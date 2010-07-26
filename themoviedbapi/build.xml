@@ -45,7 +45,7 @@
 	    <!-- Put everything in ${build} into the jar file -->
 	    <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}"/>
 	  	
-        <zip basedir="dist" destfile="${dist}/${ant.project.name}_${revision}.zip" excludes="*.zip" level="9" comment="${project}"/>
+        <zip basedir="dist" destfile="${dist}/${ant.project.name}_r${revision}.zip" excludes="*.zip" level="9" comment="${project}"/>
     	<delete>
     		<fileset dir="${dist}">
     			<exclude name="*.zip"/>
