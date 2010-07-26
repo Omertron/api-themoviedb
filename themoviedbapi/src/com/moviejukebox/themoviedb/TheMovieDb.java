@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2004-2009 YAMJ Members
+ *      Copyright (c) 2004-2010 YAMJ Members
  *      http://code.google.com/p/moviejukebox/people/list 
  *  
  *      Web: http://code.google.com/p/moviejukebox/
@@ -13,25 +13,35 @@
 
 package com.moviejukebox.themoviedb;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
-import com.moviejukebox.themoviedb.model.*;
-import com.moviejukebox.themoviedb.tools.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.moviejukebox.themoviedb.model.Artwork;
+import com.moviejukebox.themoviedb.model.Category;
+import com.moviejukebox.themoviedb.model.Country;
+import com.moviejukebox.themoviedb.model.MovieDB;
+import com.moviejukebox.themoviedb.model.Person;
+import com.moviejukebox.themoviedb.tools.LogFormatter;
 
 /**
- * This is the main class for the API to connect to TheMovieDb.org The implementation is for v2.1 of the API as detailed here
- * http://api.themoviedb.org/2.1/docs/
+ * This is the main class for the API to connect to TheMovieDb.org The implementation is for v2.1 
+ * of the API as detailed here http://api.themoviedb.org/2.1/docs/
  * 
  * @author Stuart.Boston
  * @version 1.1
@@ -80,8 +90,8 @@ public class TheMovieDb {
      * @return              A movie bean with the data extracted
      */
     public MovieDB moviedbSearch(String movieTitle, String language) {
-        XMLEventReader xmlReader = null;
         MovieDB movie = null;
+        Document doc = null;
         
         language = validateLanguage(language);
         
@@ -91,12 +101,11 @@ public class TheMovieDb {
 
         try {
             String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), language);
-            xmlReader = XMLHelper.getEventReader(searchUrl);
-            movie = parseMovieInfo(xmlReader);
+            doc = getEventDocFromUrl(searchUrl);
+            movie = parseMovieInfo(doc);
+
         } catch (Exception error) {
-            System.err.println("ERROR: TheMovieDb API -> " + error.getMessage());
-        } finally {
-            XMLHelper.closeEventReader(xmlReader);
+            logger.severe("ERROR: " + error.getMessage());
         }
         return movie;
     }
@@ -109,8 +118,8 @@ public class TheMovieDb {
      * @return          A movie bean with the data extracted
      */
     public MovieDB moviedbImdbLookup(String imdbID, String language) {
-        XMLEventReader xmlReader = null;
         MovieDB movie = null;
+        Document doc = null;
         
         language = validateLanguage(language);
 
@@ -120,12 +129,14 @@ public class TheMovieDb {
         
         try {
             String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, language);
-            xmlReader = XMLHelper.getEventReader(searchUrl);
-            movie = parseMovieInfo(xmlReader);
+            //xmlReader = XMLHelper.getEventReader(searchUrl);
+            //movie = parseMovieInfo(xmlReader);
+
+            doc = getEventDocFromUrl(searchUrl);
+            movie = parseMovieInfo(doc);
+        
         } catch (Exception error) {
-            System.err.println("ERROR: TheMovieDb API -> " + error.getMessage());
-        } finally {
-            XMLHelper.closeEventReader(xmlReader);
+            logger.severe("ERROR: " + error.getMessage());
         }
         return movie;
     }
@@ -155,7 +166,7 @@ public class TheMovieDb {
      * @return A movie bean with all of the information
      */
     public MovieDB moviedbGetInfo(String tmdbID, MovieDB movie, String language) {
-        XMLEventReader xmlReader = null;
+        Document doc = null;
         
         // If the tmdbID is null, then exit
         if (tmdbID == null || tmdbID.equals("") || tmdbID.equalsIgnoreCase("UNKNOWN"))
@@ -165,12 +176,14 @@ public class TheMovieDb {
         
         try {
             String searchUrl = buildSearchUrl("Movie.getImages", tmdbID, language);
-            xmlReader = XMLHelper.getEventReader(searchUrl);
-            movie = parseMovieInfo(xmlReader);
+            //xmlReader = XMLHelper.getEventReader(searchUrl);
+            //movie = parseMovieInfo(xmlReader);
+            
+            doc = getEventDocFromUrl(searchUrl);
+            movie = parseMovieInfo(doc);
+            
         } catch (Exception error) {
-            System.err.println("ERROR: TheMovieDb API -> " + error.getMessage());
-        } finally {
-            XMLHelper.closeEventReader(xmlReader);
+            logger.severe("ERROR: " + error.getMessage());
         }
         return movie;
     }
@@ -189,7 +202,7 @@ public class TheMovieDb {
      * @return
      */
     public MovieDB moviedbGetImages(String searchTerm, MovieDB movie, String language) {
-        XMLEventReader xmlReader = null;
+        Document doc = null;
         
         // If the searchTerm is null, then exit
         if (searchTerm == null || searchTerm.equals("") || searchTerm.equalsIgnoreCase("UNKNOWN"))
@@ -199,398 +212,19 @@ public class TheMovieDb {
         
         try {
             String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, language);
-            xmlReader = XMLHelper.getEventReader(searchUrl);
-            movie = parseMovieInfo(xmlReader);
-        } catch (Exception error) {
-            System.err.println("ERROR: TheMovieDb API -> " + error.getMessage());
-        } finally {
-            XMLHelper.closeEventReader(xmlReader);
-        }
-
-        return movie;
-    }
-    
-    /**
-     * Search the XML passed and decode to a movieDB bean
-     * 
-     * @param xmlReader
-     *            The XML stream read from TheMovieDB.org
-     * @return a MovieDB bean with the data
-     * @throws XMLStreamException
-     */
-    // TODO Waring if match is low (i.e. score != 1.0)
-    @SuppressWarnings("unchecked")
-    public MovieDB parseMovieInfo(XMLEventReader xmlReader) throws XMLStreamException {
-        MovieDB movie = null;
-        try {
-        while (xmlReader.hasNext()) {
-            XMLEvent event = xmlReader.nextEvent();
-
-            if (event.isStartElement()) {
-                StartElement startElement = event.asStartElement();
-                
-                if (startElement.getName().getLocalPart().equalsIgnoreCase("movie")) {
-                    movie = new MovieDB();
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("popularity")) {
-                        event = xmlReader.nextEvent();
-                        movie.setPopularity(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("name")) {
-                        event = xmlReader.nextEvent();
-                        movie.setTitle(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("type")) {
-                        event = xmlReader.nextEvent();
-                        movie.setType(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("id")) {
-                        event = xmlReader.nextEvent();
-                        movie.setId(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("imdb_id")) {
-                        event = xmlReader.nextEvent();
-                        movie.setImdb(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("url")) {
-                        event = xmlReader.nextEvent();
-                        movie.setUrl(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("overview")) {
-                        event = xmlReader.nextEvent();
-                        movie.setOverview(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("rating")) {
-                        event = xmlReader.nextEvent();
-                        movie.setRating(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("released")) {
-                        event = xmlReader.nextEvent();
-                        movie.setReleaseDate(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("runtime")) {
-                        event = xmlReader.nextEvent();
-                        movie.setRuntime(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("budget")) {
-                        event = xmlReader.nextEvent();
-                        movie.setBudget(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("revenue")) {
-                        event = xmlReader.nextEvent();
-                        movie.setRevenue(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("homepage")) {
-                        event = xmlReader.nextEvent();
-                        movie.setHomepage(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("trailer")) {
-                        event = xmlReader.nextEvent();
-                        movie.setTrailer(event.asCharacters().getData());
-                        continue;
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("categories")) {
-                        event = xmlReader.nextEvent();
-                        startElement = event.asStartElement();
-                        
-                        while (!event.isEndElement() && !event.asEndElement().getName().getLocalPart().equalsIgnoreCase("category")) {
-                            Category category = new Category();
-                            Iterator<Attribute> attributes = startElement.getAttributes();
-                            while (attributes.hasNext()) {
-                                Attribute attribute = attributes.next();
-                                if (attribute.getName().toString().equals("type"))
-                                    category.setType(attribute.getValue());
-                                if (attribute.getName().toString().equals("url"))
-                                    category.setUrl(attribute.getValue());
-                                if (attribute.getName().toString().equals("name"))
-                                    category.setName(attribute.getValue());
-                                
-                            }
-                            movie.addCategory(category);
-                        }
-                    }
-                }
-                
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("countries")) {
-                        event = xmlReader.nextEvent();
-                        startElement = event.asStartElement();
-
-                        while (!event.isEndElement() && !event.asEndElement().getName().getLocalPart().equalsIgnoreCase("country")) {
-                            Country country = new Country();
-                            Iterator<Attribute> attributes = startElement.getAttributes();
-                            while (attributes.hasNext()) {
-                                Attribute attribute = attributes.next();
-                                if (attribute.getName().toString().equals("code"))
-                                    country.setCode(attribute.getValue());
-                                if (attribute.getName().toString().equals("url"))
-                                    country.setUrl(attribute.getValue());
-                                if (attribute.getName().toString().equals("name"))
-                                    country.setName(attribute.getValue());
-                            }
-                            movie.addProductionCountry(country);
-                        }
-                    }
-                }
-
-                if (event.isStartElement()) {
-                    if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase("cast")) {
-                        event = xmlReader.nextEvent();
-                        startElement = event.asStartElement();
-
-                        while (!event.isEndElement() && !event.asEndElement().getName().getLocalPart().equalsIgnoreCase("person")) {
-                            Person person = new Person();
-                            Iterator<Attribute> attributes = startElement.getAttributes();
-                            while (attributes.hasNext()) {
-                                Attribute attribute = attributes.next();
-                                if (attribute.getName().toString().equals("url"))
-                                    person.setUrl(attribute.getValue());
-                                if (attribute.getName().toString().equals("name"))
-                                    person.setName(attribute.getValue());
-                                if (attribute.getName().toString().equals("job"))
-                                    person.setJob(attribute.getValue());
-                                if (attribute.getName().toString().equals("character"))
-                                    person.setCharacter(attribute.getValue());
-                                if (attribute.getName().toString().equals("id"))
-                                    person.setId(attribute.getValue());
-                            }
-                            movie.addPerson(person);
-                        }
-                    }
-                }
-
-                /*
-                 * This processes the image elements. There are two formats to deal with:
-                 * Movie.imdbLookup, Movie.getInfo & Movie.search:
-                 * <images>
-                 *     <image type="poster" size="original" url="http://images.themoviedb.org/posters/60366/Fight_Club.jpg" id="60366"/>
-                 *     <image type="backdrop" size="original" url="http://images.themoviedb.org/backdrops/56444/bscap00144.jpg" id="56444"/>
-                 * </images>
-                 * 
-                 * Movie.getImages:
-                 * <images>
-                 *     <poster id="17066">
-                 *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club.jpg" size="original"/>
-                 *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_thumb.jpg" size="thumb"/>
-                 *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_cover.jpg" size="cover"/>
-                 *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_mid.jpg" size="mid"/>
-                 *     </poster>
-                 *     <backdrop id="18593">
-                 *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1.jpg" size="original"/>
-                 *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_poster.jpg" size="poster"/>
-                 *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_thumb.jpg" size="thumb"/>
-                 *     </backdrop>
-                 * </images> 
-                 */
-                if (checkStartEvent(event, "images")) {
-                    event = xmlReader.nextEvent();
-                    
-                    while (!checkEndEvent(event, "images")) {
-                        if (checkStartEvent(event, "image")) {
-                            Artwork artwork = new Artwork();
-                            Iterator<Attribute> attributes = event.asStartElement().getAttributes();
-                            while (attributes.hasNext()) {
-                                Attribute attribute = attributes.next();
-                                if (attribute.getName().toString().equalsIgnoreCase("type"))
-                                    artwork.setType(attribute.getValue());
-                                if (attribute.getName().toString().equalsIgnoreCase("size"))
-                                    artwork.setSize(attribute.getValue());
-                                if (attribute.getName().toString().equalsIgnoreCase("url"))
-                                    artwork.setUrl(attribute.getValue());
-                                if (attribute.getName().toString().equalsIgnoreCase("id"))
-                                    artwork.setId(attribute.getValue());
-                            }
-                            event = xmlReader.nextEvent(); // Skip the characters at the end of the attributes
-                            movie.addArtwork(artwork);
-                        }
-                        
-                        if (checkStartEvent(event, "poster")) {
-                            Artwork artwork = new Artwork();
-                            String imageId = getImageId(event);
-                            event = xmlReader.nextEvent(); // Skip the characters at the end of the attributes
-                            event = xmlReader.nextEvent();
-                            
-                            while (!checkEndEvent(event, "poster")) {
-                                artwork = new Artwork();
-                                artwork.setType(Artwork.ARTWORK_TYPE_POSTER);
-                                artwork.setId(imageId);
-                                
-                                if (checkStartEvent(event, "image")) {
-                                    Iterator<Attribute> attributes = event.asStartElement().getAttributes();
-                                    while (attributes.hasNext()) {
-                                        Attribute attribute = attributes.next();
-                                        if (attribute.getName().toString().equalsIgnoreCase("url"))
-                                            artwork.setUrl(attribute.getValue());
-                                        if (attribute.getName().toString().equalsIgnoreCase("size"))
-                                            artwork.setSize(attribute.getValue());
-                                    }
-                                    event = xmlReader.nextEvent(); // Skip the characters at the end of the attributes
-                                    movie.addArtwork(artwork);
-                                }
-                                event = xmlReader.nextEvent();
-                            }
-                        }
-                        
-                        if (checkStartEvent(event, "backdrop")) {
-                            Artwork artwork = new Artwork();
-                            String imageId = getImageId(event);
-                            event = xmlReader.nextEvent(); // Skip the characters at the end of the attributes
-                            event = xmlReader.nextEvent();
-                            
-                            while (!checkEndEvent(event, "backdrop")) {
-                                artwork = new Artwork();
-                                artwork.setType(Artwork.ARTWORK_TYPE_BACKDROP);
-                                artwork.setId(imageId);
-                                
-                                if (checkStartEvent(event, "image")) {
-                                    Iterator<Attribute> attributes = event.asStartElement().getAttributes();
-                                    while (attributes.hasNext()) {
-                                        Attribute attribute = attributes.next();
-                                        if (attribute.getName().toString().equalsIgnoreCase("url"))
-                                            artwork.setUrl(attribute.getValue());
-                                        if (attribute.getName().toString().equalsIgnoreCase("size"))
-                                            artwork.setSize(attribute.getValue());
-                                    }
-                                    event = xmlReader.nextEvent(); // Skip the characters at the end of the attributes
-                                    movie.addArtwork(artwork);
-                                }
-                                event = xmlReader.nextEvent();
-                            }
-                        }
-                        event = xmlReader.nextEvent();
-                    } // While "images"
-                } // If "images"
-            } // if start element
+            //xmlReader = XMLHelper.getEventReader(searchUrl);
+            //movie = parseMovieInfo(xmlReader);
             
-            if (event.isEndElement()) {
-                EndElement endElement = event.asEndElement();
-                if (endElement.getName().getLocalPart().equalsIgnoreCase("movie")) {
-                    break;
-                }
-            }
-        }
+            doc = getEventDocFromUrl(searchUrl);
+            movie = parseMovieInfo(doc);
+
         } catch (Exception error) {
-            System.err.println("Error: " + error.getMessage());
-            error.printStackTrace();
+            logger.severe("ERROR: " + error.getMessage());
         }
+
         return movie;
     }
-
-    /**
-     * Check to see if the event passed is a start element and matches the eventName
-     * @param event
-     * @param endString
-     * @return True if the event is an end element and matches the eventName
-     */
-    private boolean checkStartEvent(XMLEvent event, String eventName) {
-        boolean validElement = false;
-        
-        if (event.isStartElement()) {
-            if (event.asStartElement().getName().getLocalPart().equalsIgnoreCase(eventName)) {
-                validElement = true;
-            }
-        }
-        return validElement;
-    }
-
-    /**
-     * Check to see if the event passed is an end element and matches the eventName
-     * @param event
-     * @param endString
-     * @return True if the event is an end element and matches the eventName
-     */
-    private boolean checkEndEvent(XMLEvent event, String eventName) {
-        boolean validElement = false;
-        
-        if (event.isEndElement()) {
-            if (event.asEndElement().getName().getLocalPart().equalsIgnoreCase(eventName)) {
-                validElement = true;
-            }
-        }
-        return validElement;
-    }
     
-    /**
-     * Find the ID in the element attributes
-     * @param event
-     * @return the imageId
-     */
-    @SuppressWarnings({"unchecked"})
-    private String getImageId(XMLEvent event) {
-        String imageId = null;
-
-        try {
-            // read the id attribute from the element
-            Iterator<Attribute> attributes = event.asStartElement().getAttributes();
-            while (attributes.hasNext()) {
-                Attribute attribute = attributes.next();
-                if (attribute.getName().toString().equalsIgnoreCase("id"))
-                    imageId = attribute.getValue();
-            }
-        } catch (Exception error) {
-            imageId = null;
-        }
-        
-        return imageId;
-    }
-
     /**
      * This function will check the passed language against a list of known themoviedb.org languages
      * Currently the only available language is English "en" and so that is what this function returns
@@ -604,5 +238,210 @@ public class TheMovieDb {
             language = defaultLanguage;
         }
         return language;
+    }
+
+    public MovieDB parseMovieInfo(Document doc) {
+        // Borrowed from http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
+        MovieDB movie = null;
+        NodeList movieNodeList, subNodeList;
+        Node movieNode, subNode;
+        Element movieElement, subElement;
+        
+        try {
+            movie = new MovieDB();
+            movieNodeList = doc.getElementsByTagName("movie");
+
+            // Only get the first movie from the list
+            movieNode = movieNodeList.item(0);
+
+            if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
+                movieElement = (Element) movieNode;
+
+                movie.setTitle(getValueFromElement(movieElement, "name"));
+                movie.setPopularity(getValueFromElement(movieElement, "popularity"));
+                movie.setType(getValueFromElement(movieElement, "type"));
+                movie.setId(getValueFromElement(movieElement, "id"));
+                movie.setImdb(getValueFromElement(movieElement, "imdb_id"));
+                movie.setUrl(getValueFromElement(movieElement, "url")); 
+                movie.setOverview(getValueFromElement(movieElement, "overview"));
+                movie.setRating(getValueFromElement(movieElement, "rating"));
+                movie.setReleaseDate(getValueFromElement(movieElement, "released"));
+                movie.setRuntime(getValueFromElement(movieElement, "runtime"));
+                movie.setBudget(getValueFromElement(movieElement, "budget"));
+                movie.setRevenue(getValueFromElement(movieElement, "revenue"));
+                movie.setHomepage(getValueFromElement(movieElement, "homepage"));
+                movie.setTrailer(getValueFromElement(movieElement, "trailer"));
+
+                // Process the "categories"
+                subNodeList = doc.getElementsByTagName("categories");
+
+                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
+                    subNode = subNodeList.item(nodeLoop);
+                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+                        subElement = (Element) subNode;
+                        Category category = new Category();
+                        
+                        category.setType(getValueFromElement(subElement, "type"));
+                        category.setUrl(getValueFromElement(subElement, "url"));
+                        category.setName(getValueFromElement(subElement, "name"));
+                     
+                        movie.addCategory(category);
+                    }
+                }
+                
+                // Process the "countries"
+                subNodeList = doc.getElementsByTagName("countries");
+
+                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
+                    subNode = subNodeList.item(nodeLoop);
+                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+                        subElement = (Element) subNode;
+                        Country country = new Country();
+                        
+                        country.setCode(getValueFromElement(subElement, "code"));
+                        country.setUrl(getValueFromElement(subElement, "url"));
+                        country.setName(getValueFromElement(subElement, "name"));
+                     
+                        movie.addProductionCountry(country);
+                    }
+                }
+                
+                // Process the "cast"
+                subNodeList = doc.getElementsByTagName("cast");
+
+                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
+                    subNode = subNodeList.item(nodeLoop);
+                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+                        subElement = (Element) subNode;
+                        Person person = new Person();
+                        
+                        person.setUrl(getValueFromElement(subElement, "url"));
+                        person.setName(getValueFromElement(subElement, "name"));
+                        person.setJob(getValueFromElement(subElement, "job"));
+                        person.setCharacter(getValueFromElement(subElement, "character"));
+                        person.setId(getValueFromElement(subElement, "id"));
+                     
+                        movie.addPerson(person);
+                    }
+                }
+
+                /*
+                * This processes the image elements. There are two formats to deal with:
+                * Movie.imdbLookup, Movie.getInfo & Movie.search:
+                * <images>
+                *     <image type="poster" size="original" url="http://images.themoviedb.org/posters/60366/Fight_Club.jpg" id="60366"/>
+                *     <image type="backdrop" size="original" url="http://images.themoviedb.org/backdrops/56444/bscap00144.jpg" id="56444"/>
+                * </images>
+                * 
+                * Movie.getImages:
+                * <images>
+                *     <poster id="17066">
+                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club.jpg" size="original"/>
+                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_thumb.jpg" size="thumb"/>
+                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_cover.jpg" size="cover"/>
+                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_mid.jpg" size="mid"/>
+                *     </poster>
+                *     <backdrop id="18593">
+                *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1.jpg" size="original"/>
+                *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_poster.jpg" size="poster"/>
+                *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_thumb.jpg" size="thumb"/>
+                *     </backdrop>
+                * </images> 
+                */
+                subNodeList = doc.getElementsByTagName("images");
+
+                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
+                    subNode = subNodeList.item(nodeLoop);
+                    
+                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+                        System.out.println("Element Node: " + subNode.getNodeName() + " Attribs: " + subNode.hasAttributes() + " Children: " + subNode.hasChildNodes());
+                        
+                        NodeList artworkNodeList = subNode.getChildNodes();
+                        for (int artworkLoop = 0; artworkLoop < artworkNodeList.getLength(); artworkLoop++) {
+                            Node artworkNode = artworkNodeList.item(artworkLoop);
+                            if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
+                                subElement = (Element) artworkNode;
+
+                                if (subElement.getNodeName().equalsIgnoreCase("image")) {
+                                    // This is the format used in Movie.imdbLookup, Movie.getInfo & Movie.search
+                                    Artwork artwork = new Artwork();
+                                    artwork.setType(subElement.getAttribute("type"));
+                                    artwork.setSize(subElement.getAttribute("size"));
+                                    artwork.setUrl(subElement.getAttribute("url"));
+                                    artwork.setId(subElement.getAttribute("id"));
+                                    movie.addArtwork(artwork);
+                                } else if (subElement.getNodeName().equalsIgnoreCase("backdrop") || 
+                                           subElement.getNodeName().equalsIgnoreCase("poster")) {
+                                    // This is the format used in Movie.getImages
+                                    String artworkId = subElement.getAttribute("id");
+                                    String artworkType = subElement.getNodeName();
+                                    
+                                    // We need to decode and loop round the child nodes to get the data
+                                    NodeList imageNodeList = subElement.getChildNodes();
+                                    for (int imageLoop = 0; imageLoop < imageNodeList.getLength(); imageLoop++) {
+                                        Node imageNode = imageNodeList.item(imageLoop);
+                                        if (imageNode.getNodeType() == Node.ELEMENT_NODE) {
+                                            Element imageElement = (Element) imageNode;
+                                            Artwork artwork = new Artwork();
+                                            artwork.setId(artworkId);
+                                            artwork.setType(artworkType);
+                                            artwork.setUrl(imageElement.getAttribute("url"));
+                                            artwork.setSize(imageElement.getAttribute("size"));
+                                            movie.addArtwork(artwork);
+                                        }
+                                    }
+                                } else {
+                                    // This is a classic, it should never happen error
+                                    logger.severe("UNKNOWN Image type");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception error) {
+            logger.severe("ERROR: " + error.getMessage());
+            error.printStackTrace();
+        }
+        return movie;
+    }
+
+    /**
+     * Gets the string value of the tag element name passed
+     * @param element
+     * @param tagName
+     * @return
+     */
+    private String getValueFromElement(Element element, String tagName) {
+        String returnValue = "";
+        
+        try {
+            NodeList elementNodeList = element.getElementsByTagName(tagName);
+            Element tagElement = (Element) elementNodeList.item(0);
+            NodeList tagNodeList = tagElement.getChildNodes();
+            returnValue = ((Node) tagNodeList.item(0)).getNodeValue();
+        } catch (Exception ignore) {
+            return returnValue;
+        }
+        
+        return returnValue;
+    }
+
+    /**
+     * Get a DOM document from the supplied URL
+     * @param url
+     * @return
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
+    public static Document getEventDocFromUrl(String url) throws MalformedURLException, IOException, ParserConfigurationException, SAXException {
+        InputStream in = (new URL(url)).openStream();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(in);
+        doc.getDocumentElement().normalize();
+        return doc;
     }
 }
