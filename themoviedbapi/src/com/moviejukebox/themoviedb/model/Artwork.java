@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2004-2009 YAMJ Members
+ *      Copyright (c) 2004-2010 YAMJ Members
  *      http://code.google.com/p/moviejukebox/people/list 
  *  
  *      Web: http://code.google.com/p/moviejukebox/
