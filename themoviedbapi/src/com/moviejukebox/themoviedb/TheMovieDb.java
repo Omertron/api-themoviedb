@@ -247,6 +247,11 @@ public class TheMovieDb {
 
             // Only get the first movie from the list
             movieNode = movieNodeList.item(0);
+            
+            if (movieNode == null) {
+                logger.finest("Movie not found");
+                return movie;
+            }
 
             if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
                 movieElement = (Element) movieNode;
