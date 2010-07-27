@@ -43,7 +43,14 @@
 
     <target name="dist" depends="compile, version" description="generate the distribution" >
 	    <!-- Put everything in ${build} into the jar file -->
-	    <jar jarfile="${dist}/${ant.project.name}.jar" basedir="${build}"/>
+        <fileset dir="${build}">
+           <include name="*.class"/>
+        </fileset>
+        <fileset dir="${src}">
+           <include name="*.java"/>
+        </fileset>
+
+	    <jar jarfile="${dist}/${ant.project.name}.jar" />
 	  	
         <zip basedir="dist" destfile="${dist}/${ant.project.name}_r${revision}.zip" excludes="*.zip" level="9" comment="${project}"/>
     	<delete>
