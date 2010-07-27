@@ -129,8 +129,6 @@ public class TheMovieDb {
         
         try {
             String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, language);
-            //xmlReader = XMLHelper.getEventReader(searchUrl);
-            //movie = parseMovieInfo(xmlReader);
 
             doc = getEventDocFromUrl(searchUrl);
             movie = parseMovieInfo(doc);
@@ -176,8 +174,6 @@ public class TheMovieDb {
         
         try {
             String searchUrl = buildSearchUrl("Movie.getImages", tmdbID, language);
-            //xmlReader = XMLHelper.getEventReader(searchUrl);
-            //movie = parseMovieInfo(xmlReader);
             
             doc = getEventDocFromUrl(searchUrl);
             movie = parseMovieInfo(doc);
@@ -212,8 +208,6 @@ public class TheMovieDb {
         
         try {
             String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, language);
-            //xmlReader = XMLHelper.getEventReader(searchUrl);
-            //movie = parseMovieInfo(xmlReader);
             
             doc = getEventDocFromUrl(searchUrl);
             movie = parseMovieInfo(doc);
@@ -354,7 +348,6 @@ public class TheMovieDb {
                     subNode = subNodeList.item(nodeLoop);
                     
                     if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                        System.out.println("Element Node: " + subNode.getNodeName() + " Attribs: " + subNode.hasAttributes() + " Children: " + subNode.hasChildNodes());
                         
                         NodeList artworkNodeList = subNode.getChildNodes();
                         for (int artworkLoop = 0; artworkLoop < artworkNodeList.getLength(); artworkLoop++) {
