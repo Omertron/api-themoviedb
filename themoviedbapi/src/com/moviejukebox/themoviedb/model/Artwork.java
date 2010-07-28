@@ -22,14 +22,16 @@ package com.moviejukebox.themoviedb.model;
 public class Artwork implements Comparable<Object> {
     public static String ARTWORK_TYPE_POSTER    = "poster";
     public static String ARTWORK_TYPE_BACKDROP  = "backdrop";
-    public static String[] ARTWORK_TYPES        = {ARTWORK_TYPE_POSTER, ARTWORK_TYPE_BACKDROP};
+    public static String ARTWORK_TYPE_PERSON    = "profile";
+    public static String[] ARTWORK_TYPES        = {ARTWORK_TYPE_POSTER, ARTWORK_TYPE_BACKDROP, ARTWORK_TYPE_PERSON};
 
     public static String ARTWORK_SIZE_ORIGINAL  = "original";
     public static String ARTWORK_SIZE_THUMB     = "thumb";
     public static String ARTWORK_SIZE_MID       = "mid";
     public static String ARTWORK_SIZE_COVER     = "cover";
     public static String ARTWORK_SIZE_POSTER    = "poster";
-    public static String[] ARTWORK_SIZES        = {ARTWORK_SIZE_ORIGINAL, ARTWORK_SIZE_THUMB, ARTWORK_SIZE_MID, ARTWORK_SIZE_COVER, ARTWORK_SIZE_POSTER};
+    public static String ARTWORK_SIZE_PROFILE   = "profile";
+    public static String[] ARTWORK_SIZES        = {ARTWORK_SIZE_ORIGINAL, ARTWORK_SIZE_THUMB, ARTWORK_SIZE_MID, ARTWORK_SIZE_COVER, ARTWORK_SIZE_POSTER, ARTWORK_SIZE_PROFILE};
 
     public String type;
     public String size;

@@ -13,30 +13,17 @@
 
 package com.moviejukebox.themoviedb;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import com.moviejukebox.themoviedb.model.Artwork;
-import com.moviejukebox.themoviedb.model.Category;
-import com.moviejukebox.themoviedb.model.Country;
 import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
+import com.moviejukebox.themoviedb.tools.DOMHelper;
+import com.moviejukebox.themoviedb.tools.DOMParser;
 import com.moviejukebox.themoviedb.tools.LogFormatter;
 
 /**
@@ -44,7 +31,7 @@ import com.moviejukebox.themoviedb.tools.LogFormatter;
  * of the API as detailed here http://api.themoviedb.org/2.1/docs/
  * 
  * @author Stuart.Boston
- * @version 1.1
+ * @version 1.3
  */
 public class TheMovieDb {
 
@@ -52,21 +39,41 @@ public class TheMovieDb {
     private static String apiSite = "http://api.themoviedb.org/2.1/";
     private static String defaultLanguage = "en";
     private static Logger logger;
+    private static LogFormatter tmdbFormatter = new LogFormatter();
+    private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
 
-    public TheMovieDb(String apiKey) {        
-        logger = Logger.getLogger("TheMovieDB");
-        LogFormatter mjbFormatter = new LogFormatter();
-        ConsoleHandler ch = new ConsoleHandler();
-        ch.setFormatter(mjbFormatter);
-        ch.setLevel(Level.FINE);
-        logger.addHandler(ch);
-        logger.setUseParentHandlers(true);
-        logger.setLevel(Level.ALL);
-        
-        this.apiKey = apiKey;
-        mjbFormatter.addApiKey(apiKey);
+    public TheMovieDb(String apiKey) {
+        setLogger(Logger.getLogger("TheMovieDB"));
+        setApiKey(apiKey);
     }
     
+    public TheMovieDb(String apiKey, Logger logger) {
+        setLogger(logger);
+        setApiKey(apiKey);
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(Logger logger) {
+        TheMovieDb.logger = logger;
+        tmdbConsoleHandler.setFormatter(tmdbFormatter);
+        tmdbConsoleHandler.setLevel(Level.FINE);
+        logger.addHandler(tmdbConsoleHandler);
+        logger.setUseParentHandlers(true);
+        logger.setLevel(Level.ALL);
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+        tmdbFormatter.addApiKey(apiKey);
+    }
+
     /**
      * Build the search URL from the search prefix and movie title.
      * This will change between v2.0 and v2.1 of the API
@@ -101,8 +108,8 @@ public class TheMovieDb {
 
         try {
             String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), language);
-            doc = getEventDocFromUrl(searchUrl);
-            movie = parseMovieInfo(doc);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            movie = DOMParser.parseMovieInfo(doc);
 
         } catch (Exception error) {
             logger.severe("ERROR: " + error.getMessage());
@@ -130,8 +137,8 @@ public class TheMovieDb {
         try {
             String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, language);
 
-            doc = getEventDocFromUrl(searchUrl);
-            movie = parseMovieInfo(doc);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            movie = DOMParser.parseMovieInfo(doc);
         
         } catch (Exception error) {
             logger.severe("ERROR: " + error.getMessage());
@@ -175,8 +182,8 @@ public class TheMovieDb {
         try {
             String searchUrl = buildSearchUrl("Movie.getImages", tmdbID, language);
             
-            doc = getEventDocFromUrl(searchUrl);
-            movie = parseMovieInfo(doc);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            movie = DOMParser.parseMovieInfo(doc);
             
         } catch (Exception error) {
             logger.severe("ERROR: " + error.getMessage());
@@ -209,8 +216,8 @@ public class TheMovieDb {
         try {
             String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, language);
             
-            doc = getEventDocFromUrl(searchUrl);
-            movie = parseMovieInfo(doc);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            movie = DOMParser.parseMovieInfo(doc);
 
         } catch (Exception error) {
             logger.severe("ERROR: " + error.getMessage());
@@ -234,212 +241,94 @@ public class TheMovieDb {
         return language;
     }
 
-    public MovieDB parseMovieInfo(Document doc) {
-        // Borrowed from http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
-        MovieDB movie = null;
-        NodeList movieNodeList, subNodeList;
-        Node movieNode, subNode;
-        Element movieElement, subElement;
+
+    /**
+     * The Person.search method is used to search for an actor, actress or production member.
+     * http://api.themoviedb.org/2.1/methods/Person.search
+     * 
+     * @param personName
+     * @param language
+     * @return
+     */
+    public Person personSearch(String personName, String language) {
+        Person person = new Person();
+        Document doc = null;
+        
+        language = validateLanguage(language);
+        
+        if (personName == null || personName.equals("")) {
+            return person;
+        }
         
         try {
-            movie = new MovieDB();
-            movieNodeList = doc.getElementsByTagName("movie");
-
-            // Only get the first movie from the list
-            movieNode = movieNodeList.item(0);
-            
-            if (movieNode == null) {
-                logger.finest("Movie not found");
-                return movie;
-            }
-
-            if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
-                movieElement = (Element) movieNode;
-
-                movie.setTitle(getValueFromElement(movieElement, "name"));
-                movie.setPopularity(getValueFromElement(movieElement, "popularity"));
-                movie.setType(getValueFromElement(movieElement, "type"));
-                movie.setId(getValueFromElement(movieElement, "id"));
-                movie.setImdb(getValueFromElement(movieElement, "imdb_id"));
-                movie.setUrl(getValueFromElement(movieElement, "url")); 
-                movie.setOverview(getValueFromElement(movieElement, "overview"));
-                movie.setRating(getValueFromElement(movieElement, "rating"));
-                movie.setReleaseDate(getValueFromElement(movieElement, "released"));
-                movie.setRuntime(getValueFromElement(movieElement, "runtime"));
-                movie.setBudget(getValueFromElement(movieElement, "budget"));
-                movie.setRevenue(getValueFromElement(movieElement, "revenue"));
-                movie.setHomepage(getValueFromElement(movieElement, "homepage"));
-                movie.setTrailer(getValueFromElement(movieElement, "trailer"));
-
-                // Process the "categories"
-                subNodeList = doc.getElementsByTagName("categories");
-
-                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
-                    subNode = subNodeList.item(nodeLoop);
-                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                        subElement = (Element) subNode;
-                        Category category = new Category();
-                        
-                        category.setType(getValueFromElement(subElement, "type"));
-                        category.setUrl(getValueFromElement(subElement, "url"));
-                        category.setName(getValueFromElement(subElement, "name"));
-                     
-                        movie.addCategory(category);
-                    }
-                }
-                
-                // Process the "countries"
-                subNodeList = doc.getElementsByTagName("countries");
-
-                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
-                    subNode = subNodeList.item(nodeLoop);
-                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                        subElement = (Element) subNode;
-                        Country country = new Country();
-                        
-                        country.setCode(getValueFromElement(subElement, "code"));
-                        country.setUrl(getValueFromElement(subElement, "url"));
-                        country.setName(getValueFromElement(subElement, "name"));
-                     
-                        movie.addProductionCountry(country);
-                    }
-                }
-                
-                // Process the "cast"
-                subNodeList = doc.getElementsByTagName("cast");
-
-                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
-                    subNode = subNodeList.item(nodeLoop);
-                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                        subElement = (Element) subNode;
-                        Person person = new Person();
-                        
-                        person.setUrl(getValueFromElement(subElement, "url"));
-                        person.setName(getValueFromElement(subElement, "name"));
-                        person.setJob(getValueFromElement(subElement, "job"));
-                        person.setCharacter(getValueFromElement(subElement, "character"));
-                        person.setId(getValueFromElement(subElement, "id"));
-                     
-                        movie.addPerson(person);
-                    }
-                }
-
-                /*
-                * This processes the image elements. There are two formats to deal with:
-                * Movie.imdbLookup, Movie.getInfo & Movie.search:
-                * <images>
-                *     <image type="poster" size="original" url="http://images.themoviedb.org/posters/60366/Fight_Club.jpg" id="60366"/>
-                *     <image type="backdrop" size="original" url="http://images.themoviedb.org/backdrops/56444/bscap00144.jpg" id="56444"/>
-                * </images>
-                * 
-                * Movie.getImages:
-                * <images>
-                *     <poster id="17066">
-                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club.jpg" size="original"/>
-                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_thumb.jpg" size="thumb"/>
-                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_cover.jpg" size="cover"/>
-                *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_mid.jpg" size="mid"/>
-                *     </poster>
-                *     <backdrop id="18593">
-                *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1.jpg" size="original"/>
-                *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_poster.jpg" size="poster"/>
-                *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_thumb.jpg" size="thumb"/>
-                *     </backdrop>
-                * </images> 
-                */
-                subNodeList = doc.getElementsByTagName("images");
-
-                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
-                    subNode = subNodeList.item(nodeLoop);
-                    
-                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                        
-                        NodeList artworkNodeList = subNode.getChildNodes();
-                        for (int artworkLoop = 0; artworkLoop < artworkNodeList.getLength(); artworkLoop++) {
-                            Node artworkNode = artworkNodeList.item(artworkLoop);
-                            if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
-                                subElement = (Element) artworkNode;
-
-                                if (subElement.getNodeName().equalsIgnoreCase("image")) {
-                                    // This is the format used in Movie.imdbLookup, Movie.getInfo & Movie.search
-                                    Artwork artwork = new Artwork();
-                                    artwork.setType(subElement.getAttribute("type"));
-                                    artwork.setSize(subElement.getAttribute("size"));
-                                    artwork.setUrl(subElement.getAttribute("url"));
-                                    artwork.setId(subElement.getAttribute("id"));
-                                    movie.addArtwork(artwork);
-                                } else if (subElement.getNodeName().equalsIgnoreCase("backdrop") || 
-                                           subElement.getNodeName().equalsIgnoreCase("poster")) {
-                                    // This is the format used in Movie.getImages
-                                    String artworkId = subElement.getAttribute("id");
-                                    String artworkType = subElement.getNodeName();
-                                    
-                                    // We need to decode and loop round the child nodes to get the data
-                                    NodeList imageNodeList = subElement.getChildNodes();
-                                    for (int imageLoop = 0; imageLoop < imageNodeList.getLength(); imageLoop++) {
-                                        Node imageNode = imageNodeList.item(imageLoop);
-                                        if (imageNode.getNodeType() == Node.ELEMENT_NODE) {
-                                            Element imageElement = (Element) imageNode;
-                                            Artwork artwork = new Artwork();
-                                            artwork.setId(artworkId);
-                                            artwork.setType(artworkType);
-                                            artwork.setUrl(imageElement.getAttribute("url"));
-                                            artwork.setSize(imageElement.getAttribute("size"));
-                                            movie.addArtwork(artwork);
-                                        }
-                                    }
-                                } else {
-                                    // This is a classic, it should never happen error
-                                    logger.severe("UNKNOWN Image type");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            String searchUrl = buildSearchUrl("Person.search", personName, language);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
             logger.severe("ERROR: " + error.getMessage());
-            error.printStackTrace();
         }
-        return movie;
+        
+        return person;
     }
-
+    
     /**
-     * Gets the string value of the tag element name passed
-     * @param element
-     * @param tagName
+     * The Person.getInfo method is used to retrieve the full filmography, known movies, 
+     * images and things like birthplace for a specific person in the TMDb database.
+     * 
+     * @param personID
+     * @param language
      * @return
      */
-    private String getValueFromElement(Element element, String tagName) {
-        String returnValue = "";
+    public Person personGetInfo(String personID, String language) {
+        Person person = new Person();
+        Document doc = null;
+        
+        language = validateLanguage(language);
+        
+        if (personID == null || personID.equals("")) {
+            return person;
+        }
         
         try {
-            NodeList elementNodeList = element.getElementsByTagName(tagName);
-            Element tagElement = (Element) elementNodeList.item(0);
-            NodeList tagNodeList = tagElement.getChildNodes();
-            returnValue = ((Node) tagNodeList.item(0)).getNodeValue();
-        } catch (Exception ignore) {
-            return returnValue;
+            String searchUrl = buildSearchUrl("Person.getInfo", personID, language);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            person = DOMParser.parsePersonInfo(doc);
+        } catch (Exception error) {
+            logger.severe("ERROR: " + error.getMessage());
         }
         
-        return returnValue;
+        return person;
     }
-
+    
     /**
-     * Get a DOM document from the supplied URL
-     * @param url
+     * The Person.getVersion method is used to retrieve the last modified time along with 
+     * the current version number of the called object(s). This is useful if you've already 
+     * called the object sometime in the past and simply want to do a quick check for updates.
+     * 
+     * @param personID
+     * @param language
      * @return
-     * @throws MalformedURLException
-     * @throws IOException
-     * @throws ParserConfigurationException
-     * @throws SAXException
      */
-    public static Document getEventDocFromUrl(String url) throws MalformedURLException, IOException, ParserConfigurationException, SAXException {
-        InputStream in = (new URL(url)).openStream();
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(in);
-        doc.getDocumentElement().normalize();
-        return doc;
+    public Person personGetVersion(String personID, String language) {
+        Person person = new Person();
+        Document doc = null;
+        
+        language = validateLanguage(language);
+        
+        if (personID == null || personID.equals("")) {
+            return person;
+        }
+        
+        try {
+            String searchUrl = buildSearchUrl("Person.getVersion", personID, language);
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            person = DOMParser.parsePersonGetVersion(doc);
+        } catch (Exception error) {
+            logger.severe("ERROR: " + error.getMessage());
+        }
+        
+        return person;
     }
+    
+    
 }
