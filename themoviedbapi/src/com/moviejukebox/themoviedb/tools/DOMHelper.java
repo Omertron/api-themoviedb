@@ -13,10 +13,11 @@
 
 package com.moviejukebox.themoviedb.tools;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,11 +65,16 @@ public class DOMHelper {
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public static Document getEventDocFromUrl(String url) throws MalformedURLException, IOException, ParserConfigurationException, SAXException {
-        InputStream in = (new URL(url)).openStream();
+    public static Document getEventDocFromUrl(String url) 
+        throws MalformedURLException, IOException, ParserConfigurationException, SAXException, UnsupportedEncodingException {
+        //InputStream in = (new URL(url)).openStream();
+        String webPage = WebBrowser.request(url);
+        InputStream in = new ByteArrayInputStream(webPage.getBytes("UTF-8"));
+        
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(in);
+        
         doc.getDocumentElement().normalize();
         return doc;
     }

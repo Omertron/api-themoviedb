@@ -112,7 +112,7 @@ public class TheMovieDb {
             movie = DOMParser.parseMovieInfo(doc);
 
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("TheMovieDb Error: " + error.getMessage());
         }
         return movie;
     }
@@ -141,7 +141,7 @@ public class TheMovieDb {
             movie = DOMParser.parseMovieInfo(doc);
         
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("TheMovieDb Error: " + error.getMessage());
         }
         return movie;
     }
@@ -186,7 +186,7 @@ public class TheMovieDb {
             movie = DOMParser.parseMovieInfo(doc);
             
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("TheMovieDb Error: " + error.getMessage());
         }
         return movie;
     }
@@ -220,7 +220,7 @@ public class TheMovieDb {
             movie = DOMParser.parseMovieInfo(doc);
 
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("TheMovieDb Error: " + error.getMessage());
         }
 
         return movie;
@@ -240,7 +240,6 @@ public class TheMovieDb {
         }
         return language;
     }
-
 
     /**
      * The Person.search method is used to search for an actor, actress or production member.
