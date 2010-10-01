@@ -40,7 +40,7 @@ public final class WebBrowser {
     private static String proxyPassword = null;
     private static String proxyEncodedPassword = null;
 
-    public WebBrowser() {
+    static {
         browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
         cookies = new HashMap<String, Map<String, String>>();
     }
