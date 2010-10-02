@@ -25,15 +25,24 @@
 	</target>
 	
 	<target name="version" description="Write out the version file">
-		<!-- Write out the readme information file -->
         <tstamp>
             <format property="builddate" pattern="yyyy-MM-dd HH:mm:ss" locale="en"/>
         </tstamp>
+
+    	<!-- Write out the readme information file -->
         <echo file="${dist}/${ant.project.name}_version.txt" append="false">${project}${line.separator}</echo>
         <echo file="${dist}/${ant.project.name}_version.txt" append="true">Build Date: ${builddate}${line.separator}</echo>
         <echo file="${dist}/${ant.project.name}_version.txt" append="true">Revision: r${revision}${line.separator}</echo>
 		
 		<copy file="${src}/readme.txt" tofile="${dist}/${ant.project.name}_readme.txt" overwrite="true"/>
+		
+        <manifest file="MANIFEST.MF">
+            <attribute name="Built-By" value="${user.name}" />
+            <attribute name="Specification-Title" value="${project}" />
+            <attribute name="Implementation-Version" value="${revision}" />
+            <attribute name="Implementation-Title" value="${builddate}" />
+        </manifest>
+
 	</target>
 	
 	<target name="compile" depends="clean" description="compile the source " >
@@ -42,22 +51,25 @@
 	</target>
 
     <target name="dist" depends="compile, version" description="generate the distribution" >
-	    <!-- Put everything in ${build} into the jar file -->
-        <fileset dir="${build}">
-           <include name="*.class"/>
-        </fileset>
-        <fileset dir="${src}">
-           <include name="*.java"/>
-        </fileset>
+        <jar jarfile="${dist}/${ant.project.name}.jar" manifest="MANIFEST.MF">
+    	    <!-- Put everything in ${build} into the jar file -->
+            <fileset dir="${build}">
+               <include name="**/*.class"/>
+            </fileset>
+        	<!-- Add files from the ${src} too -->
+            <fileset dir="${src}">
+               <include name="**/*.java"/>
+            </fileset>
+    	</jar>
 
-	    <jar jarfile="${dist}/${ant.project.name}.jar" />
-	  	
-        <zip basedir="dist" destfile="${dist}/${ant.project.name}_r${revision}.zip" excludes="*.zip" level="9" comment="${project}"/>
-    	<delete>
-    		<fileset dir="${dist}">
-    			<exclude name="*.zip"/>
-		    </fileset>
-	    </delete>
+        <zip basedir="dist" destfile="${dist}/${ant.project.name}_r${revision}.zip" excludes="*.zip" level="9" comment="${project}${line.separator}Revision: r${revision}${line.separator}"/>
+    	
+        <delete>
+             <fileset dir="${dist}">
+                 <exclude name="*.zip"/>
+             </fileset>
+         </delete>
+
     </target>
 
 </project>
