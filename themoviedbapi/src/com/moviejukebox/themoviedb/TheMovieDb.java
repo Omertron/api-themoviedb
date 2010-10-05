@@ -180,7 +180,7 @@ public class TheMovieDb {
         language = validateLanguage(language);
         
         try {
-            String searchUrl = buildSearchUrl("Movie.getImages", tmdbID, language);
+            String searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, language);
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovieInfo(doc);
