@@ -75,13 +75,20 @@ public class DOMParser {
                     subNode = subNodeList.item(nodeLoop);
                     if (subNode.getNodeType() == Node.ELEMENT_NODE) {
                         subElement = (Element) subNode;
-                        Category category = new Category();
-                        
-                        category.setType(DOMHelper.getValueFromElement(subElement, "type"));
-                        category.setUrl(DOMHelper.getValueFromElement(subElement, "url"));
-                        category.setName(DOMHelper.getValueFromElement(subElement, "name"));
-                     
-                        movie.addCategory(category);
+
+                        NodeList castList = subNode.getChildNodes();
+                        for (int i = 0; i < castList.getLength(); i++) {
+                            Node personNode = castList.item(i);
+                            if (personNode.getNodeType() == Node.ELEMENT_NODE) {
+                                subElement = (Element) personNode;
+                                Category category = new Category();
+
+                                category.setType(subElement.getAttribute("type"));
+                                category.setUrl(subElement.getAttribute("url"));
+                                category.setName(subElement.getAttribute("name"));
+                                movie.addCategory(category);
+                            }
+                        }
                     }
                 }
                 
@@ -109,18 +116,25 @@ public class DOMParser {
                     subNode = subNodeList.item(nodeLoop);
                     if (subNode.getNodeType() == Node.ELEMENT_NODE) {
                         subElement = (Element) subNode;
-                        Person person = new Person();
-                        
-                        person.setUrl(DOMHelper.getValueFromElement(subElement, "url"));
-                        person.setName(DOMHelper.getValueFromElement(subElement, "name"));
-                        person.setJob(DOMHelper.getValueFromElement(subElement, "job"));
-                        person.setCharacter(DOMHelper.getValueFromElement(subElement, "character"));
-                        person.setId(DOMHelper.getValueFromElement(subElement, "id"));
-                     
-                        movie.addPerson(person);
+
+                        NodeList castList = subNode.getChildNodes();
+                        for (int i = 0; i < castList.getLength(); i++) {
+                            Node personNode = castList.item(i);
+                            if (personNode.getNodeType() == Node.ELEMENT_NODE) {
+                                subElement = (Element) personNode;
+                                Person person = new Person();
+
+                                person.setUrl(subElement.getAttribute("url"));
+                                person.setName(subElement.getAttribute("name"));
+                                person.setJob(subElement.getAttribute("job"));
+                                person.setCharacter(subElement.getAttribute("character"));
+                                person.setId(subElement.getAttribute("id"));
+                                movie.addPerson(person);
+                            }
+                        }
                     }
                 }
-
+                
                 /*
                 * This processes the image elements. There are two formats to deal with:
                 * Movie.imdbLookup, Movie.getInfo & Movie.search:
