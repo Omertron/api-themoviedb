@@ -62,11 +62,12 @@
             </fileset>
     	</jar>
 
-        <zip basedir="dist" destfile="${dist}/${ant.project.name}_r${revision}.zip" excludes="*.zip" level="9" comment="${project}${line.separator}Revision: r${revision}${line.separator}"/>
+        <zip basedir="dist" destfile="${dist}/${ant.project.name}_r${revision}.zip" excludes="*.zip" level="9" comment="${project}${line.separator}Build Date: ${builddate}${line.separator}Revision: r${revision}${line.separator}"/>
     	
         <delete>
              <fileset dir="${dist}">
-                 <exclude name="*.zip"/>
+                <exclude name="*.zip"/>
+    			<exclude name="*.jar"/>
              </fileset>
          </delete>
 
