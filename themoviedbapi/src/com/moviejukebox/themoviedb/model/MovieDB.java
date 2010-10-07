@@ -54,6 +54,18 @@ public class MovieDB extends ModelTools {
     private List<Person>   people     = new ArrayList<Person>();
     private List<Artwork>  artwork    = new ArrayList<Artwork>();
 
+    /**
+     * Just return the first country
+     * @return
+     */
+    public String getCountry() {
+        if (!countries.isEmpty()) {
+            Country country = countries.get(0);
+            return country.getName();
+        }
+        return UNKNOWN;
+    }
+    
     public String getPopularity() {
         return popularity;
     }
