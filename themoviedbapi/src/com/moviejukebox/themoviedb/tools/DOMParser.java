@@ -148,10 +148,6 @@ public class DOMParser {
                                 country.setCode(subElement.getAttribute("code"));
                                 country.setUrl(subElement.getAttribute("url"));
 
-                                System.out.println("Name: " + country.getName());
-                                System.out.println("Code: " + country.getCode());
-                                System.out.println("Url : " + country.getUrl());
-
                                 movie.addProductionCountry(country);
                             }
                         }
