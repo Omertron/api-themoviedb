@@ -27,12 +27,13 @@ import com.moviejukebox.themoviedb.model.Country;
 import com.moviejukebox.themoviedb.model.Filmography;
 import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
+import com.moviejukebox.themoviedb.model.Studio;
 
 public class DOMParser {
     static Logger logger = TheMovieDb.getLogger();
     
     public static MovieDB parseMovieInfo(Document doc) {
-        // Borrowed from http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
+        // Inspired by http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
         MovieDB movie = null;
         NodeList movieNodeList, subNodeList;
         Node movieNode, subNode;
@@ -52,15 +53,24 @@ public class DOMParser {
 
             if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
                 movieElement = (Element) movieNode;
-
-                movie.setTitle(DOMHelper.getValueFromElement(movieElement, "name"));
+                
+                // DOMHelper.getValueFromElement(movieElement, "")
+                
                 movie.setPopularity(DOMHelper.getValueFromElement(movieElement, "popularity"));
+                movie.setTranslated(DOMHelper.getValueFromElement(movieElement, "translated"));
+                movie.setAdult(DOMHelper.getValueFromElement(movieElement, "adult"));
+                movie.setLanguage(DOMHelper.getValueFromElement(movieElement, "language"));
+                movie.setOriginalName(DOMHelper.getValueFromElement(movieElement, "original_name"));
+                movie.setTitle(DOMHelper.getValueFromElement(movieElement, "name"));
+                movie.setAlternativeName(DOMHelper.getValueFromElement(movieElement, "alternative_name"));
                 movie.setType(DOMHelper.getValueFromElement(movieElement, "type"));
                 movie.setId(DOMHelper.getValueFromElement(movieElement, "id"));
                 movie.setImdb(DOMHelper.getValueFromElement(movieElement, "imdb_id"));
                 movie.setUrl(DOMHelper.getValueFromElement(movieElement, "url")); 
                 movie.setOverview(DOMHelper.getValueFromElement(movieElement, "overview"));
                 movie.setRating(DOMHelper.getValueFromElement(movieElement, "rating"));
+                movie.setTagline(DOMHelper.getValueFromElement(movieElement, "tagline"));
+                movie.setCertification(DOMHelper.getValueFromElement(movieElement, "certification"));
                 movie.setReleaseDate(DOMHelper.getValueFromElement(movieElement, "released"));
                 movie.setRuntime(DOMHelper.getValueFromElement(movieElement, "runtime"));
                 movie.setBudget(DOMHelper.getValueFromElement(movieElement, "budget"));
@@ -86,7 +96,34 @@ public class DOMParser {
                                 category.setType(subElement.getAttribute("type"));
                                 category.setUrl(subElement.getAttribute("url"));
                                 category.setName(subElement.getAttribute("name"));
+                                category.setId(subElement.getAttribute("id"));
+                                
                                 movie.addCategory(category);
+                            }
+                        }
+                    }
+                }
+                
+                // Process the "studios"
+                subNodeList = doc.getElementsByTagName("studios");
+
+                for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
+                    subNode = subNodeList.item(nodeLoop);
+                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+                        subElement = (Element) subNode;
+
+                        NodeList studioList = subNode.getChildNodes();
+                        for (int i = 0; i < studioList.getLength(); i++) {
+                            Node studioNode = studioList.item(i);
+                            if (studioNode.getNodeType() == Node.ELEMENT_NODE) {
+                                subElement = (Element) studioNode;
+                                Studio studio = new Studio();
+
+                                studio.setUrl(subElement.getAttribute("url"));
+                                studio.setName(subElement.getAttribute("name"));
+                                studio.setId(subElement.getAttribute("id"));
+                                
+                                movie.addStudio(studio);
                             }
                         }
                     }
@@ -101,9 +138,9 @@ public class DOMParser {
                         subElement = (Element) subNode;
                         Country country = new Country();
                         
+                        country.setName(DOMHelper.getValueFromElement(subElement, "name"));
                         country.setCode(DOMHelper.getValueFromElement(subElement, "code"));
                         country.setUrl(DOMHelper.getValueFromElement(subElement, "url"));
-                        country.setName(DOMHelper.getValueFromElement(subElement, "name"));
                      
                         movie.addProductionCountry(country);
                     }
@@ -124,11 +161,18 @@ public class DOMParser {
                                 subElement = (Element) personNode;
                                 Person person = new Person();
 
-                                person.setUrl(subElement.getAttribute("url"));
                                 person.setName(subElement.getAttribute("name"));
-                                person.setJob(subElement.getAttribute("job"));
                                 person.setCharacter(subElement.getAttribute("character"));
+                                person.setJob(subElement.getAttribute("job"));
                                 person.setId(subElement.getAttribute("id"));
+                                person.addArtwork(Artwork.ARTWORK_TYPE_PERSON, 
+                                                  Artwork.ARTWORK_SIZE_THUMB, 
+                                                  subElement.getAttribute("thumb"), "-1");
+                                person.setDepartment(subElement.getAttribute("department"));
+                                person.setUrl(subElement.getAttribute("url"));
+                                person.setOrder(subElement.getAttribute("order"));
+                                person.setCastId(subElement.getAttribute("cast_id"));
+                                
                                 movie.addPerson(person);
                             }
                         }
@@ -201,7 +245,7 @@ public class DOMParser {
                                     }
                                 } else {
                                     // This is a classic, it should never happen error
-                                    logger.severe("UNKNOWN Image type");
+                                    logger.severe("UNKNOWN Image type: " + subElement.getNodeName());
                                 }
                             }
                         }

@@ -160,6 +160,14 @@ public class Person extends ModelTools {
     public void setCastId(int castId) {
         this.castId = castId;
     }
+    
+    public void setCastId(String castId) {
+        try {
+            this.castId = Integer.parseInt(castId);
+        } catch (Exception ignore) {
+            this.castId = -1;
+        }
+    }
 
     public void setCharacter(String character) {
         this.character = character;
@@ -210,6 +218,14 @@ public class Person extends ModelTools {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+    
+    public void setOrder(String order) {
+        try {
+            this.order = Integer.parseInt(order);
+        } catch (Exception ignore) {
+            this.order = -1;
+        }
     }
 
     public void setUrl(String url) {
