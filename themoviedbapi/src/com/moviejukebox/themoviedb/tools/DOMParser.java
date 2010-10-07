@@ -136,16 +136,28 @@ public class DOMParser {
                     subNode = subNodeList.item(nodeLoop);
                     if (subNode.getNodeType() == Node.ELEMENT_NODE) {
                         subElement = (Element) subNode;
-                        Country country = new Country();
-                        
-                        country.setName(DOMHelper.getValueFromElement(subElement, "name"));
-                        country.setCode(DOMHelper.getValueFromElement(subElement, "code"));
-                        country.setUrl(DOMHelper.getValueFromElement(subElement, "url"));
-                     
-                        movie.addProductionCountry(country);
+
+                        NodeList countryList = subNode.getChildNodes();
+                        for (int i = 0; i < countryList.getLength(); i++) {
+                            Node countryNode = countryList.item(i);
+                            if (countryNode.getNodeType() == Node.ELEMENT_NODE) {
+                                subElement = (Element) countryNode;
+                                Country country = new Country();
+
+                                country.setName(subElement.getAttribute("name"));
+                                country.setCode(subElement.getAttribute("code"));
+                                country.setUrl(subElement.getAttribute("url"));
+
+                                System.out.println("Name: " + country.getName());
+                                System.out.println("Code: " + country.getCode());
+                                System.out.println("Url : " + country.getUrl());
+
+                                movie.addProductionCountry(country);
+                            }
+                        }
                     }
                 }
-                
+                                
                 // Process the "cast"
                 subNodeList = doc.getElementsByTagName("cast");
 
