@@ -118,7 +118,7 @@ public class TheMovieDb {
     }
 
     /**
-     * Searches the database using the IMDd reference
+     * Searches the database using the IMDb reference
      * 
      * @param imdbID    IMDb reference, must include the "tt" at the start
      * @param language  The two digit language code. E.g. en=English            
@@ -126,14 +126,14 @@ public class TheMovieDb {
      */
     public MovieDB moviedbImdbLookup(String imdbID, String language) {
         MovieDB movie = null;
-        Document doc = null;
-        
-        language = validateLanguage(language);
 
         // If the imdbID is null, then exit
         if (imdbID == null || imdbID.equals(""))
             return movie;
         
+        Document doc = null;
+        language = validateLanguage(language);
+
         try {
             String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, language);
 
@@ -171,12 +171,11 @@ public class TheMovieDb {
      * @return A movie bean with all of the information
      */
     public MovieDB moviedbGetInfo(String tmdbID, MovieDB movie, String language) {
-        Document doc = null;
-        
         // If the tmdbID is null, then exit
         if (tmdbID == null || tmdbID.equals("") || tmdbID.equalsIgnoreCase("UNKNOWN"))
             return movie;
         
+        Document doc = null;
         language = validateLanguage(language);
         
         try {
@@ -205,12 +204,11 @@ public class TheMovieDb {
      * @return
      */
     public MovieDB moviedbGetImages(String searchTerm, MovieDB movie, String language) {
-        Document doc = null;
-        
         // If the searchTerm is null, then exit
         if (searchTerm == null || searchTerm.equals("") || searchTerm.equalsIgnoreCase("UNKNOWN"))
             return movie;
         
+        Document doc = null;
         language = validateLanguage(language);
         
         try {
@@ -251,13 +249,12 @@ public class TheMovieDb {
      */
     public Person personSearch(String personName, String language) {
         Person person = new Person();
-        Document doc = null;
-        
-        language = validateLanguage(language);
-        
         if (personName == null || personName.equals("")) {
             return person;
         }
+
+        Document doc = null;
+        language = validateLanguage(language);
         
         try {
             String searchUrl = buildSearchUrl("Person.search", personName, language);
@@ -280,14 +277,13 @@ public class TheMovieDb {
      */
     public Person personGetInfo(String personID, String language) {
         Person person = new Person();
-        Document doc = null;
-        
-        language = validateLanguage(language);
-        
         if (personID == null || personID.equals("")) {
             return person;
         }
         
+        Document doc = null;
+        language = validateLanguage(language);
+
         try {
             String searchUrl = buildSearchUrl("Person.getInfo", personID, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
@@ -310,14 +306,13 @@ public class TheMovieDb {
      */
     public Person personGetVersion(String personID, String language) {
         Person person = new Person();
-        Document doc = null;
-        
-        language = validateLanguage(language);
-        
         if (personID == null || personID.equals("")) {
             return person;
         }
-        
+
+        Document doc = null;
+        language = validateLanguage(language);
+
         try {
             String searchUrl = buildSearchUrl("Person.getVersion", personID, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
@@ -328,6 +323,4 @@ public class TheMovieDb {
         
         return person;
     }
-    
-    
 }
