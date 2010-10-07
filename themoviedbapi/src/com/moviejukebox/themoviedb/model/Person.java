@@ -28,136 +28,120 @@ import com.moviejukebox.themoviedb.tools.ModelTools;
  *
  */
 public class Person extends ModelTools {
-    private String  biography;
-    private String  character;
-    private String  id;
-    private String  job;
-    private String  name;
-    private String  url;
-    private int     version;
+    private static String UNKNOWN = MovieDB.UNKNOWN;
+
+    private String  name        = UNKNOWN;
+    private String  character   = UNKNOWN;
+    private String  job         = UNKNOWN;
+    private String  id          = UNKNOWN;
+    private String  department  = UNKNOWN;
+    private String  biography   = UNKNOWN;
+    private String  url         = UNKNOWN;
+    private int     order       = -1;
+    private int     castId      = -1;
+    private int     version     = -1;
     private Date    lastModifiedAt;
+    private int     knownMovies = -1;
+    private Date    birthday;
+    private String  birthPlace  = UNKNOWN;
     private List<Filmography> filmography = new ArrayList<Filmography>();
     private List<String>      aka         = new ArrayList<String>();
-    private int     knownMovies;
-    private Date    birthday;
-    private String  birthPlace;
-
+    private List<Artwork>     images      = new ArrayList<Artwork>();
+    
+    public void addAka(String alsoKnownAs) {
+        this.aka.add(alsoKnownAs);
+    }
+    
+    public void addFilm(Filmography film) {
+        this.filmography.add(film);
+    }
+    
+    public void addImage(Artwork image) {
+        if (image != null) {
+            this.images.add(image);
+        }
+    }
+    
+    public List<String> getAka() {
+        return aka;
+    }
     
     public String getBiography() {
         return biography;
     }
     
-    public void setBiography(String biography) {
-        this.biography = biography;
+    public Date getBirthday() {
+        return birthday;
+    }
+    
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+    
+    public int getCastId() {
+        return castId;
     }
     
     public String getCharacter() {
         return character;
     }
     
-    public void setCharacter(String character) {
-        this.character = character;
+    public String getDepartment() {
+        return department;
+    }
+    
+    public List<Filmography> getFilmography() {
+        return filmography;
     }
     
     public String getId() {
         return id;
     }
     
-    public void setId(String id) {
-        this.id = id;
+    public List<Artwork> getImages() {
+        return images;
     }
     
     public String getJob() {
         return job;
-    }
-    
-    public void setJob(String job) {
-        this.job = job;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getUrl() {
-        return url;
-    }
-    
-    public void setUrl(String url) {
-        this.url = url;
-    }
-    
-    public int getVersion() {
-        return version;
-    }
-    
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    public List<Filmography> getFilmography() {
-        return filmography;
-    }
-
-    public void setFilmography(List<Filmography> filmography) {
-        this.filmography = filmography;
-    }
-    
-    public void addFilm(Filmography film) {
-        this.filmography.add(film);
-    }
-
-    public List<String> getAka() {
-        return aka;
-    }
-
-    public void setAka(List<String> aka) {
-        this.aka = aka;
-    }
-    
-    public void addAka(String alsoKnownAs) {
-        this.aka.add(alsoKnownAs);
-    }
-
-    public Date getLastModifiedAt() {
-        return lastModifiedAt;
-    }
-
-    public void setLastModifiedAt(Date lastModifiedAt) {
-        this.lastModifiedAt = lastModifiedAt;
-    }
-    
-    public void setLastModifiedAt(String lastModifiedAt) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
-        try {
-            Date lma = df.parse(lastModifiedAt);
-            setLastModifiedAt(lma);
-        } catch (Exception ignore) {
-            return;
-        }
     }
 
     public int getKnownMovies() {
         return knownMovies;
     }
 
-    public void setKnownMovies(int knownMovies) {
-        this.knownMovies = knownMovies;
+    public Date getLastModifiedAt() {
+        return lastModifiedAt;
+    }
+    
+    public String getName() {
+        return name;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public int getOrder() {
+        return order;
     }
 
+    public String getUrl() {
+        return url;
+    }
+    
+    public int getVersion() {
+        return version;
+    }
+
+    public void setAka(List<String> aka) {
+        this.aka = aka;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+    
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
-    
+
     public void setBirthday(String sBirthday) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -169,11 +153,70 @@ public class Person extends ModelTools {
         }
     }
 
-    public String getBirthPlace() {
-        return birthPlace;
-    }
-
     public void setBirthPlace(String birthPlace) {
         this.birthPlace = birthPlace;
+    }
+
+    public void setCastId(int castId) {
+        this.castId = castId;
+    }
+
+    public void setCharacter(String character) {
+        this.character = character;
+    }
+    
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setFilmography(List<Filmography> filmography) {
+        this.filmography = filmography;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setImages(List<Artwork> images) {
+        this.images = images;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public void setKnownMovies(int knownMovies) {
+        this.knownMovies = knownMovies;
+    }
+
+    public void setLastModifiedAt(Date lastModifiedAt) {
+        this.lastModifiedAt = lastModifiedAt;
+    }
+
+    public void setLastModifiedAt(String lastModifiedAt) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        try {
+            Date lma = df.parse(lastModifiedAt);
+            setLastModifiedAt(lma);
+        } catch (Exception ignore) {
+            return;
+        }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

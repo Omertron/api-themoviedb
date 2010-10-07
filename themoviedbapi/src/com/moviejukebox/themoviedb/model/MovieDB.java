@@ -271,7 +271,13 @@ public class MovieDB extends ModelTools {
     public void setStudios(List<Studio> studios) {
         this.studios = studios;
     }
-
+    
+    public void addStudio(Studio studio) {
+        if (studio != null) {
+            this.studios.add(studio);
+        }
+    }
+    
     public void setCountries(List<Country> countries) {
         this.countries = countries;
     }
