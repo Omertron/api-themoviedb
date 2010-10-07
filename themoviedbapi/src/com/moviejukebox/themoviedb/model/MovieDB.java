@@ -27,32 +27,32 @@ import com.moviejukebox.themoviedb.tools.ModelTools;
 public class MovieDB extends ModelTools {
     public static String UNKNOWN = "UNKNOWN";
 
-    private String  score       = UNKNOWN;
-    private String  popularity  = UNKNOWN;
-    private String  title       = UNKNOWN;
-    private String  type        = UNKNOWN;
-    private String  id          = UNKNOWN;
-    private String  imdb        = UNKNOWN;
-    private String  url         = UNKNOWN;
-    private String  overview    = UNKNOWN;
-    private String  rating      = UNKNOWN;
-    private String  releaseDate = UNKNOWN;
-    private String  runtime     = UNKNOWN;
-    private String  budget      = UNKNOWN;
-    private String  revenue     = UNKNOWN;
-    private String  homepage    = UNKNOWN;
-    private String  trailer     = UNKNOWN;
-    private List<Country>  countries   = new ArrayList<Country>();
-    private List<Person>   people      = new ArrayList<Person>();
-    private List<Category> categories  = new ArrayList<Category>();
-
-    public String getScore() {
-        return score;
-    }
-    
-    public void setScore(String score) {
-        this.score = score;
-    }
+    private String popularity       = UNKNOWN;
+    private String translated       = UNKNOWN;
+    private String adult            = UNKNOWN;
+    private String language         = UNKNOWN;
+    private String title            = UNKNOWN; // "name" in the XML
+    private String originalName     = UNKNOWN; // "original_name" in the XML
+    private String alternativeName  = UNKNOWN; // "alternative_name" in the XML
+    private String type             = UNKNOWN;
+    private String id               = UNKNOWN;
+    private String imdb             = UNKNOWN; // "imdb_id" in the XML
+    private String url              = UNKNOWN;
+    private String overview         = UNKNOWN;
+    private String rating           = UNKNOWN;
+    private String tagline          = UNKNOWN;
+    private String certification    = UNKNOWN;
+    private String releaseDate      = UNKNOWN; // "released" in the XML
+    private String runtime          = UNKNOWN;
+    private String budget           = UNKNOWN;
+    private String revenue          = UNKNOWN;
+    private String homepage         = UNKNOWN;
+    private String trailer          = UNKNOWN;
+    private List<Category> categories = new ArrayList<Category>();
+    private List<Studio>   studios    = new ArrayList<Studio>();
+    private List<Country>  countries  = new ArrayList<Country>();
+    private List<Person>   people     = new ArrayList<Person>();
+    private List<Artwork>  artwork    = new ArrayList<Artwork>();
 
     public String getPopularity() {
         return popularity;
@@ -194,5 +194,93 @@ public class MovieDB extends ModelTools {
         if (category != null) {
             categories.add(category);
         }
+    }
+
+    public String getTranslated() {
+        return translated;
+    }
+
+    public String getAdult() {
+        return adult;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public String getAlternativeName() {
+        return alternativeName;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public String getCertification() {
+        return certification;
+    }
+
+    public List<Studio> getStudios() {
+        return studios;
+    }
+
+    public List<Country> getCountries() {
+        return countries;
+    }
+
+    public List<Artwork> getArtwork() {
+        return artwork;
+    }
+
+    public void setTranslated(String translated) {
+        this.translated = translated;
+    }
+
+    public void setAdult(String adult) {
+        this.adult = adult;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
+
+    public void setAlternativeName(String alternativeName) {
+        this.alternativeName = alternativeName;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
+    }
+
+    public void setCertification(String certification) {
+        this.certification = certification;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void setStudios(List<Studio> studios) {
+        this.studios = studios;
+    }
+
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
+    }
+
+    public void setPeople(List<Person> people) {
+        this.people = people;
+    }
+
+    public void setArtwork(List<Artwork> artwork) {
+        this.artwork = artwork;
     }
 }
