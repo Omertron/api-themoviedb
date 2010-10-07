@@ -98,13 +98,12 @@ public class TheMovieDb {
      */
     public MovieDB moviedbSearch(String movieTitle, String language) {
         MovieDB movie = null;
-        Document doc = null;
-        
-        language = validateLanguage(language);
-        
         // If the title is null, then exit
         if (movieTitle == null || movieTitle.equals(""))
             return movie;
+
+        Document doc = null;
+        language = validateLanguage(language);
 
         try {
             String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), language);
