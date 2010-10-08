@@ -52,7 +52,6 @@ public class MovieDB extends ModelTools {
     private List<Studio>   studios    = new ArrayList<Studio>();
     private List<Country>  countries  = new ArrayList<Country>();
     private List<Person>   people     = new ArrayList<Person>();
-    private List<Artwork>  artwork    = new ArrayList<Artwork>();
 
     public String getPopularity() {
         return popularity;
@@ -232,10 +231,6 @@ public class MovieDB extends ModelTools {
         return countries;
     }
 
-    public List<Artwork> getArtwork() {
-        return artwork;
-    }
-
     public void setTranslated(String translated) {
         this.translated = translated;
     }
@@ -284,9 +279,5 @@ public class MovieDB extends ModelTools {
 
     public void setPeople(List<Person> people) {
         this.people = people;
-    }
-
-    public void setArtwork(List<Artwork> artwork) {
-        this.artwork = artwork;
     }
 }
