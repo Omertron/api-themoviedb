@@ -37,7 +37,7 @@ public class TheMovieDb {
 
     private String apiKey;
     private static String apiSite = "http://api.themoviedb.org/2.1/";
-    private static String defaultLanguage = "en";
+    private static String defaultLanguage = "en-US";
     private static Logger logger;
     private static LogFormatter tmdbFormatter = new LogFormatter();
     private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
@@ -93,7 +93,7 @@ public class TheMovieDb {
      * Searches the database using the movie title passed
      * 
      * @param movieTitle    The title to search for
-     * @param language      The two digit language code. E.g. en=English            
+     * @param language      The two digit language code. E.g. en=English
      * @return              A movie bean with the data extracted
      */
     public MovieDB moviedbSearch(String movieTitle, String language) {
@@ -103,10 +103,9 @@ public class TheMovieDb {
             return movie;
 
         Document doc = null;
-        language = validateLanguage(language);
 
         try {
-            String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), language);
+            String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), validateLanguage(language));
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovieInfo(doc);
 
@@ -131,10 +130,9 @@ public class TheMovieDb {
             return movie;
         
         Document doc = null;
-        language = validateLanguage(language);
 
         try {
-            String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, language);
+            String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, validateLanguage(language));
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovieInfo(doc);
@@ -175,10 +173,9 @@ public class TheMovieDb {
             return movie;
         
         Document doc = null;
-        language = validateLanguage(language);
         
         try {
-            String searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, language);
+            String searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, validateLanguage(language));
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovieInfo(doc);
@@ -208,10 +205,9 @@ public class TheMovieDb {
             return movie;
         
         Document doc = null;
-        language = validateLanguage(language);
         
         try {
-            String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, language);
+            String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, validateLanguage(language));
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovieInfo(doc);
@@ -221,21 +217,6 @@ public class TheMovieDb {
         }
 
         return movie;
-    }
-    
-    /**
-     * This function will check the passed language against a list of known themoviedb.org languages
-     * Currently the only available language is English "en" and so that is what this function returns
-     * @param language
-     * @return
-     */
-    private String validateLanguage(String language) {
-        if (language == null) {
-            language = defaultLanguage;
-        } else {
-            language = defaultLanguage;
-        }
-        return language;
     }
 
     /**
@@ -253,10 +234,9 @@ public class TheMovieDb {
         }
 
         Document doc = null;
-        language = validateLanguage(language);
         
         try {
-            String searchUrl = buildSearchUrl("Person.search", personName, language);
+            String searchUrl = buildSearchUrl("Person.search", personName, validateLanguage(language));
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
@@ -281,10 +261,9 @@ public class TheMovieDb {
         }
         
         Document doc = null;
-        language = validateLanguage(language);
 
         try {
-            String searchUrl = buildSearchUrl("Person.getInfo", personID, language);
+            String searchUrl = buildSearchUrl("Person.getInfo", personID, validateLanguage(language));
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
@@ -310,10 +289,9 @@ public class TheMovieDb {
         }
 
         Document doc = null;
-        language = validateLanguage(language);
 
         try {
-            String searchUrl = buildSearchUrl("Person.getVersion", personID, language);
+            String searchUrl = buildSearchUrl("Person.getVersion", personID, validateLanguage(language));
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonGetVersion(doc);
         } catch (Exception error) {
@@ -321,5 +299,32 @@ public class TheMovieDb {
         }
         
         return person;
+    }
+    
+    /**
+     * This function will check the passed language against a list of known themoviedb.org languages
+     * Currently the only available language is English "en" and so that is what this function returns
+     * @param language
+     * @return
+     */
+    private String validateLanguage(String language) {
+        if (language == null) {
+            return defaultLanguage;
+        } else {
+            /*
+             * Rather than check every conceivable language, we'll just validate the format of the language
+             * The language should either be 2 or 5 characters "xx" or "xx-YY"
+             * http://api.themoviedb.org/2.1/language-tags
+             */
+            if (language.length() == 2) {
+                return language.toLowerCase();
+            } else if (language.length() == 5) {
+                return language.substring(1, 2).toLowerCase() + "-" + language.substring(4, 5).toUpperCase();
+            } else {
+                // The format of the language is wrong, so just cut the first two characters and use that
+                // The site will take care of invalid languages
+                return language.substring(1, 2).toLowerCase();
+            }
+        }
     }
 }
