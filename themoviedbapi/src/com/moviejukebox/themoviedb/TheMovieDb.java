@@ -415,14 +415,9 @@ public class TheMovieDb {
             return null;
         }
         
-        System.out.println("Looking for: " + title + " - Year: " + year);
-        
         for (MovieDB moviedb : movieList) {
             if (compareMovies(moviedb, title, year)) {
-                System.out.println("Matched: " + moviedb.getTitle());
                 return moviedb;
-            } else {
-                System.out.println("Not Matched: " + moviedb.getTitle() + " - " + moviedb.getReleaseDate());
             }
         }
         
@@ -445,7 +440,6 @@ public class TheMovieDb {
             if (isValidString(moviedb.getReleaseDate())) {
                 // Compare with year
                 String movieYear = moviedb.getReleaseDate().substring(0, 4);
-                logger.fine("Comparing against: " + moviedb.getTitle() + " - " + moviedb.getReleaseDate() + " - " + movieYear);
                 if (moviedb.getTitle().equalsIgnoreCase(title) && movieYear.equals(year)) {
                     return true;
                 }
