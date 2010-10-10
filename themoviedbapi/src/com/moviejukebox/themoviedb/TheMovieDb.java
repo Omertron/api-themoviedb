@@ -14,11 +14,17 @@
 package com.moviejukebox.themoviedb;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
@@ -96,23 +102,39 @@ public class TheMovieDb {
      * @param language      The two digit language code. E.g. en=English
      * @return              A movie bean with the data extracted
      */
-    public MovieDB moviedbSearch(String movieTitle, String language) {
+    public List<MovieDB> moviedbSearch(String movieTitle, String language) {
         MovieDB movie = null;
+        List<MovieDB> movieList = new ArrayList<MovieDB>();
+        
         // If the title is null, then exit
-        if (movieTitle == null || movieTitle.equals(""))
-            return movie;
+        if (!isValidString(movieTitle)) {
+            return movieList;
+        }
 
         Document doc = null;
 
         try {
             String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), validateLanguage(language));
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movie = DOMParser.parseMovieInfo(doc);
-
+            NodeList nlMovies = doc.getElementsByTagName("movie");
+            if (nlMovies == null) {
+                return movieList;
+            }
+            
+            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
+                Node nMovie = nlMovies.item(loop);
+                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eMovie = (Element) nMovie;
+                    movie = DOMParser.parseMovieInfo(eMovie);
+                    if (movie != null) {
+                        movieList.add(movie);
+                    }
+                }
+            }
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
         }
-        return movie;
+        return movieList;
     }
 
     /**
@@ -123,11 +145,12 @@ public class TheMovieDb {
      * @return          A movie bean with the data extracted
      */
     public MovieDB moviedbImdbLookup(String imdbID, String language) {
-        MovieDB movie = null;
+        MovieDB movie = new MovieDB();
 
         // If the imdbID is null, then exit
-        if (imdbID == null || imdbID.equals(""))
+        if (!isValidString(imdbID)) {
             return movie;
+        }
         
         Document doc = null;
 
@@ -135,8 +158,18 @@ public class TheMovieDb {
             String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, validateLanguage(language));
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movie = DOMParser.parseMovieInfo(doc);
-        
+            NodeList nlMovies = doc.getElementsByTagName("movie");
+            if (nlMovies == null) {
+                return movie;
+            }
+
+            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
+                Node nMovie = nlMovies.item(loop);
+                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eMovie = (Element) nMovie;
+                    movie = DOMParser.parseMovieInfo(eMovie);
+                }
+            }
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
         }
@@ -169,7 +202,7 @@ public class TheMovieDb {
      */
     public MovieDB moviedbGetInfo(String tmdbID, MovieDB movie, String language) {
         // If the tmdbID is null, then exit
-        if (tmdbID == null || tmdbID.equals("") || tmdbID.equalsIgnoreCase("UNKNOWN"))
+        if (!isValidString(tmdbID))
             return movie;
         
         Document doc = null;
@@ -178,8 +211,18 @@ public class TheMovieDb {
             String searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, validateLanguage(language));
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movie = DOMParser.parseMovieInfo(doc);
-            
+            NodeList nlMovies = doc.getElementsByTagName("movie");
+            if (nlMovies == null) {
+                return movie;
+            }
+
+            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
+                Node nMovie = nlMovies.item(loop);
+                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eMovie = (Element) nMovie;
+                    movie = DOMParser.parseMovieInfo(eMovie);
+                }
+            }
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
         }
@@ -201,7 +244,7 @@ public class TheMovieDb {
      */
     public MovieDB moviedbGetImages(String searchTerm, MovieDB movie, String language) {
         // If the searchTerm is null, then exit
-        if (searchTerm == null || searchTerm.equals("") || searchTerm.equalsIgnoreCase("UNKNOWN"))
+        if (isValidString(searchTerm))
             return movie;
         
         Document doc = null;
@@ -210,7 +253,18 @@ public class TheMovieDb {
             String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, validateLanguage(language));
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movie = DOMParser.parseMovieInfo(doc);
+            NodeList nlMovies = doc.getElementsByTagName("movie");
+            if (nlMovies == null) {
+                return movie;
+            }
+
+            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
+                Node nMovie = nlMovies.item(loop);
+                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eMovie = (Element) nMovie;
+                    movie = DOMParser.parseMovieInfo(eMovie);
+                }
+            }
 
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
@@ -229,7 +283,7 @@ public class TheMovieDb {
      */
     public Person personSearch(String personName, String language) {
         Person person = new Person();
-        if (personName == null || personName.equals("")) {
+        if (!isValidString(personName)) {
             return person;
         }
 
@@ -256,7 +310,7 @@ public class TheMovieDb {
      */
     public Person personGetInfo(String personID, String language) {
         Person person = new Person();
-        if (personID == null || personID.equals("")) {
+        if (!isValidString(personID)) {
             return person;
         }
         
@@ -284,7 +338,7 @@ public class TheMovieDb {
      */
     public Person personGetVersion(String personID, String language) {
         Person person = new Person();
-        if (personID == null || personID.equals("")) {
+        if (!isValidString(personID)) {
             return person;
         }
 
@@ -308,7 +362,7 @@ public class TheMovieDb {
      * @return
      */
     private String validateLanguage(String language) {
-        if (language == null) {
+        if (!isValidString(language)) {
             return defaultLanguage;
         } else {
             /*
@@ -326,5 +380,82 @@ public class TheMovieDb {
                 return language.substring(1, 2).toLowerCase();
             }
         }
+    }
+    
+    /**
+     * Check the string passed to see if it contains a value.
+     * @param testString The string to test
+     * @return False if the string is empty, null or UNKNOWN, True otherwise
+     */
+    public static boolean isValidString(String testString) {
+        if (testString == null) {
+            return false;
+        }
+        
+        if (testString.equalsIgnoreCase(MovieDB.UNKNOWN)) {
+            return false;
+        }
+        
+        if (testString.trim().equals("")) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Search a list of movies and return the one that matches the title & year
+     * @param movieList The list of movies to search
+     * @param title     The title to search for
+     * @param year      The year of the title to search for
+     * @return          The matching movie
+     */
+    public static MovieDB findMovie(Collection<MovieDB> movieList, String title, String year) {
+        if (movieList == null || movieList.isEmpty()) {
+            return null;
+        }
+        
+        System.out.println("Looking for: " + title + " - Year: " + year);
+        
+        for (MovieDB moviedb : movieList) {
+            if (compareMovies(moviedb, title, year)) {
+                System.out.println("Matched: " + moviedb.getTitle());
+                return moviedb;
+            } else {
+                System.out.println("Not Matched: " + moviedb.getTitle() + " - " + moviedb.getReleaseDate());
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Compare the MovieDB object with a title & year
+     * @param moviedb   The moviedb object to compare too
+     * @param title     The title of the movie to compare
+     * @param year      The year of the movie to compare
+     * @return          True if there is a match, False otherwise.
+     */
+    public static boolean compareMovies(MovieDB moviedb, String title, String year) {
+        if (!isValidString(title)) {
+            return false;
+        }
+
+        if (isValidString(year)) {
+            if (isValidString(moviedb.getReleaseDate())) {
+                // Compare with year
+                String movieYear = moviedb.getReleaseDate().substring(0, 4);
+                logger.fine("Comparing against: " + moviedb.getTitle() + " - " + moviedb.getReleaseDate() + " - " + movieYear);
+                if (moviedb.getTitle().equalsIgnoreCase(title) && movieYear.equals(year)) {
+                    return true;
+                }
+            }
+        } else {
+            // Compare without year
+            if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
