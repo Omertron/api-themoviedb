@@ -31,6 +31,7 @@ import com.moviejukebox.themoviedb.model.Person;
 import com.moviejukebox.themoviedb.tools.DOMHelper;
 import com.moviejukebox.themoviedb.tools.DOMParser;
 import com.moviejukebox.themoviedb.tools.LogFormatter;
+import com.moviejukebox.themoviedb.tools.WebBrowser;
 
 /**
  * This is the main class for the API to connect to TheMovieDb.org The implementation is for v2.1 
@@ -56,6 +57,18 @@ public class TheMovieDb {
     public TheMovieDb(String apiKey, Logger logger) {
         setLogger(logger);
         setApiKey(apiKey);
+    }
+
+    public void setProxy(String host, String port, String username, String password) {
+        WebBrowser.setProxyHost(host);
+        WebBrowser.setProxyPort(port);
+        WebBrowser.setProxyUsername(username);
+        WebBrowser.setProxyPassword(password);
+    }
+    
+    public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
+        WebBrowser.setWebTimeoutConnect(webTimeoutConnect);
+        WebBrowser.setWebTimeoutRead(webTimeoutRead);
     }
 
     public static Logger getLogger() {

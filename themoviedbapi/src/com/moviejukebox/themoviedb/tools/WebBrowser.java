@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
  * Web browser with simple cookies support
  */
 public final class WebBrowser {
+    
     private static Map<String, String> browserProperties = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies;
     private static String proxyHost = null;
@@ -39,6 +40,8 @@ public final class WebBrowser {
     private static String proxyUsername = null;
     private static String proxyPassword = null;
     private static String proxyEncodedPassword = null;
+    private static int webTimeoutConnect = 10000;   // 10 second timeout
+    private static int webTimeoutRead = 90000;      // 90 second timeout
 
     static {
         browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
@@ -233,5 +236,21 @@ public final class WebBrowser {
             proxyEncodedPassword = proxyUsername + ":" + tvdbProxyPassword;
             proxyEncodedPassword = Base64.base64Encode(proxyEncodedPassword);
         }
+    }
+
+    public static int getWebTimeoutConnect() {
+        return webTimeoutConnect;
+    }
+
+    public static int getWebTimeoutRead() {
+        return webTimeoutRead;
+    }
+
+    public static void setWebTimeoutConnect(int webTimeoutConnect) {
+        WebBrowser.webTimeoutConnect = webTimeoutConnect;
+    }
+
+    public static void setWebTimeoutRead(int webTimeoutRead) {
+        WebBrowser.webTimeoutRead = webTimeoutRead;
     }
 }
