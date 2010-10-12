@@ -25,7 +25,7 @@ import com.moviejukebox.themoviedb.tools.ModelTools;
  */
 
 public class MovieDB extends ModelTools {
-    public static String UNKNOWN = "UNKNOWN";
+    public static final String UNKNOWN = "UNKNOWN";
 
     private String popularity       = UNKNOWN;
     private String translated       = UNKNOWN;
