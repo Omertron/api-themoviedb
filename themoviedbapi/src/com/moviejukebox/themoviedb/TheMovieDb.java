@@ -127,7 +127,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), validateLanguage(language));
+            String searchUrl = buildSearchUrl("Movie.search", URLEncoder.encode(movieTitle, "UTF-8"), language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             NodeList nlMovies = doc.getElementsByTagName("movie");
             if (nlMovies == null) {
@@ -168,7 +168,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, validateLanguage(language));
+            String searchUrl = buildSearchUrl("Movie.imdbLookup", imdbID, language);
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             NodeList nlMovies = doc.getElementsByTagName("movie");
@@ -214,16 +214,26 @@ public class TheMovieDb {
      * @return A movie bean with all of the information
      */
     public MovieDB moviedbGetInfo(String tmdbID, MovieDB movie, String language) {
-        // If the tmdbID is null, then exit
+        // If the tmdbID is invalid, then exit
         if (!isValidString(tmdbID))
             return movie;
         
         Document doc = null;
         
         try {
-            String searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, validateLanguage(language));
+            String searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, language);
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
+            if (doc == null && !language.equalsIgnoreCase(defaultLanguage)) {
+                logger.fine("Trying to get the default version");
+                Thread.dumpStack();
+                searchUrl = buildSearchUrl("Movie.getInfo", tmdbID, defaultLanguage);
+            }
+            
+            if (doc == null) {
+                return movie;
+            }
+            
             NodeList nlMovies = doc.getElementsByTagName("movie");
             if (nlMovies == null) {
                 return movie;
@@ -237,7 +247,7 @@ public class TheMovieDb {
                 }
             }
         } catch (Exception error) {
-            logger.severe("TheMovieDb Error: " + error.getMessage());
+            logger.severe("Error: " + error.getMessage());
         }
         return movie;
     }
@@ -263,7 +273,7 @@ public class TheMovieDb {
         Document doc = null;
         
         try {
-            String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, validateLanguage(language));
+            String searchUrl = buildSearchUrl("Movie.getImages", searchTerm, language);
             
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             NodeList nlMovies = doc.getElementsByTagName("movie");
@@ -303,7 +313,7 @@ public class TheMovieDb {
         Document doc = null;
         
         try {
-            String searchUrl = buildSearchUrl("Person.search", personName, validateLanguage(language));
+            String searchUrl = buildSearchUrl("Person.search", personName, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
@@ -330,7 +340,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl("Person.getInfo", personID, validateLanguage(language));
+            String searchUrl = buildSearchUrl("Person.getInfo", personID, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
@@ -358,7 +368,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl("Person.getVersion", personID, validateLanguage(language));
+            String searchUrl = buildSearchUrl("Person.getVersion", personID, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonGetVersion(doc);
         } catch (Exception error) {
@@ -366,33 +376,6 @@ public class TheMovieDb {
         }
         
         return person;
-    }
-    
-    /**
-     * This function will check the passed language against a list of known themoviedb.org languages
-     * Currently the only available language is English "en" and so that is what this function returns
-     * @param language
-     * @return
-     */
-    private String validateLanguage(String language) {
-        if (!isValidString(language)) {
-            return defaultLanguage;
-        } else {
-            /*
-             * Rather than check every conceivable language, we'll just validate the format of the language
-             * The language should either be 2 or 5 characters "xx" or "xx-YY"
-             * http://api.themoviedb.org/2.1/language-tags
-             */
-            if (language.length() == 2) {
-                return language.toLowerCase();
-            } else if (language.length() == 5) {
-                return language.substring(1, 2).toLowerCase() + "-" + language.substring(4, 5).toUpperCase();
-            } else {
-                // The format of the language is wrong, so just cut the first two characters and use that
-                // The site will take care of invalid languages
-                return language.substring(1, 2).toLowerCase();
-            }
-        }
     }
     
     /**

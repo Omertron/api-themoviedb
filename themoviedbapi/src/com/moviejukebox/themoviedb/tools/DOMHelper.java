@@ -15,6 +15,7 @@ package com.moviejukebox.themoviedb.tools;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,12 +27,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.moviejukebox.themoviedb.TheMovieDb;
+
 /**
  * Generic set of routines to process the DOM model data
  * @author Stuart
  *
  */
 public class DOMHelper {
+    static Logger logger = TheMovieDb.getLogger();
 
     /**
      * Gets the string value of the tag element name passed
@@ -66,14 +70,35 @@ public class DOMHelper {
             throws IOException, ParserConfigurationException, SAXException {
         Document doc = null;
         InputStream in = null;
+        String webPage = null;
+        
         try {
-            String webPage = WebBrowser.request(url);
-            in = new ByteArrayInputStream(webPage.getBytes("UTF-8"));
+            boolean validWebPage = false;
 
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            doc = db.parse(in);
-            doc.getDocumentElement().normalize();
+
+            webPage = WebBrowser.request(url);
+           
+            // There seems to be an error with some of the web pages that returns garbage
+            if (webPage.startsWith("<?xml version")) {
+                // This looks like a valid web page
+                validWebPage = true;
+            } else {
+                logger.fine("Error with API Call for: " + url);
+                return null;
+            }
+            
+            if (validWebPage) {
+                in = new ByteArrayInputStream(webPage.getBytes("UTF-8"));
+    
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                doc = db.parse(in);
+                doc.getDocumentElement().normalize();
+            }
+        } catch (Exception error) {
+            logger.fine("Error parsing: " + url);
+            // Some sort of error occurred getting the data, so clear the document
+            doc = null;
         } finally {
             if (in != null) {
                 in.close();
