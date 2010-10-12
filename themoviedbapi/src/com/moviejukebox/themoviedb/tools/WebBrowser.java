@@ -40,7 +40,7 @@ public final class WebBrowser {
     private static String proxyUsername = null;
     private static String proxyPassword = null;
     private static String proxyEncodedPassword = null;
-    private static int webTimeoutConnect = 10000;   // 10 second timeout
+    private static int webTimeoutConnect = 25000;   // 25 second timeout
     private static int webTimeoutRead = 90000;      // 90 second timeout
 
     static {
