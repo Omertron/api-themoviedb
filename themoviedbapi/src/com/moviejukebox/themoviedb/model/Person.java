@@ -28,7 +28,7 @@ import com.moviejukebox.themoviedb.tools.ModelTools;
  *
  */
 public class Person extends ModelTools {
-    private static String UNKNOWN = MovieDB.UNKNOWN;
+    private static final String UNKNOWN = MovieDB.UNKNOWN;
 
     private String  name        = UNKNOWN;
     private String  character   = UNKNOWN;

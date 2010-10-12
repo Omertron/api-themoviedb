@@ -10,7 +10,6 @@
  *      For any reuse or distribution, you must make clear to others the 
  *      license terms of this work.  
  */
-
 package com.moviejukebox.themoviedb.model;
 
 /**
@@ -20,31 +19,32 @@ package com.moviejukebox.themoviedb.model;
  *
  */
 public class Category {
-    public String   type;
-    public String   name;
-    public String   url;
-    public String   id;
-    
+
+    private String type;
+    private String name;
+    private String url;
+    private String id;
+
     public String getId() {
         return id;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public String getType() {
         return type;
     }
-    
+
     public String getUrl() {
         return url;
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }

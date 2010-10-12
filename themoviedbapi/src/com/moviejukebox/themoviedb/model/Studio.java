@@ -10,7 +10,6 @@
  *      For any reuse or distribution, you must make clear to others the 
  *      license terms of this work.  
  */
-
 package com.moviejukebox.themoviedb.model;
 
 /**
@@ -20,10 +19,11 @@ package com.moviejukebox.themoviedb.model;
  *
  */
 public class Studio {
-    public String   name;
-    public String   url;
-    public String   id;
-    
+
+    private String name;
+    private String url;
+    private String id;
+
     public String getId() {
         return id;
     }
@@ -35,15 +35,15 @@ public class Studio {
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getUrl() {
         return url;
     }
-    
+
     public void setUrl(String url) {
         this.url = url;
     }

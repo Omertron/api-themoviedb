@@ -33,10 +33,10 @@ public class Artwork implements Comparable<Object> {
     public static String ARTWORK_SIZE_PROFILE   = "profile";
     public static String[] ARTWORK_SIZES        = {ARTWORK_SIZE_ORIGINAL, ARTWORK_SIZE_THUMB, ARTWORK_SIZE_MID, ARTWORK_SIZE_COVER, ARTWORK_SIZE_POSTER, ARTWORK_SIZE_PROFILE};
 
-    public String type;
-    public String size;
-    public String url;
-    public int    id;
+    private String type;
+    private String size;
+    private String url;
+    private int    id;
     
     public String[] getArtworkSizes() {
         return ARTWORK_SIZES;
