@@ -31,7 +31,7 @@ import com.moviejukebox.themoviedb.TheMovieDb;
 
 /**
  * Generic set of routines to process the DOM model data
- * @author Stuart
+ * @author Stuart.Boston
  *
  */
 public class DOMHelper {
@@ -74,8 +74,6 @@ public class DOMHelper {
         
         try {
             boolean validWebPage = false;
-
-
             webPage = WebBrowser.request(url);
            
             // There seems to be an error with some of the web pages that returns garbage

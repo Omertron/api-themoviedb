@@ -44,7 +44,7 @@ import com.moviejukebox.themoviedb.tools.WebBrowser;
 public class TheMovieDb {
 
     private String apiKey;
-    private static Logger logger;
+    private static Logger logger = null;
     private static LogFormatter tmdbFormatter = new LogFormatter();
     private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
     private static final String apiSite = "http://api.themoviedb.org/2.1/";
@@ -64,7 +64,9 @@ public class TheMovieDb {
     }
 
     public TheMovieDb(String apiKey, Logger logger) {
-        setLogger(logger);
+        if (logger == null) {
+            setLogger(logger);
+        }
         setApiKey(apiKey);
     }
 
@@ -84,12 +86,12 @@ public class TheMovieDb {
         return logger;
     }
 
-    public static void setLogger(Logger logger) {
+    public void setLogger(Logger logger) {
         TheMovieDb.logger = logger;
         tmdbConsoleHandler.setFormatter(tmdbFormatter);
         tmdbConsoleHandler.setLevel(Level.FINE);
         logger.addHandler(tmdbConsoleHandler);
-        logger.setUseParentHandlers(true);
+        logger.setUseParentHandlers(false);
         logger.setLevel(Level.ALL);
     }
 
@@ -243,7 +245,7 @@ public class TheMovieDb {
                 }
             }
         } catch (Exception error) {
-            logger.severe("TheMovieDb Error: " + error.getMessage());
+            logger.severe("Search error: " + error.getMessage());
         }
         return movieList;
     }
@@ -282,7 +284,7 @@ public class TheMovieDb {
                 }
             }
         } catch (Exception error) {
-            logger.severe("TheMovieDb Error: " + error.getMessage());
+            logger.severe("ImdbLookup error: " + error.getMessage());
         }
         return movie;
     }
@@ -324,8 +326,7 @@ public class TheMovieDb {
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             if (doc == null && !language.equalsIgnoreCase(defaultLanguage)) {
-                logger.fine("Trying to get the default version");
-                Thread.dumpStack();
+                logger.fine("Trying to get the '" + defaultLanguage + "' version");
                 searchUrl = buildSearchUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
             }
 
@@ -346,7 +347,8 @@ public class TheMovieDb {
                 }
             }
         } catch (Exception error) {
-            logger.severe("Error: " + error.getMessage());
+            logger.severe("GetInfo error: " + error.getMessage());
+            error.printStackTrace();
         }
         return movie;
     }
@@ -390,7 +392,7 @@ public class TheMovieDb {
             }
 
         } catch (Exception error) {
-            logger.severe("TheMovieDb Error: " + error.getMessage());
+            logger.severe("GetImages Error: " + error.getMessage());
         }
 
         return movie;
@@ -417,7 +419,7 @@ public class TheMovieDb {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("PersonSearch error: " + error.getMessage());
         }
 
         return person;
@@ -444,7 +446,7 @@ public class TheMovieDb {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("PersonGetInfo error: " + error.getMessage());
         }
 
         return person;
@@ -472,7 +474,7 @@ public class TheMovieDb {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonGetVersion(doc);
         } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
+            logger.severe("PersonGetVersion error: " + error.getMessage());
         }
 
         return person;
