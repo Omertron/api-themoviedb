@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb;
 
+import com.moviejukebox.themoviedb.model.Category;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -112,12 +113,11 @@ public class TheMovieDb {
      * @return              A movie bean with the data extracted
      */
     public List<MovieDB> moviedbSearch(String movieTitle, String language) {
-        MovieDB movie = null;
-        List<MovieDB> movieList = new ArrayList<MovieDB>();
+        List<MovieDB> movies = new ArrayList<MovieDB>();
 
         // If the title is null, then exit
         if (!isValidString(movieTitle)) {
-            return movieList;
+            return movies;
         }
 
         Document doc = null;
@@ -125,25 +125,11 @@ public class TheMovieDb {
         try {
             String searchUrl = buildSearchUrl(MOVIE_SEARCH, URLEncoder.encode(movieTitle, "UTF-8"), language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            NodeList nlMovies = doc.getElementsByTagName("movie");
-            if (nlMovies == null) {
-                return movieList;
-            }
-
-            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
-                Node nMovie = nlMovies.item(loop);
-                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eMovie = (Element) nMovie;
-                    movie = DOMParser.parseMovieInfo(eMovie);
-                    if (movie != null) {
-                        movieList.add(movie);
-                    }
-                }
-            }
+            movies = DOMParser.parseMovies(doc);
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
         }
-        return movieList;
+        return movies;
     }
 
     /**
@@ -177,9 +163,9 @@ public class TheMovieDb {
     public List<MovieDB> moviedbBrowse(String orderBy, String order,
             Map<String, String> parameters, String language) {
 
-        List<MovieDB> movieList = new ArrayList<MovieDB>();
+        List<MovieDB> movies = new ArrayList<MovieDB>();
         if (!isValidString(orderBy) || (!isValidString(order))) {
-            return movieList;
+            return movies;
         }
 
         List<String> validParameters = new ArrayList<String>();
@@ -205,31 +191,16 @@ public class TheMovieDb {
             }
         }
 
-        MovieDB movie = null;
         Document doc = null;
 
+        String searchUrl = buildSearchUrl(MOVIE_BROWSE, url, language);
         try {
-            String searchUrl = buildSearchUrl(MOVIE_BROWSE, url, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            NodeList nlMovies = doc.getElementsByTagName("movie");
-            if (nlMovies == null) {
-                return movieList;
-            }
-
-            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
-                Node nMovie = nlMovies.item(loop);
-                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eMovie = (Element) nMovie;
-                    movie = DOMParser.parseMovieInfo(eMovie);
-                    if (movie != null) {
-                        movieList.add(movie);
-                    }
-                }
-            }
         } catch (Exception error) {
             logger.severe("Browse error: " + error.getMessage());
         }
-        return movieList;
+        movies = DOMParser.parseMovies(doc);
+        return movies;
     }
 
     /**
@@ -253,18 +224,7 @@ public class TheMovieDb {
             String searchUrl = buildSearchUrl(MOVIE_IMDB_LOOKUP, imdbID, language);
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            NodeList nlMovies = doc.getElementsByTagName("movie");
-            if (nlMovies == null) {
-                return movie;
-            }
-
-            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
-                Node nMovie = nlMovies.item(loop);
-                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eMovie = (Element) nMovie;
-                    movie = DOMParser.parseMovieInfo(eMovie);
-                }
-            }
+            movie = DOMParser.parseMovie(doc);
         } catch (Exception error) {
             logger.severe("ImdbLookup error: " + error.getMessage());
         }
@@ -316,18 +276,7 @@ public class TheMovieDb {
                 return movie;
             }
 
-            NodeList nlMovies = doc.getElementsByTagName("movie");
-            if (nlMovies == null) {
-                return movie;
-            }
-
-            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
-                Node nMovie = nlMovies.item(loop);
-                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eMovie = (Element) nMovie;
-                    movie = DOMParser.parseMovieInfo(eMovie);
-                }
-            }
+            movie = DOMParser.parseMovie(doc);
         } catch (Exception error) {
             logger.severe("GetInfo error: " + error.getMessage());
             error.printStackTrace();
@@ -337,7 +286,7 @@ public class TheMovieDb {
 
     public MovieDB moviedbGetImages(String searchTerm, String language) {
         MovieDB movie = null;
-        movie = moviedbGetInfo(searchTerm, movie, language);
+        movie = moviedbGetImages(searchTerm, movie, language);
         return movie;
     }
 
@@ -360,18 +309,7 @@ public class TheMovieDb {
             String searchUrl = buildSearchUrl(MOVIE_GET_IMAGES, searchTerm, language);
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            NodeList nlMovies = doc.getElementsByTagName("movie");
-            if (nlMovies == null) {
-                return movie;
-            }
-
-            for (int loop = 0; loop < nlMovies.getLength(); loop++) {
-                Node nMovie = nlMovies.item(loop);
-                if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eMovie = (Element) nMovie;
-                    movie = DOMParser.parseMovieInfo(eMovie);
-                }
-            }
+            movie = DOMParser.parseMovie(doc);
 
         } catch (Exception error) {
             logger.severe("GetImages Error: " + error.getMessage());
@@ -461,6 +399,7 @@ public class TheMovieDb {
 
         return person;
     }
+
 
     /**
      * Search a list of movies and return the one that matches the title & year

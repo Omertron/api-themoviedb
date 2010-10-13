@@ -10,9 +10,10 @@
  *      For any reuse or distribution, you must make clear to others the 
  *      license terms of this work.  
  */
-
 package com.moviejukebox.themoviedb.tools;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
@@ -30,15 +31,139 @@ import com.moviejukebox.themoviedb.model.Person;
 import com.moviejukebox.themoviedb.model.Studio;
 
 public class DOMParser {
+
     static Logger logger = TheMovieDb.getLogger();
-    
-    public static MovieDB parseMovieInfo(Element movieElement) {
-        // Inspired by http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
+
+    /**
+     * Returns a list of MovieDB object parsed from the DOM Document
+     * even if there is only one movie
+     * @param doc DOM Document
+     * @return
+     */
+    public static List<MovieDB> parseMovies(Document doc) {
+        List<MovieDB> movies = new ArrayList<MovieDB>();
+        NodeList nlMovies = doc.getElementsByTagName("movie");
+        if ((nlMovies == null) || nlMovies.getLength() == 0) {
+            return movies;
+        }
+
+        MovieDB movie = null;
+
+        for (int i = 0; i < nlMovies.getLength(); i++) {
+            Node movieNode = nlMovies.item(i);
+            if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element movieElement = (Element) movieNode;
+                movie = DOMParser.parseMovieInfo(movieElement);
+                if (movie != null) {
+                    movies.add(movie);
+                }
+            }
+        }
+        return movies;
+    }
+
+    /**
+     * Returns the first MovieDB from the DOM Document.
+     * @param doc a DOM Document
+     * @return
+     */
+    public static MovieDB parseMovie(Document doc) {
+        MovieDB movie = new MovieDB();
+        NodeList nlMovies = doc.getElementsByTagName("movie");
+        if ((nlMovies == null) || nlMovies.getLength() == 0) {
+            return movie;
+        }
+
+        Node nMovie = nlMovies.item(0);
+        if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
+            Element eMovie = (Element) nMovie;
+            movie = DOMParser.parseMovieInfo(eMovie);
+        }
+
+        return movie;
+    }
+
+    public static Person parsePersonInfo(Document doc) {
+        Person person = null;
+
+        try {
+            person = new Person();
+            NodeList personNodeList = doc.getElementsByTagName("person");
+
+            // Only get the first movie from the list
+            Node personNode = personNodeList.item(0);
+
+            if (personNode == null) {
+                logger.finest("Person not found");
+                return person;
+            }
+
+            if (personNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element personElement = (Element) personNode;
+
+                person.setName(DOMHelper.getValueFromElement(personElement, "name"));
+                person.setId(DOMHelper.getValueFromElement(personElement, "id"));
+                person.setBiography(DOMHelper.getValueFromElement(personElement, "biography"));
+                person.setKnownMovies(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "known_movies")));
+                person.setBirthday(DOMHelper.getValueFromElement(personElement, "birthday"));
+                person.setBirthPlace(DOMHelper.getValueFromElement(personElement, "birthplace"));
+                person.setUrl(DOMHelper.getValueFromElement(personElement, "url"));
+                person.setVersion(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "version")));
+                person.setLastModifiedAt(DOMHelper.getValueFromElement(personElement, "last_modified_at"));
+
+                NodeList artworkNodeList = doc.getElementsByTagName("image");
+                for (int nodeLoop = 0; nodeLoop < artworkNodeList.getLength(); nodeLoop++) {
+                    Node artworkNode = artworkNodeList.item(nodeLoop);
+                    if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element artworkElement = (Element) artworkNode;
+                        Artwork artwork = new Artwork();
+                        artwork.setType(artworkElement.getAttribute("type"));
+                        artwork.setUrl(artworkElement.getAttribute("url"));
+                        artwork.setSize(artworkElement.getAttribute("size"));
+                        artwork.setId(artworkElement.getAttribute("id"));
+                        person.addArtwork(artwork);
+                    }
+                }
+
+                NodeList filmNodeList = doc.getElementsByTagName("movie");
+                for (int nodeLoop = 0; nodeLoop < filmNodeList.getLength(); nodeLoop++) {
+                    Node filmNode = filmNodeList.item(nodeLoop);
+                    if (filmNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element filmElement = (Element) filmNode;
+                        Filmography film = new Filmography();
+
+                        film.setCharacter(filmElement.getAttribute("character"));
+                        film.setDepartment(filmElement.getAttribute("department"));
+                        film.setId(filmElement.getAttribute("id"));
+                        film.setJob(filmElement.getAttribute("job"));
+                        film.setName(filmElement.getAttribute("name"));
+                        film.setUrl(filmElement.getAttribute("url"));
+
+                        person.addFilm(film);
+                    }
+                }
+            }
+        } catch (Exception error) {
+            logger.severe("ERROR: " + error.getMessage());
+            error.printStackTrace();
+        }
+
+        return person;
+    }
+
+    public static Person parsePersonGetVersion(Document doc) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private static MovieDB parseMovieInfo(Element movieElement) {
+        // Inspired by
+        // http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
         MovieDB movie = new MovieDB();
         NodeList subNodeList;
         Node subNode;
         Element subElement;
-        
+
         try {
             movie.setPopularity(DOMHelper.getValueFromElement(movieElement, "popularity"));
             movie.setTranslated(DOMHelper.getValueFromElement(movieElement, "translated"));
@@ -50,7 +175,7 @@ public class DOMParser {
             movie.setType(DOMHelper.getValueFromElement(movieElement, "type"));
             movie.setId(DOMHelper.getValueFromElement(movieElement, "id"));
             movie.setImdb(DOMHelper.getValueFromElement(movieElement, "imdb_id"));
-            movie.setUrl(DOMHelper.getValueFromElement(movieElement, "url")); 
+            movie.setUrl(DOMHelper.getValueFromElement(movieElement, "url"));
             movie.setOverview(DOMHelper.getValueFromElement(movieElement, "overview"));
             movie.setRating(DOMHelper.getValueFromElement(movieElement, "rating"));
             movie.setTagline(DOMHelper.getValueFromElement(movieElement, "tagline"));
@@ -81,13 +206,13 @@ public class DOMParser {
                             category.setUrl(subElement.getAttribute("url"));
                             category.setName(subElement.getAttribute("name"));
                             category.setId(subElement.getAttribute("id"));
-                            
+
                             movie.addCategory(category);
                         }
                     }
                 }
             }
-            
+
             // Process the "studios"
             subNodeList = movieElement.getElementsByTagName("studios");
 
@@ -106,13 +231,13 @@ public class DOMParser {
                             studio.setUrl(subElement.getAttribute("url"));
                             studio.setName(subElement.getAttribute("name"));
                             studio.setId(subElement.getAttribute("id"));
-                            
+
                             movie.addStudio(studio);
                         }
                     }
                 }
             }
-            
+
             // Process the "countries"
             subNodeList = movieElement.getElementsByTagName("countries");
 
@@ -137,7 +262,7 @@ public class DOMParser {
                     }
                 }
             }
-                            
+
             // Process the "cast"
             subNodeList = movieElement.getElementsByTagName("cast");
 
@@ -157,50 +282,50 @@ public class DOMParser {
                             person.setCharacter(subElement.getAttribute("character"));
                             person.setJob(subElement.getAttribute("job"));
                             person.setId(subElement.getAttribute("id"));
-                            person.addArtwork(Artwork.ARTWORK_TYPE_PERSON, 
-                                              Artwork.ARTWORK_SIZE_THUMB, 
-                                              subElement.getAttribute("thumb"), "-1");
+                            person.addArtwork(Artwork.ARTWORK_TYPE_PERSON,
+                                    Artwork.ARTWORK_SIZE_THUMB,
+                                    subElement.getAttribute("thumb"), "-1");
                             person.setDepartment(subElement.getAttribute("department"));
                             person.setUrl(subElement.getAttribute("url"));
                             person.setOrder(subElement.getAttribute("order"));
                             person.setCastId(subElement.getAttribute("cast_id"));
-                            
+
                             movie.addPerson(person);
                         }
                     }
                 }
             }
-            
+
             /*
-            * This processes the image elements. There are two formats to deal with:
-            * Movie.imdbLookup, Movie.getInfo & Movie.search:
-            * <images>
-            *     <image type="poster" size="original" url="http://images.themoviedb.org/posters/60366/Fight_Club.jpg" id="60366"/>
-            *     <image type="backdrop" size="original" url="http://images.themoviedb.org/backdrops/56444/bscap00144.jpg" id="56444"/>
-            * </images>
-            * 
-            * Movie.getImages:
-            * <images>
-            *     <poster id="17066">
-            *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club.jpg" size="original"/>
-            *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_thumb.jpg" size="thumb"/>
-            *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_cover.jpg" size="cover"/>
-            *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_mid.jpg" size="mid"/>
-            *     </poster>
-            *     <backdrop id="18593">
-            *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1.jpg" size="original"/>
-            *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_poster.jpg" size="poster"/>
-            *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_thumb.jpg" size="thumb"/>
-            *     </backdrop>
-            * </images> 
-            */
+             * This processes the image elements. There are two formats to deal with:
+             * Movie.imdbLookup, Movie.getInfo & Movie.search:
+             * <images>
+             *     <image type="poster" size="original" url="http://images.themoviedb.org/posters/60366/Fight_Club.jpg" id="60366"/>
+             *     <image type="backdrop" size="original" url="http://images.themoviedb.org/backdrops/56444/bscap00144.jpg" id="56444"/>
+             * </images>
+             *
+             * Movie.getImages:
+             * <images>
+             *     <poster id="17066">
+             *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club.jpg" size="original"/>
+             *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_thumb.jpg" size="thumb"/>
+             *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_cover.jpg" size="cover"/>
+             *         <image url="http://images.themoviedb.org/posters/17066/Fight_Club_mid.jpg" size="mid"/>
+             *     </poster>
+             *     <backdrop id="18593">
+             *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1.jpg" size="original"/>
+             *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_poster.jpg" size="poster"/>
+             *         <image url="http://images.themoviedb.org/backdrops/18593/Fight_Club_on_the_street1_thumb.jpg" size="thumb"/>
+             *     </backdrop>
+             * </images>
+             */
             subNodeList = movieElement.getElementsByTagName("images");
 
             for (int nodeLoop = 0; nodeLoop < subNodeList.getLength(); nodeLoop++) {
                 subNode = subNodeList.item(nodeLoop);
-                
+
                 if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                    
+
                     NodeList artworkNodeList = subNode.getChildNodes();
                     for (int artworkLoop = 0; artworkLoop < artworkNodeList.getLength(); artworkLoop++) {
                         Node artworkNode = artworkNodeList.item(artworkLoop);
@@ -215,12 +340,12 @@ public class DOMParser {
                                 artwork.setUrl(subElement.getAttribute("url"));
                                 artwork.setId(subElement.getAttribute("id"));
                                 movie.addArtwork(artwork);
-                            } else if (subElement.getNodeName().equalsIgnoreCase("backdrop") || 
-                                       subElement.getNodeName().equalsIgnoreCase("poster")) {
+                            } else if (subElement.getNodeName().equalsIgnoreCase("backdrop")
+                                    || subElement.getNodeName().equalsIgnoreCase("poster")) {
                                 // This is the format used in Movie.getImages
                                 String artworkId = subElement.getAttribute("id");
                                 String artworkType = subElement.getNodeName();
-                                
+
                                 // We need to decode and loop round the child nodes to get the data
                                 NodeList imageNodeList = subElement.getChildNodes();
                                 for (int imageLoop = 0; imageLoop < imageNodeList.getLength(); imageLoop++) {
@@ -248,78 +373,5 @@ public class DOMParser {
             error.printStackTrace();
         }
         return movie;
-    }
-
-    public static Person parsePersonInfo(Document doc) {
-        Person person = null;
-        
-        try {
-            person = new Person();
-            NodeList personNodeList = doc.getElementsByTagName("person");
-
-            // Only get the first movie from the list
-            Node personNode = personNodeList.item(0);
-            
-            if (personNode == null) {
-                logger.finest("Person not found");
-                return person;
-            }
-
-            if (personNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element personElement = (Element) personNode;
-                
-                person.setName(DOMHelper.getValueFromElement(personElement, "name"));
-                person.setId(DOMHelper.getValueFromElement(personElement, "id"));
-                person.setBiography(DOMHelper.getValueFromElement(personElement, "biography"));
-                person.setKnownMovies(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "known_movies")));
-                person.setBirthday(DOMHelper.getValueFromElement(personElement, "birthday"));
-                person.setBirthPlace(DOMHelper.getValueFromElement(personElement, "birthplace"));
-                person.setUrl(DOMHelper.getValueFromElement(personElement, "url"));
-                person.setVersion(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "version")));
-                person.setLastModifiedAt(DOMHelper.getValueFromElement(personElement, "last_modified_at"));
-                
-                NodeList artworkNodeList = doc.getElementsByTagName("image");
-                for (int nodeLoop = 0; nodeLoop < artworkNodeList.getLength(); nodeLoop++) {
-                    Node artworkNode = artworkNodeList.item(nodeLoop);
-                    if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element artworkElement = (Element) artworkNode;
-                        Artwork artwork = new Artwork();
-                        artwork.setType(artworkElement.getAttribute("type"));
-                        artwork.setUrl(artworkElement.getAttribute("url"));
-                        artwork.setSize(artworkElement.getAttribute("size"));
-                        artwork.setId(artworkElement.getAttribute("id"));
-                        person.addArtwork(artwork);
-                    }
-                }
-                
-                NodeList filmNodeList = doc.getElementsByTagName("movie");
-                for (int nodeLoop = 0; nodeLoop < filmNodeList.getLength(); nodeLoop++) {
-                    Node filmNode = filmNodeList.item(nodeLoop);
-                    if (filmNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element filmElement = (Element) filmNode;
-                        Filmography film = new Filmography();
-                        
-                        film.setCharacter(filmElement.getAttribute("character"));
-                        film.setDepartment(filmElement.getAttribute("department"));
-                        film.setId(filmElement.getAttribute("id"));
-                        film.setJob(filmElement.getAttribute("job"));
-                        film.setName(filmElement.getAttribute("name"));
-                        film.setUrl(filmElement.getAttribute("url"));
-                        
-                        person.addFilm(film);
-                    }
-                }
-            }
-        } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
-            error.printStackTrace();
-        }
-        
-        return person;
-    }
-
-    public static Person parsePersonGetVersion(Document doc) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }
