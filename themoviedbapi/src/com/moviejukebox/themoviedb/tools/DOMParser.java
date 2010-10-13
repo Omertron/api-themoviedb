@@ -151,11 +151,6 @@ public class DOMParser {
         return person;
     }
 
-    public static Person parsePersonGetVersion(Document doc) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     private static MovieDB parseMovieInfo(Element movieElement) {
         // Inspired by
         // http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
@@ -373,6 +368,34 @@ public class DOMParser {
             error.printStackTrace();
         }
         return movie;
+    }
+
+    /**
+     * Parse a DOM document and returns a list of Person
+     * @param doc a DOM document
+     * @return
+     */
+    public static List<Person> parsePersonGetVersion(Document doc) {
+        List<Person> people = new ArrayList<Person>();
+        NodeList movies = doc.getElementsByTagName("movie");
+        if( (movies == null) || movies.getLength() == 0) {
+            return people;
+        }
+
+        for (int i= 0; i < movies.getLength(); i++) {
+            Node node = movies.item(i);
+            if(node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                Person person = new Person();
+                person.setName(DOMHelper.getValueFromElement(element, "name"));
+                person.setId(DOMHelper.getValueFromElement(element, "id"));
+                person.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
+                person.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
+                people.add(person);
+            }
+        }
+
+        return people;
     }
 
     /**

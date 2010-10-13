@@ -31,6 +31,7 @@ import com.moviejukebox.themoviedb.tools.DOMHelper;
 import com.moviejukebox.themoviedb.tools.DOMParser;
 import com.moviejukebox.themoviedb.tools.LogFormatter;
 import com.moviejukebox.themoviedb.tools.WebBrowser;
+import java.util.Arrays;
 
 /**
  * This is the main class for the API to connect to TheMovieDb.org The implementation is for v2.1 
@@ -375,27 +376,50 @@ public class TheMovieDb {
      * the current version number of the called object(s). This is useful if you've already 
      * called the object sometime in the past and simply want to do a quick check for updates.
      * 
-     * @param personID
-     * @param language
+     * @param personID a Person TMDb id
+     * @param language the two digit language code. E.g. en=English
      * @return
      */
     public Person personGetVersion(String personID, String language) {
-        Person person = new Person();
         if (!isValidString(personID)) {
-            return person;
+            return new Person();
+        }
+
+        List<Person> people = new ArrayList<Person>();
+        people = this.personGetVersion(Arrays.asList(personID), language);
+        
+        return people.get(0);
+    }
+
+    /**
+     * Retrieve the last modified time along with the current version of a Person.
+     * @param personIDs one or multiple Person TMDb ids
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public List<Person> personGetVersion(List<String> personIDs, String language) {
+        List<Person> people = new ArrayList<Person>();
+
+        String ids = "";
+        for (int i = 0; i < personIDs.size(); i++) {
+            if (i == 0) {
+                ids += personIDs.get(i);
+                continue;
+            }
+            ids += "," + personIDs.get(i);
         }
 
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(PERSON_GET_VERSION, personID, language);
+            String searchUrl = buildSearchUrl(PERSON_GET_VERSION, ids, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            person = DOMParser.parsePersonGetVersion(doc);
+            people = DOMParser.parsePersonGetVersion(doc);
         } catch (Exception error) {
             logger.severe("PersonGetVersion error: " + error.getMessage());
         }
 
-        return person;
+        return people;
     }
 
     /**

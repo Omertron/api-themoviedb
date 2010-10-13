@@ -14,12 +14,15 @@
 package com.moviejukebox.themoviedb.model;
 
 public class Filmography {
-    private String url;
-    private String name;
-    private String department;
-    private String character;
-    private String job;
-    private String id;
+
+    private static final String UNKNOWN = MovieDB.UNKNOWN;
+
+    private String url = UNKNOWN;
+    private String name = UNKNOWN;
+    private String department = UNKNOWN;
+    private String character = UNKNOWN;
+    private String job = UNKNOWN;
+    private String id = UNKNOWN;
     
     public String getUrl() {
         return url;

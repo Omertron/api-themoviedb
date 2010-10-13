@@ -20,9 +20,11 @@ package com.moviejukebox.themoviedb.model;
  */
 public class Country {
 
-    private String url;
-    private String name;
-    private String code;
+    private static final String UNKNOWN = MovieDB.UNKNOWN;
+
+    private String url = UNKNOWN;
+    private String name = UNKNOWN;
+    private String code = UNKNOWN;
 
     public String getUrl() {
         return url;

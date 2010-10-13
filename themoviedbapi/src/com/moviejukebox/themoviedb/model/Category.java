@@ -20,10 +20,12 @@ package com.moviejukebox.themoviedb.model;
  */
 public class Category {
 
-    private String type;
-    private String name;
-    private String url;
-    private String id;
+    private static final String UNKNOWN = MovieDB.UNKNOWN;
+
+    private String type = UNKNOWN;
+    private String name = UNKNOWN;
+    private String url = UNKNOWN;
+    private String id = UNKNOWN;
 
     public String getId() {
         return id;
