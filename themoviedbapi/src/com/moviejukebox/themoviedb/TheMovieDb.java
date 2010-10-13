@@ -105,27 +105,6 @@ public class TheMovieDb {
     }
 
     /**
-     * Build the search URL from the search prefix and movie title.
-     * This will change between v2.0 and v2.1 of the API
-     * 
-     * @param prefix        The search prefix before the movie title
-     * @param language      The two digit language code. E.g. en=English            
-     * @param searchTerm    The search key to use, e.g. movie title or IMDb ID
-     * @return              The search URL
-     */
-    private String buildSearchUrl(String prefix, String searchTerm, String language) {
-        String searchUrl = apiSite + prefix + "/" + language + "/xml/" + apiKey;
-        if (prefix.equals(MOVIE_BROWSE)) {
-            searchUrl += "?";
-        } else {
-            searchUrl += "/";
-        }
-        searchUrl += searchTerm;
-        logger.finest("Search URL: " + searchUrl);
-        return searchUrl;
-    }
-
-    /**
      * Searches the database using the movie title passed
      * 
      * @param movieTitle    The title to search for
@@ -198,6 +177,11 @@ public class TheMovieDb {
     public List<MovieDB> moviedbBrowse(String orderBy, String order,
             Map<String, String> parameters, String language) {
 
+        List<MovieDB> movieList = new ArrayList<MovieDB>();
+        if (!isValidString(orderBy) || (!isValidString(order))) {
+            return movieList;
+        }
+
         List<String> validParameters = new ArrayList<String>();
         validParameters.add("per_page");
         validParameters.add("page");
@@ -220,10 +204,8 @@ public class TheMovieDb {
                 url += "&" + key + "=" + parameters.get(key);
             }
         }
-        logger.finest("Browse URL : " + url);
 
         MovieDB movie = null;
-        List<MovieDB> movieList = new ArrayList<MovieDB>();
         Document doc = null;
 
         try {
@@ -245,7 +227,7 @@ public class TheMovieDb {
                 }
             }
         } catch (Exception error) {
-            logger.severe("Search error: " + error.getMessage());
+            logger.severe("Browse error: " + error.getMessage());
         }
         return movieList;
     }
@@ -481,27 +463,6 @@ public class TheMovieDb {
     }
 
     /**
-     * Check the string passed to see if it contains a value.
-     * @param testString The string to test
-     * @return False if the string is empty, null or UNKNOWN, True otherwise
-     */
-    private static boolean isValidString(String testString) {
-        if (testString == null) {
-            return false;
-        }
-
-        if (testString.equalsIgnoreCase(MovieDB.UNKNOWN)) {
-            return false;
-        }
-
-        if (testString.trim().equals("")) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Search a list of movies and return the one that matches the title & year
      * @param movieList The list of movies to search
      * @param title     The title to search for
@@ -530,11 +491,7 @@ public class TheMovieDb {
      * @return          True if there is a match, False otherwise.
      */
     public static boolean compareMovies(MovieDB moviedb, String title, String year) {
-        if (moviedb == null) {
-            return false;
-        }
-
-        if (!isValidString(title)) {
+        if ((moviedb == null) || (!isValidString(title))) {
             return false;
         }
 
@@ -553,5 +510,40 @@ public class TheMovieDb {
             }
         }
         return false;
+    }
+
+    /**
+     * Build the search URL from the search prefix and movie title.
+     * This will change between v2.0 and v2.1 of the API
+     *
+     * @param prefix        The search prefix before the movie title
+     * @param language      The two digit language code. E.g. en=English
+     * @param searchTerm    The search key to use, e.g. movie title or IMDb ID
+     * @return              The search URL
+     */
+    private String buildSearchUrl(String prefix, String searchTerm, String language) {
+        String searchUrl = apiSite + prefix + "/" + language + "/xml/" + apiKey;
+        if (prefix.equals(MOVIE_BROWSE)) {
+            searchUrl += "?";
+        } else {
+            searchUrl += "/";
+        }
+        searchUrl += searchTerm;
+        logger.finest("Search URL: " + searchUrl);
+        return searchUrl;
+    }
+
+    /**
+     * Check the string passed to see if it contains a value.
+     * @param testString The string to test
+     * @return False if the string is empty, null or UNKNOWN, True otherwise
+     */
+    private static boolean isValidString(String testString) {
+        if ((testString == null)
+                || (testString.trim().equals(""))
+                || (testString.equalsIgnoreCase(MovieDB.UNKNOWN))) {
+            return false;
+        }
+        return true;
     }
 }
