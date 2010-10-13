@@ -410,6 +410,7 @@ public class TheMovieDb {
         List<Category> categories = new ArrayList<Category>();
         Document doc = null;
         String url = this.buildSearchUrl(GENRES_GET_LIST, "", language);
+
         try {
             doc = DOMHelper.getEventDocFromUrl(url);
             categories = DOMParser.parseCategories(doc);
@@ -483,7 +484,7 @@ public class TheMovieDb {
         String searchUrl = apiSite + prefix + "/" + language + "/xml/" + apiKey;
         if (prefix.equals(MOVIE_BROWSE)) {
             searchUrl += "?";
-        } else {
+        } else if (!prefix.equals(GENRES_GET_LIST)) {
             searchUrl += "/";
         }
         searchUrl += searchTerm;
