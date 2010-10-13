@@ -374,4 +374,32 @@ public class DOMParser {
         }
         return movie;
     }
+
+    /**
+     * Retrieve a list of valid genres within TMDb.
+     * @param doc a DOM document
+     * @return
+     */
+    public static List<Category> parseCategories(Document doc) {
+        List<Category> categories = new ArrayList<Category>();
+        NodeList genres = doc.getElementsByTagName("genres");
+        if( (genres == null) || genres.getLength() == 0) {
+            return categories;
+        }
+
+        for (int i= 0; i < genres.getLength(); i++) {
+            Node node = genres.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                Category category = new Category();
+                category.setId(element.getAttribute("id"));
+                category.setName(DOMHelper.getValueFromElement(element, "name"));
+                category.setType(DOMHelper.getValueFromElement(element, "type"));
+                category.setUrl(DOMHelper.getValueFromElement(element, "url"));
+                categories.add(category);
+            }
+        }
+
+        return categories;
+    }
 }

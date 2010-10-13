@@ -58,6 +58,7 @@ public class TheMovieDb {
     private static final String PERSON_GET_VERSION = "Person.getVersion";
     private static final String PERSON_GET_INFO = "Person.getInfo";
     private static final String PERSON_SEARCH = "Person.search";
+    private static final String GENRES_GET_LIST = "Genres.getList";
 
     public TheMovieDb(String apiKey) {
         setLogger(Logger.getLogger("TheMovieDB"));
@@ -400,6 +401,24 @@ public class TheMovieDb {
         return person;
     }
 
+    /**
+     * Retrieve a list of valid genres within TMDb.
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public List<Category> getCategories(String language) {
+        List<Category> categories = new ArrayList<Category>();
+        Document doc = null;
+        String url = this.buildSearchUrl(GENRES_GET_LIST, "", language);
+        try {
+            doc = DOMHelper.getEventDocFromUrl(url);
+            categories = DOMParser.parseCategories(doc);
+        } catch (Exception error) {
+            logger.severe("Get categories error: " + error.getMessage());
+        }
+
+        return categories;
+    }
 
     /**
      * Search a list of movies and return the one that matches the title & year
