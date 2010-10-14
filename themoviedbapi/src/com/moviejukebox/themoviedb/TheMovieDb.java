@@ -479,13 +479,33 @@ public class TheMovieDb {
             if (isValidString(moviedb.getReleaseDate())) {
                 // Compare with year
                 String movieYear = moviedb.getReleaseDate().substring(0, 4);
-                if (moviedb.getTitle().equalsIgnoreCase(title) && movieYear.equals(year)) {
-                    return true;
+                if (movieYear.equals(year)) {
+                    if (moviedb.getOriginalName().equalsIgnoreCase(title)) {
+                        return true;
+                    }
+                    
+                    if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                        return true;
+                    }
+                    
+                    // Try matching the alternative name too
+                    if (moviedb.getAlternativeName().equalsIgnoreCase(title)) {
+                        return true;
+                    }
                 }
             }
         } else {
             // Compare without year
+            if (moviedb.getOriginalName().equalsIgnoreCase(title)) {
+                return true;
+            }
+            
             if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+            
+            // Try matching the alternative name too
+            if (moviedb.getAlternativeName().equalsIgnoreCase(title)) {
                 return true;
             }
         }
