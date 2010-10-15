@@ -378,13 +378,13 @@ public class DOMParser {
     public static List<Person> parsePersonGetVersion(Document doc) {
         List<Person> people = new ArrayList<Person>();
         NodeList movies = doc.getElementsByTagName("movie");
-        if( (movies == null) || movies.getLength() == 0) {
+        if ((movies == null) || movies.getLength() == 0) {
             return people;
         }
 
-        for (int i= 0; i < movies.getLength(); i++) {
+        for (int i = 0; i < movies.getLength(); i++) {
             Node node = movies.item(i);
-            if(node.getNodeType() == Node.ELEMENT_NODE) {
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
                 Person person = new Person();
                 person.setName(DOMHelper.getValueFromElement(element, "name"));
@@ -406,11 +406,11 @@ public class DOMParser {
     public static List<Category> parseCategories(Document doc) {
         List<Category> categories = new ArrayList<Category>();
         NodeList genres = doc.getElementsByTagName("genre");
-        if( (genres == null) || genres.getLength() == 0) {
+        if ((genres == null) || genres.getLength() == 0) {
             return categories;
         }
 
-        for (int i= 0; i < genres.getLength(); i++) {
+        for (int i = 0; i < genres.getLength(); i++) {
             Node node = genres.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
@@ -424,5 +424,31 @@ public class DOMParser {
         }
 
         return categories;
+    }
+    
+    /**
+     * Parse a DOM document and returns the latest Movie.
+     * @param doc
+     * @return
+     */
+    public static MovieDB parseLatestMovie(Document doc) {
+        MovieDB movie = new MovieDB();
+        NodeList movies = doc.getElementsByTagName("movie");
+        if ((movies == null) || movies.getLength() == 0) {
+            return movie;
+        }
+
+        Node node = movies.item(0);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            movie.setTitle(DOMHelper.getValueFromElement(element, "name"));
+            movie.setId(DOMHelper.getValueFromElement(element, "id"));
+            movie.setImdb(DOMHelper.getValueFromElement(element, "imdb_id"));
+            // to be done:
+            //movie.setVersion(DOMHelper.getValueFromElement(element, "version"));
+            //movie.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
+        }
+
+        return movie;
     }
 }

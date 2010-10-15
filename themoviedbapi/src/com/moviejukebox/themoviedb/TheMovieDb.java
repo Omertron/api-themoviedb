@@ -53,6 +53,7 @@ public class TheMovieDb {
     private static final String MOVIE_IMDB_LOOKUP = "Movie.imdbLookup";
     private static final String MOVIE_GET_INFO = "Movie.getInfo";
     private static final String MOVIE_GET_IMAGES = "Movie.getImages";
+    private static final String MOVIE_GET_LATEST = "Movie.getLatest";
     private static final String PERSON_GET_VERSION = "Person.getVersion";
     private static final String PERSON_GET_INFO = "Person.getInfo";
     private static final String PERSON_SEARCH = "Person.search";
@@ -122,7 +123,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(MOVIE_SEARCH, URLEncoder.encode(movieTitle, "UTF-8"), language);
+            String searchUrl = buildUrl(MOVIE_SEARCH, URLEncoder.encode(movieTitle, "UTF-8"), language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movies = DOMParser.parseMovies(doc);
         } catch (Exception error) {
@@ -192,7 +193,7 @@ public class TheMovieDb {
 
         Document doc = null;
 
-        String searchUrl = buildSearchUrl(MOVIE_BROWSE, url, language);
+        String searchUrl = buildUrl(MOVIE_BROWSE, url, language);
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
@@ -220,7 +221,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(MOVIE_IMDB_LOOKUP, imdbID, language);
+            String searchUrl = buildUrl(MOVIE_IMDB_LOOKUP, imdbID, language);
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovie(doc);
@@ -263,12 +264,12 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(MOVIE_GET_INFO, tmdbID, language);
+            String searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, language);
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             if (doc == null && !language.equalsIgnoreCase(defaultLanguage)) {
                 logger.fine("Trying to get the '" + defaultLanguage + "' version");
-                searchUrl = buildSearchUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
+                searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
             }
 
             if (doc == null) {
@@ -279,6 +280,28 @@ public class TheMovieDb {
         } catch (Exception error) {
             logger.severe("GetInfo error: " + error.getMessage());
             error.printStackTrace();
+        }
+        return movie;
+    }
+
+    /**
+     * The Movie.getLatest method is a simple method. It returns the ID of the
+     * last movie created in the database. This is useful if you are scanning
+     * the database and want to know which id to stop at. <br/>
+     * The MovieDB object returned only has its title, TMDb id and IMDB id
+     * initialized.
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public MovieDB moviedbGetLatest(String language) {
+        Document doc = null;
+        MovieDB movie = new MovieDB();
+        try {
+            String url = buildUrl(MOVIE_GET_LATEST, "", language);
+            doc = DOMHelper.getEventDocFromUrl(url);
+            movie = DOMParser.parseLatestMovie(doc);
+        } catch (Exception error) {
+            logger.severe("GetLatest error: " + error.getMessage());
         }
         return movie;
     }
@@ -305,7 +328,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(MOVIE_GET_IMAGES, searchTerm, language);
+            String searchUrl = buildUrl(MOVIE_GET_IMAGES, searchTerm, language);
 
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             movie = DOMParser.parseMovie(doc);
@@ -334,7 +357,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(PERSON_SEARCH, personName, language);
+            String searchUrl = buildUrl(PERSON_SEARCH, personName, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
@@ -361,7 +384,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(PERSON_GET_INFO, personID, language);
+            String searchUrl = buildUrl(PERSON_GET_INFO, personID, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             person = DOMParser.parsePersonInfo(doc);
         } catch (Exception error) {
@@ -385,10 +408,7 @@ public class TheMovieDb {
             return new Person();
         }
 
-        List<Person> people = new ArrayList<Person>();
-        people = this.personGetVersion(Arrays.asList(personID), language);
-        
-        return people.get(0);
+        return this.personGetVersion(Arrays.asList(personID), language).get(0);
     }
 
     /**
@@ -399,6 +419,11 @@ public class TheMovieDb {
      */
     public List<Person> personGetVersion(List<String> personIDs, String language) {
         List<Person> people = new ArrayList<Person>();
+
+        if (personIDs.isEmpty()) {
+            logger.warning("There are no Person ids!");
+            return people;
+        }
 
         String ids = "";
         for (int i = 0; i < personIDs.size(); i++) {
@@ -412,7 +437,7 @@ public class TheMovieDb {
         Document doc = null;
 
         try {
-            String searchUrl = buildSearchUrl(PERSON_GET_VERSION, ids, language);
+            String searchUrl = buildUrl(PERSON_GET_VERSION, ids, language);
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
             people = DOMParser.parsePersonGetVersion(doc);
         } catch (Exception error) {
@@ -430,7 +455,7 @@ public class TheMovieDb {
     public List<Category> getCategories(String language) {
         List<Category> categories = new ArrayList<Category>();
         Document doc = null;
-        String url = this.buildSearchUrl(GENRES_GET_LIST, "", language);
+        String url = this.buildUrl(GENRES_GET_LIST, "", language);
 
         try {
             doc = DOMHelper.getEventDocFromUrl(url);
@@ -483,11 +508,11 @@ public class TheMovieDb {
                     if (moviedb.getOriginalName().equalsIgnoreCase(title)) {
                         return true;
                     }
-                    
+
                     if (moviedb.getTitle().equalsIgnoreCase(title)) {
                         return true;
                     }
-                    
+
                     // Try matching the alternative name too
                     if (moviedb.getAlternativeName().equalsIgnoreCase(title)) {
                         return true;
@@ -499,11 +524,11 @@ public class TheMovieDb {
             if (moviedb.getOriginalName().equalsIgnoreCase(title)) {
                 return true;
             }
-            
+
             if (moviedb.getTitle().equalsIgnoreCase(title)) {
                 return true;
             }
-            
+
             // Try matching the alternative name too
             if (moviedb.getAlternativeName().equalsIgnoreCase(title)) {
                 return true;
@@ -513,24 +538,26 @@ public class TheMovieDb {
     }
 
     /**
-     * Build the search URL from the search prefix and movie title.
-     * This will change between v2.0 and v2.1 of the API
+     * Build the URL that is used to get the XML from TMDb.
      *
      * @param prefix        The search prefix before the movie title
      * @param language      The two digit language code. E.g. en=English
      * @param searchTerm    The search key to use, e.g. movie title or IMDb ID
      * @return              The search URL
      */
-    private String buildSearchUrl(String prefix, String searchTerm, String language) {
-        String searchUrl = apiSite + prefix + "/" + language + "/xml/" + apiKey;
-        if (prefix.equals(MOVIE_BROWSE)) {
-            searchUrl += "?";
-        } else if (!prefix.equals(GENRES_GET_LIST)) {
-            searchUrl += "/";
+    private String buildUrl(String prefix, String searchTerm, String language) {
+        String url = apiSite + prefix + "/" + language + "/xml/" + apiKey;
+        if (searchTerm.equals("")) {
+            return url;
         }
-        searchUrl += searchTerm;
-        logger.finest("Search URL: " + searchUrl);
-        return searchUrl;
+        if (prefix.equals(MOVIE_BROWSE)) {
+            url += "?";
+        } else {
+            url += "/";
+        }
+        url += searchTerm;
+        logger.finest("Search URL: " + url);
+        return url;
     }
 
     /**
