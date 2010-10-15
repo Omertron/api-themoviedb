@@ -13,6 +13,8 @@
 package com.moviejukebox.themoviedb;
 
 import com.moviejukebox.themoviedb.model.Category;
+
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,12 +25,9 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.w3c.dom.Document;
-
 import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
-import com.moviejukebox.themoviedb.tools.DOMHelper;
-import com.moviejukebox.themoviedb.tools.DOMParser;
+import com.moviejukebox.themoviedb.tools.MovieDbParser;
 import com.moviejukebox.themoviedb.tools.LogFormatter;
 import com.moviejukebox.themoviedb.tools.WebBrowser;
 import java.util.Arrays;
@@ -122,16 +121,8 @@ public class TheMovieDb {
             return movies;
         }
 
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(MOVIE_SEARCH, URLEncoder.encode(movieTitle, "UTF-8"), language);
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movies = DOMParser.parseMovies(doc);
-        } catch (Exception error) {
-            logger.severe("TheMovieDb Error: " + error.getMessage());
-        }
-        return movies;
+        String searchUrl = buildUrl(MOVIE_SEARCH, movieTitle, language);
+        return MovieDbParser.parseMovies(searchUrl);
     }
 
     /**
@@ -193,16 +184,9 @@ public class TheMovieDb {
             }
         }
 
-        Document doc = null;
-
         String searchUrl = buildUrl(MOVIE_BROWSE, url, language);
-        try {
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-        } catch (Exception error) {
-            logger.severe("Browse error: " + error.getMessage());
-        }
-        movies = DOMParser.parseMovies(doc);
-        return movies;
+        return MovieDbParser.parseMovies(searchUrl);
+        
     }
 
     /**
@@ -220,17 +204,8 @@ public class TheMovieDb {
             return movie;
         }
 
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(MOVIE_IMDB_LOOKUP, imdbID, language);
-
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movie = DOMParser.parseMovie(doc);
-        } catch (Exception error) {
-            logger.severe("ImdbLookup error: " + error.getMessage());
-        }
-        return movie;
+        String searchUrl = buildUrl(MOVIE_IMDB_LOOKUP, imdbID, language);
+        return MovieDbParser.parseMovie(searchUrl);
     }
 
     /**
@@ -262,27 +237,16 @@ public class TheMovieDb {
         if (!isValidString(tmdbID)) {
             return movie;
         }
-
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, language);
-
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            if (doc == null && !language.equalsIgnoreCase(defaultLanguage)) {
-                logger.fine("Trying to get the '" + defaultLanguage + "' version");
-                searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
-            }
-
-            if (doc == null) {
-                return movie;
-            }
-
-            movie = DOMParser.parseMovie(doc);
-        } catch (Exception error) {
-            logger.severe("GetInfo error: " + error.getMessage());
-            error.printStackTrace();
+        
+        String searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, language);
+        movie = MovieDbParser.parseMovie(searchUrl);
+        
+        if (movie == null && !language.equalsIgnoreCase(defaultLanguage)) {
+            logger.fine("Trying to get the '" + defaultLanguage + "' version");
+            searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
+            movie = MovieDbParser.parseMovie(searchUrl);
         }
+        
         return movie;
     }
 
@@ -296,16 +260,8 @@ public class TheMovieDb {
      * @return
      */
     public MovieDB moviedbGetLatest(String language) {
-        Document doc = null;
-        MovieDB movie = new MovieDB();
-        try {
-            String url = buildUrl(MOVIE_GET_LATEST, "", language);
-            doc = DOMHelper.getEventDocFromUrl(url);
-            movie = DOMParser.parseLatestMovie(doc);
-        } catch (Exception error) {
-            logger.severe("GetLatest error: " + error.getMessage());
-        }
-        return movie;
+        String url = buildUrl(MOVIE_GET_LATEST, "", language);
+        return MovieDbParser.parseLatestMovie(url);
     }
 
     public MovieDB moviedbGetImages(String searchTerm, String language) {
@@ -325,19 +281,8 @@ public class TheMovieDb {
             return movie;
         }
 
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(MOVIE_GET_IMAGES, searchTerm, language);
-
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            movie = DOMParser.parseMovie(doc);
-
-        } catch (Exception error) {
-            logger.severe("GetImages Error: " + error.getMessage());
-        }
-
-        return movie;
+        String searchUrl = buildUrl(MOVIE_GET_IMAGES, searchTerm, language);
+        return MovieDbParser.parseMovie(searchUrl);
     }
 
     /**
@@ -349,22 +294,12 @@ public class TheMovieDb {
      * @return
      */
     public Person personSearch(String personName, String language) {
-        Person person = new Person();
         if (!isValidString(personName)) {
-            return person;
+            return new Person();
         }
 
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(PERSON_SEARCH, personName, language);
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            person = DOMParser.parsePersonInfo(doc);
-        } catch (Exception error) {
-            logger.severe("PersonSearch error: " + error.getMessage());
-        }
-
-        return person;
+        String searchUrl = buildUrl(PERSON_SEARCH, personName, language);
+        return MovieDbParser.parsePersonInfo(searchUrl);
     }
 
     /**
@@ -381,17 +316,8 @@ public class TheMovieDb {
             return person;
         }
 
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(PERSON_GET_INFO, personID, language);
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            person = DOMParser.parsePersonInfo(doc);
-        } catch (Exception error) {
-            logger.severe("PersonGetInfo error: " + error.getMessage());
-        }
-
-        return person;
+        String searchUrl = buildUrl(PERSON_GET_INFO, personID, language);
+        return MovieDbParser.parsePersonInfo(searchUrl);
     }
 
     /**
@@ -434,17 +360,8 @@ public class TheMovieDb {
             ids += "," + personIDs.get(i);
         }
 
-        Document doc = null;
-
-        try {
-            String searchUrl = buildUrl(PERSON_GET_VERSION, ids, language);
-            doc = DOMHelper.getEventDocFromUrl(searchUrl);
-            people = DOMParser.parsePersonGetVersion(doc);
-        } catch (Exception error) {
-            logger.severe("PersonGetVersion error: " + error.getMessage());
-        }
-
-        return people;
+        String searchUrl = buildUrl(PERSON_GET_VERSION, ids, language);
+        return MovieDbParser.parsePersonGetVersion(searchUrl);
     }
 
     /**
@@ -453,18 +370,8 @@ public class TheMovieDb {
      * @return
      */
     public List<Category> getCategories(String language) {
-        List<Category> categories = new ArrayList<Category>();
-        Document doc = null;
-        String url = this.buildUrl(GENRES_GET_LIST, "", language);
-
-        try {
-            doc = DOMHelper.getEventDocFromUrl(url);
-            categories = DOMParser.parseCategories(doc);
-        } catch (Exception error) {
-            logger.severe("Get categories error: " + error.getMessage());
-        }
-
-        return categories;
+        String searchUrl = this.buildUrl(GENRES_GET_LIST, "", language);
+        return MovieDbParser.parseCategories(searchUrl);
     }
 
     /**
@@ -547,15 +454,27 @@ public class TheMovieDb {
      */
     private String buildUrl(String prefix, String searchTerm, String language) {
         String url = apiSite + prefix + "/" + language + "/xml/" + apiKey;
-        if (searchTerm.equals("")) {
+
+        if (!isValidString(searchTerm)) {
             return url;
         }
+        
+        String encodedSearchTerm;
+        
+        try {
+            encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            encodedSearchTerm = searchTerm;
+        }
+        
         if (prefix.equals(MOVIE_BROWSE)) {
             url += "?";
         } else {
             url += "/";
         }
-        url += searchTerm;
+        
+        url += encodedSearchTerm;
+        
         logger.finest("Search URL: " + url);
         return url;
     }

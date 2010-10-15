@@ -30,7 +30,7 @@ import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
 import com.moviejukebox.themoviedb.model.Studio;
 
-public class DOMParser {
+public class MovieDbParser {
 
     static Logger logger = TheMovieDb.getLogger();
 
@@ -40,9 +40,24 @@ public class DOMParser {
      * @param doc DOM Document
      * @return
      */
-    public static List<MovieDB> parseMovies(Document doc) {
+    public static List<MovieDB> parseMovies(String searchUrl) {
         List<MovieDB> movies = new ArrayList<MovieDB>();
+        
+        Document doc = null;
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+        } catch (Exception error) {
+            logger.severe("TheMovieDb Error: " + error.getMessage());
+            return movies;
+        }
+        
+        if (doc == null) {
+            return movies;
+        }
+        
         NodeList nlMovies = doc.getElementsByTagName("movie");
+
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movies;
         }
@@ -53,7 +68,7 @@ public class DOMParser {
             Node movieNode = nlMovies.item(i);
             if (movieNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element movieElement = (Element) movieNode;
-                movie = DOMParser.parseMovieInfo(movieElement);
+                movie = parseMovieInfo(movieElement);
                 if (movie != null) {
                     movies.add(movie);
                 }
@@ -67,8 +82,21 @@ public class DOMParser {
      * @param doc a DOM Document
      * @return
      */
-    public static MovieDB parseMovie(Document doc) {
-        MovieDB movie = new MovieDB();
+    public static MovieDB parseMovie(String searchUrl) {
+        MovieDB movie = null;
+        Document doc = null;
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+        } catch (Exception error) {
+            logger.severe("TheMovieDb Error: " + error.getMessage());
+            return movie;
+        }
+        
+        if (doc == null) {
+            return movie;
+        }
+        
         NodeList nlMovies = doc.getElementsByTagName("movie");
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movie;
@@ -77,15 +105,27 @@ public class DOMParser {
         Node nMovie = nlMovies.item(0);
         if (nMovie.getNodeType() == Node.ELEMENT_NODE) {
             Element eMovie = (Element) nMovie;
-            movie = DOMParser.parseMovieInfo(eMovie);
+            movie = parseMovieInfo(eMovie);
         }
 
         return movie;
     }
 
-    public static Person parsePersonInfo(Document doc) {
+    public static Person parsePersonInfo(String searchUrl) {
         Person person = null;
+        Document doc = null;
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+        } catch (Exception error) {
+            logger.severe("PersonSearch error: " + error.getMessage());
+            return person;
+        }
 
+        if (doc == null) {
+            return person;
+        }
+        
         try {
             person = new Person();
             NodeList personNodeList = doc.getElementsByTagName("person");
@@ -375,8 +415,21 @@ public class DOMParser {
      * @param doc a DOM document
      * @return
      */
-    public static List<Person> parsePersonGetVersion(Document doc) {
+    public static List<Person> parsePersonGetVersion(String searchUrl) {
         List<Person> people = new ArrayList<Person>();
+        Document doc = null;
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+        } catch (Exception error) {
+            logger.severe("PersonGetVersion error: " + error.getMessage());
+            return people;
+        }
+        
+        if (doc == null) {
+            return people;
+        }
+        
         NodeList movies = doc.getElementsByTagName("movie");
         if ((movies == null) || movies.getLength() == 0) {
             return people;
@@ -403,8 +456,20 @@ public class DOMParser {
      * @param doc a DOM document
      * @return
      */
-    public static List<Category> parseCategories(Document doc) {
+    public static List<Category> parseCategories(String searchUrl) {
+        Document doc = null;
         List<Category> categories = new ArrayList<Category>();
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+        } catch (Exception error) {
+            return categories;
+        }
+        
+        if (doc == null) {
+            return categories;
+        }
+        
         NodeList genres = doc.getElementsByTagName("genre");
         if ((genres == null) || genres.getLength() == 0) {
             return categories;
@@ -431,15 +496,31 @@ public class DOMParser {
      * @param doc
      * @return
      */
-    public static MovieDB parseLatestMovie(Document doc) {
-        MovieDB movie = new MovieDB();
-        NodeList movies = doc.getElementsByTagName("movie");
-        if ((movies == null) || movies.getLength() == 0) {
+    public static MovieDB parseLatestMovie(String searchUrl) {
+        MovieDB movie = null;
+        Document doc = null;
+        
+        try {
+            doc = DOMHelper.getEventDocFromUrl(searchUrl);
+        } catch (Exception error) {
+            logger.severe("GetLatest error: " + error.getMessage());
+            return movie;
+        }
+        
+        if (doc == null) {
+            return movie;
+        }
+        
+        NodeList nlMovies = doc.getElementsByTagName("movie");
+        
+        if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movie;
         }
 
-        Node node = movies.item(0);
+        Node node = nlMovies.item(0);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
+            movie = new MovieDB();
+            
             Element element = (Element) node;
             movie.setTitle(DOMHelper.getValueFromElement(element, "name"));
             movie.setId(DOMHelper.getValueFromElement(element, "id"));
