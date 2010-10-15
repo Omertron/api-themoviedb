@@ -65,9 +65,7 @@ public class TheMovieDb {
     }
 
     public TheMovieDb(String apiKey, Logger logger) {
-        if (logger == null) {
-            setLogger(logger);
-        }
+        setLogger(logger);
         setApiKey(apiKey);
     }
 
@@ -88,6 +86,10 @@ public class TheMovieDb {
     }
 
     public void setLogger(Logger logger) {
+        if (logger == null) {
+            return;
+        }
+        
         TheMovieDb.logger = logger;
         tmdbConsoleHandler.setFormatter(tmdbFormatter);
         tmdbConsoleHandler.setLevel(Level.FINE);
@@ -307,9 +309,7 @@ public class TheMovieDb {
     }
 
     public MovieDB moviedbGetImages(String searchTerm, String language) {
-        MovieDB movie = null;
-        movie = moviedbGetImages(searchTerm, movie, language);
-        return movie;
+        return moviedbGetImages(searchTerm, new MovieDB(), language);
     }
 
     /**
@@ -321,7 +321,7 @@ public class TheMovieDb {
      */
     public MovieDB moviedbGetImages(String searchTerm, MovieDB movie, String language) {
         // If the searchTerm is null, then exit
-        if (isValidString(searchTerm)) {
+        if (!isValidString(searchTerm)) {
             return movie;
         }
 
