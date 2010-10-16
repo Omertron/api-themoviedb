@@ -48,17 +48,18 @@ public class TheMovieDb {
     private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
     private static final String apiSite = "http://api.themoviedb.org/2.1/";
     private static final String defaultLanguage = "en-US";
-    private static final String MOVIE_SEARCH = "Movie.search";
+    private static final String GENRES_GET_LIST = "Genres.getList";
     private static final String MOVIE_BROWSE = "Movie.browse";
-    private static final String MOVIE_IMDB_LOOKUP = "Movie.imdbLookup";
     private static final String MOVIE_GET_INFO = "Movie.getInfo";
     private static final String MOVIE_GET_IMAGES = "Movie.getImages";
     private static final String MOVIE_GET_LATEST = "Movie.getLatest";
     private static final String MOVIE_GET_VERSION = "Movie.getVersion";
-    private static final String PERSON_GET_VERSION = "Person.getVersion";
+    private static final String MOVIE_IMDB_LOOKUP = "Movie.imdbLookup";
+    private static final String MOVIE_SEARCH = "Movie.search";
     private static final String PERSON_GET_INFO = "Person.getInfo";
+    private static final String PERSON_GET_LATEST = "Person.getLatest";
+    private static final String PERSON_GET_VERSION = "Person.getVersion";
     private static final String PERSON_SEARCH = "Person.search";
-    private static final String GENRES_GET_LIST = "Genres.getList";
 
     public TheMovieDb(String apiKey) {
         setLogger(Logger.getLogger("TheMovieDB"));
@@ -275,7 +276,11 @@ public class TheMovieDb {
      * @return
      */
     public MovieDB moviedbGetVersion(String movieId, String language) {
-        return this.moviedbGetVersion(Arrays.asList(movieId), language).get(0);
+        List<MovieDB> movies = this.moviedbGetVersion(Arrays.asList(movieId), language);
+        if (movies.isEmpty()) {
+            return new MovieDB();
+        }
+        return movies.get(0);
     }
 
     /**
@@ -294,7 +299,7 @@ public class TheMovieDb {
     public List<MovieDB> moviedbGetVersion(List<String> movieIds, String language) {
         List<MovieDB> movies = new ArrayList<MovieDB>();
 
-        if (movieIds.isEmpty()) {
+        if ((movieIds == null) || movieIds.isEmpty()) {
             logger.warning("There are no Movie ids!");
             return movies;
         }
@@ -372,6 +377,17 @@ public class TheMovieDb {
     }
 
     /**
+     * The Person.getLatest method is a simple method. It returns the ID of the
+     * last person created in the db. This is useful if you are scanning the
+     * database and want to know which id to stop at.
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public Person personGetLatest(String language) {
+        return MovieDbParser.parseLatestPerson(buildUrl(PERSON_GET_LATEST, "", language));
+    }
+
+    /**
      * The Person.getVersion method is used to retrieve the last modified time 
      * along with the current version number of the called object(s). This is
      * useful if you've already called the object sometime in the past and
@@ -382,11 +398,17 @@ public class TheMovieDb {
      * @return
      */
     public Person personGetVersion(String personID, String language) {
+        Person person = new Person();
         if (!isValidString(personID)) {
-            return new Person();
+            return person;
         }
 
-        return this.personGetVersion(Arrays.asList(personID), language).get(0);
+        List<Person> people = this.personGetVersion(Arrays.asList(personID), language);
+        if (people.isEmpty()) {
+            return person;
+        }
+
+        return people.get(0);
     }
 
     /**
@@ -399,7 +421,7 @@ public class TheMovieDb {
      * @return
      */
     public List<Person> personGetVersion(List<String> personIDs, String language) {
-        if (personIDs.isEmpty()) {
+        if ((personIDs == null) || (personIDs.isEmpty())) {
             logger.warning("There are no Person ids!");
             return new ArrayList<Person>();
         }

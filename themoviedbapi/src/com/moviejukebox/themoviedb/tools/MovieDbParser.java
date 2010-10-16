@@ -439,12 +439,7 @@ public class MovieDbParser {
             Node node = movies.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
-                Person person = new Person();
-                person.setName(DOMHelper.getValueFromElement(element, "name"));
-                person.setId(DOMHelper.getValueFromElement(element, "id"));
-                person.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
-                person.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
-                people.add(person);
+                people.add(MovieDbParser.parseSimplePerson(element));
             }
         }
 
@@ -562,6 +557,50 @@ public class MovieDbParser {
         return movies;
     }
 
+    public static Person parseLatestPerson(String url) {
+        Person person = new Person();
+        Document doc = null;
+
+        try {
+            doc = DOMHelper.getEventDocFromUrl(url);
+        } catch (Exception error) {
+            logger.severe("Person.getLatest error: " + error.getMessage());
+            return person;
+        }
+
+        if (doc == null) {
+            return person;
+        }
+
+        NodeList nlMovies = doc.getElementsByTagName("person");
+
+        if ((nlMovies == null) || nlMovies.getLength() == 0) {
+            return person;
+        }
+
+        Node node = nlMovies.item(0);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            person = new Person();
+
+            Element element = (Element) node;
+            person = MovieDbParser.parseSimplePerson(element);
+        }
+
+        return person;
+    }
+
+    /**
+     * Parse a "simple" Movie in the form:
+     * <movie>
+     *  <name>Inception</name>
+     *  <id>36462</id>
+     *  <imdb_id>tt1375666</imdb_id>
+     *  <version>11</version>
+     *  <last_modified_at>2010-07-26 17:06:18</last_modified_at>
+     * </movie>
+     * @param element
+     * @return
+     */
     private static MovieDB parseSimpleMovie(Element element) {
         MovieDB movie = new MovieDB();
         movie.setTitle(DOMHelper.getValueFromElement(element, "name"));
@@ -570,5 +609,25 @@ public class MovieDbParser {
         movie.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
         movie.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
         return movie;
+    }
+
+    /**
+     * Parse a "simple" Person in the form:
+     * <person>
+     *  <name>John Joseph</name>
+     *  <id>111830</id>
+     *  <version>3</version>
+     *  <last_modified_at>2010-07-19 10:59:13</last_modified_at>
+     * </person>
+     * @param element
+     * @return
+     */
+    private static Person parseSimplePerson(Element element) {
+        Person person = new Person();
+        person.setName(DOMHelper.getValueFromElement(element, "name"));
+        person.setId(DOMHelper.getValueFromElement(element, "id"));
+        person.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
+        person.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
+        return person;
     }
 }
