@@ -42,20 +42,20 @@ public class MovieDbParser {
      */
     public static List<MovieDB> parseMovies(String searchUrl) {
         List<MovieDB> movies = new ArrayList<MovieDB>();
-        
+
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
             return movies;
         }
-        
+
         if (doc == null) {
             return movies;
         }
-        
+
         NodeList nlMovies = doc.getElementsByTagName("movie");
 
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
@@ -85,18 +85,18 @@ public class MovieDbParser {
     public static MovieDB parseMovie(String searchUrl) {
         MovieDB movie = null;
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
             logger.severe("TheMovieDb Error: " + error.getMessage());
             return movie;
         }
-        
+
         if (doc == null) {
             return movie;
         }
-        
+
         NodeList nlMovies = doc.getElementsByTagName("movie");
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movie;
@@ -114,7 +114,7 @@ public class MovieDbParser {
     public static Person parsePersonInfo(String searchUrl) {
         Person person = null;
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
@@ -125,7 +125,7 @@ public class MovieDbParser {
         if (doc == null) {
             return person;
         }
-        
+
         try {
             person = new Person();
             NodeList personNodeList = doc.getElementsByTagName("person");
@@ -418,18 +418,18 @@ public class MovieDbParser {
     public static List<Person> parsePersonGetVersion(String searchUrl) {
         List<Person> people = new ArrayList<Person>();
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
             logger.severe("PersonGetVersion error: " + error.getMessage());
             return people;
         }
-        
+
         if (doc == null) {
             return people;
         }
-        
+
         NodeList movies = doc.getElementsByTagName("movie");
         if ((movies == null) || movies.getLength() == 0) {
             return people;
@@ -459,17 +459,17 @@ public class MovieDbParser {
     public static List<Category> parseCategories(String searchUrl) {
         Document doc = null;
         List<Category> categories = new ArrayList<Category>();
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
             return categories;
         }
-        
+
         if (doc == null) {
             return categories;
         }
-        
+
         NodeList genres = doc.getElementsByTagName("genre");
         if ((genres == null) || genres.getLength() == 0) {
             return categories;
@@ -490,29 +490,31 @@ public class MovieDbParser {
 
         return categories;
     }
-    
+
     /**
      * Parse a DOM document and returns the latest Movie.
+     * This method is used for Movie.getLatest and Movie.getVersion where only
+     * a few fields are initialized.
      * @param doc
      * @return
      */
     public static MovieDB parseLatestMovie(String searchUrl) {
         MovieDB movie = null;
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
             logger.severe("GetLatest error: " + error.getMessage());
             return movie;
         }
-        
+
         if (doc == null) {
             return movie;
         }
-        
+
         NodeList nlMovies = doc.getElementsByTagName("movie");
-        
+
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movie;
         }
@@ -520,16 +522,53 @@ public class MovieDbParser {
         Node node = nlMovies.item(0);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             movie = new MovieDB();
-            
+
             Element element = (Element) node;
-            movie.setTitle(DOMHelper.getValueFromElement(element, "name"));
-            movie.setId(DOMHelper.getValueFromElement(element, "id"));
-            movie.setImdb(DOMHelper.getValueFromElement(element, "imdb_id"));
-            // to be done:
-            //movie.setVersion(DOMHelper.getValueFromElement(element, "version"));
-            //movie.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
+            movie = MovieDbParser.parseSimpleMovie(element);
         }
 
+        return movie;
+    }
+
+    public static List<MovieDB> parseMovieGetVersion(String url) {
+        List<MovieDB> movies = new ArrayList<MovieDB>();
+        Document doc = null;
+
+        try {
+            doc = DOMHelper.getEventDocFromUrl(url);
+        } catch (Exception e) {
+            logger.severe("Movie.getVersion error: " + e.getMessage());
+            return movies;
+        }
+
+        if (doc == null) {
+            return movies;
+        }
+
+        NodeList nlMovies = doc.getElementsByTagName("movie");
+
+        if ((nlMovies == null) || nlMovies.getLength() == 0) {
+            return movies;
+        }
+
+        for (int i = 0; i < nlMovies.getLength(); i++) {
+            Node node = nlMovies.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                movies.add(MovieDbParser.parseSimpleMovie(element));
+            }
+        }
+
+        return movies;
+    }
+
+    private static MovieDB parseSimpleMovie(Element element) {
+        MovieDB movie = new MovieDB();
+        movie.setTitle(DOMHelper.getValueFromElement(element, "name"));
+        movie.setId(DOMHelper.getValueFromElement(element, "id"));
+        movie.setImdb(DOMHelper.getValueFromElement(element, "imdb_id"));
+        movie.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
+        movie.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
         return movie;
     }
 }

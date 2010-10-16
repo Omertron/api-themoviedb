@@ -13,8 +13,11 @@
 
 package com.moviejukebox.themoviedb.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import com.moviejukebox.themoviedb.tools.ModelTools;
 
@@ -48,6 +51,8 @@ public class MovieDB extends ModelTools {
     private String revenue          = UNKNOWN;
     private String homepage         = UNKNOWN;
     private String trailer          = UNKNOWN;
+    private int version             = -1;
+    private Date lastModifiedAt;
     private List<Category> categories = new ArrayList<Category>();
     private List<Studio>   studios    = new ArrayList<Studio>();
     private List<Country>  countries  = new ArrayList<Country>();
@@ -279,5 +284,31 @@ public class MovieDB extends ModelTools {
 
     public void setPeople(List<Person> people) {
         this.people = people;
+    }
+
+    public Date getLastModifiedAt() {
+        return lastModifiedAt;
+    }
+
+    public void setLastModifiedAt(Date lastModifiedAt) {
+        this.lastModifiedAt = lastModifiedAt;
+    }
+
+    public void setLastModifiedAt(String lastModifiedAt) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            setLastModifiedAt(df.parse(lastModifiedAt));
+        } catch (Exception ignore) {
+            return;
+        }
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

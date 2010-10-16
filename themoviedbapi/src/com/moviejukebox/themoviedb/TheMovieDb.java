@@ -33,8 +33,9 @@ import com.moviejukebox.themoviedb.tools.WebBrowser;
 import java.util.Arrays;
 
 /**
- * This is the main class for the API to connect to TheMovieDb.org The implementation is for v2.1 
- * of the API as detailed here http://api.themoviedb.org/2.1/docs/
+ * This is the main class for the API to connect to TheMovieDb.org.
+ * The implementation is for v2.1 of the API as detailed here:
+ * http://api.themoviedb.org/2.1
  * 
  * @author Stuart.Boston
  * @version 1.3
@@ -53,6 +54,7 @@ public class TheMovieDb {
     private static final String MOVIE_GET_INFO = "Movie.getInfo";
     private static final String MOVIE_GET_IMAGES = "Movie.getImages";
     private static final String MOVIE_GET_LATEST = "Movie.getLatest";
+    private static final String MOVIE_GET_VERSION = "Movie.getVersion";
     private static final String PERSON_GET_VERSION = "Person.getVersion";
     private static final String PERSON_GET_INFO = "Person.getInfo";
     private static final String PERSON_SEARCH = "Person.search";
@@ -88,7 +90,7 @@ public class TheMovieDb {
         if (logger == null) {
             return;
         }
-        
+
         TheMovieDb.logger = logger;
         tmdbConsoleHandler.setFormatter(tmdbFormatter);
         tmdbConsoleHandler.setLevel(Level.FINE);
@@ -114,11 +116,9 @@ public class TheMovieDb {
      * @return              A movie bean with the data extracted
      */
     public List<MovieDB> moviedbSearch(String movieTitle, String language) {
-        List<MovieDB> movies = new ArrayList<MovieDB>();
-
         // If the title is null, then exit
         if (!isValidString(movieTitle)) {
-            return movies;
+            return new ArrayList<MovieDB>();
         }
 
         String searchUrl = buildUrl(MOVIE_SEARCH, movieTitle, language);
@@ -130,9 +130,9 @@ public class TheMovieDb {
      * http://api.themoviedb.org/2.1/methods/Movie.browse
      *
      * @param orderBy either <code>rating</code>,
-     * <code>release</code> or <code>title</code>
+     *                <code>release</code> or <code>title</code>
      * @param order how results are ordered. Either <code>asc</code> or
-     * <code>desc</code>
+     *              <code>desc</code>
      * @param language the two digit language code. E.g. en=English
      * @return a list of MovieDB objects
      */
@@ -145,11 +145,11 @@ public class TheMovieDb {
      * http://api.themoviedb.org/2.1/methods/Movie.browse
      *
      * @param orderBy either <code>rating</code>,
-     * <code>release</code> or <code>title</code>
+     *                <code>release</code> or <code>title</code>
      * @param order how results are ordered. Either <code>asc</code> or
-     * <code>desc</code>
+     *              <code>desc</code>
      * @param parameters a Map of optional parameters. See the complete list
-     * in the url above.
+     *                   in the url above.
      * @param language the two digit language code. E.g. en=English
      * @return a list of MovieDB objects
      */
@@ -186,7 +186,7 @@ public class TheMovieDb {
 
         String searchUrl = buildUrl(MOVIE_BROWSE, url, language);
         return MovieDbParser.parseMovies(searchUrl);
-        
+
     }
 
     /**
@@ -237,16 +237,16 @@ public class TheMovieDb {
         if (!isValidString(tmdbID)) {
             return movie;
         }
-        
+
         String searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, language);
         movie = MovieDbParser.parseMovie(searchUrl);
-        
+
         if (movie == null && !language.equalsIgnoreCase(defaultLanguage)) {
             logger.fine("Trying to get the '" + defaultLanguage + "' version");
             searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
             movie = MovieDbParser.parseMovie(searchUrl);
         }
-        
+
         return movie;
     }
 
@@ -254,34 +254,86 @@ public class TheMovieDb {
      * The Movie.getLatest method is a simple method. It returns the ID of the
      * last movie created in the database. This is useful if you are scanning
      * the database and want to know which id to stop at. <br/>
-     * The MovieDB object returned only has its title, TMDb id and IMDB id
-     * initialized.
+     * The MovieDB object returned only has its title, TMDb id, IMDB id,
+     * version and last modified date initialized.
      * @param language the two digit language code. E.g. en=English
      * @return
      */
     public MovieDB moviedbGetLatest(String language) {
-        String url = buildUrl(MOVIE_GET_LATEST, "", language);
-        return MovieDbParser.parseLatestMovie(url);
-    }
-
-    public MovieDB moviedbGetImages(String searchTerm, String language) {
-        return moviedbGetImages(searchTerm, new MovieDB(), language);
+        return MovieDbParser.parseLatestMovie(buildUrl(MOVIE_GET_LATEST, "", language));
     }
 
     /**
-     * Get all the image information from TheMovieDb.
-     * @param searchTerm    Can be either the IMDb ID or TMDb ID
-     * @param movie
-     * @param language
+     * The Movie.getVersion method is used to retrieve the last modified time
+     * along with the current version number of the called object(s). This is
+     * useful if you've already called the object sometime in the past and
+     * simply want to do a quick check for updates. <br/>
+     * The MovieDB object returned only has its title, TMDb id, IMDB id,
+     * version and last modified date initialized.
+     * @param movieId the TMDb ID or IMDB ID of the movie
+     * @param language the two digit language code. E.g. en=English
      * @return
      */
-    public MovieDB moviedbGetImages(String searchTerm, MovieDB movie, String language) {
+    public MovieDB moviedbGetVersion(String movieId, String language) {
+        return this.moviedbGetVersion(Arrays.asList(movieId), language).get(0);
+    }
+
+    /**
+     * The Movie.getVersion method is used to retrieve the last modified time
+     * along with the current version number of the called object(s). This is
+     * useful if you've already called the object sometime in the past and
+     * simply want to do a quick check for updates. <br/>
+     * The MovieDB object returned only has its title, TMDb id, IMDB id,
+     * version and last modified date initialized.
+     * @param movieIds the ID of the TMDb movie you are looking for.
+     *                 This field supports an integer value (TMDb movie id) an
+     *                 IMDB ID or a combination of both.
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public List<MovieDB> moviedbGetVersion(List<String> movieIds, String language) {
+        List<MovieDB> movies = new ArrayList<MovieDB>();
+
+        if (movieIds.isEmpty()) {
+            logger.warning("There are no Movie ids!");
+            return movies;
+        }
+
+        String url = buildUrl(MOVIE_GET_VERSION, this.buildIds(movieIds), language);
+        return MovieDbParser.parseMovieGetVersion(url);
+
+    }
+
+    /**
+     * The Movie.getImages method is used to retrieve all of the backdrops and
+     * posters for a particular movie. This is useful to scan for updates, or
+     * new images if that's all you're after.
+     * @param movieId the TMDb or IMDB ID (starting with tt) of the movie you
+     *                are searching for.
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public MovieDB moviedbGetImages(String movieId, String language) {
+        return moviedbGetImages(movieId, new MovieDB(), language);
+    }
+
+    /**
+     * The Movie.getImages method is used to retrieve all of the backdrops and
+     * posters for a particular movie. This is useful to scan for updates, or
+     * new images if that's all you're after.
+     * @param movieId the TMDb or IMDB ID (starting with tt) of the movie you
+     *                are searching for.
+     * @param movie a MovieDB object
+     * @param language the two digit language code. E.g. en=English
+     * @return
+     */
+    public MovieDB moviedbGetImages(String movieId, MovieDB movie, String language) {
         // If the searchTerm is null, then exit
-        if (!isValidString(searchTerm)) {
+        if (!isValidString(movieId)) {
             return movie;
         }
 
-        String searchUrl = buildUrl(MOVIE_GET_IMAGES, searchTerm, language);
+        String searchUrl = buildUrl(MOVIE_GET_IMAGES, movieId, language);
         return MovieDbParser.parseMovie(searchUrl);
     }
 
@@ -311,9 +363,8 @@ public class TheMovieDb {
      * @return
      */
     public Person personGetInfo(String personID, String language) {
-        Person person = new Person();
         if (!isValidString(personID)) {
-            return person;
+            return new Person();
         }
 
         String searchUrl = buildUrl(PERSON_GET_INFO, personID, language);
@@ -321,9 +372,10 @@ public class TheMovieDb {
     }
 
     /**
-     * The Person.getVersion method is used to retrieve the last modified time along with 
-     * the current version number of the called object(s). This is useful if you've already 
-     * called the object sometime in the past and simply want to do a quick check for updates.
+     * The Person.getVersion method is used to retrieve the last modified time 
+     * along with the current version number of the called object(s). This is
+     * useful if you've already called the object sometime in the past and
+     * simply want to do a quick check for updates.
      * 
      * @param personID a Person TMDb id
      * @param language the two digit language code. E.g. en=English
@@ -338,29 +390,21 @@ public class TheMovieDb {
     }
 
     /**
-     * Retrieve the last modified time along with the current version of a Person.
+     * The Person.getVersion method is used to retrieve the last modified time
+     * along with the current version number of the called object(s). This is
+     * useful if you've already called the object sometime in the past and
+     * simply want to do a quick check for updates.
      * @param personIDs one or multiple Person TMDb ids
      * @param language the two digit language code. E.g. en=English
      * @return
      */
     public List<Person> personGetVersion(List<String> personIDs, String language) {
-        List<Person> people = new ArrayList<Person>();
-
         if (personIDs.isEmpty()) {
             logger.warning("There are no Person ids!");
-            return people;
+            return new ArrayList<Person>();
         }
 
-        String ids = "";
-        for (int i = 0; i < personIDs.size(); i++) {
-            if (i == 0) {
-                ids += personIDs.get(i);
-                continue;
-            }
-            ids += "," + personIDs.get(i);
-        }
-
-        String searchUrl = buildUrl(PERSON_GET_VERSION, ids, language);
+        String searchUrl = buildUrl(PERSON_GET_VERSION, this.buildIds(personIDs), language);
         return MovieDbParser.parsePersonGetVersion(searchUrl);
     }
 
@@ -370,8 +414,7 @@ public class TheMovieDb {
      * @return
      */
     public List<Category> getCategories(String language) {
-        String searchUrl = this.buildUrl(GENRES_GET_LIST, "", language);
-        return MovieDbParser.parseCategories(searchUrl);
+        return MovieDbParser.parseCategories(this.buildUrl(GENRES_GET_LIST, "", language));
     }
 
     /**
@@ -382,7 +425,9 @@ public class TheMovieDb {
      * @return          The matching movie
      */
     public static MovieDB findMovie(Collection<MovieDB> movieList, String title, String year) {
-        if (movieList == null || movieList.isEmpty()) {
+        if ((movieList == null) || (movieList.isEmpty())
+                || (!isValidString(title))
+                || (!isValidString(year))) {
             return null;
         }
 
@@ -458,25 +503,42 @@ public class TheMovieDb {
         if (!isValidString(searchTerm)) {
             return url;
         }
-        
+
         String encodedSearchTerm;
-        
+
         try {
             encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             encodedSearchTerm = searchTerm;
         }
-        
+
         if (prefix.equals(MOVIE_BROWSE)) {
             url += "?";
         } else {
             url += "/";
         }
-        
+
         url += encodedSearchTerm;
-        
+
         logger.finest("Search URL: " + url);
         return url;
+    }
+
+    /**
+     * Build comma separated ids for Movie.getLatest and Movie.getVersion.
+     * @param ids a List of ids
+     * @return
+     */
+    private String buildIds(List<String> ids) {
+        String s = "";
+        for (int i = 0; i < ids.size(); i++) {
+            if (i == 0) {
+                s += ids.get(i);
+                continue;
+            }
+            s += "," + ids.get(i);
+        }
+        return s;
     }
 
     /**
