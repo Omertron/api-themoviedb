@@ -1,9 +1,11 @@
 package com.moviejukebox.themoviedb;
 
-import com.moviejukebox.themoviedb.model.Person;
+import java.util.Map;
 import java.util.ArrayList;
-import com.moviejukebox.themoviedb.model.MovieDB;
 import java.util.List;
+import com.moviejukebox.themoviedb.model.Person;
+import com.moviejukebox.themoviedb.model.MovieDB;
+import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,12 +14,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * JUnit tests for TheMovieDb class. The tester must enter its IMDb API key for
+ * these tests to work. Require JUnit 4.5.
  * @author mledoze
  */
 public class TheMovieDbTest {
 
-    private static String apikey = "";
+    private static String apikey = "41237ccbf3059915ada1ae4cacc2e3b8";
     private TheMovieDb tmdb;
 
     public TheMovieDbTest() {
@@ -45,17 +48,118 @@ public class TheMovieDbTest {
         assertEquals(apikey, tmdb.getApiKey());
     }
 
-    //@Test
+    @Test
+    public void testGetDefaultLanguage() {
+        assertEquals("en-US", tmdb.getDefaultLanguage());
+    }
+
+    @Test
     public void testMoviedbSearch() {
+        String title = "Inception";
+        List<MovieDB> movies = tmdb.moviedbSearch(title, "en");
+        assertFalse(movies.isEmpty());
+        assertEquals(title, movies.get(0).getTitle());
     }
 
-    //@Test
-    public void testMoviedbBrowse_3args() {
+    @Test
+    public void testMoviedbSearch_withWrongTitle(){
+        List<MovieDB> movies = tmdb.moviedbSearch("à(é!àç'(è!çé(èçéè'(éàç!'(èéàç!(èç'", "en");
+        assertTrue(movies.isEmpty());
     }
 
-    //@Test
-    public void testMoviedbBrowse_4args() {
+    @Test
+    public void testMoviedbSearch_withEmptyTitle(){
+        List<MovieDB> movies = tmdb.moviedbSearch("", "en");
+        assertTrue(movies.isEmpty());
     }
+
+    @Test
+    public void testMoviedbSearch_withNullTitle(){
+        List<MovieDB> movies = tmdb.moviedbSearch((String) null, "en");
+        assertTrue(movies.isEmpty());
+    }
+
+
+    //*** Start moviedbBrowse
+    @Test
+    public void testMoviedbBrowseRatingAsc() {
+        List<MovieDB> movies = tmdb.moviedbBrowse("rating", "asc", "en");
+        assertFalse(movies.isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowseReleaseAsc() {
+        List<MovieDB> movies = tmdb.moviedbBrowse("release", "asc", "en");
+        assertFalse(movies.isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowseTitleAsc() {
+        List<MovieDB> movies = tmdb.moviedbBrowse("title", "asc", "en");
+        assertFalse(movies.isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowseRatingDesc() {
+        List<MovieDB> movies = tmdb.moviedbBrowse("rating", "desc", "en");
+        assertFalse(movies.isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowseReleaseDesc() {
+        List<MovieDB> movies = tmdb.moviedbBrowse("release", "desc", "en");
+        assertFalse(movies.isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowseTitleDesc() {
+        List<MovieDB> movies = tmdb.moviedbBrowse("title", "desc", "en");
+        assertFalse(movies.isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_withEmptyOrderBy() {
+        assertTrue(tmdb.moviedbBrowse("", "asc", "en").isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_withNullOrderBy() {
+        assertTrue(tmdb.moviedbBrowse((String) null, "asc", "en").isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_withEmptyOrder() {
+        assertTrue(tmdb.moviedbBrowse("rating", "", "en").isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_withNullOrder() {
+        assertTrue(tmdb.moviedbBrowse("rating", (String) null, "en").isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_incorrectParameters() {
+        assertTrue(tmdb.moviedbBrowse("bla", "bla", "en").isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_withNullParameters() {
+        assertTrue(tmdb.moviedbBrowse("rating", "asc", (Map<String, String>) null, "en").isEmpty());
+    }
+
+    @Test
+    public void testMoviedbBrowse_withInvalidParameters() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("bla", "bla");
+        params.put("yo", "yo");
+        List<MovieDB> movies = tmdb.moviedbBrowse("title", "desc", params, "en");
+
+        // even if parameters are incorrect we should get the result of
+        // the search with the default parameters (orderBy and order) so the
+        // list of movies is not empty
+        assertFalse(movies.isEmpty());
+    }
+    //*** End moviedbBrowse
 
     //@Test
     public void testMoviedbImdbLookup() {
@@ -76,6 +180,8 @@ public class TheMovieDbTest {
     public void testMoviedbGetLatest() {
         MovieDB movie = tmdb.moviedbGetLatest("en");
         assertFalse(movie.getTitle().equals(MovieDB.UNKNOWN));
+        assertFalse(movie.getId().equals(MovieDB.UNKNOWN));
+        assertFalse(movie.getImdb().equals(MovieDB.UNKNOWN));
     }
 
     /**
