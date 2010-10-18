@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class TheMovieDbTest {
 
-    private static String apikey = "41237ccbf3059915ada1ae4cacc2e3b8";
+    private static String apikey = "";
     private TheMovieDb tmdb;
 
     public TheMovieDbTest() {
