@@ -191,7 +191,8 @@ public class TheMovieDb {
             Map<String, String> parameters, String language) {
 
         List<MovieDB> movies = new ArrayList<MovieDB>();
-        if (!isValidString(orderBy) || (!isValidString(order))) {
+        if (!isValidString(orderBy) || (!isValidString(order))
+                || (parameters == null)) {
             return movies;
         }
 
