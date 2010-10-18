@@ -12,11 +12,10 @@
  */
 package com.moviejukebox.themoviedb;
 
-import com.moviejukebox.themoviedb.model.Category;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +24,12 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.moviejukebox.themoviedb.model.Category;
 import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
 import com.moviejukebox.themoviedb.tools.MovieDbParser;
 import com.moviejukebox.themoviedb.tools.LogFormatter;
 import com.moviejukebox.themoviedb.tools.WebBrowser;
-import java.util.Arrays;
 
 /**
  * This is the main class for the API to connect to TheMovieDb.org.
@@ -63,14 +62,27 @@ public class TheMovieDb {
 
     public TheMovieDb(String apiKey) {
         setLogger(Logger.getLogger("TheMovieDB"));
+        if (!isValidString(apiKey)) {
+            logger.severe("TheMovieDb was initialized with a wrong API key!");
+        }
         setApiKey(apiKey);
     }
 
     public TheMovieDb(String apiKey, Logger logger) {
         setLogger(logger);
+        if (!isValidString(apiKey)) {
+            logger.severe("TheMovieDb was initialized with a wrong API key!");
+        }
         setApiKey(apiKey);
     }
 
+    /**
+     * Set proxy parameters.
+     * @param host proxy host URL
+     * @param port proxy port
+     * @param username proxy username
+     * @param password proxy password
+     */
     public void setProxy(String host, String port, String username, String password) {
         WebBrowser.setProxyHost(host);
         WebBrowser.setProxyPort(port);
@@ -78,6 +90,11 @@ public class TheMovieDb {
         WebBrowser.setProxyPassword(password);
     }
 
+    /**
+     * Set web browser timeout.
+     * @param webTimeoutConnect
+     * @param webTimeoutRead
+     */
     public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
         WebBrowser.setWebTimeoutConnect(webTimeoutConnect);
         WebBrowser.setWebTimeoutRead(webTimeoutRead);
@@ -100,13 +117,29 @@ public class TheMovieDb {
         logger.setLevel(Level.ALL);
     }
 
+    /**
+     * Return the API key.
+     * @return
+     */
     public String getApiKey() {
         return apiKey;
     }
 
+    /**
+     * Set the TMDb API key.
+     * @param apiKey a valid TMDb API key.
+     */
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
         tmdbFormatter.addApiKey(apiKey);
+    }
+
+    /**
+     * Return the TMDb default language: en-US.
+     * @return
+     */
+    public String getDefaultLanguage() {
+        return defaultLanguage;
     }
 
     /**

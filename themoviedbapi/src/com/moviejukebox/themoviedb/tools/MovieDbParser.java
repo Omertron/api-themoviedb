@@ -478,7 +478,6 @@ public class MovieDbParser {
                 category.setName(element.getAttribute("name"));
                 category.setId(DOMHelper.getValueFromElement(element, "id"));
                 category.setUrl(DOMHelper.getValueFromElement(element, "url"));
-                category.setType(""); // there are no type in the XML
                 categories.add(category);
             }
         }
