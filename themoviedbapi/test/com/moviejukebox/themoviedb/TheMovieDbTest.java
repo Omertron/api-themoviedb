@@ -1,5 +1,6 @@
 package com.moviejukebox.themoviedb;
 
+import com.moviejukebox.themoviedb.model.Category;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,23 +63,22 @@ public class TheMovieDbTest {
     }
 
     @Test
-    public void testMoviedbSearch_withWrongTitle(){
+    public void testMoviedbSearch_withWrongTitle() {
         List<MovieDB> movies = tmdb.moviedbSearch("à(é!àç'(è!çé(èçéè'(éàç!'(èéàç!(èç'", "en");
         assertTrue(movies.isEmpty());
     }
 
     @Test
-    public void testMoviedbSearch_withEmptyTitle(){
+    public void testMoviedbSearch_withEmptyTitle() {
         List<MovieDB> movies = tmdb.moviedbSearch("", "en");
         assertTrue(movies.isEmpty());
     }
 
     @Test
-    public void testMoviedbSearch_withNullTitle(){
+    public void testMoviedbSearch_withNullTitle() {
         List<MovieDB> movies = tmdb.moviedbSearch((String) null, "en");
         assertTrue(movies.isEmpty());
     }
-
 
     //*** Start moviedbBrowse
     @Test
@@ -161,21 +161,82 @@ public class TheMovieDbTest {
     }
     //*** End moviedbBrowse
 
-    //@Test
+    @Test
     public void testMoviedbImdbLookup() {
+        MovieDB movie = tmdb.moviedbImdbLookup("tt0137523", "en");
+        assertEquals("Fight Club", movie.getTitle());
+        assertEquals("550", movie.getId());
+        assertEquals("tt0137523", movie.getImdb());
+        assertEquals("138", movie.getRuntime());
     }
 
-    //@Test
-    public void testMoviedbGetInfo_String_String() {
+    @Test
+    public void testMoviedbImdbLookup_withEmptyId() {
+        MovieDB movie = tmdb.moviedbImdbLookup("", "en");
+        assertTrue(movie.getTitle().equals(MovieDB.UNKNOWN));
+        assertTrue(movie.getId().equals(MovieDB.UNKNOWN));
+        assertTrue(movie.getImdb().equals(MovieDB.UNKNOWN));
     }
 
-    //@Test
-    public void testMoviedbGetInfo_3args() {
+    @Test
+    public void testMoviedbImdbLookup_withNullId() {
+        MovieDB movie = tmdb.moviedbImdbLookup((String) null, "en");
+        assertTrue(movie.getTitle().equals(MovieDB.UNKNOWN));
+        assertTrue(movie.getId().equals(MovieDB.UNKNOWN));
+        assertTrue(movie.getImdb().equals(MovieDB.UNKNOWN));
     }
 
-    /**
-     * Test of moviedbGetLatest method, of class TheMovieDb.
-     */
+    @Test
+    public void testMoviedbGetInfo() {
+        MovieDB movie = tmdb.moviedbGetInfo("187", "en");
+        assertEquals("Sin City", movie.getTitle());
+        assertEquals("187", movie.getId());
+        assertEquals("tt0401792", movie.getImdb());
+        assertEquals("124", movie.getRuntime());
+
+    }
+
+    @Test
+    public void testMoviedbGetInfo_withExistingMovie() {
+        MovieDB movie = tmdb.moviedbGetInfo("200", new MovieDB(), "en");
+        assertEquals("Star Trek: Insurrection", movie.getTitle());
+        assertEquals("200", movie.getId());
+        assertEquals("tt0120844", movie.getImdb());
+        assertEquals("103", movie.getRuntime());
+    }
+
+    @Test
+    public void testMoviedbGetInfo_withNullMovie() {
+        MovieDB movie = tmdb.moviedbGetInfo("306", null, "en");
+        assertEquals("Beverly Hills Cop III", movie.getTitle());
+        assertEquals("306", movie.getId());
+        assertEquals("tt0109254", movie.getImdb());
+        assertEquals("104", movie.getRuntime());
+    }
+
+    @Test
+    public void testMoviedbGetInfo_withNullMovieAndEmptyId() {
+        MovieDB movie = tmdb.moviedbGetInfo("", null, "en");
+        assertNull(movie);
+    }
+
+    @Test
+    public void testMoviedbGetInfo_withNullMovieAndNullId() {
+        MovieDB movie = tmdb.moviedbGetInfo((String) null, null, "en");
+        assertNull(movie);
+    }
+
+    @Test
+    public void testMoviedbGetInfo_withInitializedMovie() {
+        MovieDB input = new MovieDB();
+        String title = "The 300 Spartans";
+        String id = "19972";
+        input.setTitle(title);
+        MovieDB movie = tmdb.moviedbGetInfo(id, input, "en");
+        assertEquals(title, movie.getTitle());
+        assertEquals(id, movie.getId());
+    }
+
     @Test
     public void testMoviedbGetLatest() {
         MovieDB movie = tmdb.moviedbGetLatest("en");
@@ -184,9 +245,6 @@ public class TheMovieDbTest {
         assertFalse(movie.getImdb().equals(MovieDB.UNKNOWN));
     }
 
-    /**
-     * Test of moviedbGetVersion method, of class TheMovieDb.
-     */
     @Test
     public void testMoviedbGetVersion_String_String() {
         MovieDB movie = tmdb.moviedbGetVersion("155", "en");
@@ -253,12 +311,46 @@ public class TheMovieDbTest {
     public void testMoviedbGetImages_3args() {
     }
 
-    //@Test
+    @Test
     public void testPersonSearch() {
+        Person person = tmdb.personSearch("Tom Cruise", "en");
+        assertEquals("Tom Cruise", person.getName());
+        assertEquals("500", person.getId());
     }
 
-    //@Test
+    @Test
+    public void testPersonSearch_withEmptyName() {
+        Person person = tmdb.personSearch("", "en");
+        assertTrue(person.getName().equals(MovieDB.UNKNOWN));
+        assertTrue(person.getId().equals(MovieDB.UNKNOWN));
+    }
+
+    @Test
+    public void testPersonSearch_withNullName() {
+        Person person = tmdb.personSearch((String) null, "en");
+        assertTrue(person.getName().equals(MovieDB.UNKNOWN));
+        assertTrue(person.getId().equals(MovieDB.UNKNOWN));
+    }
+
+    @Test
     public void testPersonGetInfo() {
+        Person person = tmdb.personGetInfo("260", "en");
+        assertEquals("Marco Pérez", person.getName());
+        assertEquals("260", person.getId());
+    }
+
+    @Test
+    public void testPersonGetInfo_withEmptyId() {
+        Person person = tmdb.personGetInfo("", "en");
+        assertTrue(person.getName().equals(MovieDB.UNKNOWN));
+        assertTrue(person.getId().equals(MovieDB.UNKNOWN));
+    }
+
+    @Test
+    public void testPersonGetInfo_withNullId() {
+        Person person = tmdb.personGetInfo((String) null, "en");
+        assertTrue(person.getName().equals(MovieDB.UNKNOWN));
+        assertTrue(person.getId().equals(MovieDB.UNKNOWN));
     }
 
     @Test
@@ -321,15 +413,37 @@ public class TheMovieDbTest {
         assertTrue(people.isEmpty());
     }
 
-    //@Test
+    @Test
     public void testGetCategories() {
+        List<Category> genres = tmdb.getCategories("en");
+        assertFalse(genres.isEmpty());
+        assertEquals(30, genres.size());
     }
 
     //@Test
     public void testFindMovie() {
     }
 
-    //@Test
+    @Test
     public void testCompareMovies() {
+        MovieDB movie = tmdb.moviedbGetInfo("27205", "en");
+        assertTrue(TheMovieDb.compareMovies(movie, "Inception", "2010"));
+    }
+
+    //@Test
+    public void testCompareMovies_sameTitleAndDifferentYear() {
+        MovieDB movie = tmdb.moviedbGetInfo("27205", "en");
+        assertTrue(TheMovieDb.compareMovies(movie, "Inception", "1999"));
+    }
+
+    //@Test
+    public void testCompareMovies_differentTitleAndSameYear() {
+        MovieDB movie = tmdb.moviedbGetInfo("27205", "en");
+        assertTrue(TheMovieDb.compareMovies(movie, "xxx", "2010"));
+    }
+
+    @Test
+    public void testCompareMovies_wrongArgument() {
+        assertFalse(TheMovieDb.compareMovies(null, "", "2010"));
     }
 }
