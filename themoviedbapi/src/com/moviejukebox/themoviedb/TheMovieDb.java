@@ -213,9 +213,11 @@ public class TheMovieDb {
         validParameters.add("countries");
 
         String url = "order_by=" + orderBy + "&order=" + order;
-        for (String key : validParameters) {
-            if (parameters.containsKey(key)) {
-                url += "&" + key + "=" + parameters.get(key);
+        if(!parameters.isEmpty()) {
+            for (String key : validParameters) {
+                if (parameters.containsKey(key)) {
+                    url += "&" + key + "=" + parameters.get(key);
+                }
             }
         }
 
