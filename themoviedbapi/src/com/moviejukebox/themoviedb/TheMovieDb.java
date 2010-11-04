@@ -483,9 +483,7 @@ public class TheMovieDb {
      * @return          The matching movie
      */
     public static MovieDB findMovie(Collection<MovieDB> movieList, String title, String year) {
-        if ((movieList == null) || (movieList.isEmpty())
-                || (!isValidString(title))
-                || (!isValidString(year))) {
+        if ((movieList == null) || (movieList.isEmpty()) || (!isValidString(title))) {
             return null;
         }
 
