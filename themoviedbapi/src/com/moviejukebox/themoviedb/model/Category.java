@@ -13,7 +13,7 @@
 package com.moviejukebox.themoviedb.model;
 
 /**
- *  Category from the MovieDB.org
+ *  Category from TheMovieDB.org
  *  
  *  @author Stuart.Boston
  *
