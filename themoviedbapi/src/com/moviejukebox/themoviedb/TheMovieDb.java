@@ -41,7 +41,13 @@ import com.moviejukebox.themoviedb.tools.WebBrowser;
  * @version 1.3
  */
 public class TheMovieDb {
-
+    private String apiKey;
+    private static Logger logger = null;
+    private static LogFormatter tmdbFormatter = new LogFormatter();
+    private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
+    private static final String apiSite = "http://api.themoviedb.org/2.1/";
+    private static final String defaultLanguage = "en-US";
+    
     /**
      * Compare the MovieDB object with a title & year
      * @param moviedb   The moviedb object to compare too
@@ -90,6 +96,7 @@ public class TheMovieDb {
         }
         return false;
     }
+    
     /**
      * Search a list of movies and return the one that matches the title & year
      * @param movieList The list of movies to search
@@ -110,6 +117,7 @@ public class TheMovieDb {
 
         return null;
     }
+    
     /**
      * Check the string passed to see if it contains a value.
      * @param testString The string to test
@@ -123,9 +131,6 @@ public class TheMovieDb {
         }
         return true;
     }
-    private String apiKey;
-    private static Logger logger = null;
-    private static LogFormatter tmdbFormatter = new LogFormatter();
     
     /*
      * API Methods
@@ -133,10 +138,6 @@ public class TheMovieDb {
      * Note: This is currently a read-only interface and as such, no write methods exist.
      */
     
-    private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
-    
-    private static final String apiSite = "http://api.themoviedb.org/2.1/";
-    private static final String defaultLanguage = "en-US";
     /*
      * Media
      */
@@ -642,4 +643,5 @@ public class TheMovieDb {
         WebBrowser.setWebTimeoutConnect(webTimeoutConnect);
         WebBrowser.setWebTimeoutRead(webTimeoutRead);
     }
+
 }
