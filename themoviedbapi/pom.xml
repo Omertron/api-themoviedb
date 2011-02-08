@@ -19,7 +19,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>Hudson CI</system>
-		<url>http://mediadeveloper.org:8080/job/themoviedbapi/</url>
+		<url>http://mediadeveloper.org:8080/job/API-TheMovieDb/</url>
 	</ciManagement>
 	<scm>
 		<connection>scm:svn:http://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</connection>
