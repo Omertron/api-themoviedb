@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>com.moviejukebox</groupId>
 	<artifactId>themoviedbapi</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<name>The MovieDB API</name>
 
 	<issueManagement>
@@ -20,10 +20,9 @@
 		<url>http://mediadeveloper.org:8080/job/API-TheMovieDb/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://themoviedbapi.googlecode.com/svn/tags/themoviedbapi-1.0</connection>
-		<developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/tags/themoviedbapi-1.0</developerConnection>
-		<tag>HEAD</tag>
-		<url>http://code.google.com/p/themoviedbapi/source/browse/tags/themoviedbapi-1.0</url>
+		<connection>scm:svn:http://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</connection>
+		<developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</developerConnection>
+		<url>http://code.google.com/p/themoviedbapi/source/browse/trunk/themoviedbapi</url>
 	</scm>
 
 	<properties>
