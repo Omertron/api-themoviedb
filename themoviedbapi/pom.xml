@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -8,7 +10,7 @@
 	</parent>
 	<groupId>com.moviejukebox</groupId>
 	<artifactId>themoviedbapi</artifactId>
-	<version>1.0</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>The MovieDB API</name>
 
 	<issueManagement>
@@ -20,10 +22,10 @@
 		<url>http://mediadeveloper.org:8080/job/API-TheMovieDb/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://themoviedbapi.googlecode.com/svn/tags/themoviedbapi-1.0</connection>
-		<developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/tags/themoviedbapi-1.0</developerConnection>
+		<connection>scm:svn:http://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</connection>
+		<developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</developerConnection>
 		<tag>HEAD</tag>
-		<url>http://code.google.com/p/themoviedbapi/source/browse/tags/themoviedbapi-1.0</url>
+		<url>http://code.google.com/p/themoviedbapi/source/browse/trunk/themoviedbapi</url>
 	</scm>
 
 	<properties>
