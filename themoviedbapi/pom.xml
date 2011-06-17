@@ -18,7 +18,7 @@
 	
 	<ciManagement>
 		<system>Hudson CI</system>
-		<url>http://mediadeveloper.org:8080/job/API-TheMovieDb/</url>
+		<url>http://jenkins.omertron.com/job/API-TheMovieDb/</url>
 	</ciManagement>
 	
 	<scm>
