@@ -136,8 +136,6 @@ public class MovieDbParser {
 
         Node node = nlMovies.item(0);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            movie = new MovieDB();
-
             Element element = (Element) node;
             movie = MovieDbParser.parseSimpleMovie(element);
         }
@@ -168,8 +166,6 @@ public class MovieDbParser {
 
         Node node = nlMovies.item(0);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            person = new Person();
-
             Element element = (Element) node;
             person = MovieDbParser.parseSimplePerson(element);
         }

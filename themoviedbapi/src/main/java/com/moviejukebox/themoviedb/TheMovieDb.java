@@ -424,9 +424,7 @@ public class TheMovieDb {
      * @return          A movie bean with all of the information
      */
     public MovieDB moviedbGetInfo(String tmdbID, String language) {
-        MovieDB movie = null;
-        movie = moviedbGetInfo(tmdbID, movie, language);
-        return movie;
+        return moviedbGetInfo(tmdbID, new MovieDB(), language);
     }
 
     /**
