@@ -149,12 +149,14 @@ public class ModelTools {
             return null;
         }
         
+        
+        int validArtworkNumber = artworkNumber;
         // Validate the number
-        if (artworkNumber <= 0) {
-            artworkNumber = 0;
+        if (validArtworkNumber <= 0) {
+            validArtworkNumber = 0;
         } else {
             // Artwork elements start at 0 (Zero)
-            artworkNumber -= 1;
+            validArtworkNumber -= 1;
         }
         
         List<Artwork> artworkList = getArtwork(artworkType, artworkSize);
@@ -165,11 +167,11 @@ public class ModelTools {
         }
         
         // If the number requested is greater than the array size, loop around until it's within scope
-        while (artworkNumber > artworkCount) {
-            artworkNumber = artworkNumber - artworkCount;
+        while (validArtworkNumber > artworkCount) {
+            validArtworkNumber = validArtworkNumber - artworkCount;
         }
         
-        return artworkList.get(artworkNumber);
+        return artworkList.get(validArtworkNumber);
     }
 
 }

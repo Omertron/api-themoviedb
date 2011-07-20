@@ -96,8 +96,10 @@ public class Artwork implements Comparable<Object> {
     
     @Override
     public int compareTo(Object otherArtwork) throws ClassCastException {
-        if (!(otherArtwork instanceof Artwork))
+        if (!(otherArtwork instanceof Artwork)) {
             throw new ClassCastException("TheMovieDB API: An Artwork object is expected.");
+        }
+        
         int anotherId = ((Artwork) otherArtwork).getId();  
         return this.id - anotherId;    
       }
@@ -117,19 +119,61 @@ public class Artwork implements Comparable<Object> {
         return builder.toString();
     }
 
-   
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result + ((size == null) ? 0 : size.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + ((url == null) ? 0 : url.hashCode());
+        return result;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        
+        if (!(obj instanceof Artwork)) {
             return false;
+        }
+        
         Artwork other = (Artwork)obj;
-        if (id != other.id)
+        
+        if (id != other.id) {
             return false;
+        }
+        
+        if (size == null) {
+            if (other.size != null) {
+                return false;
+            }
+        } else if (!size.equals(other.size)) {
+            return false;
+        }
+        
+        if (type == null) {
+            if (other.type != null) {
+                return false;
+            }
+        } else if (!type.equals(other.type)) {
+            return false;
+        }
+        
+        if (url == null) {
+            if (other.url != null) {
+                return false;
+            }
+        } else if (!url.equals(other.url)) {
+            return false;
+        }
+        
         return true;
     }
  }

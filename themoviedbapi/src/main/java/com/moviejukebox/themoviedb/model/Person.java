@@ -145,8 +145,7 @@ public class Person extends ModelTools {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
-            Date birthday = df.parse(sBirthday);
-            setBirthday(birthday);
+            setBirthday(df.parse(sBirthday));
         } catch (Exception ignore) {
             return;
         }

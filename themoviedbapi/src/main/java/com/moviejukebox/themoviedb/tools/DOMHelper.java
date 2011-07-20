@@ -35,7 +35,7 @@ import com.moviejukebox.themoviedb.TheMovieDb;
  *
  */
 public class DOMHelper {
-    static Logger logger = TheMovieDb.getLogger();
+    private static Logger logger = TheMovieDb.getLogger();
 
     /**
      * Gets the string value of the tag element name passed

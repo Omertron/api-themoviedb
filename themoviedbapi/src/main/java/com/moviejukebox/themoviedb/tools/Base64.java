@@ -13,9 +13,7 @@
 package com.moviejukebox.themoviedb.tools;
 
 public class Base64 {
-    public static String base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789" + "+/";
-
-    public static int splitLinesAt = 76;
+    private static final String base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     public static String base64Encode(String string) {
         String unEncoded = string; // Copy the string so we can modify it

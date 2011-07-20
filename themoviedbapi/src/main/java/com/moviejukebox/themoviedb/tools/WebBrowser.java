@@ -90,16 +90,11 @@ public final class WebBrowser {
                 if (in != null) {
                     in.close();
                 }
-                if (cnx != null) {
-                    if(cnx instanceof HttpURLConnection) {
-                        ((HttpURLConnection)cnx).disconnect();
-                    }
+                
+                if ((cnx != null) && (cnx instanceof HttpURLConnection)) {
+                    ((HttpURLConnection)cnx).disconnect();
                 }
-                if (cnx != null) {
-                    if(cnx instanceof HttpURLConnection) {
-                        ((HttpURLConnection)cnx).disconnect();
-                    }
-                }
+                
             }
             return content.toString();
         } finally {

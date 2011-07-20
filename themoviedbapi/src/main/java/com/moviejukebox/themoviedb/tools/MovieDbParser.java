@@ -12,6 +12,9 @@
  */
 package com.moviejukebox.themoviedb.tools;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -33,7 +36,16 @@ import com.moviejukebox.themoviedb.model.Studio;
 
 public class MovieDbParser {
 
-    static Logger logger = TheMovieDb.getLogger();
+    private static Logger logger = TheMovieDb.getLogger();
+    
+    private static final String NAME = "name";
+    private static final String GENRE = "genre";
+    private static final String ID = "id";
+    private static final String URL = "url";
+    private static final String LANGUAGE = "language";
+    private static final String MOVIE = "movie";
+    private static final String PERSON = "person";
+    private static final String TYPE = "type";
 
     /**
      * Retrieve a list of valid genres within TMDb.
@@ -54,7 +66,7 @@ public class MovieDbParser {
             return categories;
         }
 
-        NodeList genres = doc.getElementsByTagName("genre");
+        NodeList genres = doc.getElementsByTagName(GENRE);
         if ((genres == null) || genres.getLength() == 0) {
             return categories;
         }
@@ -64,9 +76,9 @@ public class MovieDbParser {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
                 Category category = new Category();
-                category.setName(element.getAttribute("name"));
-                category.setId(DOMHelper.getValueFromElement(element, "id"));
-                category.setUrl(DOMHelper.getValueFromElement(element, "url"));
+                category.setName(element.getAttribute(NAME));
+                category.setId(DOMHelper.getValueFromElement(element, ID));
+                category.setUrl(DOMHelper.getValueFromElement(element, URL));
                 categories.add(category);
             }
         }
@@ -89,7 +101,7 @@ public class MovieDbParser {
             return languages;
         }
         
-        NodeList nlLanguages = doc.getElementsByTagName("language");
+        NodeList nlLanguages = doc.getElementsByTagName(LANGUAGE);
         
         if ((nlLanguages == null) || nlLanguages.getLength() == 0) {
             return languages;
@@ -128,7 +140,7 @@ public class MovieDbParser {
             return movie;
         }
 
-        NodeList nlMovies = doc.getElementsByTagName("movie");
+        NodeList nlMovies = doc.getElementsByTagName(MOVIE);
 
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movie;
@@ -158,7 +170,7 @@ public class MovieDbParser {
             return person;
         }
 
-        NodeList nlMovies = doc.getElementsByTagName("person");
+        NodeList nlMovies = doc.getElementsByTagName(PERSON);
 
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return person;
@@ -193,7 +205,7 @@ public class MovieDbParser {
             return movie;
         }
 
-        NodeList nlMovies = doc.getElementsByTagName("movie");
+        NodeList nlMovies = doc.getElementsByTagName(MOVIE);
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movie;
         }
@@ -222,7 +234,7 @@ public class MovieDbParser {
             return movies;
         }
 
-        NodeList nlMovies = doc.getElementsByTagName("movie");
+        NodeList nlMovies = doc.getElementsByTagName(MOVIE);
 
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movies;
@@ -251,14 +263,14 @@ public class MovieDbParser {
             movie.setPopularity(DOMHelper.getValueFromElement(movieElement, "popularity"));
             movie.setTranslated(DOMHelper.getValueFromElement(movieElement, "translated"));
             movie.setAdult(DOMHelper.getValueFromElement(movieElement, "adult"));
-            movie.setLanguage(DOMHelper.getValueFromElement(movieElement, "language"));
+            movie.setLanguage(DOMHelper.getValueFromElement(movieElement, LANGUAGE));
             movie.setOriginalName(DOMHelper.getValueFromElement(movieElement, "original_name"));
-            movie.setTitle(DOMHelper.getValueFromElement(movieElement, "name"));
+            movie.setTitle(DOMHelper.getValueFromElement(movieElement, NAME));
             movie.setAlternativeName(DOMHelper.getValueFromElement(movieElement, "alternative_name"));
-            movie.setType(DOMHelper.getValueFromElement(movieElement, "type"));
-            movie.setId(DOMHelper.getValueFromElement(movieElement, "id"));
+            movie.setType(DOMHelper.getValueFromElement(movieElement, TYPE));
+            movie.setId(DOMHelper.getValueFromElement(movieElement, ID));
             movie.setImdb(DOMHelper.getValueFromElement(movieElement, "imdb_id"));
-            movie.setUrl(DOMHelper.getValueFromElement(movieElement, "url"));
+            movie.setUrl(DOMHelper.getValueFromElement(movieElement, URL));
             movie.setOverview(DOMHelper.getValueFromElement(movieElement, "overview"));
             movie.setRating(DOMHelper.getValueFromElement(movieElement, "rating"));
             movie.setTagline(DOMHelper.getValueFromElement(movieElement, "tagline"));
@@ -285,10 +297,10 @@ public class MovieDbParser {
                             subElement = (Element) personNode;
                             Category category = new Category();
 
-                            category.setType(subElement.getAttribute("type"));
-                            category.setUrl(subElement.getAttribute("url"));
-                            category.setName(subElement.getAttribute("name"));
-                            category.setId(subElement.getAttribute("id"));
+                            category.setType(subElement.getAttribute(TYPE));
+                            category.setUrl(subElement.getAttribute(URL));
+                            category.setName(subElement.getAttribute(NAME));
+                            category.setId(subElement.getAttribute(ID));
 
                             movie.addCategory(category);
                         }
@@ -311,9 +323,9 @@ public class MovieDbParser {
                             subElement = (Element) studioNode;
                             Studio studio = new Studio();
 
-                            studio.setUrl(subElement.getAttribute("url"));
-                            studio.setName(subElement.getAttribute("name"));
-                            studio.setId(subElement.getAttribute("id"));
+                            studio.setUrl(subElement.getAttribute(URL));
+                            studio.setName(subElement.getAttribute(NAME));
+                            studio.setId(subElement.getAttribute(ID));
 
                             movie.addStudio(studio);
                         }
@@ -336,9 +348,9 @@ public class MovieDbParser {
                             subElement = (Element) countryNode;
                             Country country = new Country();
 
-                            country.setName(subElement.getAttribute("name"));
+                            country.setName(subElement.getAttribute(NAME));
                             country.setCode(subElement.getAttribute("code"));
-                            country.setUrl(subElement.getAttribute("url"));
+                            country.setUrl(subElement.getAttribute(URL));
 
                             movie.addProductionCountry(country);
                         }
@@ -361,15 +373,15 @@ public class MovieDbParser {
                             subElement = (Element) personNode;
                             Person person = new Person();
 
-                            person.setName(subElement.getAttribute("name"));
+                            person.setName(subElement.getAttribute(NAME));
                             person.setCharacter(subElement.getAttribute("character"));
                             person.setJob(subElement.getAttribute("job"));
-                            person.setId(subElement.getAttribute("id"));
+                            person.setId(subElement.getAttribute(ID));
                             person.addArtwork(Artwork.ARTWORK_TYPE_PERSON,
                                     Artwork.ARTWORK_SIZE_THUMB,
                                     subElement.getAttribute("thumb"), "-1");
                             person.setDepartment(subElement.getAttribute("department"));
-                            person.setUrl(subElement.getAttribute("url"));
+                            person.setUrl(subElement.getAttribute(URL));
                             person.setOrder(subElement.getAttribute("order"));
                             person.setCastId(subElement.getAttribute("cast_id"));
 
@@ -418,15 +430,15 @@ public class MovieDbParser {
                             if (subElement.getNodeName().equalsIgnoreCase("image")) {
                                 // This is the format used in Movie.imdbLookup, Movie.getInfo & Movie.search
                                 Artwork artwork = new Artwork();
-                                artwork.setType(subElement.getAttribute("type"));
+                                artwork.setType(subElement.getAttribute(TYPE));
                                 artwork.setSize(subElement.getAttribute("size"));
-                                artwork.setUrl(subElement.getAttribute("url"));
-                                artwork.setId(subElement.getAttribute("id"));
+                                artwork.setUrl(subElement.getAttribute(URL));
+                                artwork.setId(subElement.getAttribute(ID));
                                 movie.addArtwork(artwork);
                             } else if (subElement.getNodeName().equalsIgnoreCase("backdrop")
                                     || subElement.getNodeName().equalsIgnoreCase("poster")) {
                                 // This is the format used in Movie.getImages
-                                String artworkId = subElement.getAttribute("id");
+                                String artworkId = subElement.getAttribute(ID);
                                 String artworkType = subElement.getNodeName();
 
                                 // We need to decode and loop round the child nodes to get the data
@@ -438,7 +450,7 @@ public class MovieDbParser {
                                         Artwork artwork = new Artwork();
                                         artwork.setId(artworkId);
                                         artwork.setType(artworkType);
-                                        artwork.setUrl(imageElement.getAttribute("url"));
+                                        artwork.setUrl(imageElement.getAttribute(URL));
                                         artwork.setSize(imageElement.getAttribute("size"));
                                         movie.addArtwork(artwork);
                                     }
@@ -453,7 +465,10 @@ public class MovieDbParser {
             }
         } catch (Exception error) {
             logger.severe("ERROR: " + error.getMessage());
-            error.printStackTrace();
+            final Writer eResult = new StringWriter();
+            final PrintWriter printWriter = new PrintWriter(eResult);
+            error.printStackTrace(printWriter);
+            logger.severe(eResult.toString());
         }
         return movie;
     }
@@ -480,7 +495,7 @@ public class MovieDbParser {
             return movies;
         }
 
-        NodeList nlMovies = doc.getElementsByTagName("movie");
+        NodeList nlMovies = doc.getElementsByTagName(MOVIE);
 
         if ((nlMovies == null) || nlMovies.getLength() == 0) {
             return movies;
@@ -521,7 +536,7 @@ public class MovieDbParser {
             return people;
         }
 
-        NodeList movies = doc.getElementsByTagName("movie");
+        NodeList movies = doc.getElementsByTagName(MOVIE);
         if ((movies == null) || movies.getLength() == 0) {
             return people;
         }
@@ -553,7 +568,7 @@ public class MovieDbParser {
             return people;
         }
 
-        NodeList personNodeList = doc.getElementsByTagName("person");
+        NodeList personNodeList = doc.getElementsByTagName(PERSON);
 
         
         if ((personNodeList == null) || personNodeList.getLength() == 0) {
@@ -573,8 +588,8 @@ public class MovieDbParser {
                 try {
                     Element personElement = (Element) personNode;
     
-                    person.setName(DOMHelper.getValueFromElement(personElement, "name"));
-                    person.setId(DOMHelper.getValueFromElement(personElement, "id"));
+                    person.setName(DOMHelper.getValueFromElement(personElement, NAME));
+                    person.setId(DOMHelper.getValueFromElement(personElement, ID));
                     person.setBiography(DOMHelper.getValueFromElement(personElement, "biography"));
                     
                     try {
@@ -585,7 +600,7 @@ public class MovieDbParser {
                     
                     person.setBirthday(DOMHelper.getValueFromElement(personElement, "birthday"));
                     person.setBirthPlace(DOMHelper.getValueFromElement(personElement, "birthplace"));
-                    person.setUrl(DOMHelper.getValueFromElement(personElement, "url"));
+                    person.setUrl(DOMHelper.getValueFromElement(personElement, URL));
                     person.setVersion(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "version")));
                     person.setLastModifiedAt(DOMHelper.getValueFromElement(personElement, "last_modified_at"));
     
@@ -595,15 +610,15 @@ public class MovieDbParser {
                         if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
                             Element artworkElement = (Element) artworkNode;
                             Artwork artwork = new Artwork();
-                            artwork.setType(artworkElement.getAttribute("type"));
-                            artwork.setUrl(artworkElement.getAttribute("url"));
+                            artwork.setType(artworkElement.getAttribute(TYPE));
+                            artwork.setUrl(artworkElement.getAttribute(URL));
                             artwork.setSize(artworkElement.getAttribute("size"));
-                            artwork.setId(artworkElement.getAttribute("id"));
+                            artwork.setId(artworkElement.getAttribute(ID));
                             person.addArtwork(artwork);
                         }
                     }
     
-                    NodeList filmNodeList = doc.getElementsByTagName("movie");
+                    NodeList filmNodeList = doc.getElementsByTagName(MOVIE);
                     for (int nodeLoop = 0; nodeLoop < filmNodeList.getLength(); nodeLoop++) {
                         Node filmNode = filmNodeList.item(nodeLoop);
                         if (filmNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -612,10 +627,10 @@ public class MovieDbParser {
     
                             film.setCharacter(filmElement.getAttribute("character"));
                             film.setDepartment(filmElement.getAttribute("department"));
-                            film.setId(filmElement.getAttribute("id"));
+                            film.setId(filmElement.getAttribute(ID));
                             film.setJob(filmElement.getAttribute("job"));
-                            film.setName(filmElement.getAttribute("name"));
-                            film.setUrl(filmElement.getAttribute("url"));
+                            film.setName(filmElement.getAttribute(NAME));
+                            film.setUrl(filmElement.getAttribute(URL));
     
                             person.addFilm(film);
                         }
@@ -624,7 +639,10 @@ public class MovieDbParser {
                     people.add(person);
                 } catch (Exception error) {
                     logger.severe("PersonInfo: " + error.getMessage());
-                    error.printStackTrace();
+                    final Writer eResult = new StringWriter();
+                    final PrintWriter printWriter = new PrintWriter(eResult);
+                    error.printStackTrace(printWriter);
+                    logger.severe(eResult.toString());
                 }
             }
         }
@@ -663,8 +681,8 @@ public class MovieDbParser {
      */
     private static MovieDB parseSimpleMovie(Element element) {
         MovieDB movie = new MovieDB();
-        movie.setTitle(DOMHelper.getValueFromElement(element, "name"));
-        movie.setId(DOMHelper.getValueFromElement(element, "id"));
+        movie.setTitle(DOMHelper.getValueFromElement(element, NAME));
+        movie.setId(DOMHelper.getValueFromElement(element, ID));
         movie.setImdb(DOMHelper.getValueFromElement(element, "imdb_id"));
         movie.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
         movie.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
@@ -684,8 +702,8 @@ public class MovieDbParser {
      */
     private static Person parseSimplePerson(Element element) {
         Person person = new Person();
-        person.setName(DOMHelper.getValueFromElement(element, "name"));
-        person.setId(DOMHelper.getValueFromElement(element, "id"));
+        person.setName(DOMHelper.getValueFromElement(element, NAME));
+        person.setId(DOMHelper.getValueFromElement(element, ID));
         person.setVersion(Integer.valueOf(DOMHelper.getValueFromElement(element, "version")));
         person.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
         return person;

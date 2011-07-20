@@ -405,15 +405,15 @@ public class TheMovieDb {
         }
 
         String searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, language);
-        movie = MovieDbParser.parseMovie(searchUrl);
+        MovieDB foundMovie = MovieDbParser.parseMovie(searchUrl);
 
-        if (movie == null && !language.equalsIgnoreCase(DEFAULT_LANGUAGE)) {
+        if (foundMovie == null && !language.equalsIgnoreCase(DEFAULT_LANGUAGE)) {
             logger.fine("Trying to get the '" + DEFAULT_LANGUAGE + "' version");
             searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, DEFAULT_LANGUAGE);
-            movie = MovieDbParser.parseMovie(searchUrl);
+            foundMovie = MovieDbParser.parseMovie(searchUrl);
         }
 
-        return movie;
+        return foundMovie;
     }
 
     /**
