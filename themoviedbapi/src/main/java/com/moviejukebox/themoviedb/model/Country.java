@@ -49,4 +49,17 @@ public class Country {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Country=[url=");
+        builder.append(url);
+        builder.append("][name=");
+        builder.append(name);
+        builder.append("][code=");
+        builder.append(code);
+        builder.append("]]");
+        return builder.toString();
+    }
 }

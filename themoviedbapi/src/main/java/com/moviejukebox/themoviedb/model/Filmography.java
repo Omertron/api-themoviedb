@@ -71,4 +71,23 @@ public class Filmography {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Filmography=[url=");
+        builder.append(url);
+        builder.append("][name=");
+        builder.append(name);
+        builder.append("][department=");
+        builder.append(department);
+        builder.append("][character=");
+        builder.append(character);
+        builder.append("][job=");
+        builder.append(job);
+        builder.append("][id=");
+        builder.append(id);
+        builder.append("]]");
+        return builder.toString();
+    }
 }

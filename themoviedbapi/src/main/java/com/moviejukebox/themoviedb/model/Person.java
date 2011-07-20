@@ -234,4 +234,45 @@ public class Person extends ModelTools {
     public void setVersion(int version) {
         this.version = version;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Person=[name=");
+        builder.append(name);
+        builder.append("][character=");
+        builder.append(character);
+        builder.append("][job=");
+        builder.append(job);
+        builder.append("][id=");
+        builder.append(id);
+        builder.append("][department=");
+        builder.append(department);
+        builder.append("][biography=");
+        builder.append(biography);
+        builder.append("][url=");
+        builder.append(url);
+        builder.append("][order=");
+        builder.append(order);
+        builder.append("][castId=");
+        builder.append(castId);
+        builder.append("][version=");
+        builder.append(version);
+        builder.append("][lastModifiedAt=");
+        builder.append(lastModifiedAt);
+        builder.append("][knownMovies=");
+        builder.append(knownMovies);
+        builder.append("][birthday=");
+        builder.append(birthday);
+        builder.append("][birthPlace=");
+        builder.append(birthPlace);
+        builder.append("][filmography=");
+        builder.append(filmography);
+        builder.append("][aka=");
+        builder.append(aka);
+        builder.append("][images=");
+        builder.append(images);
+        builder.append("]]");
+        return builder.toString();
+    }
 }

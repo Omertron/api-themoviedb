@@ -60,6 +60,19 @@ public class Language {
     public void setNativeName(String nativeName) {
         this.nativeName = nativeName;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Language=[isoCode=");
+        builder.append(isoCode);
+        builder.append("][englishName=");
+        builder.append(englishName);
+        builder.append("][nativeName=");
+        builder.append(nativeName);
+        builder.append("]]");
+        return builder.toString();
+    }
     
     
 }

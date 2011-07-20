@@ -310,4 +310,65 @@ public class MovieDB extends ModelTools {
     public void setVersion(int version) {
         this.version = version;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[MovieDB=[popularity=");
+        builder.append(popularity);
+        builder.append("][translated=");
+        builder.append(translated);
+        builder.append("][adult=");
+        builder.append(adult);
+        builder.append("][language=");
+        builder.append(language);
+        builder.append("][title=");
+        builder.append(title);
+        builder.append("][originalName=");
+        builder.append(originalName);
+        builder.append("][alternativeName=");
+        builder.append(alternativeName);
+        builder.append("][type=");
+        builder.append(type);
+        builder.append("][id=");
+        builder.append(id);
+        builder.append("][imdb=");
+        builder.append(imdb);
+        builder.append("][url=");
+        builder.append(url);
+        builder.append("][overview=");
+        builder.append(overview);
+        builder.append("][rating=");
+        builder.append(rating);
+        builder.append("][tagline=");
+        builder.append(tagline);
+        builder.append("][certification=");
+        builder.append(certification);
+        builder.append("][releaseDate=");
+        builder.append(releaseDate);
+        builder.append("][runtime=");
+        builder.append(runtime);
+        builder.append("][budget=");
+        builder.append(budget);
+        builder.append("][revenue=");
+        builder.append(revenue);
+        builder.append("][homepage=");
+        builder.append(homepage);
+        builder.append("][trailer=");
+        builder.append(trailer);
+        builder.append("][version=");
+        builder.append(version);
+        builder.append("][lastModifiedAt=");
+        builder.append(lastModifiedAt);
+        builder.append("][categories=");
+        builder.append(categories);
+        builder.append("][studios=");
+        builder.append(studios);
+        builder.append("][countries=");
+        builder.append(countries);
+        builder.append("][people=");
+        builder.append(people);
+        builder.append("]]");
+        return builder.toString();
+    }
 }

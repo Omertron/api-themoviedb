@@ -541,7 +541,8 @@ public class MovieDbParser {
         return people;
     }
 
-    public static Person parsePersonInfo(String searchUrl) {
+    public static ArrayList<Person> parsePersonInfo(String searchUrl) {
+        ArrayList<Person> people = new ArrayList<Person>();
         Person person = null;
         Document doc = null;
 
@@ -549,76 +550,90 @@ public class MovieDbParser {
             doc = DOMHelper.getEventDocFromUrl(searchUrl);
         } catch (Exception error) {
             logger.severe("PersonSearch error: " + error.getMessage());
-            return person;
+            return people;
         }
 
         if (doc == null) {
-            return person;
+            return people;
         }
 
-        try {
+        NodeList personNodeList = doc.getElementsByTagName("person");
+
+        
+        if ((personNodeList == null) || personNodeList.getLength() == 0) {
+            return people;
+        }
+        
+        for (int loop = 0; loop < personNodeList.getLength(); loop++) {
+            Node personNode = personNodeList.item(loop);
             person = new Person();
-            NodeList personNodeList = doc.getElementsByTagName("person");
-
-            // Only get the first movie from the list
-            Node personNode = personNodeList.item(0);
-
+            
             if (personNode == null) {
                 logger.finest("Person not found");
-                return person;
+                return people;
             }
 
             if (personNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element personElement = (Element) personNode;
-
-                person.setName(DOMHelper.getValueFromElement(personElement, "name"));
-                person.setId(DOMHelper.getValueFromElement(personElement, "id"));
-                person.setBiography(DOMHelper.getValueFromElement(personElement, "biography"));
-                person.setKnownMovies(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "known_movies")));
-                person.setBirthday(DOMHelper.getValueFromElement(personElement, "birthday"));
-                person.setBirthPlace(DOMHelper.getValueFromElement(personElement, "birthplace"));
-                person.setUrl(DOMHelper.getValueFromElement(personElement, "url"));
-                person.setVersion(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "version")));
-                person.setLastModifiedAt(DOMHelper.getValueFromElement(personElement, "last_modified_at"));
-
-                NodeList artworkNodeList = doc.getElementsByTagName("image");
-                for (int nodeLoop = 0; nodeLoop < artworkNodeList.getLength(); nodeLoop++) {
-                    Node artworkNode = artworkNodeList.item(nodeLoop);
-                    if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element artworkElement = (Element) artworkNode;
-                        Artwork artwork = new Artwork();
-                        artwork.setType(artworkElement.getAttribute("type"));
-                        artwork.setUrl(artworkElement.getAttribute("url"));
-                        artwork.setSize(artworkElement.getAttribute("size"));
-                        artwork.setId(artworkElement.getAttribute("id"));
-                        person.addArtwork(artwork);
+                try {
+                    Element personElement = (Element) personNode;
+    
+                    person.setName(DOMHelper.getValueFromElement(personElement, "name"));
+                    person.setId(DOMHelper.getValueFromElement(personElement, "id"));
+                    person.setBiography(DOMHelper.getValueFromElement(personElement, "biography"));
+                    
+                    try {
+                        person.setKnownMovies(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "known_movies")));
+                    } catch (NumberFormatException error) {
+                        person.setKnownMovies(0);
                     }
-                }
-
-                NodeList filmNodeList = doc.getElementsByTagName("movie");
-                for (int nodeLoop = 0; nodeLoop < filmNodeList.getLength(); nodeLoop++) {
-                    Node filmNode = filmNodeList.item(nodeLoop);
-                    if (filmNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element filmElement = (Element) filmNode;
-                        Filmography film = new Filmography();
-
-                        film.setCharacter(filmElement.getAttribute("character"));
-                        film.setDepartment(filmElement.getAttribute("department"));
-                        film.setId(filmElement.getAttribute("id"));
-                        film.setJob(filmElement.getAttribute("job"));
-                        film.setName(filmElement.getAttribute("name"));
-                        film.setUrl(filmElement.getAttribute("url"));
-
-                        person.addFilm(film);
+                    
+                    person.setBirthday(DOMHelper.getValueFromElement(personElement, "birthday"));
+                    person.setBirthPlace(DOMHelper.getValueFromElement(personElement, "birthplace"));
+                    person.setUrl(DOMHelper.getValueFromElement(personElement, "url"));
+                    person.setVersion(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "version")));
+                    person.setLastModifiedAt(DOMHelper.getValueFromElement(personElement, "last_modified_at"));
+    
+                    NodeList artworkNodeList = doc.getElementsByTagName("image");
+                    for (int nodeLoop = 0; nodeLoop < artworkNodeList.getLength(); nodeLoop++) {
+                        Node artworkNode = artworkNodeList.item(nodeLoop);
+                        if (artworkNode.getNodeType() == Node.ELEMENT_NODE) {
+                            Element artworkElement = (Element) artworkNode;
+                            Artwork artwork = new Artwork();
+                            artwork.setType(artworkElement.getAttribute("type"));
+                            artwork.setUrl(artworkElement.getAttribute("url"));
+                            artwork.setSize(artworkElement.getAttribute("size"));
+                            artwork.setId(artworkElement.getAttribute("id"));
+                            person.addArtwork(artwork);
+                        }
                     }
+    
+                    NodeList filmNodeList = doc.getElementsByTagName("movie");
+                    for (int nodeLoop = 0; nodeLoop < filmNodeList.getLength(); nodeLoop++) {
+                        Node filmNode = filmNodeList.item(nodeLoop);
+                        if (filmNode.getNodeType() == Node.ELEMENT_NODE) {
+                            Element filmElement = (Element) filmNode;
+                            Filmography film = new Filmography();
+    
+                            film.setCharacter(filmElement.getAttribute("character"));
+                            film.setDepartment(filmElement.getAttribute("department"));
+                            film.setId(filmElement.getAttribute("id"));
+                            film.setJob(filmElement.getAttribute("job"));
+                            film.setName(filmElement.getAttribute("name"));
+                            film.setUrl(filmElement.getAttribute("url"));
+    
+                            person.addFilm(film);
+                        }
+                    }
+                    
+                    people.add(person);
+                } catch (Exception error) {
+                    logger.severe("PersonInfo: " + error.getMessage());
+                    error.printStackTrace();
                 }
             }
-        } catch (Exception error) {
-            logger.severe("ERROR: " + error.getMessage());
-            error.printStackTrace();
         }
-
-        return person;
+        
+        return people;
     }
 
     /**

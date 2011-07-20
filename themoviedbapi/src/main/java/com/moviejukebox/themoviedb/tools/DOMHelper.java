@@ -81,7 +81,7 @@ public class DOMHelper {
                 // This looks like a valid web page
                 validWebPage = true;
             } else {
-                logger.fine("Error with API Call for: " + url);
+                logger.fine("DOMHelper: Error with API Call for: " + url);
                 return null;
             }
             
@@ -94,7 +94,7 @@ public class DOMHelper {
                 doc.getDocumentElement().normalize();
             }
         } catch (Exception error) {
-            logger.fine("Error parsing: " + url);
+            logger.fine("DOMHelper: Error parsing: " + url);
             // Some sort of error occurred getting the data, so clear the document
             doc = null;
         } finally {

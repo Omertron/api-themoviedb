@@ -45,8 +45,8 @@ public class TheMovieDb {
     private static Logger logger = null;
     private static LogFormatter tmdbFormatter = new LogFormatter();
     private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
-    private static final String apiSite = "http://api.themoviedb.org/2.1/";
-    private static final String defaultLanguage = "en-US";
+    private static final String API_SITE = "http://api.themoviedb.org/2.1/";
+    private static final String DEFAULT_LANGUAGE = "en-US";
     
     /**
      * Compare the MovieDB object with a title & year
@@ -199,15 +199,16 @@ public class TheMovieDb {
      * @return
      */
     private String buildIds(List<String> ids) {
-        String s = "";
+        StringBuilder builder = new StringBuilder();
+        
         for (int i = 0; i < ids.size(); i++) {
             if (i == 0) {
-                s += ids.get(i);
+                builder.append(ids.get(i));
                 continue;
             }
-            s += "," + ids.get(i);
+            builder.append(",").append(ids.get(i));
         }
-        return s;
+        return builder.toString();
     }
 
     /**
@@ -219,30 +220,33 @@ public class TheMovieDb {
      * @return              The search URL
      */
     private String buildUrl(String prefix, String searchTerm, String language) {
-        String url = apiSite + prefix + "/" + language + "/xml/" + apiKey;
+        StringBuilder url = new StringBuilder();
+        
+        url.append(API_SITE);
+        url.append(prefix);
+        url.append("/");
+        url.append(language);
+        url.append("/xml/");
+        url.append(apiKey);
 
         if (!isValidString(searchTerm)) {
-            return url;
-        }
-
-        String encodedSearchTerm;
-
-        try {
-            encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            encodedSearchTerm = searchTerm;
+            return url.toString();
         }
 
         if (prefix.equals(MOVIE_BROWSE)) {
-            url += "?";
+            url.append("?");
         } else {
-            url += "/";
+            url.append("/");
         }
 
-        url += encodedSearchTerm;
+        // Try to encode the search term to append
+        try {
+            url.append(URLEncoder.encode(searchTerm, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            url.append(searchTerm);
+        }
 
-        logger.finest("Search URL: " + url);
-        return url;
+        return url.toString();
     }
 
     /**
@@ -267,7 +271,7 @@ public class TheMovieDb {
      * @return
      */
     public String getDefaultLanguage() {
-        return defaultLanguage;
+        return DEFAULT_LANGUAGE;
     }
 
     public List<Language> getTranslations(String movieId, String language) {
@@ -287,12 +291,11 @@ public class TheMovieDb {
      * @param language the two digit language code. E.g. en=English
      * @return a list of MovieDB objects
      */
-    public List<MovieDB> moviedbBrowse(String orderBy, String order,
-            Map<String, String> parameters, String language) {
+    public List<MovieDB> moviedbBrowse(String orderBy, String order, Map<String, String> parameters, String language) {
 
         List<MovieDB> movies = new ArrayList<MovieDB>();
         if (!isValidString(orderBy) || (!isValidString(order))
-                || (parameters == null)) {
+                || (parameters == null) || parameters.isEmpty()) {
             return movies;
         }
 
@@ -312,17 +315,27 @@ public class TheMovieDb {
         validParameters.add("companies");
         validParameters.add("countries");
 
-        String url = "order_by=" + orderBy + "&order=" + order;
+        
+        StringBuilder searchUrl = new StringBuilder();
+        searchUrl.append("order_by=").append(orderBy);
+        searchUrl.append("&order=").append(order);
+        
         if(!parameters.isEmpty()) {
             for (String key : validParameters) {
                 if (parameters.containsKey(key)) {
-                    url += "&" + key + "=" + parameters.get(key);
+                    searchUrl.append("&").append(key).append("=").append(parameters.get(key));
                 }
             }
         }
 
-        String searchUrl = buildUrl(MOVIE_BROWSE, url, language);
-        return MovieDbParser.parseMovies(searchUrl);
+        // Get the search url
+        String baseUrl = buildUrl(MOVIE_BROWSE, "", language);
+        
+        // Now append the parameter url to the end of the search url
+        searchUrl.insert(0, "?");
+        searchUrl.insert(0, baseUrl);
+        
+        return MovieDbParser.parseMovies(searchUrl.toString());
 
     }
 
@@ -338,7 +351,7 @@ public class TheMovieDb {
      * @return a list of MovieDB objects
      */
     public List<MovieDB> moviedbBrowse(String orderBy, String order, String language) {
-        return this.moviedbBrowse(orderBy, order, new HashMap<String, String>(), language);
+        return moviedbBrowse(orderBy, order, new HashMap<String, String>(), language);
     }
 
     /**
@@ -394,9 +407,9 @@ public class TheMovieDb {
         String searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, language);
         movie = MovieDbParser.parseMovie(searchUrl);
 
-        if (movie == null && !language.equalsIgnoreCase(defaultLanguage)) {
-            logger.fine("Trying to get the '" + defaultLanguage + "' version");
-            searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, defaultLanguage);
+        if (movie == null && !language.equalsIgnoreCase(DEFAULT_LANGUAGE)) {
+            logger.fine("Trying to get the '" + DEFAULT_LANGUAGE + "' version");
+            searchUrl = buildUrl(MOVIE_GET_INFO, tmdbID, DEFAULT_LANGUAGE);
             movie = MovieDbParser.parseMovie(searchUrl);
         }
 
@@ -426,7 +439,8 @@ public class TheMovieDb {
      * @return
      */
     public MovieDB moviedbGetLatest(String language) {
-        return MovieDbParser.parseLatestMovie(buildUrl(MOVIE_GET_LATEST, "", language));
+        String searchUrl = buildUrl(MOVIE_GET_LATEST, "", language);
+        return MovieDbParser.parseLatestMovie(searchUrl);
     }
 
     /**
@@ -446,7 +460,6 @@ public class TheMovieDb {
         List<MovieDB> movies = new ArrayList<MovieDB>();
 
         if ((movieIds == null) || movieIds.isEmpty()) {
-            logger.warning("There are no Movie ids!");
             return movies;
         }
 
@@ -518,9 +531,9 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public Person personGetInfo(String personID, String language) {
+    public ArrayList<Person> personGetInfo(String personID, String language) {
         if (!isValidString(personID)) {
-            return new Person();
+            return new ArrayList<Person>();
         }
 
         String searchUrl = buildUrl(PERSON_GET_INFO, personID, language);
@@ -549,7 +562,6 @@ public class TheMovieDb {
      */
     public List<Person> personGetVersion(List<String> personIDs, String language) {
         if ((personIDs == null) || (personIDs.isEmpty())) {
-            logger.warning("There are no Person ids!");
             return new ArrayList<Person>();
         }
 
@@ -589,9 +601,9 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public Person personSearch(String personName, String language) {
+    public ArrayList<Person> personSearch(String personName, String language) {
         if (!isValidString(personName)) {
-            return new Person();
+            return new ArrayList<Person>();
         }
 
         String searchUrl = buildUrl(PERSON_SEARCH, personName, language);

@@ -101,4 +101,19 @@ public class Artwork implements Comparable<Object> {
         int anotherId = ((Artwork) otherArtwork).getId();  
         return this.id - anotherId;    
       }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[Artwork=[type=");
+        builder.append(type);
+        builder.append("][size=");
+        builder.append(size);
+        builder.append("][url=");
+        builder.append(url);
+        builder.append("][id=");
+        builder.append(id);
+        builder.append("]]");
+        return builder.toString();
+    }
  }
