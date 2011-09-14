@@ -12,13 +12,16 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
+
 /**
  *  Studio from the MovieDB.org
  *  
  *  @author Stuart.Boston
  *
  */
-public class Studio {
+public class Studio implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final String UNKNOWN = MovieDB.UNKNOWN;
 

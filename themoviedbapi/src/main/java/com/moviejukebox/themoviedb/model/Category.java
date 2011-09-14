@@ -12,14 +12,17 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
+
 /**
  *  Category from TheMovieDB.org
  *  
  *  @author Stuart.Boston
  *
  */
-public class Category {
-
+public class Category implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private static final String UNKNOWN = MovieDB.UNKNOWN;
 
     private String type = UNKNOWN;

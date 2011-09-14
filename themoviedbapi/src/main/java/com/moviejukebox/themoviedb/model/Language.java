@@ -12,12 +12,15 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
+
 /**
  * Language from TheMovieDB.org
  * @author stuart.boston
  *
  */
-public class Language {
+public class Language implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final String UNKNOWN = MovieDB.UNKNOWN;
 

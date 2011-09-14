@@ -12,14 +12,17 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
+
 /**
  *  Country from the MovieDB.org
  *  
  *  @author Stuart.Boston
  *
  */
-public class Country {
-
+public class Country implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private static final String UNKNOWN = MovieDB.UNKNOWN;
 
     private String url = UNKNOWN;

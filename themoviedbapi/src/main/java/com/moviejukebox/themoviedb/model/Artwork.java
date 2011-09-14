@@ -12,13 +12,17 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
+
 /**
  *  This is the new bean for the Artwork 
  *  
  *  @author Stuart.Boston
  *
  */
-public class Artwork implements Comparable<Object> {
+public class Artwork implements Comparable<Object>, Serializable {
+    private static final long serialVersionUID = 1L;
+    
     public static final String ARTWORK_TYPE_POSTER    = "poster";
     public static final String ARTWORK_TYPE_BACKDROP  = "backdrop";
     public static final String ARTWORK_TYPE_PERSON    = "profile";

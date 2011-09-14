@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ import com.moviejukebox.themoviedb.tools.ModelTools;
  *  @author Stuart.Boston
  */
 
-public class MovieDB extends ModelTools {
+public class MovieDB extends ModelTools implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public static final String UNKNOWN = "UNKNOWN";
 
     private String popularity       = UNKNOWN;

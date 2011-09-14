@@ -13,7 +13,10 @@
 
 package com.moviejukebox.themoviedb.model;
 
-public class Filmography {
+import java.io.Serializable;
+
+public class Filmography implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final String UNKNOWN = MovieDB.UNKNOWN;
 
