@@ -67,7 +67,7 @@ public class TheMovieDbTest {
 
     @Test
     public void testMoviedbSearch_withWrongTitle() {
-        List<MovieDB> movies = tmdb.moviedbSearch("à(é!àç'(è!çé(èçéè'(éàç!'(èéàç!(èç'", "en");
+        List<MovieDB> movies = tmdb.moviedbSearch("Ã (Ã©!Ã Ã§'(Ã¨!Ã§Ã©(Ã¨Ã§Ã©Ã¨'(Ã©Ã Ã§!'(Ã¨Ã©Ã Ã§!(Ã¨Ã§'", "en");
         assertTrue(movies.isEmpty());
     }
 
@@ -375,7 +375,7 @@ public class TheMovieDbTest {
             }
         }
 
-        assertEquals("Marco P�rez", person.getName());
+        assertEquals("Marco Pérez", person.getName());
         assertEquals("260", person.getId());
     }
 
