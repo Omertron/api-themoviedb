@@ -36,7 +36,7 @@ import com.moviejukebox.themoviedb.model.Person;
  */
 public class TheMovieDbTest {
 
-    private static String apikey = "5a1a77e2eba8984804586122754f969f";
+    private static String apikey = "";
     private TheMovieDb tmdb;
 
     public TheMovieDbTest() {
