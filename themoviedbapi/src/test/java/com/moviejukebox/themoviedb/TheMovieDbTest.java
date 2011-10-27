@@ -22,10 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.moviejukebox.themoviedb.model.Category;
@@ -39,27 +36,15 @@ import com.moviejukebox.themoviedb.model.Person;
  */
 public class TheMovieDbTest {
 
-    private static String apikey = "";
+    private static String apikey = "5a1a77e2eba8984804586122754f969f";
     private TheMovieDb tmdb;
 
     public TheMovieDbTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
         tmdb = new TheMovieDb(apikey);
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -322,7 +307,7 @@ public class TheMovieDbTest {
         assertEquals("585", movies.get(0).getId());
         assertEquals("tt0198781", movies.get(0).getImdb());
 
-        assertEquals("Star Wars: Episode IV: A New Hope", movies.get(1).getTitle());
+        assertEquals("Star Wars: Episode IV - A New Hope", movies.get(1).getTitle());
         assertEquals("11", movies.get(1).getId());
         assertEquals("tt0076759", movies.get(1).getImdb());
 
@@ -390,7 +375,7 @@ public class TheMovieDbTest {
             }
         }
 
-        assertEquals("Marco PÃ©rez", person.getName());
+        assertEquals("Marco Pérez", person.getName());
         assertEquals("260", person.getId());
     }
 
