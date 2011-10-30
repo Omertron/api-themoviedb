@@ -222,10 +222,16 @@ public class TheMovieDb {
     private String buildUrl(String prefix, String searchTerm, String language) {
         StringBuilder url = new StringBuilder();
         
+        
+        
         url.append(API_SITE);
         url.append(prefix);
         url.append("/");
-        url.append(language);
+        if (language.length() > 2) {
+            url.append(language.substring(0, 2));
+        } else {
+            url.append(language);
+        }
         url.append("/xml/");
         url.append(apiKey);
 
@@ -579,6 +585,7 @@ public class TheMovieDb {
      */
     public Person personGetVersion(String personID, String language) {
         Person person = new Person();
+        
         if (!isValidString(personID)) {
             return person;
         }
