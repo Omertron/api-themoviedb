@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2011 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.themoviedb.tools;
 
@@ -35,7 +35,7 @@ import com.moviejukebox.themoviedb.TheMovieDb;
  *
  */
 public class DOMHelper {
-    private static Logger logger = TheMovieDb.getLogger();
+    private static final Logger logger = TheMovieDb.getLogger();
 
     /**
      * Gets the string value of the tag element name passed
@@ -71,11 +71,11 @@ public class DOMHelper {
         Document doc = null;
         InputStream in = null;
         String webPage = null;
-        
+
         try {
             boolean validWebPage = false;
             webPage = WebBrowser.request(url);
-           
+
             // There seems to be an error with some of the web pages that returns garbage
             if (webPage.startsWith("<?xml version")) {
                 // This looks like a valid web page
@@ -84,10 +84,10 @@ public class DOMHelper {
                 logger.fine("DOMHelper: Error with API Call for: " + url);
                 return null;
             }
-            
+
             if (validWebPage) {
                 in = new ByteArrayInputStream(webPage.getBytes("UTF-8"));
-    
+
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 doc = db.parse(in);

@@ -1,34 +1,38 @@
 /*
  *      Copyright (c) 2004-2011 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.themoviedb.model;
 
+import com.moviejukebox.themoviedb.TheMovieDb;
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
 import com.moviejukebox.themoviedb.tools.ModelTools;
+import java.util.logging.Logger;
 
 /**
  *  This is the Movie Search bean for the MovieDb.org search
- *   
+ *
  *  @author Stuart.Boston
  */
 
 public class MovieDB extends ModelTools implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = TheMovieDb.getLogger();
 
     public static final String UNKNOWN = "UNKNOWN";
 
@@ -63,7 +67,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getPopularity() {
         return popularity;
     }
-    
+
     public void setPopularity(String popularity) {
         this.popularity = popularity;
     }
@@ -71,7 +75,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getTitle() {
         return title;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -79,11 +83,11 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getType() {
         return type;
     }
-    
+
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public String getId() {
         return id;
     }
@@ -91,11 +95,11 @@ public class MovieDB extends ModelTools implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getImdb() {
         return imdb;
     }
-    
+
     public void setImdb(String imdb) {
         this.imdb = imdb;
     }
@@ -103,7 +107,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getUrl() {
         return url;
     }
-    
+
     public void setUrl(String url) {
         this.url = url;
     }
@@ -111,7 +115,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getOverview() {
         return overview;
     }
-    
+
     public void setOverview(String overview) {
         this.overview = overview;
     }
@@ -119,7 +123,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getReleaseDate() {
         return releaseDate;
     }
-    
+
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
@@ -127,7 +131,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getRating() {
         return rating;
     }
-    
+
     public void setRating(String rating) {
         this.rating = rating;
     }
@@ -135,7 +139,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getRuntime() {
         return runtime;
     }
-    
+
     public void setRuntime(String runtime) {
         this.runtime = runtime;
     }
@@ -143,7 +147,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getBudget() {
         return budget;
     }
-    
+
     public void setBudget(String budget) {
         this.budget = budget;
     }
@@ -151,7 +155,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getRevenue() {
         return revenue;
     }
-    
+
     public void setRevenue(String revenue) {
         this.revenue = revenue;
     }
@@ -159,7 +163,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getHomepage() {
         return homepage;
     }
-    
+
     public void setHomepage(String homepage) {
         this.homepage = homepage;
     }
@@ -167,7 +171,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public String getTrailer() {
         return trailer;
     }
-    
+
     public void setTrailer(String trailer) {
         this.trailer = trailer;
     }
@@ -175,17 +179,17 @@ public class MovieDB extends ModelTools implements Serializable {
     public List<Country> getProductionCountries() {
         return countries;
     }
-    
+
     public void addProductionCountry(Country country) {
         if (country != null) {
             countries.add(country);
         }
     }
-    
+
     public List<Person> getPeople() {
         return people;
     }
-    
+
     public void addPerson(Person person) {
         if (person != null) {
             people.add(person);
@@ -195,7 +199,7 @@ public class MovieDB extends ModelTools implements Serializable {
     public List<Category> getCategories() {
         return categories;
     }
-    
+
     public void addCategory(Category category) {
         if (category != null) {
             categories.add(category);
@@ -273,13 +277,13 @@ public class MovieDB extends ModelTools implements Serializable {
     public void setStudios(List<Studio> studios) {
         this.studios = studios;
     }
-    
+
     public void addStudio(Studio studio) {
         if (studio != null) {
             this.studios.add(studio);
         }
     }
-    
+
     public void setCountries(List<Country> countries) {
         this.countries = countries;
     }
@@ -298,11 +302,10 @@ public class MovieDB extends ModelTools implements Serializable {
 
     public void setLastModifiedAt(String lastModifiedAt) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         try {
             setLastModifiedAt(df.parse(lastModifiedAt));
-        } catch (Exception ignore) {
-            return;
+        } catch (ParseException ex) {
+            logger.fine("MovieDB: Error parsing date: " + lastModifiedAt);
         }
     }
 

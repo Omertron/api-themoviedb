@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2011 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.themoviedb;
 
@@ -36,7 +36,7 @@ import com.moviejukebox.themoviedb.tools.WebBrowser;
  * This is the main class for the API to connect to TheMovieDb.org.
  * The implementation is for v2.1 of the API as detailed here:
  * http://api.themoviedb.org/2.1
- * 
+ *
  * @author Stuart.Boston
  * @version 1.3
  */
@@ -47,7 +47,56 @@ public class TheMovieDb {
     private static ConsoleHandler tmdbConsoleHandler = new ConsoleHandler();
     private static final String API_SITE = "http://api.themoviedb.org/2.1/";
     private static final String DEFAULT_LANGUAGE = "en-US";
-    
+
+    /**
+     * Constructor with default logger.
+     * @param apiKey
+     */
+    public TheMovieDb(String apiKey) {
+        setLogger(Logger.getLogger("TheMovieDB"));
+        if (!isValidString(apiKey)) {
+            logger.severe("TheMovieDb was initialized with a wrong API key!");
+        }
+        setApiKey(apiKey);
+    }
+
+    /*
+     * API Methods
+     * http://api.themoviedb.org/2.1
+     * Note: This is currently a read-only interface and as such, no write methods exist.
+     */
+
+    /*
+     * Media
+     */
+    @SuppressWarnings("unused")
+    private static final String MEDIA_GET_INFO      = "Media.getInfo";
+
+    /*
+     * Movies
+     */
+    private static final String MOVIE_BROWSE        = "Movie.browse";
+    private static final String MOVIE_GET_IMAGES    = "Movie.getImages";
+    private static final String MOVIE_GET_INFO      = "Movie.getInfo";
+    private static final String MOVIE_GET_LATEST    = "Movie.getLatest";
+    private static final String MOVIE_GET_TRANSLATIONS = "Movie.getTranslations";
+    private static final String MOVIE_GET_VERSION   = "Movie.getVersion";
+    private static final String MOVIE_IMDB_LOOKUP   = "Movie.imdbLookup";
+    private static final String MOVIE_SEARCH        = "Movie.search";
+
+    /*
+     * People
+     */
+    private static final String PERSON_GET_INFO     = "Person.getInfo";
+    private static final String PERSON_GET_LATEST   = "Person.getLatest";
+    private static final String PERSON_GET_VERSION  = "Person.getVersion";
+    private static final String PERSON_SEARCH       = "Person.search";
+
+    /*
+     * Misc
+     */
+    private static final String GENRES_GET_LIST     = "Genres.getList";
+
     /**
      * Compare the MovieDB object with a title & year
      * @param moviedb   The moviedb object to compare too
@@ -96,7 +145,7 @@ public class TheMovieDb {
         }
         return false;
     }
-    
+
     /**
      * Search a list of movies and return the one that matches the title & year
      * @param movieList The list of movies to search
@@ -117,7 +166,7 @@ public class TheMovieDb {
 
         return null;
     }
-    
+
     /**
      * Check the string passed to see if it contains a value.
      * @param testString The string to test
@@ -131,66 +180,9 @@ public class TheMovieDb {
         }
         return true;
     }
-    
-    /*
-     * API Methods
-     * http://api.themoviedb.org/2.1
-     * Note: This is currently a read-only interface and as such, no write methods exist.
-     */
-    
-    /*
-     * Media
-     */
-    @SuppressWarnings("unused")
-    private static final String MEDIA_GET_INFO      = "Media.getInfo";
-    
-    /*
-     * Movies
-     */
-    private static final String MOVIE_BROWSE        = "Movie.browse";
-    private static final String MOVIE_GET_IMAGES    = "Movie.getImages";
-    private static final String MOVIE_GET_INFO      = "Movie.getInfo";
-    private static final String MOVIE_GET_LATEST    = "Movie.getLatest";
-    private static final String MOVIE_GET_TRANSLATIONS = "Movie.getTranslations";
-    private static final String MOVIE_GET_VERSION   = "Movie.getVersion";
-    private static final String MOVIE_IMDB_LOOKUP   = "Movie.imdbLookup";
-    private static final String MOVIE_SEARCH        = "Movie.search";
-    
-    /*
-     * People
-     */
-    private static final String PERSON_GET_INFO     = "Person.getInfo";
-    private static final String PERSON_GET_LATEST   = "Person.getLatest";
-    private static final String PERSON_GET_VERSION  = "Person.getVersion";
-    private static final String PERSON_SEARCH       = "Person.search";
-
-    /*
-     * Misc
-     */
-    private static final String GENRES_GET_LIST     = "Genres.getList";
 
     public static Logger getLogger() {
         return logger;
-    }
-
-    /**
-     * Constructor with default logger.
-     * @param apiKey
-     */
-    public TheMovieDb(String apiKey) {
-        setLogger(Logger.getLogger("TheMovieDB"));
-        if (!isValidString(apiKey)) {
-            logger.severe("TheMovieDb was initialized with a wrong API key!");
-        }
-        setApiKey(apiKey);
-    }
-
-    public TheMovieDb(String apiKey, Logger logger) {
-        setLogger(logger);
-        if (!isValidString(apiKey)) {
-            logger.severe("TheMovieDb was initialized with a wrong API key!");
-        }
-        setApiKey(apiKey);
     }
 
     /**
@@ -200,7 +192,7 @@ public class TheMovieDb {
      */
     private String buildIds(List<String> ids) {
         StringBuilder builder = new StringBuilder();
-        
+
         for (int i = 0; i < ids.size(); i++) {
             if (i == 0) {
                 builder.append(ids.get(i));
@@ -221,9 +213,9 @@ public class TheMovieDb {
      */
     private String buildUrl(String prefix, String searchTerm, String language) {
         StringBuilder url = new StringBuilder();
-        
-        
-        
+
+
+
         url.append(API_SITE);
         url.append(prefix);
         url.append("/");
@@ -321,11 +313,11 @@ public class TheMovieDb {
         validParameters.add("companies");
         validParameters.add("countries");
 
-        
+
         StringBuilder searchUrl = new StringBuilder();
         searchUrl.append("order_by=").append(orderBy);
         searchUrl.append("&order=").append(order);
-        
+
         if(!parameters.isEmpty()) {
             for (String key : validParameters) {
                 if (parameters.containsKey(key)) {
@@ -336,11 +328,11 @@ public class TheMovieDb {
 
         // Get the search url
         String baseUrl = buildUrl(MOVIE_BROWSE, "", language);
-        
+
         // Now append the parameter url to the end of the search url
         searchUrl.insert(0, "?");
         searchUrl.insert(0, baseUrl);
-        
+
         return MovieDbParser.parseMovies(searchUrl.toString());
 
     }
@@ -395,13 +387,13 @@ public class TheMovieDb {
 
     /**
      * Gets all the information for a given TheMovieDb ID
-     * 
+     *
      * @param movie
      *            An existing MovieDB object to populate with the data
      * @param tmdbID
      *            The Movie Db ID for the movie to get information for
      * @param language
-     *            The two digit language code. E.g. en=English            
+     *            The two digit language code. E.g. en=English
      * @return A movie bean with all of the information
      */
     public MovieDB moviedbGetInfo(String tmdbID, MovieDB movie, String language) {
@@ -424,9 +416,9 @@ public class TheMovieDb {
 
     /**
      * Passes a null MovieDB object to the full function
-     * 
+     *
      * @param tmdbID    TheMovieDB ID of the movie to get the information for
-     * @param language  The two digit language code. E.g. en=English            
+     * @param language  The two digit language code. E.g. en=English
      * @return          A movie bean with all of the information
      */
     public MovieDB moviedbGetInfo(String tmdbID, String language) {
@@ -493,9 +485,9 @@ public class TheMovieDb {
 
     /**
      * Searches the database using the IMDb reference
-     * 
+     *
      * @param imdbID    IMDb reference, must include the "tt" at the start
-     * @param language  The two digit language code. E.g. en=English            
+     * @param language  The two digit language code. E.g. en=English
      * @return          A movie bean with the data extracted
      */
     public MovieDB moviedbImdbLookup(String imdbID, String language) {
@@ -512,7 +504,7 @@ public class TheMovieDb {
 
     /**
      * Searches the database using the movie title passed
-     * 
+     *
      * @param movieTitle    The title to search for
      * @param language      The two digit language code. E.g. en=English
      * @return              A movie bean with the data extracted
@@ -528,9 +520,9 @@ public class TheMovieDb {
     }
 
     /**
-     * The Person.getInfo method is used to retrieve the full filmography, known movies, 
+     * The Person.getInfo method is used to retrieve the full filmography, known movies,
      * images and things like birthplace for a specific person in the TMDb database.
-     * 
+     *
      * @param personID
      * @param language
      * @return
@@ -574,18 +566,18 @@ public class TheMovieDb {
     }
 
     /**
-     * The Person.getVersion method is used to retrieve the last modified time 
+     * The Person.getVersion method is used to retrieve the last modified time
      * along with the current version number of the called object(s). This is
      * useful if you've already called the object sometime in the past and
      * simply want to do a quick check for updates.
-     * 
+     *
      * @param personID a Person TMDb id
      * @param language the two digit language code. E.g. en=English
      * @return
      */
     public Person personGetVersion(String personID, String language) {
         Person person = new Person();
-        
+
         if (!isValidString(personID)) {
             return person;
         }
@@ -601,7 +593,7 @@ public class TheMovieDb {
     /**
      * The Person.search method is used to search for an actor, actress or production member.
      * http://api.themoviedb.org/2.1/methods/Person.search
-     * 
+     *
      * @param personName
      * @param language
      * @return

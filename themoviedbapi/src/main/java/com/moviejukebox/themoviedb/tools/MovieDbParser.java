@@ -1,14 +1,14 @@
 /*
  *      Copyright (c) 2004-2011 YAMJ Members
- *      http://code.google.com/p/moviejukebox/people/list 
- *  
+ *      http://code.google.com/p/moviejukebox/people/list
+ *
  *      Web: http://code.google.com/p/moviejukebox/
- *  
+ *
  *      This software is licensed under a Creative Commons License
  *      See this page: http://code.google.com/p/moviejukebox/wiki/License
- *  
- *      For any reuse or distribution, you must make clear to others the 
- *      license terms of this work.  
+ *
+ *      For any reuse or distribution, you must make clear to others the
+ *      license terms of this work.
  */
 package com.moviejukebox.themoviedb.tools;
 
@@ -34,10 +34,14 @@ import com.moviejukebox.themoviedb.model.MovieDB;
 import com.moviejukebox.themoviedb.model.Person;
 import com.moviejukebox.themoviedb.model.Studio;
 
+/**
+ * The parser helper class for TheMovieDb API
+ * @author stuart.boston
+ */
 public class MovieDbParser {
 
-    private static Logger logger = TheMovieDb.getLogger();
-    
+    private static final Logger logger = TheMovieDb.getLogger();
+
     private static final String NAME = "name";
     private static final String GENRE = "genre";
     private static final String ID = "id";
@@ -86,27 +90,32 @@ public class MovieDbParser {
         return categories;
     }
 
+    /**
+     * Get the list of available languages
+     * @param url
+     * @return
+     */
     public static List<Language> parseLanguages(String url) {
         List<Language> languages = new ArrayList<Language>();
         Document doc = null;
-        
+
         try {
             doc = DOMHelper.getEventDocFromUrl(url);
         } catch (Exception e) {
             logger.severe("Movie.getTranslations error: " + e.getMessage());
             return languages;
         }
-        
+
         if (doc == null) {
             return languages;
         }
-        
+
         NodeList nlLanguages = doc.getElementsByTagName(LANGUAGE);
-        
+
         if ((nlLanguages == null) || nlLanguages.getLength() == 0) {
             return languages;
         }
-        
+
         for (int i = 0; i < nlLanguages.getLength(); i++) {
             Node node = nlLanguages.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -114,7 +123,7 @@ public class MovieDbParser {
                 languages.add(parseSimpleLanguage(element));
             }
         }
-        
+
         return languages;
     }
 
@@ -155,6 +164,11 @@ public class MovieDbParser {
         return movie;
     }
 
+    /**
+     * Parse a DOM document and return the person information
+     * @param url
+     * @return
+     */
     public static Person parseLatestPerson(String url) {
         Person person = new Person();
         Document doc = null;
@@ -219,6 +233,11 @@ public class MovieDbParser {
         return movie;
     }
 
+    /**
+     * Parse the DOM document for movie information and return a list of movies
+     * @param url
+     * @return
+     */
     public static List<MovieDB> parseMovieGetVersion(String url) {
         List<MovieDB> movies = new ArrayList<MovieDB>();
         Document doc = null;
@@ -251,6 +270,11 @@ public class MovieDbParser {
         return movies;
     }
 
+    /**
+     * Returns a MovieDB object from the Element
+     * @param movieElement
+     * @return
+     */
     private static MovieDB parseMovieInfo(Element movieElement) {
         // Inspired by
         // http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
@@ -552,6 +576,9 @@ public class MovieDbParser {
         return people;
     }
 
+    /**
+     * Parse the URL and return a list of the people found in the DOM document
+     */
     public static ArrayList<Person> parsePersonInfo(String searchUrl) {
         ArrayList<Person> people = new ArrayList<Person>();
         Person person = null;
@@ -570,15 +597,15 @@ public class MovieDbParser {
 
         NodeList personNodeList = doc.getElementsByTagName(PERSON);
 
-        
+
         if ((personNodeList == null) || personNodeList.getLength() == 0) {
             return people;
         }
-        
+
         for (int loop = 0; loop < personNodeList.getLength(); loop++) {
             Node personNode = personNodeList.item(loop);
             person = new Person();
-            
+
             if (personNode == null) {
                 logger.finest("Person not found");
                 return people;
@@ -587,23 +614,23 @@ public class MovieDbParser {
             if (personNode.getNodeType() == Node.ELEMENT_NODE) {
                 try {
                     Element personElement = (Element) personNode;
-    
+
                     person.setName(DOMHelper.getValueFromElement(personElement, NAME));
                     person.setId(DOMHelper.getValueFromElement(personElement, ID));
                     person.setBiography(DOMHelper.getValueFromElement(personElement, "biography"));
-                    
+
                     try {
                         person.setKnownMovies(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "known_movies")));
                     } catch (NumberFormatException error) {
                         person.setKnownMovies(0);
                     }
-                    
+
                     person.setBirthday(DOMHelper.getValueFromElement(personElement, "birthday"));
                     person.setBirthPlace(DOMHelper.getValueFromElement(personElement, "birthplace"));
                     person.setUrl(DOMHelper.getValueFromElement(personElement, URL));
                     person.setVersion(Integer.parseInt(DOMHelper.getValueFromElement(personElement, "version")));
                     person.setLastModifiedAt(DOMHelper.getValueFromElement(personElement, "last_modified_at"));
-    
+
                     NodeList artworkNodeList = doc.getElementsByTagName("image");
                     for (int nodeLoop = 0; nodeLoop < artworkNodeList.getLength(); nodeLoop++) {
                         Node artworkNode = artworkNodeList.item(nodeLoop);
@@ -617,25 +644,25 @@ public class MovieDbParser {
                             person.addArtwork(artwork);
                         }
                     }
-    
+
                     NodeList filmNodeList = doc.getElementsByTagName(MOVIE);
                     for (int nodeLoop = 0; nodeLoop < filmNodeList.getLength(); nodeLoop++) {
                         Node filmNode = filmNodeList.item(nodeLoop);
                         if (filmNode.getNodeType() == Node.ELEMENT_NODE) {
                             Element filmElement = (Element) filmNode;
                             Filmography film = new Filmography();
-    
+
                             film.setCharacter(filmElement.getAttribute("character"));
                             film.setDepartment(filmElement.getAttribute("department"));
                             film.setId(filmElement.getAttribute(ID));
                             film.setJob(filmElement.getAttribute("job"));
                             film.setName(filmElement.getAttribute(NAME));
                             film.setUrl(filmElement.getAttribute(URL));
-    
+
                             person.addFilm(film);
                         }
                     }
-                    
+
                     people.add(person);
                 } catch (Exception error) {
                     logger.severe("PersonInfo: " + error.getMessage());
@@ -646,7 +673,7 @@ public class MovieDbParser {
                 }
             }
         }
-        
+
         return people;
     }
 
@@ -688,7 +715,7 @@ public class MovieDbParser {
         movie.setLastModifiedAt(DOMHelper.getValueFromElement(element, "last_modified_at"));
         return movie;
     }
-    
+
     /**
      * Parse a "simple" Person in the form:
      * <person>
