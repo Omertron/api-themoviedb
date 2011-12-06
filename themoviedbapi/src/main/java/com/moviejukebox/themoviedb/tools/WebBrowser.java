@@ -15,7 +15,6 @@ package com.moviejukebox.themoviedb.tools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -293,7 +292,7 @@ public final class WebBrowser {
     public static void setProxyPassword(String proxyPassword) {
         WebBrowser.proxyPassword = proxyPassword;
 
-        if (proxyUsername != null && !proxyPassword.isEmpty()) {
+        if (proxyUsername != null) {
             proxyEncodedPassword = proxyUsername + ":" + proxyPassword;
             proxyEncodedPassword = "Basic " + new String(Base64.encodeBase64((proxyUsername + ":" + proxyPassword).getBytes()));
         }

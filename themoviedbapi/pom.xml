@@ -9,7 +9,7 @@
 	<groupId>com.moviejukebox</groupId>
 	<artifactId>themoviedbapi</artifactId>
 	<version>1.2-SNAPSHOT</version>
-	<name>The MovieDB API</name>
+	<name>API-The MovieDB</name>
 
 	<issueManagement>
 		<system>Google Code</system>
@@ -42,7 +42,7 @@
 	 <dependency>
 	  <groupId>commons-codec</groupId>
 	  <artifactId>commons-codec</artifactId>
-	  <version>1.4</version>
+	  <version>1.5</version>
 	 </dependency>
 	</dependencies>
 
