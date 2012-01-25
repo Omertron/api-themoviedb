@@ -33,8 +33,8 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class TheMovieDB {
 
-    private static final Logger logger = Logger.getLogger(TheMovieDB.class);
-    private static String API_KEY;
+    private static final Logger LOGGER = Logger.getLogger(TheMovieDB.class);
+    private static String apiKey;
     private static TmdbConfiguration tmdbConfig;
     /*
      * TheMovieDB API URLs
@@ -66,7 +66,7 @@ public class TheMovieDB {
     private static ObjectMapper mapper = new ObjectMapper();
 
     public TheMovieDB(String apiKey) throws IOException {
-        TheMovieDB.API_KEY = apiKey;
+        TheMovieDB.apiKey = apiKey;
         URL configUrl = TMDB_CONFIG_URL.getQueryUrl("");
         mapper.configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
         tmdbConfig = mapper.readValue(configUrl, TmdbConfiguration.class);
@@ -75,7 +75,7 @@ public class TheMovieDB {
     }
 
     public static String getApiKey() {
-        return API_KEY;
+        return apiKey;
     }
 
     public static String getApiBase() {
@@ -94,7 +94,7 @@ public class TheMovieDB {
             WrapperResultList resultList = mapper.readValue(url, WrapperResultList.class);
             return resultList.getResults();
         } catch (IOException ex) {
-            logger.warn("Failed to find movie: " + ex.getMessage());
+            LOGGER.warn("Failed to find movie: " + ex.getMessage());
             return new ArrayList<MovieDB>();
         }
     }
@@ -109,10 +109,9 @@ public class TheMovieDB {
     public MovieDB getMovieInfo(int movieId, String language) {
         try {
             URL url = TMDB_MOVIE_INFO.getIdUrl(movieId, language);
-            MovieDB movieDb = mapper.readValue(url, MovieDB.class);
-            return movieDb;
+            return mapper.readValue(url, MovieDB.class);
         } catch (IOException ex) {
-            logger.warn("Failed to get movie info: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
         }
         return new MovieDB();
     }
@@ -129,7 +128,7 @@ public class TheMovieDB {
             WrapperAlternativeTitles at = mapper.readValue(url, WrapperAlternativeTitles.class);
             return at.getTitles();
         } catch (IOException ex) {
-            logger.warn("Failed to get movie alternative titles: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie alternative titles: " + ex.getMessage());
         }
         return new ArrayList<AlternativeTitle>();
     }
@@ -162,7 +161,7 @@ public class TheMovieDB {
 
             return people;
         } catch (IOException ex) {
-            logger.warn("Failed to get movie casts: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie casts: " + ex.getMessage());
         }
         return people;
     }
@@ -193,7 +192,7 @@ public class TheMovieDB {
 
             return artwork;
         } catch (IOException ex) {
-            logger.warn("Failed to get movie images: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie images: " + ex.getMessage());
         }
         return artwork;
     }
@@ -210,7 +209,7 @@ public class TheMovieDB {
             WrapperMovieKeywords mk = mapper.readValue(url, WrapperMovieKeywords.class);
             return mk.getKeywords();
         } catch (IOException ex) {
-            logger.warn("Failed to get movie keywords: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie keywords: " + ex.getMessage());
         }
         return new ArrayList<Keyword>();
     }
@@ -227,7 +226,7 @@ public class TheMovieDB {
             WrapperReleaseInfo ri = mapper.readValue(url, WrapperReleaseInfo.class);
             return ri.getCountries();
         } catch (IOException ex) {
-            logger.warn("Failed to get movie release information: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie release information: " + ex.getMessage());
         }
         return new ArrayList<ReleaseInfo>();
     }
@@ -258,7 +257,7 @@ public class TheMovieDB {
             }
             return trailers;
         } catch (IOException ex) {
-            logger.warn("Failed to get movie trailers: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie trailers: " + ex.getMessage());
         }
         return trailers;
     }
@@ -274,7 +273,7 @@ public class TheMovieDB {
             WrapperTranslations wt = mapper.readValue(url, WrapperTranslations.class);
             return wt.getTranslations();
         } catch (IOException ex) {
-            logger.warn("Failed to get movie tranlations: " + ex.getMessage());
+            LOGGER.warn("Failed to get movie tranlations: " + ex.getMessage());
         }
         return new ArrayList<Translation>();
     }
@@ -289,8 +288,7 @@ public class TheMovieDB {
     public CollectionInfo getCollectionInfo(int movieId, String language) {
         try {
             URL url = TMDB_COLLECTION_INFO.getIdUrl(movieId);
-            CollectionInfo col = mapper.readValue(url, CollectionInfo.class);
-            return col;
+            return mapper.readValue(url, CollectionInfo.class);
         } catch (IOException ex) {
             return new CollectionInfo();
         }
@@ -317,7 +315,7 @@ public class TheMovieDB {
         if (!tmdbConfig.isValidSize(requiredSize)) {
             sb = new StringBuilder();
             sb.append(" - Invalid size requested: ").append(requiredSize);
-            logger.warn(sb.toString());
+            LOGGER.warn(sb.toString());
             return returnUrl;
         }
 
@@ -327,7 +325,7 @@ public class TheMovieDB {
             sb.append(imagePath);
             returnUrl = new URL(sb.toString());
         } catch (MalformedURLException ex) {
-            logger.warn("Failed to create image URL: " + ex.getMessage());
+            LOGGER.warn("Failed to create image URL: " + ex.getMessage());
         }
 
         return returnUrl;

@@ -26,7 +26,7 @@ public class MovieDB {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(MovieDB.class);
+    private static final Logger LOGGER = Logger.getLogger(MovieDB.class);
     /*
      * Properties
      */
@@ -265,7 +265,7 @@ public class MovieDB {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">

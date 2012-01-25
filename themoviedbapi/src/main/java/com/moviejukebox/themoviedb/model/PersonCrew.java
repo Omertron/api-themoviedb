@@ -25,7 +25,7 @@ public class PersonCrew {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(PersonCrew.class);
+    private static final Logger LOGGER = Logger.getLogger(PersonCrew.class);
     /*
      * Properties
      */
@@ -94,7 +94,7 @@ public class PersonCrew {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override

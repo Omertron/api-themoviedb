@@ -27,7 +27,7 @@ public class Language {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(Language.class);
+    private static final Logger LOGGER = Logger.getLogger(Language.class);
     /*
      * Properties
      */
@@ -66,7 +66,7 @@ public class Language {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override

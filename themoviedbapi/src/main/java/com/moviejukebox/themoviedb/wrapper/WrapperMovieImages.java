@@ -27,7 +27,7 @@ public class WrapperMovieImages {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperMovieImages.class);
+    private static final Logger LOGGER = Logger.getLogger(WrapperMovieImages.class);
     /*
      * Properties
      */
@@ -76,6 +76,6 @@ public class WrapperMovieImages {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 }

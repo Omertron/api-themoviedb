@@ -25,7 +25,7 @@ public class AlternativeTitle {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(AlternativeTitle.class);
+    private static final Logger LOGGER = Logger.getLogger(AlternativeTitle.class);
     /*
      * Properties
      */
@@ -64,7 +64,7 @@ public class AlternativeTitle {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override

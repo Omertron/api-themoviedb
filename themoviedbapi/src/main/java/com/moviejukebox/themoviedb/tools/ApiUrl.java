@@ -30,7 +30,7 @@ public class ApiUrl {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(ApiUrl.class);
+    private static final Logger LOGGER = Logger.getLogger(ApiUrl.class);
     /*
      * Parameter configuration
      */
@@ -131,10 +131,10 @@ public class ApiUrl {
         }
 
         try {
-            logger.trace("URL: " + urlString.toString());
+            LOGGER.trace("URL: " + urlString.toString());
             return new URL(urlString.toString());
         } catch (MalformedURLException ex) {
-            logger.warn("Failed to create URL " + urlString.toString());
+            LOGGER.warn("Failed to create URL " + urlString.toString());
             return null;
         }
     }

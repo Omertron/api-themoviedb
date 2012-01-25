@@ -25,7 +25,7 @@ public class Translation {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(Translation.class);
+    private static final Logger LOGGER = Logger.getLogger(Translation.class);
     /*
      * Properties
      */
@@ -74,7 +74,7 @@ public class Translation {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override

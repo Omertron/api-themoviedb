@@ -27,18 +27,18 @@ public class WrapperResultList {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperResultList.class);
+    private static final Logger LOGGER = Logger.getLogger(WrapperResultList.class);
     /*
      * Properties
      */
     @JsonProperty("page")
-    int page;
+    private int page;
     @JsonProperty("results")
-    List<MovieDB> results;
+    private List<MovieDB> results;
     @JsonProperty("total_pages")
-    int totalPages;
+    private int totalPages;
     @JsonProperty("total_results")
-    int totalResults;
+    private int totalResults;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public int getPage() {
@@ -75,6 +75,7 @@ public class WrapperResultList {
         this.totalResults = totalResults;
     }
     //</editor-fold>
+
     /**
      * Handle unknown properties and print a message
      * @param key
@@ -85,7 +86,7 @@ public class WrapperResultList {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override

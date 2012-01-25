@@ -28,7 +28,7 @@ import org.junit.*;
  */
 public class TheMovieDBTest {
 
-    private static final Logger logger = Logger.getLogger(TheMovieDBTest.class);
+    private static final Logger LOGGER = Logger.getLogger(TheMovieDBTest.class);
     private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
     private static TheMovieDB tmdb;
     /*
@@ -62,7 +62,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testConfiguration() throws IOException {
-        logger.info("Test Configuration");
+        LOGGER.info("Test Configuration");
 
         TmdbConfiguration tmdbConfig = tmdb.getConfiguration();
         assertNotNull("Configuration failed", tmdbConfig);
@@ -70,7 +70,7 @@ public class TheMovieDBTest {
         assertTrue("No backdrop sizes", tmdbConfig.getBackdropSizes().size() > 0);
         assertTrue("No poster sizes", tmdbConfig.getPosterSizes().size() > 0);
         assertTrue("No profile sizes", tmdbConfig.getProfileSizes().size() > 0);
-        logger.info(tmdbConfig.toString());
+        LOGGER.info(tmdbConfig.toString());
     }
 
     /**
@@ -78,7 +78,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testSearchMovie() throws UnsupportedEncodingException {
-        logger.info("searchMovie");
+        LOGGER.info("searchMovie");
 
         // Try a movie with less than 1 page of results
         List<MovieDB> movieList = tmdb.searchMovie("Blade Runner", "", true);
@@ -98,7 +98,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieInfo() {
-        logger.info("getMovieInfo");
+        LOGGER.info("getMovieInfo");
         String language = "en";
         MovieDB result = tmdb.getMovieInfo(ID_BLADE_RUNNER, language);
         assertEquals("Incorrect movie information", "Blade Runner", result.getOriginalTitle());
@@ -109,7 +109,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieAlternativeTitles() {
-        logger.info("getMovieAlternativeTitles");
+        LOGGER.info("getMovieAlternativeTitles");
         String country = "";
         List<AlternativeTitle> results = tmdb.getMovieAlternativeTitles(ID_BLADE_RUNNER, country);
         assertTrue("No alternative titles found", results.size() > 0);
@@ -125,7 +125,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieCasts() {
-        logger.info("getMovieCasts");
+        LOGGER.info("getMovieCasts");
         List<Person> people = tmdb.getMovieCasts(ID_BLADE_RUNNER);
         assertTrue("No cast information", people.size() > 0);
 
@@ -153,7 +153,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieImages() {
-        logger.info("getMovieImages");
+        LOGGER.info("getMovieImages");
         String language = "";
         List<Artwork> result = tmdb.getMovieImages(ID_BLADE_RUNNER, language);
         assertFalse("No artwork found", result.isEmpty());
@@ -164,7 +164,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieKeywords() {
-        logger.info("getMovieKeywords");
+        LOGGER.info("getMovieKeywords");
         List<Keyword> result = tmdb.getMovieKeywords(ID_BLADE_RUNNER);
         assertFalse("No keywords found", result.isEmpty());
     }
@@ -174,7 +174,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieReleaseInfo() {
-        logger.info("getMovieReleaseInfo");
+        LOGGER.info("getMovieReleaseInfo");
         List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_BLADE_RUNNER, "");
         assertFalse("Release information missing", result.isEmpty());
     }
@@ -184,7 +184,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieTrailers() {
-        logger.info("getMovieTrailers");
+        LOGGER.info("getMovieTrailers");
         List<Trailer> result = tmdb.getMovieTrailers(ID_BLADE_RUNNER, "");
         assertFalse("Movie trailers missing", result.isEmpty());
     }
@@ -194,7 +194,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetMovieTranslations() {
-        logger.info("getMovieTranslations");
+        LOGGER.info("getMovieTranslations");
         List<Translation> result = tmdb.getMovieTranslations(ID_BLADE_RUNNER);
         assertFalse("No translations found", result.isEmpty());
     }
@@ -204,7 +204,7 @@ public class TheMovieDBTest {
      */
     @Test
     public void testGetCollectionInfo() {
-        logger.info("getCollectionInfo");
+        LOGGER.info("getCollectionInfo");
         String language = "";
         CollectionInfo result = tmdb.getCollectionInfo(ID_STAR_WARS_COLLECTION, language);
         assertFalse("No collection information", result.getParts().isEmpty());
@@ -212,7 +212,7 @@ public class TheMovieDBTest {
 
     @Test
     public void testCreateImageUrl() {
-        logger.info("createImageUrl");
+        LOGGER.info("createImageUrl");
         MovieDB movie = tmdb.getMovieInfo(ID_BLADE_RUNNER, "");
         String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());

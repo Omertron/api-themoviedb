@@ -28,7 +28,7 @@ public class TmdbConfiguration {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(TmdbConfiguration.class);
+    private static final Logger LOGGER = Logger.getLogger(TmdbConfiguration.class);
     /*
      * Properties
      */
@@ -134,7 +134,7 @@ public class TmdbConfiguration {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override

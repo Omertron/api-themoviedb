@@ -27,7 +27,7 @@ public class WrapperTrailers {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperTrailers.class);
+    private static final Logger LOGGER = Logger.getLogger(WrapperTrailers.class);
     /*
      * Properties
      */
@@ -76,6 +76,6 @@ public class WrapperTrailers {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 }

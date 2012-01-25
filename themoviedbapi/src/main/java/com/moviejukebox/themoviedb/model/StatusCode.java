@@ -25,14 +25,14 @@ public class StatusCode {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(StatusCode.class);
+    private static final Logger LOGGER = Logger.getLogger(StatusCode.class);
     /*
      * Properties
      */
     @JsonProperty("status_code")
-    int statusCode;
+    private int statusCode;
     @JsonProperty("status_message")
-    String statusMessage;
+    private String statusMessage;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public int getStatusCode() {
@@ -64,7 +64,7 @@ public class StatusCode {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.warn(sb.toString());
+        LOGGER.warn(sb.toString());
     }
 
     @Override
