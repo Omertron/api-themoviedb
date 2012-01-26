@@ -43,6 +43,7 @@ public class ApiUrl {
     private static final String PARAMETER_PAGE = DELIMITER_SUBSEQUENT + "page=";
     private static final String DEFAULT_QUERY = "";
     private static final int DEFAULT_ID = -1;
+    private static final int IMDB_ID_TRIGGER = 0;   // Use to determine its an IMDB search
     private static final String DEFAULT_LANGUAGE = "";
     private static final String DEFAULT_COUNTRY = "";
     private static final int DEFAULT_PAGE = -1;
@@ -74,7 +75,7 @@ public class ApiUrl {
      * @param page
      * @return
      */
-    private URL getFullUrl(String query, int tmdbId, String language, String country, int page) {
+    private URL getFullUrl(String query, int tmdbId, String imdbId, String language, String country, int page) {
         StringBuilder urlString = new StringBuilder(TheMovieDB.getApiBase());
 
         // Get the start of the URL
@@ -96,6 +97,11 @@ public class ApiUrl {
         // Append the ID if provided
         if (tmdbId > DEFAULT_ID) {
             urlString.append(tmdbId);
+        }
+        
+        // Append the IMDB ID if provided
+        if (StringUtils.isNotBlank(imdbId)) {
+            urlString.append(imdbId);
         }
 
         // Append the suffix of the API URL
@@ -147,7 +153,7 @@ public class ApiUrl {
      * @return
      */
     public URL getQueryUrl(String query, String language, int page) {
-        return getFullUrl(query, DEFAULT_ID, language, null, page);
+        return getFullUrl(query, DEFAULT_ID, DEFAULT_QUERY, language, null, page);
     }
 
     public URL getQueryUrl(String query) {
@@ -166,7 +172,7 @@ public class ApiUrl {
      * @return
      */
     public URL getIdUrl(int tmdbId, String language, String country) {
-        return getFullUrl(DEFAULT_QUERY, tmdbId, language, country, DEFAULT_PAGE);
+        return getFullUrl(DEFAULT_QUERY, tmdbId, DEFAULT_QUERY, language, country, DEFAULT_PAGE);
     }
 
     public URL getIdUrl(int tmdbId) {
@@ -175,6 +181,17 @@ public class ApiUrl {
 
     public URL getIdUrl(int tmdbId, String language) {
         return getIdUrl(tmdbId, language, DEFAULT_COUNTRY);
+    }
+    
+    /**
+     * Get the movie info for an IMDB ID.
+     * Note, this is a special case
+     * @param imdbId
+     * @param language
+     * @return 
+     */
+    public URL getIdUrl(String imdbId, String language) {
+        return getFullUrl(DEFAULT_QUERY, DEFAULT_ID, imdbId, language, DEFAULT_COUNTRY, DEFAULT_PAGE);
     }
 
 }

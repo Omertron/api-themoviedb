@@ -217,4 +217,15 @@ public class TheMovieDBTest {
         String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());
     }
+
+    /**
+     * Test of getMovieInfoImdb method, of class TheMovieDB.
+     */
+    @Test
+    public void testGetMovieInfoImdb() {
+        LOGGER.info("getMovieInfoImdb");
+        MovieDB result = tmdb.getMovieInfoImdb("tt0076759", "en-US");
+        assertTrue("Error getting the movie from IMDB ID", result.getId() == 11);
+    }
+
 }

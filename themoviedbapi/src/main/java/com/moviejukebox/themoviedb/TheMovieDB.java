@@ -26,9 +26,9 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- * The MovieDB API.
- * This is for version 3 of the API as specified here:
+ * The MovieDB API. This is for version 3 of the API as specified here:
  * http://help.themoviedb.org/kb/api/about-3
+ *
  * @author stuart.boston
  */
 public class TheMovieDB {
@@ -41,7 +41,7 @@ public class TheMovieDB {
      */
     protected static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
     /*
-     * API  Methods
+     * API Methods
      */
     protected static final ApiUrl TMDB_CONFIG_URL = new ApiUrl("configuration");
     protected static final ApiUrl TMDB_SEARCH_MOVIE = new ApiUrl("search/movie");
@@ -83,10 +83,9 @@ public class TheMovieDB {
     }
 
     /**
-     * Search Movies
-     * This is a good starting point to start finding movies on TMDb.
-     * The idea is to be a quick and light method so you can iterate through movies quickly.
-     * http://help.themoviedb.org/kb/api/search-movies
+     * Search Movies This is a good starting point to start finding movies on
+     * TMDb. The idea is to be a quick and light method so you can iterate
+     * through movies quickly. http://help.themoviedb.org/kb/api/search-movies
      */
     public List<MovieDB> searchMovie(String movieName, String language, boolean allResults) {
         try {
@@ -100,8 +99,9 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve all of the basic movie information.
-     * It will return the single highest rated poster and backdrop.
+     * This method is used to retrieve all of the basic movie information. It
+     * will return the single highest rated poster and backdrop.
+     *
      * @param movieId
      * @param language
      * @return
@@ -117,7 +117,27 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     * This method is used to retrieve all of the basic movie information. It
+     * will return the single highest rated poster and backdrop.
+     *
+     * @param movieId
+     * @param language
+     * @return
+     */
+    public MovieDB getMovieInfoImdb(String imdbId, String language) {
+        try {
+            URL url = TMDB_MOVIE_INFO.getIdUrl(imdbId, language);
+            return mapper.readValue(url, MovieDB.class);
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+        }
+        return new MovieDB();
+    }
+
+    /**
+     * This method is used to retrieve all of the alternative titles we have for
+     * a particular movie.
+     *
      * @param movieId
      * @param country
      * @return
@@ -135,6 +155,7 @@ public class TheMovieDB {
 
     /**
      * This method is used to retrieve all of the movie cast information.
+     *
      * @param movieId
      * @return
      */
@@ -167,7 +188,9 @@ public class TheMovieDB {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the
+     * images for a particular movie.
+     *
      * @param movieId
      * @param language
      * @return
@@ -198,8 +221,9 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
-     * Currently, only English keywords exist.
+     * This method is used to retrieve all of the keywords that have been added
+     * to a particular movie. Currently, only English keywords exist.
+     *
      * @param movieId
      * @return
      */
@@ -215,7 +239,9 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data
+     * we have for a specific movie.
+     *
      * @param movieId
      * @param language
      * @return
@@ -232,8 +258,9 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular movie.
-     * Supported sites are YouTube and QuickTime.
+     * This method is used to retrieve all of the trailers for a particular
+     * movie. Supported sites are YouTube and QuickTime.
+     *
      * @param movieId
      * @param language
      * @return
@@ -263,7 +290,9 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
+     * This method is used to retrieve a list of the available translations for
+     * a specific movie.
+     *
      * @param movieId
      * @return
      */
@@ -279,8 +308,10 @@ public class TheMovieDB {
     }
 
     /**
-     * This method is used to retrieve all of the basic information about a movie collection.
-     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
+     * This method is used to retrieve all of the basic information about a
+     * movie collection. You can get the ID needed for this method by making a
+     * getMovieInfo request for the belongs_to_collection.
+     *
      * @param movieId
      * @param language
      * @return
@@ -296,6 +327,7 @@ public class TheMovieDB {
 
     /**
      * Get the configuration information
+     *
      * @return
      */
     public TmdbConfiguration getConfiguration() {
@@ -304,6 +336,7 @@ public class TheMovieDB {
 
     /**
      * Generate the full image URL from the size and image path
+     *
      * @param imagePath
      * @param requiredSize
      * @return
