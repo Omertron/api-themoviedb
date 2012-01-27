@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -464,5 +465,44 @@ public class TheMovieDb {
             LOGGER.warn("Failed to get person images: " + ex.getMessage());
             return personImages;
         }
+    }
+
+    /**
+     * Compare the MovieDB object with a title & year
+     * @param moviedb   The moviedb object to compare too
+     * @param title     The title of the movie to compare
+     * @param year      The year of the movie to compare
+     * @return          True if there is a match, False otherwise.
+     */
+    public static boolean compareMovies(MovieDb moviedb, String title, String year) {
+        if ((moviedb == null) || (StringUtils.isBlank(title))) {
+            return false;
+        }
+
+        if (StringUtils.isNotBlank(year)) {
+            if (StringUtils.isNotBlank(moviedb.getReleaseDate())) {
+                // Compare with year
+                String movieYear = moviedb.getReleaseDate().substring(0, 4);
+                if (movieYear.equals(year)) {
+                    if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
+                        return true;
+                    }
+
+                    if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                        return true;
+                    }
+                }
+            }
+        } else {
+            // Compare without year
+            if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+
+            if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
