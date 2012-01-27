@@ -22,12 +22,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  * @author Stuart
  */
-public class WrapperMovieImages {
+public class WrapperImages {
     /*
      * Logger
      */
 
-    private static final Logger LOGGER = Logger.getLogger(WrapperMovieImages.class);
+    private static final Logger LOGGER = Logger.getLogger(WrapperImages.class);
     /*
      * Properties
      */
@@ -37,37 +37,48 @@ public class WrapperMovieImages {
     private List<Artwork> backdrops;
     @JsonProperty("posters")
     private List<Artwork> posters;
+    @JsonProperty("profiles")
+    private List<Artwork> profiles;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
-    public List<Artwork> getBackdrops() {
-        return backdrops;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public List<Artwork> getBackdrops() {
+        return backdrops;
     }
 
     public List<Artwork> getPosters() {
         return posters;
     }
+
+    public List<Artwork> getProfiles() {
+        return profiles;
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setBackdrops(List<Artwork> backdrops) {
-        this.backdrops = backdrops;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setBackdrops(List<Artwork> backdrops) {
+        this.backdrops = backdrops;
     }
 
     public void setPosters(List<Artwork> posters) {
         this.posters = posters;
     }
+
+    public void setProfiles(List<Artwork> profiles) {
+        this.profiles = profiles;
+    }
     //</editor-fold>
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */

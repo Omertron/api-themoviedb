@@ -13,11 +13,12 @@
 package com.moviejukebox.themoviedb.model;
 
 /**
- * ArtworkType enum List of the artwork types that are available
+ *
+ * @author stuart.boston
  */
-public enum ArtworkType {
+public enum PersonType {
 
-    POSTER,     // Poster artwork
-    BACKDROP,   // Fanart/backdrop
-    PROFILE     // Person image
+    CAST,   // A member of the cast
+    CREW,   // A member of the crew
+    PERSON  // No specific type
 }

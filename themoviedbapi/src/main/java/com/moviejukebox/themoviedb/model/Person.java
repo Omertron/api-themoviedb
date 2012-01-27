@@ -12,8 +12,11 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
@@ -31,25 +34,39 @@ public class Person {
      */
     private static final String CAST_DEPARTMENT = "acting";
     private static final String CAST_JOB = "actor";
+    private static final String DEFAULT_STRING = "";
     /*
      * Properties
      */
+    @JsonProperty("id")
     private int id = -1;
+    @JsonProperty("name")
     private String name = "";
-    private String profilePath = "";
-    private PersonType personType;
-    private String department = "";  // Crew
-    private String job = "";         // Crew
-    private String character = "";   // Cast
-    private int order = -1;          // Cast
-
-    public enum PersonType {
-
-        CAST, CREW
-    }
+    @JsonProperty("profile_path")
+    private String profilePath = DEFAULT_STRING;
+    private PersonType personType = PersonType.PERSON;
+    private String department = DEFAULT_STRING;  // Crew
+    private String job = DEFAULT_STRING;         // Crew
+    private String character = DEFAULT_STRING;   // Cast
+    private int order = -1;                      // Cast
+    @JsonProperty("adult")
+    private boolean adult = false;  // Person info
+    @JsonProperty("also_known_as")
+    private List<String> aka = new ArrayList<String>();
+    @JsonProperty("biography")
+    private String biography = DEFAULT_STRING;
+    @JsonProperty("birthday")
+    private String birthday = DEFAULT_STRING;
+    @JsonProperty("deathday")
+    private String deathday = DEFAULT_STRING;
+    @JsonProperty("homepage")
+    private String homepage = DEFAULT_STRING;
+    @JsonProperty("place_of_birth")
+    private String birthplace = DEFAULT_STRING;
 
     /**
      * Add a crew member
+     *
      * @param id
      * @param name
      * @param profilePath
@@ -69,6 +86,7 @@ public class Person {
 
     /**
      * Add a cast member
+     *
      * @param id
      * @param name
      * @param profilePath
@@ -118,6 +136,34 @@ public class Person {
     public String getProfilePath() {
         return profilePath;
     }
+
+    public boolean isAdult() {
+        return adult;
+    }
+
+    public List<String> getAka() {
+        return aka;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public String getBirthplace() {
+        return birthplace;
+    }
+
+    public String getDeathday() {
+        return deathday;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -152,10 +198,39 @@ public class Person {
     public void setProfilePath(String profilePath) {
         this.profilePath = profilePath;
     }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
+
+    public void setAka(List<String> aka) {
+        this.aka = aka;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setBirthplace(String birthplace) {
+        this.birthplace = birthplace;
+    }
+
+    public void setDeathday(String deathday) {
+        this.deathday = deathday;
+    }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
     // </editor-fold>
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
@@ -224,6 +299,13 @@ public class Person {
         sb.append("],[job=").append(job);
         sb.append("],[character=").append(character);
         sb.append("],[order=").append(order);
+        sb.append("],[adult=").append(adult);
+        sb.append("],[=aka").append(aka.toString());
+        sb.append("],[biography=").append(biography);
+        sb.append("],[birthday=").append(birthday);
+        sb.append("],[deathday=").append(deathday);
+        sb.append("],[homepage=").append(homepage);
+        sb.append("],[birthplace=").append(birthplace);
         sb.append("]]");
         return sb.toString();
     }

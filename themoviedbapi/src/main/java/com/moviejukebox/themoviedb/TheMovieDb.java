@@ -26,7 +26,7 @@ import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- * The MovieDB API. This is for version 3 of the API as specified here:
+ * The MovieDb API. This is for version 3 of the API as specified here:
  * http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
@@ -55,7 +55,7 @@ public class TheMovieDb {
     private static final ApiUrl TMDB_MOVIE_RELEASE_INFO = new ApiUrl("movie/", "/releases");
     private static final ApiUrl TMDB_MOVIE_TRAILERS = new ApiUrl("movie/", "/trailers");
     private static final ApiUrl TMDB_MOVIE_TRANSLATIONS = new ApiUrl("movie/", "/translations");
-    private static final ApiUrl TMDB_PERSON_INFO = new ApiUrl("person");
+    private static final ApiUrl TMDB_PERSON_INFO = new ApiUrl("person/");
     private static final ApiUrl TMDB_PERSON_CREDITS = new ApiUrl("person/", "/credits");
     private static final ApiUrl TMDB_PERSON_IMAGES = new ApiUrl("person/", "/images");
     private static final ApiUrl TMDB_LATEST_MOVIE = new ApiUrl("latest/movie");
@@ -67,6 +67,7 @@ public class TheMovieDb {
 
     /**
      * API for The Movie Db.
+     *
      * @param apiKey
      * @throws IOException
      */
@@ -91,15 +92,16 @@ public class TheMovieDb {
      * Search Movies This is a good starting point to start finding movies on
      * TMDb. The idea is to be a quick and light method so you can iterate
      * through movies quickly. http://help.themoviedb.org/kb/api/search-movies
+     * TODO: Make the allResults work
      */
-    public List<MovieDB> searchMovie(String movieName, String language, boolean allResults) {
+    public List<MovieDb> searchMovie(String movieName, String language, boolean allResults) {
         try {
             URL url = TMDB_SEARCH_MOVIE.getQueryUrl(movieName, language, 1);
             WrapperResultList resultList = mapper.readValue(url, WrapperResultList.class);
             return resultList.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to find movie: " + ex.getMessage());
-            return new ArrayList<MovieDB>();
+            return new ArrayList<MovieDb>();
         }
     }
 
@@ -111,14 +113,14 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public MovieDB getMovieInfo(int movieId, String language) {
+    public MovieDb getMovieInfo(int movieId, String language) {
         try {
             URL url = TMDB_MOVIE_INFO.getIdUrl(movieId, language);
-            return mapper.readValue(url, MovieDB.class);
+            return mapper.readValue(url, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
         }
-        return new MovieDB();
+        return new MovieDb();
     }
 
     /**
@@ -129,14 +131,14 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public MovieDB getMovieInfoImdb(String imdbId, String language) {
+    public MovieDb getMovieInfoImdb(String imdbId, String language) {
         try {
             URL url = TMDB_MOVIE_INFO.getIdUrl(imdbId, language);
-            return mapper.readValue(url, MovieDB.class);
+            return mapper.readValue(url, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
         }
-        return new MovieDB();
+        return new MovieDb();
     }
 
     /**
@@ -159,7 +161,8 @@ public class TheMovieDb {
     }
 
     /**
-     * This method is used to retrieve all of the movie cast information.
+     * This method is used to retrieve all of the movie cast information. TODO:
+     * Add a function to enrich the data with the people methods
      *
      * @param movieId
      * @return
@@ -204,7 +207,7 @@ public class TheMovieDb {
         List<Artwork> artwork = new ArrayList<Artwork>();
         try {
             URL url = TMDB_MOVIE_IMAGES.getIdUrl(movieId, language);
-            WrapperMovieImages mi = mapper.readValue(url, WrapperMovieImages.class);
+            WrapperImages mi = mapper.readValue(url, WrapperImages.class);
 
             // Add all the posters to the list
             for (Artwork poster : mi.getPosters()) {
@@ -367,5 +370,99 @@ public class TheMovieDb {
         }
 
         return returnUrl;
+    }
+
+    /**
+     * This is a good starting point to start finding people on TMDb. The idea
+     * is to be a quick and light method so you can iterate through people
+     * quickly. TODO: Fix allResults
+     */
+    public List<Person> searchPeople(String personName, boolean allResults) {
+
+        try {
+            URL url = TMDB_SEARCH_PEOPLE.getQueryUrl(personName, "", 1);
+            WrapperPerson resultList = mapper.readValue(url, WrapperPerson.class);
+            return resultList.getResults();
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to find person: " + ex.getMessage());
+            return new ArrayList<Person>();
+        }
+    }
+
+    /**
+     * This method is used to retrieve all of the basic person information. It
+     * will return the single highest rated profile image.
+     *
+     * @param personId
+     * @return
+     */
+    public Person getPersonInfo(int personId) {
+        try {
+            URL url = TMDB_PERSON_INFO.getIdUrl(personId);
+            return mapper.readValue(url, Person.class);
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+            return new Person();
+        }
+    }
+
+    /**
+     * This method is used to retrieve all of the cast & crew information for
+     * the person. It will return the single highest rated poster for each movie
+     * record.
+     *
+     * @param personId
+     * @return
+     */
+    public List<PersonCredit> getPersonCredits(int personId) {
+        List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
+
+        try {
+            URL url = TMDB_PERSON_CREDITS.getIdUrl(personId);
+            WrapperPersonCredits pc = mapper.readValue(url, WrapperPersonCredits.class);
+
+            // Add a cast member
+            for (PersonCredit cast : pc.getCast()) {
+                cast.setPersonType(PersonType.CAST);
+                personCredits.add(cast);
+            }
+
+            // Add a crew member
+            for (PersonCredit crew : pc.getCrew()) {
+                crew.setPersonType(PersonType.CREW);
+                personCredits.add(crew);
+            }
+
+            return personCredits;
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get person credits: " + ex.getMessage());
+            return personCredits;
+        }
+    }
+
+    /**
+     * This method is used to retrieve all of the profile images for a person.
+     *
+     * @param personId
+     * @return
+     */
+    public List<Artwork> getPersonImages(int personId) {
+        List<Artwork> personImages = new ArrayList<Artwork>();
+
+        try {
+            URL url = TMDB_PERSON_IMAGES.getIdUrl(personId);
+            WrapperImages images = mapper.readValue(url, WrapperImages.class);
+
+            // Update the image type
+            for (Artwork artwork : images.getProfiles()) {
+                artwork.setArtworkType(ArtworkType.PROFILE);
+                personImages.add(artwork);
+            }
+
+            return personImages;
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get person images: " + ex.getMessage());
+            return personImages;
+        }
     }
 }

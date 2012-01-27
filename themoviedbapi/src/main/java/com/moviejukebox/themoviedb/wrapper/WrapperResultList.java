@@ -12,7 +12,7 @@
  */
 package com.moviejukebox.themoviedb.wrapper;
 
-import com.moviejukebox.themoviedb.model.MovieDB;
+import com.moviejukebox.themoviedb.model.MovieDb;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
@@ -34,7 +34,7 @@ public class WrapperResultList {
     @JsonProperty("page")
     private int page;
     @JsonProperty("results")
-    private List<MovieDB> results;
+    private List<MovieDb> results;
     @JsonProperty("total_pages")
     private int totalPages;
     @JsonProperty("total_results")
@@ -45,7 +45,7 @@ public class WrapperResultList {
         return page;
     }
 
-    public List<MovieDB> getResults() {
+    public List<MovieDb> getResults() {
         return results;
     }
 
@@ -63,7 +63,7 @@ public class WrapperResultList {
         this.page = page;
     }
 
-    public void setResults(List<MovieDB> results) {
+    public void setResults(List<MovieDb> results) {
         this.results = results;
     }
 

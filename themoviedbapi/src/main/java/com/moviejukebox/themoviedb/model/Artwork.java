@@ -18,6 +18,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * The artwork type information
+ *
  * @author Stuart
  */
 public class Artwork {
@@ -115,6 +116,7 @@ public class Artwork {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
