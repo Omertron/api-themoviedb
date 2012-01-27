@@ -22,23 +22,23 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 /**
- * Test cases for TheMovieDB API
+ * Test cases for TheMovieDb API
  *
  * @author stuart.boston
  */
-public class TheMovieDBTest {
+public class TheMovieDbTest {
 
-    private static final Logger LOGGER = Logger.getLogger(TheMovieDBTest.class);
+    private static final Logger LOGGER = Logger.getLogger(TheMovieDbTest.class);
     private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
-    private static TheMovieDB tmdb;
+    private static TheMovieDb tmdb;
     /*
      * Test data
      */
     private static final int ID_BLADE_RUNNER = 78;
     private static final int ID_STAR_WARS_COLLECTION = 10;
 
-    public TheMovieDBTest() throws IOException {
-        tmdb = new TheMovieDB(API_KEY);
+    public TheMovieDbTest() throws IOException {
+        tmdb = new TheMovieDb(API_KEY);
     }
 
     @BeforeClass
@@ -58,7 +58,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getConfiguration method, of class TheMovieDB.
+     * Test of getConfiguration method, of class TheMovieDb.
      */
     @Test
     public void testConfiguration() throws IOException {
@@ -74,7 +74,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of searchMovie method, of class TheMovieDB.
+     * Test of searchMovie method, of class TheMovieDb.
      */
     @Test
     public void testSearchMovie() throws UnsupportedEncodingException {
@@ -94,7 +94,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieInfo method, of class TheMovieDB.
+     * Test of getMovieInfo method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieInfo() {
@@ -105,7 +105,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieAlternativeTitles method, of class TheMovieDB.
+     * Test of getMovieAlternativeTitles method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieAlternativeTitles() {
@@ -121,7 +121,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieCasts method, of class TheMovieDB.
+     * Test of getMovieCasts method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieCasts() {
@@ -149,7 +149,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieImages method, of class TheMovieDB.
+     * Test of getMovieImages method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieImages() {
@@ -160,7 +160,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieKeywords method, of class TheMovieDB.
+     * Test of getMovieKeywords method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieKeywords() {
@@ -170,7 +170,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieReleaseInfo method, of class TheMovieDB.
+     * Test of getMovieReleaseInfo method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieReleaseInfo() {
@@ -180,7 +180,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieTrailers method, of class TheMovieDB.
+     * Test of getMovieTrailers method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieTrailers() {
@@ -190,7 +190,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieTranslations method, of class TheMovieDB.
+     * Test of getMovieTranslations method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieTranslations() {
@@ -200,7 +200,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getCollectionInfo method, of class TheMovieDB.
+     * Test of getCollectionInfo method, of class TheMovieDb.
      */
     @Test
     public void testGetCollectionInfo() {
@@ -219,7 +219,7 @@ public class TheMovieDBTest {
     }
 
     /**
-     * Test of getMovieInfoImdb method, of class TheMovieDB.
+     * Test of getMovieInfoImdb method, of class TheMovieDb.
      */
     @Test
     public void testGetMovieInfoImdb() {

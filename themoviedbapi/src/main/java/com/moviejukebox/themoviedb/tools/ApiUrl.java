@@ -12,7 +12,7 @@
  */
 package com.moviejukebox.themoviedb.tools;
 
-import com.moviejukebox.themoviedb.TheMovieDB;
+import com.moviejukebox.themoviedb.TheMovieDb;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -41,12 +41,8 @@ public class ApiUrl {
     private static final String PARAMETER_LANGUAGE = DELIMITER_SUBSEQUENT + "language=";
     private static final String PARAMETER_COUNTRY = DELIMITER_SUBSEQUENT + "country=";
     private static final String PARAMETER_PAGE = DELIMITER_SUBSEQUENT + "page=";
-    private static final String DEFAULT_QUERY = "";
-    private static final int DEFAULT_ID = -1;
-    private static final int IMDB_ID_TRIGGER = 0;   // Use to determine its an IMDB search
-    private static final String DEFAULT_LANGUAGE = "";
-    private static final String DEFAULT_COUNTRY = "";
-    private static final int DEFAULT_PAGE = -1;
+    private static final String DEFAULT_STRING = "";
+    private static final int DEFAULT_INT = -1;
     /*
      * Properties
      */
@@ -54,11 +50,20 @@ public class ApiUrl {
     private String submethod;
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
+    /**
+     * Constructor for the simple API URL method without a sub-method
+     * @param method
+     */
     public ApiUrl(String method) {
         this.method = method;
-        this.submethod = DEFAULT_QUERY;
+        this.submethod = DEFAULT_STRING;
     }
 
+    /**
+     * Constructor for the API URL with a sub-method
+     * @param method
+     * @param submethod
+     */
     public ApiUrl(String method, String submethod) {
         this.method = method;
         this.submethod = submethod;
@@ -75,8 +80,8 @@ public class ApiUrl {
      * @param page
      * @return
      */
-    private URL getFullUrl(String query, int tmdbId, String imdbId, String language, String country, int page) {
-        StringBuilder urlString = new StringBuilder(TheMovieDB.getApiBase());
+    private URL getFullUrl(String query, String movieId, String language, String country, int page) {
+        StringBuilder urlString = new StringBuilder(TheMovieDb.getApiBase());
 
         // Get the start of the URL
         urlString.append(method);
@@ -95,13 +100,8 @@ public class ApiUrl {
         }
 
         // Append the ID if provided
-        if (tmdbId > DEFAULT_ID) {
-            urlString.append(tmdbId);
-        }
-        
-        // Append the IMDB ID if provided
-        if (StringUtils.isNotBlank(imdbId)) {
-            urlString.append(imdbId);
+        if (StringUtils.isNotBlank(movieId)) {
+            urlString.append(movieId);
         }
 
         // Append the suffix of the API URL
@@ -116,7 +116,7 @@ public class ApiUrl {
             urlString.append(DELIMITER_SUBSEQUENT);
         }
         urlString.append(PARAMETER_API_KEY);
-        urlString.append(TheMovieDB.getApiKey());
+        urlString.append(TheMovieDb.getApiKey());
 
         // Append the language to the URL
         if (StringUtils.isNotBlank(language)) {
@@ -131,7 +131,7 @@ public class ApiUrl {
         }
 
         // Append the page to the URL
-        if (page > DEFAULT_PAGE) {
+        if (page > DEFAULT_INT) {
             urlString.append(PARAMETER_PAGE);
             urlString.append(page);
         }
@@ -146,52 +146,96 @@ public class ApiUrl {
     }
 
     /**
-     * Create an URL using a query (string) and optional language and page
+     * Create an URL using the query (string), language and page
+     *
      * @param query
      * @param language
      * @param page
      * @return
      */
     public URL getQueryUrl(String query, String language, int page) {
-        return getFullUrl(query, DEFAULT_ID, DEFAULT_QUERY, language, null, page);
-    }
-
-    public URL getQueryUrl(String query) {
-        return getQueryUrl(query, DEFAULT_LANGUAGE, DEFAULT_PAGE);
-    }
-
-    public URL getQueryUrl(String query, String language) {
-        return getQueryUrl(query, language, DEFAULT_PAGE);
+        return getFullUrl(query, DEFAULT_STRING, language, null, page);
     }
 
     /**
-     * Create an URL using the TheMovieDB ID and optional language an country codes
-     * @param tmdbId
+     * Create an URL using the query (string)
+     * @param query
+     * @return
+     */
+    public URL getQueryUrl(String query) {
+        return getQueryUrl(query, DEFAULT_STRING, DEFAULT_INT);
+    }
+
+    /**
+     * Create an URL using the query (string) and language
+     * @param query
+     * @param language
+     * @return
+     */
+    public URL getQueryUrl(String query, String language) {
+        return getQueryUrl(query, language, DEFAULT_INT);
+    }
+
+    /**
+     * Create an URL using the movie ID, language and country code
+     *
+     * @param movieId
      * @param language
      * @param country
      * @return
      */
-    public URL getIdUrl(int tmdbId, String language, String country) {
-        return getFullUrl(DEFAULT_QUERY, tmdbId, DEFAULT_QUERY, language, country, DEFAULT_PAGE);
+    public URL getIdUrl(String movieId, String language, String country) {
+        return getFullUrl(DEFAULT_STRING, movieId, language, country, DEFAULT_INT);
     }
 
-    public URL getIdUrl(int tmdbId) {
-        return getIdUrl(tmdbId, DEFAULT_LANGUAGE, DEFAULT_COUNTRY);
-    }
-
-    public URL getIdUrl(int tmdbId, String language) {
-        return getIdUrl(tmdbId, language, DEFAULT_COUNTRY);
-    }
-    
     /**
-     * Get the movie info for an IMDB ID.
-     * Note, this is a special case
-     * @param imdbId
+     * Create an URL using the movie ID and language
+     * @param movieId
      * @param language
-     * @return 
+     * @return
      */
-    public URL getIdUrl(String imdbId, String language) {
-        return getFullUrl(DEFAULT_QUERY, DEFAULT_ID, imdbId, language, DEFAULT_COUNTRY, DEFAULT_PAGE);
+    public URL getIdUrl(String movieId, String language) {
+        return getIdUrl(movieId, language, DEFAULT_STRING);
+    }
+
+    /**
+     * Create an URL using the movie ID
+     * @param movieId
+     * @return
+     */
+    public URL getIdUrl(String movieId) {
+        return getIdUrl(movieId, DEFAULT_STRING, DEFAULT_STRING);
+    }
+
+    /**
+     * Create an URL using the movie ID, language and country code
+     *
+     * @param movieId
+     * @param language
+     * @param country
+     * @return
+     */
+    public URL getIdUrl(int movieId, String language, String country) {
+        return getIdUrl(String.valueOf(movieId), language, country);
+    }
+
+    /**
+     * Create an URL using the movie ID and language
+     * @param movieId
+     * @param language
+     * @return
+     */
+    public URL getIdUrl(int movieId, String language) {
+        return getIdUrl(String.valueOf(movieId), language, DEFAULT_STRING);
+    }
+
+    /**
+     * Create an URL using the movie ID
+     * @param movieId
+     * @return
+     */
+    public URL getIdUrl(int movieId) {
+        return getIdUrl(String.valueOf(movieId), DEFAULT_STRING, DEFAULT_STRING);
     }
 
 }
