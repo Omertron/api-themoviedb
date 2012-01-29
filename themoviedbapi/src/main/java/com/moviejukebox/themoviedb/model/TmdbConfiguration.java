@@ -13,6 +13,7 @@
 package com.moviejukebox.themoviedb.model;
 
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -94,6 +95,9 @@ public class TmdbConfiguration {
      * @return
      */
     public boolean isValidPosterSize(String posterSize) {
+        if (StringUtils.isBlank(posterSize)) {
+            return false;
+        }
         return posterSizes.contains(posterSize);
     }
 
@@ -103,6 +107,9 @@ public class TmdbConfiguration {
      * @return
      */
     public boolean isValidBackdropSize(String backdropSize) {
+        if (StringUtils.isBlank(backdropSize)) {
+            return false;
+        }
         return backdropSizes.contains(backdropSize);
     }
 
@@ -112,6 +119,9 @@ public class TmdbConfiguration {
      * @return
      */
     public boolean isValidProfileSize(String profileSize) {
+        if (StringUtils.isBlank(profileSize)) {
+            return false;
+        }
         return profileSizes.contains(profileSize);
     }
 

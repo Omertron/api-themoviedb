@@ -61,7 +61,7 @@ public class TheMovieDbTest {
     /**
      * Test of getConfiguration method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testConfiguration() throws IOException {
         LOGGER.info("Test Configuration");
 
@@ -77,7 +77,7 @@ public class TheMovieDbTest {
     /**
      * Test of searchMovie method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testSearchMovie() throws UnsupportedEncodingException {
         LOGGER.info("searchMovie");
 
@@ -97,7 +97,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieInfo method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieInfo() {
         LOGGER.info("getMovieInfo");
         String language = "en";
@@ -108,7 +108,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieAlternativeTitles method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieAlternativeTitles() {
         LOGGER.info("getMovieAlternativeTitles");
         String country = "";
@@ -124,7 +124,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieCasts method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieCasts() {
         LOGGER.info("getMovieCasts");
         List<Person> people = tmdb.getMovieCasts(ID_BLADE_RUNNER);
@@ -151,7 +151,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieImages method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieImages() {
         LOGGER.info("getMovieImages");
         String language = "";
@@ -162,7 +162,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieKeywords method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieKeywords() {
         LOGGER.info("getMovieKeywords");
         List<Keyword> result = tmdb.getMovieKeywords(ID_BLADE_RUNNER);
@@ -172,7 +172,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieReleaseInfo method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieReleaseInfo() {
         LOGGER.info("getMovieReleaseInfo");
         List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_BLADE_RUNNER, "");
@@ -182,7 +182,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieTrailers method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieTrailers() {
         LOGGER.info("getMovieTrailers");
         List<Trailer> result = tmdb.getMovieTrailers(ID_BLADE_RUNNER, "");
@@ -192,7 +192,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieTranslations method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieTranslations() {
         LOGGER.info("getMovieTranslations");
         List<Translation> result = tmdb.getMovieTranslations(ID_BLADE_RUNNER);
@@ -202,7 +202,7 @@ public class TheMovieDbTest {
     /**
      * Test of getCollectionInfo method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetCollectionInfo() {
         LOGGER.info("getCollectionInfo");
         String language = "";
@@ -210,7 +210,7 @@ public class TheMovieDbTest {
         assertFalse("No collection information", result.getParts().isEmpty());
     }
 
-    //@Test
+    @Test
     public void testCreateImageUrl() {
         LOGGER.info("createImageUrl");
         MovieDb movie = tmdb.getMovieInfo(ID_BLADE_RUNNER, "");
@@ -221,7 +221,7 @@ public class TheMovieDbTest {
     /**
      * Test of getMovieInfoImdb method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetMovieInfoImdb() {
         LOGGER.info("getMovieInfoImdb");
         MovieDb result = tmdb.getMovieInfoImdb("tt0076759", "en-US");
@@ -231,7 +231,7 @@ public class TheMovieDbTest {
     /**
      * Test of getApiKey method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetApiKey() {
         // Not required
     }
@@ -239,7 +239,7 @@ public class TheMovieDbTest {
     /**
      * Test of getApiBase method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetApiBase() {
         // Not required
     }
@@ -247,7 +247,7 @@ public class TheMovieDbTest {
     /**
      * Test of getConfiguration method, of class TheMovieDb.
      */
-    //@Test
+    @Test
     public void testGetConfiguration() {
         // Not required
     }
@@ -294,11 +294,6 @@ public class TheMovieDbTest {
 
         List<Artwork> artwork = tmdb.getPersonImages(ID_BRUCE_WILLIS);
         assertTrue("No cast information", artwork.size() > 0);
-
-        for(Artwork a:artwork) {
-            LOGGER.info("  " + a.toString());
-        }
-
     }
 
 }
