@@ -19,6 +19,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * Movie Bean
+ *
  * @author stuart.boston
  */
 public class MovieDb {
@@ -257,6 +258,7 @@ public class MovieDb {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
@@ -274,104 +276,51 @@ public class MovieDb {
         if (obj == null) {
             return false;
         }
+
         if (getClass() != obj.getClass()) {
             return false;
         }
+
         final MovieDb other = (MovieDb) obj;
-        if ((this.backdropPath == null) ? (other.backdropPath != null) : !this.backdropPath.equals(other.backdropPath)) {
-            return false;
-        }
+
         if (this.id != other.id) {
             return false;
         }
-        if ((this.originalTitle == null) ? (other.originalTitle != null) : !this.originalTitle.equals(other.originalTitle)) {
+
+        // Dirty way of checking that all the fields are the same
+        if (this.toString().equals(other.toString())) {
             return false;
         }
-        if (Float.floatToIntBits(this.popularity) != Float.floatToIntBits(other.popularity)) {
-            return false;
-        }
-        if ((this.posterPath == null) ? (other.posterPath != null) : !this.posterPath.equals(other.posterPath)) {
-            return false;
-        }
-        if ((this.releaseDate == null) ? (other.releaseDate != null) : !this.releaseDate.equals(other.releaseDate)) {
-            return false;
-        }
-        if ((this.title == null) ? (other.title != null) : !this.title.equals(other.title)) {
-            return false;
-        }
-        if (this.adult != other.adult) {
-            return false;
-        }
-        if (this.belongsToCollection != other.belongsToCollection && (this.belongsToCollection == null || !this.belongsToCollection.equals(other.belongsToCollection))) {
-            return false;
-        }
-        if (this.budget != other.budget) {
-            return false;
-        }
-        if (this.genres != other.genres && (this.genres == null || !this.genres.equals(other.genres))) {
-            return false;
-        }
-        if ((this.homepage == null) ? (other.homepage != null) : !this.homepage.equals(other.homepage)) {
-            return false;
-        }
-        if ((this.imdbID == null) ? (other.imdbID != null) : !this.imdbID.equals(other.imdbID)) {
-            return false;
-        }
-        if ((this.overview == null) ? (other.overview != null) : !this.overview.equals(other.overview)) {
-            return false;
-        }
-        if (this.productionCompanies != other.productionCompanies && (this.productionCompanies == null || !this.productionCompanies.equals(other.productionCompanies))) {
-            return false;
-        }
-        if (this.productionCountries != other.productionCountries && (this.productionCountries == null || !this.productionCountries.equals(other.productionCountries))) {
-            return false;
-        }
-        if (this.revenue != other.revenue) {
-            return false;
-        }
-        if (this.runtime != other.runtime) {
-            return false;
-        }
-        if (this.spokenLanguages != other.spokenLanguages && (this.spokenLanguages == null || !this.spokenLanguages.equals(other.spokenLanguages))) {
-            return false;
-        }
-        if ((this.tagline == null) ? (other.tagline != null) : !this.tagline.equals(other.tagline)) {
-            return false;
-        }
-        if (Float.floatToIntBits(this.voteAverage) != Float.floatToIntBits(other.voteAverage)) {
-            return false;
-        }
-        if (this.voteCount != other.voteCount) {
-            return false;
-        }
+
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + (this.backdropPath != null ? this.backdropPath.hashCode() : 0);
-        hash = 97 * hash + this.id;
-        hash = 97 * hash + (this.originalTitle != null ? this.originalTitle.hashCode() : 0);
-        hash = 97 * hash + Float.floatToIntBits(this.popularity);
-        hash = 97 * hash + (this.posterPath != null ? this.posterPath.hashCode() : 0);
-        hash = 97 * hash + (this.releaseDate != null ? this.releaseDate.hashCode() : 0);
-        hash = 97 * hash + (this.title != null ? this.title.hashCode() : 0);
-        hash = 97 * hash + (this.adult ? 1 : 0);
-        hash = 97 * hash + (this.belongsToCollection != null ? this.belongsToCollection.hashCode() : 0);
-        hash = 97 * hash + this.budget;
-        hash = 97 * hash + (this.genres != null ? this.genres.hashCode() : 0);
-        hash = 97 * hash + (this.homepage != null ? this.homepage.hashCode() : 0);
-        hash = 97 * hash + (this.imdbID != null ? this.imdbID.hashCode() : 0);
-        hash = 97 * hash + (this.overview != null ? this.overview.hashCode() : 0);
-        hash = 97 * hash + (this.productionCompanies != null ? this.productionCompanies.hashCode() : 0);
-        hash = 97 * hash + (this.productionCountries != null ? this.productionCountries.hashCode() : 0);
-        hash = 97 * hash + this.revenue;
-        hash = 97 * hash + this.runtime;
-        hash = 97 * hash + (this.spokenLanguages != null ? this.spokenLanguages.hashCode() : 0);
-        hash = 97 * hash + (this.tagline != null ? this.tagline.hashCode() : 0);
-        hash = 97 * hash + Float.floatToIntBits(this.voteAverage);
-        hash = 97 * hash + this.voteCount;
+        int multiplier = 97;
+        hash = multiplier * hash + (this.backdropPath != null ? this.backdropPath.hashCode() : 0);
+        hash = multiplier * hash + this.id;
+        hash = multiplier * hash + (this.originalTitle != null ? this.originalTitle.hashCode() : 0);
+        hash = multiplier * hash + Float.floatToIntBits(this.popularity);
+        hash = multiplier * hash + (this.posterPath != null ? this.posterPath.hashCode() : 0);
+        hash = multiplier * hash + (this.releaseDate != null ? this.releaseDate.hashCode() : 0);
+        hash = multiplier * hash + (this.title != null ? this.title.hashCode() : 0);
+        hash = multiplier * hash + (this.adult ? 1 : 0);
+        hash = multiplier * hash + (this.belongsToCollection != null ? this.belongsToCollection.hashCode() : 0);
+        hash = multiplier * hash + this.budget;
+        hash = multiplier * hash + (this.genres != null ? this.genres.hashCode() : 0);
+        hash = multiplier * hash + (this.homepage != null ? this.homepage.hashCode() : 0);
+        hash = multiplier * hash + (this.imdbID != null ? this.imdbID.hashCode() : 0);
+        hash = multiplier * hash + (this.overview != null ? this.overview.hashCode() : 0);
+        hash = multiplier * hash + (this.productionCompanies != null ? this.productionCompanies.hashCode() : 0);
+        hash = multiplier * hash + (this.productionCountries != null ? this.productionCountries.hashCode() : 0);
+        hash = multiplier * hash + this.revenue;
+        hash = multiplier * hash + this.runtime;
+        hash = multiplier * hash + (this.spokenLanguages != null ? this.spokenLanguages.hashCode() : 0);
+        hash = multiplier * hash + (this.tagline != null ? this.tagline.hashCode() : 0);
+        hash = multiplier * hash + Float.floatToIntBits(this.voteAverage);
+        hash = multiplier * hash + this.voteCount;
         return hash;
     }
     //</editor-fold>

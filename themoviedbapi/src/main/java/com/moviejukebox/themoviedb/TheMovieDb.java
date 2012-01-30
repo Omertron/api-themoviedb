@@ -35,31 +35,30 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class TheMovieDb {
 
     private static final Logger LOGGER = Logger.getLogger(TheMovieDb.class);
-    private static String apiKey;
-    private static TmdbConfiguration tmdbConfig;
+    private String apiKey;
+    private TmdbConfiguration tmdbConfig;
     /*
-     * TheMovieDb API URLs
+     * API Methods These are not set to static so that multiple instances of the
+     * API can co-exist
      */
-    private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
-    /*
-     * API Methods
-     */
-    private static final ApiUrl TMDB_CONFIG_URL = new ApiUrl("configuration");
-    private static final ApiUrl TMDB_SEARCH_MOVIE = new ApiUrl("search/movie");
-    private static final ApiUrl TMDB_SEARCH_PEOPLE = new ApiUrl("search/person");
-    private static final ApiUrl TMDB_COLLECTION_INFO = new ApiUrl("collection/");
-    private static final ApiUrl TMDB_MOVIE_INFO = new ApiUrl("movie/");
-    private static final ApiUrl TMDB_MOVIE_ALT_TITLES = new ApiUrl("movie/", "/alternative_titles");
-    private static final ApiUrl TMDB_MOVIE_CASTS = new ApiUrl("movie/", "/casts");
-    private static final ApiUrl TMDB_MOVIE_IMAGES = new ApiUrl("movie/", "/images");
-    private static final ApiUrl TMDB_MOVIE_KEYWORDS = new ApiUrl("movie/", "/keywords");
-    private static final ApiUrl TMDB_MOVIE_RELEASE_INFO = new ApiUrl("movie/", "/releases");
-    private static final ApiUrl TMDB_MOVIE_TRAILERS = new ApiUrl("movie/", "/trailers");
-    private static final ApiUrl TMDB_MOVIE_TRANSLATIONS = new ApiUrl("movie/", "/translations");
-    private static final ApiUrl TMDB_PERSON_INFO = new ApiUrl("person/");
-    private static final ApiUrl TMDB_PERSON_CREDITS = new ApiUrl("person/", "/credits");
-    private static final ApiUrl TMDB_PERSON_IMAGES = new ApiUrl("person/", "/images");
-    private static final ApiUrl TMDB_LATEST_MOVIE = new ApiUrl("latest/movie");
+    private final String BASE_MOVIE = "movie/";
+    private final String BASE_PERSON = "person/";
+    private final ApiUrl TMDB_CONFIG_URL = new ApiUrl(this, "configuration");
+    private final ApiUrl TMDB_SEARCH_MOVIE = new ApiUrl(this, "search/movie");
+    private final ApiUrl TMDB_SEARCH_PEOPLE = new ApiUrl(this, "search/person");
+    private final ApiUrl TMDB_COLLECTION_INFO = new ApiUrl(this, "collection/");
+    private final ApiUrl TMDB_MOVIE_INFO = new ApiUrl(this, BASE_MOVIE);
+    private final ApiUrl TMDB_MOVIE_ALT_TITLES = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
+    private final ApiUrl TMDB_MOVIE_CASTS = new ApiUrl(this, BASE_MOVIE, "/casts");
+    private final ApiUrl TMDB_MOVIE_IMAGES = new ApiUrl(this, BASE_MOVIE, "/images");
+    private final ApiUrl TMDB_MOVIE_KEYWORDS = new ApiUrl(this, BASE_MOVIE, "/keywords");
+    private final ApiUrl TMDB_MOVIE_RELEASE_INFO = new ApiUrl(this, BASE_MOVIE, "/releases");
+    private final ApiUrl TMDB_MOVIE_TRAILERS = new ApiUrl(this, BASE_MOVIE, "/trailers");
+    private final ApiUrl TMDB_MOVIE_TRANSLATIONS = new ApiUrl(this, BASE_MOVIE, "/translations");
+    private final ApiUrl TMDB_PERSON_INFO = new ApiUrl(this, BASE_PERSON);
+    private final ApiUrl TMDB_PERSON_CREDITS = new ApiUrl(this, BASE_PERSON, "/credits");
+    private final ApiUrl TMDB_PERSON_IMAGES = new ApiUrl(this, BASE_PERSON, "/images");
+    private final ApiUrl TMDB_LATEST_MOVIE = new ApiUrl(this, "latest/movie");
 
     /*
      * Jackson JSON configuration
@@ -73,7 +72,7 @@ public class TheMovieDb {
      * @throws IOException
      */
     public TheMovieDb(String apiKey) throws IOException {
-        TheMovieDb.apiKey = apiKey;
+        this.apiKey = apiKey;
         URL configUrl = TMDB_CONFIG_URL.getQueryUrl("");
         mapper.configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
         tmdbConfig = mapper.readValue(configUrl, TmdbConfiguration.class);
@@ -81,12 +80,8 @@ public class TheMovieDb {
         FilteringLayout.addApiKey(apiKey);
     }
 
-    public static String getApiKey() {
+    public String getApiKey() {
         return apiKey;
-    }
-
-    public static String getApiBase() {
-        return TMDB_API_BASE;
     }
 
     /**
@@ -468,11 +463,26 @@ public class TheMovieDb {
     }
 
     /**
+     * This method is used to retrieve the newest movie that was added to TMDb.
+     * @return
+     */
+    public MovieDb getLatestMovie() {
+        try {
+            URL url = TMDB_LATEST_MOVIE.getIdUrl("");
+            return mapper.readValue(url, MovieDb.class);
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
+            return new MovieDb();
+        }
+    }
+
+    /**
      * Compare the MovieDB object with a title & year
-     * @param moviedb   The moviedb object to compare too
-     * @param title     The title of the movie to compare
-     * @param year      The year of the movie to compare
-     * @return          True if there is a match, False otherwise.
+     *
+     * @param moviedb The moviedb object to compare too
+     * @param title The title of the movie to compare
+     * @param year The year of the movie to compare
+     * @return True if there is a match, False otherwise.
      */
     public static boolean compareMovies(MovieDb moviedb, String title, String year) {
         if ((moviedb == null) || (StringUtils.isBlank(title))) {
