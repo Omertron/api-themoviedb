@@ -105,9 +105,6 @@ public class Trailer {
         if ((this.source == null) ? (other.source != null) : !this.source.equals(other.source)) {
             return false;
         }
-        if ((this.website == null) ? (other.website != null) : !this.website.equals(other.website)) {
-            return false;
-        }
         return true;
     }
 

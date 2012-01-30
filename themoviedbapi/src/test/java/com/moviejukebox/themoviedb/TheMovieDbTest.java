@@ -296,4 +296,22 @@ public class TheMovieDbTest {
         assertTrue("No cast information", artwork.size() > 0);
     }
 
+    /**
+     * Test of getLatestMovie method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetLatestMovie() {
+        LOGGER.info("getLatestMovie");
+        MovieDb result = tmdb.getLatestMovie();
+        LOGGER.info(result.toString());
+        assertTrue("No latest movie found", result.getId() > 0);
+}
+
+    /**
+     * Test of compareMovies method, of class TheMovieDb.
+     */
+    @Test
+    public void testCompareMovies() {
+        // Not required
+    }
 }

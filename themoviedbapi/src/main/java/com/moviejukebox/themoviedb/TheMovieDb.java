@@ -41,24 +41,24 @@ public class TheMovieDb {
      * API Methods These are not set to static so that multiple instances of the
      * API can co-exist
      */
-    private final String BASE_MOVIE = "movie/";
-    private final String BASE_PERSON = "person/";
-    private final ApiUrl TMDB_CONFIG_URL = new ApiUrl(this, "configuration");
-    private final ApiUrl TMDB_SEARCH_MOVIE = new ApiUrl(this, "search/movie");
-    private final ApiUrl TMDB_SEARCH_PEOPLE = new ApiUrl(this, "search/person");
-    private final ApiUrl TMDB_COLLECTION_INFO = new ApiUrl(this, "collection/");
-    private final ApiUrl TMDB_MOVIE_INFO = new ApiUrl(this, BASE_MOVIE);
-    private final ApiUrl TMDB_MOVIE_ALT_TITLES = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
-    private final ApiUrl TMDB_MOVIE_CASTS = new ApiUrl(this, BASE_MOVIE, "/casts");
-    private final ApiUrl TMDB_MOVIE_IMAGES = new ApiUrl(this, BASE_MOVIE, "/images");
-    private final ApiUrl TMDB_MOVIE_KEYWORDS = new ApiUrl(this, BASE_MOVIE, "/keywords");
-    private final ApiUrl TMDB_MOVIE_RELEASE_INFO = new ApiUrl(this, BASE_MOVIE, "/releases");
-    private final ApiUrl TMDB_MOVIE_TRAILERS = new ApiUrl(this, BASE_MOVIE, "/trailers");
-    private final ApiUrl TMDB_MOVIE_TRANSLATIONS = new ApiUrl(this, BASE_MOVIE, "/translations");
-    private final ApiUrl TMDB_PERSON_INFO = new ApiUrl(this, BASE_PERSON);
-    private final ApiUrl TMDB_PERSON_CREDITS = new ApiUrl(this, BASE_PERSON, "/credits");
-    private final ApiUrl TMDB_PERSON_IMAGES = new ApiUrl(this, BASE_PERSON, "/images");
-    private final ApiUrl TMDB_LATEST_MOVIE = new ApiUrl(this, "latest/movie");
+    private static final String BASE_MOVIE = "movie/";
+    private static final String BASE_PERSON = "person/";
+    private final ApiUrl tmdbConfigUrl = new ApiUrl(this, "configuration");
+    private final ApiUrl tmdbSearchMovie = new ApiUrl(this, "search/movie");
+    private final ApiUrl tmdbSearchPeople = new ApiUrl(this, "search/person");
+    private final ApiUrl tmdbCollectionInfo = new ApiUrl(this, "collection/");
+    private final ApiUrl tmdbMovieInfo = new ApiUrl(this, BASE_MOVIE);
+    private final ApiUrl tmdbMovieAltTitles = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
+    private final ApiUrl tmdbMovieCasts = new ApiUrl(this, BASE_MOVIE, "/casts");
+    private final ApiUrl tmdbMovieImages = new ApiUrl(this, BASE_MOVIE, "/images");
+    private final ApiUrl tmdbMovieKeywords = new ApiUrl(this, BASE_MOVIE, "/keywords");
+    private final ApiUrl tmdbMovieReleaseInfo = new ApiUrl(this, BASE_MOVIE, "/releases");
+    private final ApiUrl tmdbMovieTrailers = new ApiUrl(this, BASE_MOVIE, "/trailers");
+    private final ApiUrl tmdbMovieTranslations = new ApiUrl(this, BASE_MOVIE, "/translations");
+    private final ApiUrl tmdbPersonInfo = new ApiUrl(this, BASE_PERSON);
+    private final ApiUrl tmdbPersonCredits = new ApiUrl(this, BASE_PERSON, "/credits");
+    private final ApiUrl tmdbPersonImages = new ApiUrl(this, BASE_PERSON, "/images");
+    private final ApiUrl tmdbLatestMovie = new ApiUrl(this, "latest/movie");
 
     /*
      * Jackson JSON configuration
@@ -73,13 +73,17 @@ public class TheMovieDb {
      */
     public TheMovieDb(String apiKey) throws IOException {
         this.apiKey = apiKey;
-        URL configUrl = TMDB_CONFIG_URL.getQueryUrl("");
+        URL configUrl = tmdbConfigUrl.getQueryUrl("");
         mapper.configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
         tmdbConfig = mapper.readValue(configUrl, TmdbConfiguration.class);
         mapper.configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, false);
         FilteringLayout.addApiKey(apiKey);
     }
 
+    /**
+     * Get the API key that is to be used
+     * @return
+     */
     public String getApiKey() {
         return apiKey;
     }
@@ -92,7 +96,7 @@ public class TheMovieDb {
      */
     public List<MovieDb> searchMovie(String movieName, String language, boolean allResults) {
         try {
-            URL url = TMDB_SEARCH_MOVIE.getQueryUrl(movieName, language, 1);
+            URL url = tmdbSearchMovie.getQueryUrl(movieName, language, 1);
             WrapperResultList resultList = mapper.readValue(url, WrapperResultList.class);
             return resultList.getResults();
         } catch (IOException ex) {
@@ -111,7 +115,7 @@ public class TheMovieDb {
      */
     public MovieDb getMovieInfo(int movieId, String language) {
         try {
-            URL url = TMDB_MOVIE_INFO.getIdUrl(movieId, language);
+            URL url = tmdbMovieInfo.getIdUrl(movieId, language);
             return mapper.readValue(url, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
@@ -129,7 +133,7 @@ public class TheMovieDb {
      */
     public MovieDb getMovieInfoImdb(String imdbId, String language) {
         try {
-            URL url = TMDB_MOVIE_INFO.getIdUrl(imdbId, language);
+            URL url = tmdbMovieInfo.getIdUrl(imdbId, language);
             return mapper.readValue(url, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
@@ -147,7 +151,7 @@ public class TheMovieDb {
      */
     public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) {
         try {
-            URL url = TMDB_MOVIE_ALT_TITLES.getIdUrl(movieId, country);
+            URL url = tmdbMovieAltTitles.getIdUrl(movieId, country);
             WrapperAlternativeTitles at = mapper.readValue(url, WrapperAlternativeTitles.class);
             return at.getTitles();
         } catch (IOException ex) {
@@ -167,7 +171,7 @@ public class TheMovieDb {
         List<Person> people = new ArrayList<Person>();
 
         try {
-            URL url = TMDB_MOVIE_CASTS.getIdUrl(movieId);
+            URL url = tmdbMovieCasts.getIdUrl(movieId);
             WrapperMovieCasts mc = mapper.readValue(url, WrapperMovieCasts.class);
 
             // Add a cast member
@@ -202,7 +206,7 @@ public class TheMovieDb {
     public List<Artwork> getMovieImages(int movieId, String language) {
         List<Artwork> artwork = new ArrayList<Artwork>();
         try {
-            URL url = TMDB_MOVIE_IMAGES.getIdUrl(movieId, language);
+            URL url = tmdbMovieImages.getIdUrl(movieId, language);
             WrapperImages mi = mapper.readValue(url, WrapperImages.class);
 
             // Add all the posters to the list
@@ -233,7 +237,7 @@ public class TheMovieDb {
      */
     public List<Keyword> getMovieKeywords(int movieId) {
         try {
-            URL url = TMDB_MOVIE_KEYWORDS.getIdUrl(movieId);
+            URL url = tmdbMovieKeywords.getIdUrl(movieId);
             WrapperMovieKeywords mk = mapper.readValue(url, WrapperMovieKeywords.class);
             return mk.getKeywords();
         } catch (IOException ex) {
@@ -252,7 +256,7 @@ public class TheMovieDb {
      */
     public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) {
         try {
-            URL url = TMDB_MOVIE_RELEASE_INFO.getIdUrl(movieId);
+            URL url = tmdbMovieReleaseInfo.getIdUrl(movieId);
             WrapperReleaseInfo ri = mapper.readValue(url, WrapperReleaseInfo.class);
             return ri.getCountries();
         } catch (IOException ex) {
@@ -272,7 +276,7 @@ public class TheMovieDb {
     public List<Trailer> getMovieTrailers(int movieId, String language) {
         List<Trailer> trailers = new ArrayList<Trailer>();
         try {
-            URL url = TMDB_MOVIE_TRAILERS.getIdUrl(movieId);
+            URL url = tmdbMovieTrailers.getIdUrl(movieId);
             WrapperTrailers wt = mapper.readValue(url, WrapperTrailers.class);
 
             // Add the trailer to the return list along with it's source
@@ -302,7 +306,7 @@ public class TheMovieDb {
      */
     public List<Translation> getMovieTranslations(int movieId) {
         try {
-            URL url = TMDB_MOVIE_TRANSLATIONS.getIdUrl(movieId);
+            URL url = tmdbMovieTranslations.getIdUrl(movieId);
             WrapperTranslations wt = mapper.readValue(url, WrapperTranslations.class);
             return wt.getTranslations();
         } catch (IOException ex) {
@@ -322,7 +326,7 @@ public class TheMovieDb {
      */
     public CollectionInfo getCollectionInfo(int movieId, String language) {
         try {
-            URL url = TMDB_COLLECTION_INFO.getIdUrl(movieId);
+            URL url = tmdbCollectionInfo.getIdUrl(movieId);
             return mapper.readValue(url, CollectionInfo.class);
         } catch (IOException ex) {
             return new CollectionInfo();
@@ -376,7 +380,7 @@ public class TheMovieDb {
     public List<Person> searchPeople(String personName, boolean allResults) {
 
         try {
-            URL url = TMDB_SEARCH_PEOPLE.getQueryUrl(personName, "", 1);
+            URL url = tmdbSearchPeople.getQueryUrl(personName, "", 1);
             WrapperPerson resultList = mapper.readValue(url, WrapperPerson.class);
             return resultList.getResults();
         } catch (IOException ex) {
@@ -394,7 +398,7 @@ public class TheMovieDb {
      */
     public Person getPersonInfo(int personId) {
         try {
-            URL url = TMDB_PERSON_INFO.getIdUrl(personId);
+            URL url = tmdbPersonInfo.getIdUrl(personId);
             return mapper.readValue(url, Person.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
@@ -414,7 +418,7 @@ public class TheMovieDb {
         List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
 
         try {
-            URL url = TMDB_PERSON_CREDITS.getIdUrl(personId);
+            URL url = tmdbPersonCredits.getIdUrl(personId);
             WrapperPersonCredits pc = mapper.readValue(url, WrapperPersonCredits.class);
 
             // Add a cast member
@@ -446,7 +450,7 @@ public class TheMovieDb {
         List<Artwork> personImages = new ArrayList<Artwork>();
 
         try {
-            URL url = TMDB_PERSON_IMAGES.getIdUrl(personId);
+            URL url = tmdbPersonImages.getIdUrl(personId);
             WrapperImages images = mapper.readValue(url, WrapperImages.class);
 
             // Update the image type
@@ -468,7 +472,7 @@ public class TheMovieDb {
      */
     public MovieDb getLatestMovie() {
         try {
-            URL url = TMDB_LATEST_MOVIE.getIdUrl("");
+            URL url = tmdbLatestMovie.getIdUrl("");
             return mapper.readValue(url, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get latest movie: " + ex.getMessage());

@@ -34,7 +34,7 @@ public class ApiUrl {
     /*
      * TheMovieDb API Base URL
      */
-    private final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
+    private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
     /*
      * Parameter configuration
      */
@@ -52,15 +52,15 @@ public class ApiUrl {
      */
     private String method;
     private String submethod;
-    private TheMovieDb TMDb;
+    private TheMovieDb tmdb;
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
     /**
      * Constructor for the simple API URL method without a sub-method
      * @param method
      */
-    public ApiUrl(TheMovieDb TMDb, String method) {
-        this.TMDb = TMDb;
+    public ApiUrl(TheMovieDb tmdb, String method) {
+        this.tmdb = tmdb;
         this.method = method;
         this.submethod = DEFAULT_STRING;
     }
@@ -70,8 +70,8 @@ public class ApiUrl {
      * @param method
      * @param submethod
      */
-    public ApiUrl(TheMovieDb TMDb, String method, String submethod) {
-        this.TMDb = TMDb;
+    public ApiUrl(TheMovieDb tmdb, String method, String submethod) {
+        this.tmdb = tmdb;
         this.method = method;
         this.submethod = submethod;
     }
@@ -123,7 +123,7 @@ public class ApiUrl {
             urlString.append(DELIMITER_SUBSEQUENT);
         }
         urlString.append(PARAMETER_API_KEY);
-        urlString.append(TMDb.getApiKey());
+        urlString.append(tmdb.getApiKey());
 
         // Append the language to the URL
         if (StringUtils.isNotBlank(language)) {

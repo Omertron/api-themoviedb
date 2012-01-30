@@ -137,12 +137,6 @@ public class Collection {
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
-        if ((this.posterPath == null) ? (other.posterPath != null) : !this.posterPath.equals(other.posterPath)) {
-            return false;
-        }
-        if ((this.releaseDate == null) ? (other.releaseDate != null) : !this.releaseDate.equals(other.releaseDate)) {
-            return false;
-        }
         return true;
     }
 

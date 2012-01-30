@@ -118,9 +118,6 @@ public class PersonCrew {
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
-        if ((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath)) {
-            return false;
-        }
         return true;
     }
 
