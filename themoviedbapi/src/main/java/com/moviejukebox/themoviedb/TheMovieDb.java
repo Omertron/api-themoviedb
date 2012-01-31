@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -74,9 +73,8 @@ public class TheMovieDb {
     public TheMovieDb(String apiKey) throws IOException {
         this.apiKey = apiKey;
         URL configUrl = tmdbConfigUrl.getQueryUrl("");
-        mapper.configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
-        tmdbConfig = mapper.readValue(configUrl, TmdbConfiguration.class);
-        mapper.configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, false);
+        WrapperConfig wc = mapper.readValue(configUrl, WrapperConfig.class);
+        tmdbConfig = wc.getTmdbConfiguration();
         FilteringLayout.addApiKey(apiKey);
     }
 

@@ -17,13 +17,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonRootName;
 
 /**
  *
  * @author stuart.boston
  */
-@JsonRootName("images")
 public class TmdbConfiguration {
 
     /*
@@ -80,6 +78,7 @@ public class TmdbConfiguration {
 
     /**
      * Copy the data from the passed object to this one
+     *
      * @param config
      */
     public void clone(TmdbConfiguration config) {
@@ -91,11 +90,12 @@ public class TmdbConfiguration {
 
     /**
      * Check that the poster size is valid
+     *
      * @param posterSize
      * @return
      */
     public boolean isValidPosterSize(String posterSize) {
-        if (StringUtils.isBlank(posterSize)) {
+        if (StringUtils.isBlank(posterSize) || posterSizes.isEmpty()) {
             return false;
         }
         return posterSizes.contains(posterSize);
@@ -103,11 +103,12 @@ public class TmdbConfiguration {
 
     /**
      * Check that the backdrop size is valid
+     *
      * @param backdropSize
      * @return
      */
     public boolean isValidBackdropSize(String backdropSize) {
-        if (StringUtils.isBlank(backdropSize)) {
+        if (StringUtils.isBlank(backdropSize) || backdropSizes.isEmpty()) {
             return false;
         }
         return backdropSizes.contains(backdropSize);
@@ -115,11 +116,12 @@ public class TmdbConfiguration {
 
     /**
      * Check that the profile size is valid
+     *
      * @param profileSize
      * @return
      */
     public boolean isValidProfileSize(String profileSize) {
-        if (StringUtils.isBlank(profileSize)) {
+        if (StringUtils.isBlank(profileSize) || profileSizes.isEmpty()) {
             return false;
         }
         return profileSizes.contains(profileSize);
@@ -127,6 +129,7 @@ public class TmdbConfiguration {
 
     /**
      * Check to see if the size is valid for any of the images types
+     *
      * @param sizeToCheck
      * @return
      */
@@ -136,6 +139,7 @@ public class TmdbConfiguration {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
