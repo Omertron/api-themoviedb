@@ -50,7 +50,7 @@ public class MovieDb {
     @JsonProperty("belongs_to_collection")
     private Collection belongsToCollection;
     @JsonProperty("budget")
-    private int budget;
+    private long budget;
     @JsonProperty("genres")
     private List<Genre> genres;
     @JsonProperty("homepage")
@@ -64,7 +64,7 @@ public class MovieDb {
     @JsonProperty("production_countries")
     private List<ProductionCountry> productionCountries;
     @JsonProperty("revenue")
-    private int revenue;
+    private long revenue;
     @JsonProperty("runtime")
     private int runtime;
     @JsonProperty("spoken_languages")
@@ -113,7 +113,7 @@ public class MovieDb {
         return belongsToCollection;
     }
 
-    public int getBudget() {
+    public long getBudget() {
         return budget;
     }
 
@@ -141,7 +141,7 @@ public class MovieDb {
         return productionCountries;
     }
 
-    public int getRevenue() {
+    public long getRevenue() {
         return revenue;
     }
 
@@ -203,7 +203,7 @@ public class MovieDb {
         this.belongsToCollection = belongsToCollection;
     }
 
-    public void setBudget(int budget) {
+    public void setBudget(long budget) {
         this.budget = budget;
     }
 
@@ -231,7 +231,7 @@ public class MovieDb {
         this.productionCountries = productionCountries;
     }
 
-    public void setRevenue(int revenue) {
+    public void setRevenue(long revenue) {
         this.revenue = revenue;
     }
 
@@ -276,51 +276,28 @@ public class MovieDb {
         if (obj == null) {
             return false;
         }
-
         if (getClass() != obj.getClass()) {
             return false;
         }
-
         final MovieDb other = (MovieDb) obj;
-
         if (this.id != other.id) {
             return false;
         }
-
-        // Dirty way of checking that all the fields are the same
-        if (this.toString().equals(other.toString())) {
+        if ((this.imdbID == null) ? (other.imdbID != null) : !this.imdbID.equals(other.imdbID)) {
             return false;
         }
-
+        if (this.runtime != other.runtime) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        int multiplier = 97;
-        hash = multiplier * hash + (this.backdropPath != null ? this.backdropPath.hashCode() : 0);
-        hash = multiplier * hash + this.id;
-        hash = multiplier * hash + (this.originalTitle != null ? this.originalTitle.hashCode() : 0);
-        hash = multiplier * hash + Float.floatToIntBits(this.popularity);
-        hash = multiplier * hash + (this.posterPath != null ? this.posterPath.hashCode() : 0);
-        hash = multiplier * hash + (this.releaseDate != null ? this.releaseDate.hashCode() : 0);
-        hash = multiplier * hash + (this.title != null ? this.title.hashCode() : 0);
-        hash = multiplier * hash + (this.adult ? 1 : 0);
-        hash = multiplier * hash + (this.belongsToCollection != null ? this.belongsToCollection.hashCode() : 0);
-        hash = multiplier * hash + this.budget;
-        hash = multiplier * hash + (this.genres != null ? this.genres.hashCode() : 0);
-        hash = multiplier * hash + (this.homepage != null ? this.homepage.hashCode() : 0);
-        hash = multiplier * hash + (this.imdbID != null ? this.imdbID.hashCode() : 0);
-        hash = multiplier * hash + (this.overview != null ? this.overview.hashCode() : 0);
-        hash = multiplier * hash + (this.productionCompanies != null ? this.productionCompanies.hashCode() : 0);
-        hash = multiplier * hash + (this.productionCountries != null ? this.productionCountries.hashCode() : 0);
-        hash = multiplier * hash + this.revenue;
-        hash = multiplier * hash + this.runtime;
-        hash = multiplier * hash + (this.spokenLanguages != null ? this.spokenLanguages.hashCode() : 0);
-        hash = multiplier * hash + (this.tagline != null ? this.tagline.hashCode() : 0);
-        hash = multiplier * hash + Float.floatToIntBits(this.voteAverage);
-        hash = multiplier * hash + this.voteCount;
+        int hash = 5;
+        hash = 89 * hash + this.id;
+        hash = 89 * hash + (this.imdbID != null ? this.imdbID.hashCode() : 0);
+        hash = 89 * hash + this.runtime;
         return hash;
     }
     //</editor-fold>
