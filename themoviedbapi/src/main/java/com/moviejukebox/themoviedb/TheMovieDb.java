@@ -80,6 +80,7 @@ public class TheMovieDb {
 
     /**
      * Get the API key that is to be used
+     *
      * @return
      */
     public String getApiKey() {
@@ -466,6 +467,7 @@ public class TheMovieDb {
 
     /**
      * This method is used to retrieve the newest movie that was added to TMDb.
+     *
      * @return
      */
     public MovieDb getLatestMovie() {
@@ -491,30 +493,29 @@ public class TheMovieDb {
             return false;
         }
 
-        if (StringUtils.isNotBlank(year)) {
-            if (StringUtils.isNotBlank(moviedb.getReleaseDate())) {
-                // Compare with year
-                String movieYear = moviedb.getReleaseDate().substring(0, 4);
-                if (movieYear.equals(year)) {
-                    if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
-                        return true;
-                    }
+        if (StringUtils.isNotBlank(year) && !year.equalsIgnoreCase("UNKNOWN") && StringUtils.isNotBlank(moviedb.getReleaseDate())) {
+            // Compare with year
+            String movieYear = moviedb.getReleaseDate().substring(0, 4);
+            if (movieYear.equals(year)) {
+                if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
+                    return true;
+                }
 
-                    if (moviedb.getTitle().equalsIgnoreCase(title)) {
-                        return true;
-                    }
+                if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                    return true;
                 }
             }
-        } else {
-            // Compare without year
-            if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
-                return true;
-            }
-
-            if (moviedb.getTitle().equalsIgnoreCase(title)) {
-                return true;
-            }
         }
+
+        // Compare without year
+        if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
+            return true;
+        }
+
+        if (moviedb.getTitle().equalsIgnoreCase(title)) {
+            return true;
+        }
+
         return false;
     }
 }
