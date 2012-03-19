@@ -74,7 +74,8 @@ public class TheMovieDb {
     public TheMovieDb(String apiKey) throws IOException {
         this.apiKey = apiKey;
         URL configUrl = tmdbConfigUrl.getQueryUrl("");
-        WrapperConfig wc = mapper.readValue(configUrl, WrapperConfig.class);
+        String webPage = WebBrowser.request(configUrl);
+        WrapperConfig wc = mapper.readValue(webPage, WrapperConfig.class);
         tmdbConfig = wc.getTmdbConfiguration();
         FilteringLayout.addApiKey(apiKey);
     }
