@@ -14,7 +14,6 @@ package com.moviejukebox.themoviedb;
 
 import com.moviejukebox.themoviedb.model.*;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -38,7 +37,7 @@ public class TheMovieDbTest {
     private static final int ID_STAR_WARS_COLLECTION = 10;
     private static final int ID_BRUCE_WILLIS = 62;
 
-    public TheMovieDbTest() throws IOException {
+    public TheMovieDbTest() throws MovieDbException {
         tmdb = new TheMovieDb(API_KEY);
     }
 
@@ -78,7 +77,7 @@ public class TheMovieDbTest {
      * Test of searchMovie method, of class TheMovieDb.
      */
     @Test
-    public void testSearchMovie() throws UnsupportedEncodingException {
+    public void testSearchMovie() throws MovieDbException  {
         LOGGER.info("searchMovie");
 
         // Try a movie with less than 1 page of results
@@ -98,7 +97,7 @@ public class TheMovieDbTest {
      * Test of getMovieInfo method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieInfo() {
+    public void testGetMovieInfo() throws MovieDbException {
         LOGGER.info("getMovieInfo");
         String language = "en";
         MovieDb result = tmdb.getMovieInfo(ID_BLADE_RUNNER, language);
@@ -109,7 +108,7 @@ public class TheMovieDbTest {
      * Test of getMovieAlternativeTitles method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieAlternativeTitles() {
+    public void testGetMovieAlternativeTitles() throws MovieDbException {
         LOGGER.info("getMovieAlternativeTitles");
         String country = "";
         List<AlternativeTitle> results = tmdb.getMovieAlternativeTitles(ID_BLADE_RUNNER, country);
@@ -125,7 +124,7 @@ public class TheMovieDbTest {
      * Test of getMovieCasts method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieCasts() {
+    public void testGetMovieCasts() throws MovieDbException {
         LOGGER.info("getMovieCasts");
         List<Person> people = tmdb.getMovieCasts(ID_BLADE_RUNNER);
         assertTrue("No cast information", people.size() > 0);
@@ -152,7 +151,7 @@ public class TheMovieDbTest {
      * Test of getMovieImages method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieImages() {
+    public void testGetMovieImages() throws MovieDbException {
         LOGGER.info("getMovieImages");
         String language = "";
         List<Artwork> result = tmdb.getMovieImages(ID_BLADE_RUNNER, language);
@@ -163,7 +162,7 @@ public class TheMovieDbTest {
      * Test of getMovieKeywords method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieKeywords() {
+    public void testGetMovieKeywords() throws MovieDbException {
         LOGGER.info("getMovieKeywords");
         List<Keyword> result = tmdb.getMovieKeywords(ID_BLADE_RUNNER);
         assertFalse("No keywords found", result.isEmpty());
@@ -173,7 +172,7 @@ public class TheMovieDbTest {
      * Test of getMovieReleaseInfo method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieReleaseInfo() {
+    public void testGetMovieReleaseInfo() throws MovieDbException {
         LOGGER.info("getMovieReleaseInfo");
         List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_BLADE_RUNNER, "");
         assertFalse("Release information missing", result.isEmpty());
@@ -183,7 +182,7 @@ public class TheMovieDbTest {
      * Test of getMovieTrailers method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieTrailers() {
+    public void testGetMovieTrailers() throws MovieDbException {
         LOGGER.info("getMovieTrailers");
         List<Trailer> result = tmdb.getMovieTrailers(ID_BLADE_RUNNER, "");
         assertFalse("Movie trailers missing", result.isEmpty());
@@ -193,7 +192,7 @@ public class TheMovieDbTest {
      * Test of getMovieTranslations method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieTranslations() {
+    public void testGetMovieTranslations() throws MovieDbException {
         LOGGER.info("getMovieTranslations");
         List<Translation> result = tmdb.getMovieTranslations(ID_BLADE_RUNNER);
         assertFalse("No translations found", result.isEmpty());
@@ -203,7 +202,7 @@ public class TheMovieDbTest {
      * Test of getCollectionInfo method, of class TheMovieDb.
      */
     @Test
-    public void testGetCollectionInfo() {
+    public void testGetCollectionInfo() throws MovieDbException {
         LOGGER.info("getCollectionInfo");
         String language = "";
         CollectionInfo result = tmdb.getCollectionInfo(ID_STAR_WARS_COLLECTION, language);
@@ -211,7 +210,7 @@ public class TheMovieDbTest {
     }
 
     @Test
-    public void testCreateImageUrl() {
+    public void testCreateImageUrl() throws MovieDbException {
         LOGGER.info("createImageUrl");
         MovieDb movie = tmdb.getMovieInfo(ID_BLADE_RUNNER, "");
         String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
@@ -222,7 +221,7 @@ public class TheMovieDbTest {
      * Test of getMovieInfoImdb method, of class TheMovieDb.
      */
     @Test
-    public void testGetMovieInfoImdb() {
+    public void testGetMovieInfoImdb() throws MovieDbException {
         LOGGER.info("getMovieInfoImdb");
         MovieDb result = tmdb.getMovieInfoImdb("tt0076759", "en-US");
         assertTrue("Error getting the movie from IMDB ID", result.getId() == 11);
@@ -256,7 +255,7 @@ public class TheMovieDbTest {
      * Test of searchPeople method, of class TheMovieDb.
      */
     @Test
-    public void testSearchPeople() {
+    public void testSearchPeople() throws MovieDbException {
         LOGGER.info("searchPeople");
         String personName = "Bruce Willis";
         boolean allResults = false;
@@ -268,7 +267,7 @@ public class TheMovieDbTest {
      * Test of getPersonInfo method, of class TheMovieDb.
      */
     @Test
-    public void testGetPersonInfo() {
+    public void testGetPersonInfo() throws MovieDbException {
         LOGGER.info("getPersonInfo");
         Person result = tmdb.getPersonInfo(ID_BRUCE_WILLIS);
         assertTrue("Wrong actor returned", result.getId() == ID_BRUCE_WILLIS);
@@ -278,7 +277,7 @@ public class TheMovieDbTest {
      * Test of getPersonCredits method, of class TheMovieDb.
      */
     @Test
-    public void testGetPersonCredits() {
+    public void testGetPersonCredits() throws MovieDbException {
         LOGGER.info("getPersonCredits");
 
         List<PersonCredit> people = tmdb.getPersonCredits(ID_BRUCE_WILLIS);
@@ -289,7 +288,7 @@ public class TheMovieDbTest {
      * Test of getPersonImages method, of class TheMovieDb.
      */
     @Test
-    public void testGetPersonImages() {
+    public void testGetPersonImages() throws MovieDbException {
         LOGGER.info("getPersonImages");
 
         List<Artwork> artwork = tmdb.getPersonImages(ID_BRUCE_WILLIS);
@@ -300,7 +299,7 @@ public class TheMovieDbTest {
      * Test of getLatestMovie method, of class TheMovieDb.
      */
     @Test
-    public void testGetLatestMovie() {
+    public void testGetLatestMovie() throws MovieDbException {
         LOGGER.info("getLatestMovie");
         MovieDb result = tmdb.getLatestMovie();
         LOGGER.info(result.toString());

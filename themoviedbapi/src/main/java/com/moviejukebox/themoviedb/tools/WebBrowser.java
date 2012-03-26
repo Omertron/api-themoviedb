@@ -12,11 +12,13 @@
  */
 package com.moviejukebox.themoviedb.tools;
 
+import com.moviejukebox.themoviedb.MovieDbException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -27,12 +29,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 
 /**
  * Web browser with simple cookies support
  */
 public final class WebBrowser {
 
+    private static final Logger LOGGER = Logger.getLogger(WebBrowser.class);
     private static Map<String, String> browserProperties = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
@@ -58,27 +62,35 @@ public final class WebBrowser {
         }
     }
 
-    public static String request(String url) throws IOException {
-        return request(new URL(url));
+    public static String request(String url) throws MovieDbException {
+        try {
+            return request(new URL(url));
+        } catch (MalformedURLException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null);
+        }
     }
 
-    public static URLConnection openProxiedConnection(URL url) throws IOException {
-        if (proxyHost != null) {
-            System.getProperties().put("proxySet", "true");
-            System.getProperties().put("proxyHost", proxyHost);
-            System.getProperties().put("proxyPort", proxyPort);
+    public static URLConnection openProxiedConnection(URL url) throws MovieDbException {
+        try {
+            if (proxyHost != null) {
+                System.getProperties().put("proxySet", "true");
+                System.getProperties().put("proxyHost", proxyHost);
+                System.getProperties().put("proxyPort", proxyPort);
+            }
+
+            URLConnection cnx = url.openConnection();
+
+            if (proxyUsername != null) {
+                cnx.setRequestProperty("Proxy-Authorization", proxyEncodedPassword);
+            }
+
+            return cnx;
+        } catch (IOException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null);
         }
-
-        URLConnection cnx = url.openConnection();
-
-        if (proxyUsername != null) {
-            cnx.setRequestProperty("Proxy-Authorization", proxyEncodedPassword);
-        }
-
-        return cnx;
     }
 
-    public static String request(URL url) throws IOException {
+    public static String request(URL url) throws MovieDbException {
         StringWriter content = null;
 
         try {
@@ -106,9 +118,15 @@ public final class WebBrowser {
                 }
             }
             return content.toString();
+        } catch (IOException error) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null);
         } finally {
             if (content != null) {
-                content.close();
+                try {
+                    content.close();
+                } catch (IOException ex) {
+                    LOGGER.debug("Failed to close connection: " + ex.getMessage());
+                }
             }
         }
     }

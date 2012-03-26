@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb;
 
+import com.moviejukebox.themoviedb.MovieDbException.MovieDbExceptionType;
 import com.moviejukebox.themoviedb.model.*;
 import com.moviejukebox.themoviedb.tools.ApiUrl;
 import com.moviejukebox.themoviedb.tools.FilteringLayout;
@@ -71,13 +72,18 @@ public class TheMovieDb {
      * @param apiKey
      * @throws IOException
      */
-    public TheMovieDb(String apiKey) throws IOException {
+    public TheMovieDb(String apiKey) throws MovieDbException {
         this.apiKey = apiKey;
         URL configUrl = tmdbConfigUrl.getQueryUrl("");
         String webPage = WebBrowser.request(configUrl);
-        WrapperConfig wc = mapper.readValue(webPage, WrapperConfig.class);
-        tmdbConfig = wc.getTmdbConfiguration();
         FilteringLayout.addApiKey(apiKey);
+
+        try {
+            WrapperConfig wc = mapper.readValue(webPage, WrapperConfig.class);
+            tmdbConfig = wc.getTmdbConfiguration();
+        } catch (IOException error) {
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration");
+        }
     }
 
     /**
@@ -90,11 +96,12 @@ public class TheMovieDb {
     }
 
     /**
-     * Set the proxy information 
+     * Set the proxy information
+     *
      * @param host
      * @param port
      * @param username
-     * @param password 
+     * @param password
      */
     public void setProxy(String host, String port, String username, String password) {
         WebBrowser.setProxyHost(host);
@@ -105,8 +112,9 @@ public class TheMovieDb {
 
     /**
      * Set the connection and read time out values
+     *
      * @param connect
-     * @param read 
+     * @param read
      */
     public void setTimeout(int connect, int read) {
         WebBrowser.setWebTimeoutConnect(connect);
@@ -119,15 +127,16 @@ public class TheMovieDb {
      * through movies quickly. http://help.themoviedb.org/kb/api/search-movies
      * TODO: Make the allResults work
      */
-    public List<MovieDb> searchMovie(String movieName, String language, boolean allResults) {
+    public List<MovieDb> searchMovie(String movieName, String language, boolean allResults) throws MovieDbException {
+
+        URL url = tmdbSearchMovie.getQueryUrl(movieName, language, 1);
+        String webPage = WebBrowser.request(url);
         try {
-            URL url = tmdbSearchMovie.getQueryUrl(movieName, language, 1);
-            String webPage = WebBrowser.request(url);
             WrapperResultList resultList = mapper.readValue(webPage, WrapperResultList.class);
             return resultList.getResults();
-        } catch (IOException ex) {
-            LOGGER.warn("Failed to find movie: " + ex.getMessage());
-            return new ArrayList<MovieDb>();
+        } catch (IOException error) {
+            LOGGER.warn("Failed to find movie: " + error.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
@@ -139,15 +148,16 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public MovieDb getMovieInfo(int movieId, String language) {
+    public MovieDb getMovieInfo(int movieId, String language) throws MovieDbException {
+
+        URL url = tmdbMovieInfo.getIdUrl(movieId, language);
+        String webPage = WebBrowser.request(url);
         try {
-            URL url = tmdbMovieInfo.getIdUrl(movieId, language);
-            String webPage = WebBrowser.request(url);
             return mapper.readValue(webPage, MovieDb.class);
-        } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+        } catch (IOException error) {
+            LOGGER.warn("Failed to get movie info: " + error.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return new MovieDb();
     }
 
     /**
@@ -158,15 +168,16 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public MovieDb getMovieInfoImdb(String imdbId, String language) {
+    public MovieDb getMovieInfoImdb(String imdbId, String language) throws MovieDbException {
+
+        URL url = tmdbMovieInfo.getIdUrl(imdbId, language);
+        String webPage = WebBrowser.request(url);
         try {
-            URL url = tmdbMovieInfo.getIdUrl(imdbId, language);
-            String webPage = WebBrowser.request(url);
             return mapper.readValue(webPage, MovieDb.class);
-        } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+        } catch (IOException error) {
+            LOGGER.warn("Failed to get movie info: " + error.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return new MovieDb();
     }
 
     /**
@@ -177,16 +188,17 @@ public class TheMovieDb {
      * @param country
      * @return
      */
-    public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) {
+    public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
+
+        URL url = tmdbMovieAltTitles.getIdUrl(movieId, country);
+        String webPage = WebBrowser.request(url);
         try {
-            URL url = tmdbMovieAltTitles.getIdUrl(movieId, country);
-            String webPage = WebBrowser.request(url);
             WrapperAlternativeTitles at = mapper.readValue(webPage, WrapperAlternativeTitles.class);
             return at.getTitles();
-        } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie alternative titles: " + ex.getMessage());
+        } catch (IOException error) {
+            LOGGER.warn("Failed to get movie alternative titles: " + error.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return new ArrayList<AlternativeTitle>();
     }
 
     /**
@@ -196,12 +208,13 @@ public class TheMovieDb {
      * @param movieId
      * @return
      */
-    public List<Person> getMovieCasts(int movieId) {
+    public List<Person> getMovieCasts(int movieId) throws MovieDbException {
+
         List<Person> people = new ArrayList<Person>();
 
+        URL url = tmdbMovieCasts.getIdUrl(movieId);
+        String webPage = WebBrowser.request(url);
         try {
-            URL url = tmdbMovieCasts.getIdUrl(movieId);
-            String webPage = WebBrowser.request(url);
             WrapperMovieCasts mc = mapper.readValue(webPage, WrapperMovieCasts.class);
 
             // Add a cast member
@@ -219,10 +232,10 @@ public class TheMovieDb {
             }
 
             return people;
-        } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie casts: " + ex.getMessage());
+        } catch (IOException error) {
+            LOGGER.warn("Failed to get movie casts: " + error.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return people;
     }
 
     /**
@@ -233,11 +246,12 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public List<Artwork> getMovieImages(int movieId, String language) {
+    public List<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
+
         List<Artwork> artwork = new ArrayList<Artwork>();
+        URL url = tmdbMovieImages.getIdUrl(movieId, language);
+        String webPage = WebBrowser.request(url);
         try {
-            URL url = tmdbMovieImages.getIdUrl(movieId, language);
-            String webPage = WebBrowser.request(url);
             WrapperImages mi = mapper.readValue(webPage, WrapperImages.class);
 
             // Add all the posters to the list
@@ -253,10 +267,10 @@ public class TheMovieDb {
             }
 
             return artwork;
-        } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie images: " + ex.getMessage());
+        } catch (IOException error) {
+            LOGGER.warn("Failed to get movie images: " + error.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return artwork;
     }
 
     /**
@@ -266,16 +280,18 @@ public class TheMovieDb {
      * @param movieId
      * @return
      */
-    public List<Keyword> getMovieKeywords(int movieId) {
+    public List<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
+
+        URL url = tmdbMovieKeywords.getIdUrl(movieId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbMovieKeywords.getIdUrl(movieId);
-            String webPage = WebBrowser.request(url);
             WrapperMovieKeywords mk = mapper.readValue(webPage, WrapperMovieKeywords.class);
             return mk.getKeywords();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie keywords: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return new ArrayList<Keyword>();
     }
 
     /**
@@ -286,16 +302,18 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) {
+    public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
+
+        URL url = tmdbMovieReleaseInfo.getIdUrl(movieId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbMovieReleaseInfo.getIdUrl(movieId);
-            String webPage = WebBrowser.request(url);
             WrapperReleaseInfo ri = mapper.readValue(webPage, WrapperReleaseInfo.class);
             return ri.getCountries();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie release information: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return new ArrayList<ReleaseInfo>();
     }
 
     /**
@@ -306,11 +324,13 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public List<Trailer> getMovieTrailers(int movieId, String language) {
+    public List<Trailer> getMovieTrailers(int movieId, String language) throws MovieDbException {
+
         List<Trailer> trailers = new ArrayList<Trailer>();
+        URL url = tmdbMovieTrailers.getIdUrl(movieId, language);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbMovieTrailers.getIdUrl(movieId);
-            String webPage = WebBrowser.request(url);
             WrapperTrailers wt = mapper.readValue(webPage, WrapperTrailers.class);
 
             // Add the trailer to the return list along with it's source
@@ -318,7 +338,6 @@ public class TheMovieDb {
                 trailer.setWebsite(Trailer.WEBSITE_QUICKTIME);
                 trailers.add(trailer);
             }
-
             // Add the trailer to the return list along with it's source
             for (Trailer trailer : wt.getYoutube()) {
                 trailer.setWebsite(Trailer.WEBSITE_YOUTUBE);
@@ -327,8 +346,8 @@ public class TheMovieDb {
             return trailers;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie trailers: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return trailers;
     }
 
     /**
@@ -338,16 +357,18 @@ public class TheMovieDb {
      * @param movieId
      * @return
      */
-    public List<Translation> getMovieTranslations(int movieId) {
+    public List<Translation> getMovieTranslations(int movieId) throws MovieDbException {
+
+        URL url = tmdbMovieTranslations.getIdUrl(movieId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbMovieTranslations.getIdUrl(movieId);
-            String webPage = WebBrowser.request(url);
             WrapperTranslations wt = mapper.readValue(webPage, WrapperTranslations.class);
             return wt.getTranslations();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie tranlations: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
-        return new ArrayList<Translation>();
     }
 
     /**
@@ -359,13 +380,16 @@ public class TheMovieDb {
      * @param language
      * @return
      */
-    public CollectionInfo getCollectionInfo(int movieId, String language) {
+    public CollectionInfo getCollectionInfo(int movieId, String language) throws MovieDbException {
+
+        URL url = tmdbCollectionInfo.getIdUrl(movieId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbCollectionInfo.getIdUrl(movieId);
-            String webPage = WebBrowser.request(url);
             return mapper.readValue(webPage, CollectionInfo.class);
         } catch (IOException ex) {
-            return new CollectionInfo();
+            LOGGER.warn("Failed to get movie tranlations: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
@@ -385,7 +409,7 @@ public class TheMovieDb {
      * @param requiredSize
      * @return
      */
-    public URL createImageUrl(String imagePath, String requiredSize) {
+    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
         URL returnUrl = null;
         StringBuilder sb;
 
@@ -400,12 +424,11 @@ public class TheMovieDb {
             sb = new StringBuilder(tmdbConfig.getBaseUrl());
             sb.append(requiredSize);
             sb.append(imagePath);
-            returnUrl = new URL(sb.toString());
+            return (new URL(sb.toString()));
         } catch (MalformedURLException ex) {
             LOGGER.warn("Failed to create image URL: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.INVALID_URL, returnUrl.toString());
         }
-
-        return returnUrl;
     }
 
     /**
@@ -413,16 +436,17 @@ public class TheMovieDb {
      * is to be a quick and light method so you can iterate through people
      * quickly. TODO: Fix allResults
      */
-    public List<Person> searchPeople(String personName, boolean allResults) {
+    public List<Person> searchPeople(String personName, boolean allResults) throws MovieDbException {
+
+        URL url = tmdbSearchPeople.getQueryUrl(personName, "", 1);
+        String webPage = WebBrowser.request(url);
 
         try {
-            URL url = tmdbSearchPeople.getQueryUrl(personName, "", 1);
-            String webPage = WebBrowser.request(url);
             WrapperPerson resultList = mapper.readValue(webPage, WrapperPerson.class);
             return resultList.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to find person: " + ex.getMessage());
-            return new ArrayList<Person>();
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
@@ -433,14 +457,16 @@ public class TheMovieDb {
      * @param personId
      * @return
      */
-    public Person getPersonInfo(int personId) {
+    public Person getPersonInfo(int personId) throws MovieDbException {
+
+        URL url = tmdbPersonInfo.getIdUrl(personId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbPersonInfo.getIdUrl(personId);
-            String webPage = WebBrowser.request(url);
             return mapper.readValue(webPage, Person.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
-            return new Person();
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
@@ -452,12 +478,14 @@ public class TheMovieDb {
      * @param personId
      * @return
      */
-    public List<PersonCredit> getPersonCredits(int personId) {
+    public List<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
+
         List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
 
+        URL url = tmdbPersonCredits.getIdUrl(personId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbPersonCredits.getIdUrl(personId);
-            String webPage = WebBrowser.request(url);
             WrapperPersonCredits pc = mapper.readValue(webPage, WrapperPersonCredits.class);
 
             // Add a cast member
@@ -465,17 +493,15 @@ public class TheMovieDb {
                 cast.setPersonType(PersonType.CAST);
                 personCredits.add(cast);
             }
-
             // Add a crew member
             for (PersonCredit crew : pc.getCrew()) {
                 crew.setPersonType(PersonType.CREW);
                 personCredits.add(crew);
             }
-
             return personCredits;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get person credits: " + ex.getMessage());
-            return personCredits;
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
@@ -485,12 +511,14 @@ public class TheMovieDb {
      * @param personId
      * @return
      */
-    public List<Artwork> getPersonImages(int personId) {
+    public List<Artwork> getPersonImages(int personId) throws MovieDbException {
+
         List<Artwork> personImages = new ArrayList<Artwork>();
 
+        URL url = tmdbPersonImages.getIdUrl(personId);
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbPersonImages.getIdUrl(personId);
-            String webPage = WebBrowser.request(url);
             WrapperImages images = mapper.readValue(webPage, WrapperImages.class);
 
             // Update the image type
@@ -498,11 +526,10 @@ public class TheMovieDb {
                 artwork.setArtworkType(ArtworkType.PROFILE);
                 personImages.add(artwork);
             }
-
             return personImages;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get person images: " + ex.getMessage());
-            return personImages;
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
@@ -511,14 +538,16 @@ public class TheMovieDb {
      *
      * @return
      */
-    public MovieDb getLatestMovie() {
+    public MovieDb getLatestMovie() throws MovieDbException {
+
+        URL url = tmdbLatestMovie.getIdUrl("");
+        String webPage = WebBrowser.request(url);
+
         try {
-            URL url = tmdbLatestMovie.getIdUrl("");
-            String webPage = WebBrowser.request(url);
             return mapper.readValue(webPage, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
-            return new MovieDb();
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
 
