@@ -45,8 +45,8 @@ public class ApiUrl {
     private static final String PARAMETER_LANGUAGE = DELIMITER_SUBSEQUENT + "language=";
     private static final String PARAMETER_COUNTRY = DELIMITER_SUBSEQUENT + "country=";
     private static final String PARAMETER_PAGE = DELIMITER_SUBSEQUENT + "page=";
-    private static final String DEFAULT_STRING = "";
-    private static final int DEFAULT_INT = -1;
+    public static final String DEFAULT_STRING = "";
+    public static final int DEFAULT_INT = -1;
     /*
      * Properties
      */

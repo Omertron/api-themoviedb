@@ -190,7 +190,7 @@ public class TheMovieDb {
      */
     public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
 
-        URL url = tmdbMovieAltTitles.getIdUrl(movieId, country);
+        URL url = tmdbMovieAltTitles.getIdUrl(movieId, ApiUrl.DEFAULT_STRING, country);
         String webPage = WebBrowser.request(url);
         try {
             WrapperAlternativeTitles at = mapper.readValue(webPage, WrapperAlternativeTitles.class);
