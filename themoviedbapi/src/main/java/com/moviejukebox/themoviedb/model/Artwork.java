@@ -39,7 +39,7 @@ public class Artwork {
     @JsonProperty("iso_639_1")
     private String language;
     @JsonProperty("width")
-    private String width;
+    private int width;
     @JsonProperty("vote_average")
     private float voteAverage;
     @JsonProperty("vote_count")
@@ -67,7 +67,7 @@ public class Artwork {
         return language;
     }
 
-    public String getWidth() {
+    public int getWidth() {
         return width;
     }
 
@@ -101,7 +101,7 @@ public class Artwork {
         this.language = language;
     }
 
-    public void setWidth(String width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -149,7 +149,7 @@ public class Artwork {
         if ((this.language == null) ? (other.language != null) : !this.language.equals(other.language)) {
             return false;
         }
-        if ((this.width == null) ? (other.width != null) : !this.width.equals(other.width)) {
+        if (this.width != other.width) {
             return false;
         }
         if (this.artworkType != other.artworkType) {
@@ -165,7 +165,7 @@ public class Artwork {
         hash = 71 * hash + (this.filePath != null ? this.filePath.hashCode() : 0);
         hash = 71 * hash + this.height;
         hash = 71 * hash + (this.language != null ? this.language.hashCode() : 0);
-        hash = 71 * hash + (this.width != null ? this.width.hashCode() : 0);
+        hash = 71 * hash + this.width;
         hash = 71 * hash + (this.artworkType != null ? this.artworkType.hashCode() : 0);
         return hash;
     }
