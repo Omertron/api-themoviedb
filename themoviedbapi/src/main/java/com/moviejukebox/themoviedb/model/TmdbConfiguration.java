@@ -39,22 +39,28 @@ public class TmdbConfiguration {
     private List<String> backdropSizes;
     @JsonProperty("profile_sizes")
     private List<String> profileSizes;
+    @JsonProperty("logo_sizes")
+    private List<String> logoSizes;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">//GEN-BEGIN:getterMethods
     public List<String> getBackdropSizes() {
         return backdropSizes;
     }
-
+    
     public String getBaseUrl() {
         return baseUrl;
     }
-
+    
     public List<String> getPosterSizes() {
         return posterSizes;
     }
-
+    
     public List<String> getProfileSizes() {
         return profileSizes;
+    }
+    
+    public List<String> getLogoSizes() {
+        return logoSizes;
     }
     // </editor-fold>
 
@@ -62,19 +68,23 @@ public class TmdbConfiguration {
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
     }
-
+    
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
-
+    
     public void setPosterSizes(List<String> posterSizes) {
         this.posterSizes = posterSizes;
     }
-
+    
     public void setProfileSizes(List<String> profileSizes) {
         this.profileSizes = profileSizes;
     }
-// </editor-fold>
+    
+    public void setLogoSizes(List<String> logoSizes) {
+        this.logoSizes = logoSizes;
+    }
+    // </editor-fold>
 
     /**
      * Copy the data from the passed object to this one
@@ -86,6 +96,7 @@ public class TmdbConfiguration {
         baseUrl = config.getBaseUrl();
         posterSizes = config.getPosterSizes();
         profileSizes = config.getProfileSizes();
+        logoSizes = config.getLogoSizes();
     }
 
     /**
@@ -128,13 +139,29 @@ public class TmdbConfiguration {
     }
 
     /**
+     * Check that the logo size is valid
+     *
+     * @param logoSize
+     * @return
+     */
+    public boolean isValidLogoSize(String logoSize) {
+        if (StringUtils.isBlank(logoSize) || logoSizes.isEmpty()) {
+            return false;
+        }
+        return logoSizes.contains(logoSize);
+    }
+
+    /**
      * Check to see if the size is valid for any of the images types
      *
      * @param sizeToCheck
      * @return
      */
     public boolean isValidSize(String sizeToCheck) {
-        return (isValidPosterSize(sizeToCheck) || isValidBackdropSize(sizeToCheck) || isValidProfileSize(sizeToCheck));
+        return (isValidPosterSize(sizeToCheck) 
+                || isValidBackdropSize(sizeToCheck) 
+                || isValidProfileSize(sizeToCheck) 
+                || isValidLogoSize(sizeToCheck));
     }
 
     /**
@@ -150,7 +177,7 @@ public class TmdbConfiguration {
         sb.append("' value: '").append(value).append("'");
         LOGGER.warn(sb.toString());
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[ImageConfiguration=");
@@ -158,6 +185,7 @@ public class TmdbConfiguration {
         sb.append("],[posterSizes=").append(posterSizes.toString());
         sb.append("],[backdropSizes=").append(backdropSizes.toString());
         sb.append("],[profileSizes=").append(profileSizes.toString());
+        sb.append("],[logoSizes=").append(logoSizes.toString());
         sb.append(("]]"));
         return sb.toString();
     }
