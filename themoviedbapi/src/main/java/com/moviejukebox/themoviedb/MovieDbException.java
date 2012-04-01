@@ -11,14 +11,18 @@ public class MovieDbException extends Exception {
     private final MovieDbExceptionType exceptionType;
     private final String response;
 
-    public MovieDbException(final MovieDbExceptionType exceptionType,
-            final String response) {
-
+    public MovieDbException(final MovieDbExceptionType exceptionType, final String response) {
         super();
         this.exceptionType = exceptionType;
         this.response = response;
     }
 
+    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, Throwable cause) {
+        super(cause);
+        this.exceptionType = exceptionType;
+        this.response = response;
+    }
+    
     public MovieDbExceptionType getExceptionType() {
 
         return exceptionType;

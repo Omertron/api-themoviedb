@@ -66,7 +66,7 @@ public final class WebBrowser {
         try {
             return request(new URL(url));
         } catch (MalformedURLException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null);
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, ex);
         }
     }
 
@@ -86,7 +86,7 @@ public final class WebBrowser {
 
             return cnx;
         } catch (IOException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null);
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, ex);
         }
     }
 
@@ -118,8 +118,8 @@ public final class WebBrowser {
                 }
             }
             return content.toString();
-        } catch (IOException error) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null);
+        } catch (IOException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
         } finally {
             if (content != null) {
                 try {
