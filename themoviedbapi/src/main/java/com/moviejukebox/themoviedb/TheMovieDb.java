@@ -83,7 +83,7 @@ public class TheMovieDb {
      * API for The Movie Db.
      *
      * @param apiKey
-     * @throws IOException
+     * @throws MovieDbException
      */
     public TheMovieDb(String apiKey) throws MovieDbException {
         this.apiKey = apiKey;
@@ -138,7 +138,14 @@ public class TheMovieDb {
      * Search Movies This is a good starting point to start finding movies on
      * TMDb. The idea is to be a quick and light method so you can iterate
      * through movies quickly. http://help.themoviedb.org/kb/api/search-movies
+     *
      * TODO: Make the allResults work
+     *
+     * @param movieName
+     * @param language
+     * @param allResults
+     * @return
+     * @throws MovieDbException
      */
     public List<MovieDb> searchMovie(String movieName, String language, boolean allResults) throws MovieDbException {
 
@@ -160,6 +167,7 @@ public class TheMovieDb {
      * @param movieId
      * @param language
      * @return
+     * @throws MovieDbException
      */
     public MovieDb getMovieInfo(int movieId, String language) throws MovieDbException {
 
@@ -177,9 +185,10 @@ public class TheMovieDb {
      * This method is used to retrieve all of the basic movie information. It
      * will return the single highest rated poster and backdrop.
      *
-     * @param movieId
+     * @param imdbId
      * @param language
      * @return
+     * @throws MovieDbException
      */
     public MovieDb getMovieInfoImdb(String imdbId, String language) throws MovieDbException {
 
@@ -200,6 +209,7 @@ public class TheMovieDb {
      * @param movieId
      * @param country
      * @return
+     * @throws MovieDbException
      */
     public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
 
@@ -220,6 +230,7 @@ public class TheMovieDb {
      *
      * @param movieId
      * @return
+     * @throws MovieDbException
      */
     public List<Person> getMovieCasts(int movieId) throws MovieDbException {
 
@@ -258,6 +269,7 @@ public class TheMovieDb {
      * @param movieId
      * @param language
      * @return
+     * @throws MovieDbException
      */
     public List<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
 
@@ -292,6 +304,7 @@ public class TheMovieDb {
      *
      * @param movieId
      * @return
+     * @throws MovieDbException
      */
     public List<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
 
@@ -314,6 +327,7 @@ public class TheMovieDb {
      * @param movieId
      * @param language
      * @return
+     * @throws MovieDbException
      */
     public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
 
@@ -336,6 +350,7 @@ public class TheMovieDb {
      * @param movieId
      * @param language
      * @return
+     * @throws MovieDbException
      */
     public List<Trailer> getMovieTrailers(int movieId, String language) throws MovieDbException {
 
@@ -369,6 +384,7 @@ public class TheMovieDb {
      *
      * @param movieId
      * @return
+     * @throws MovieDbException
      */
     public List<Translation> getMovieTranslations(int movieId) throws MovieDbException {
 
@@ -392,6 +408,7 @@ public class TheMovieDb {
      * @param movieId
      * @param language
      * @return
+     * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int movieId, String language) throws MovieDbException {
 
@@ -421,6 +438,7 @@ public class TheMovieDb {
      * @param imagePath
      * @param requiredSize
      * @return
+     * @throws MovieDbException
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
         if (!tmdbConfig.isValidSize(requiredSize)) {
@@ -441,7 +459,14 @@ public class TheMovieDb {
     /**
      * This is a good starting point to start finding people on TMDb. The idea
      * is to be a quick and light method so you can iterate through people
-     * quickly. TODO: Fix allResults
+     * quickly.
+     *
+     * TODO: Fix allResults
+     *
+     * @param personName
+     * @param allResults
+     * @return
+     * @throws MovieDbException
      */
     public List<Person> searchPeople(String personName, boolean allResults) throws MovieDbException {
 
@@ -463,6 +488,7 @@ public class TheMovieDb {
      *
      * @param personId
      * @return
+     * @throws MovieDbException 
      */
     public Person getPersonInfo(int personId) throws MovieDbException {
 
@@ -484,6 +510,7 @@ public class TheMovieDb {
      *
      * @param personId
      * @return
+     * @throws MovieDbException 
      */
     public List<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
 
@@ -517,6 +544,7 @@ public class TheMovieDb {
      *
      * @param personId
      * @return
+     * @throws MovieDbException 
      */
     public List<Artwork> getPersonImages(int personId) throws MovieDbException {
 
@@ -563,6 +591,7 @@ public class TheMovieDb {
      * a curated list that will normally contain 100 movies. The default
      * response will return 20 movies.
      *
+     * @param language
      * @return
      * @throws MovieDbException
      */
@@ -579,6 +608,14 @@ public class TheMovieDb {
         }
     }
 
+    /**
+     * This method is used to retrieve the movies currently in theatres. This is
+     * a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
+     *
+     * @return
+     * @throws MovieDbException
+     */
     public List<MovieDb> getNowPlayingMovies() throws MovieDbException {
         return getNowPlayingMovies("");
     }
