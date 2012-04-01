@@ -423,24 +423,18 @@ public class TheMovieDb {
      * @return
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
-        URL returnUrl = null;
-        StringBuilder sb;
-
         if (!tmdbConfig.isValidSize(requiredSize)) {
-            sb = new StringBuilder();
-            sb.append(" - Invalid size requested: ").append(requiredSize);
-            LOGGER.warn(sb.toString());
-            return returnUrl;
+            throw new MovieDbException(MovieDbExceptionType.INVALID_IMAGE, requiredSize);
         }
 
+        StringBuilder sb = new StringBuilder(tmdbConfig.getBaseUrl());
+        sb.append(requiredSize);
+        sb.append(imagePath);
         try {
-            sb = new StringBuilder(tmdbConfig.getBaseUrl());
-            sb.append(requiredSize);
-            sb.append(imagePath);
             return (new URL(sb.toString()));
         } catch (MalformedURLException ex) {
             LOGGER.warn("Failed to create image URL: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.INVALID_URL, returnUrl.toString());
+            throw new MovieDbException(MovieDbExceptionType.INVALID_URL, sb.toString());
         }
     }
 
@@ -584,7 +578,7 @@ public class TheMovieDb {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
     }
-    
+
     public List<MovieDb> getNowPlayingMovies() throws MovieDbException {
         return getNowPlayingMovies("");
     }

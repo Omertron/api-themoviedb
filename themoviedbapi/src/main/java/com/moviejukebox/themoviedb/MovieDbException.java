@@ -6,7 +6,7 @@ public class MovieDbException extends Exception {
 
     public enum MovieDbExceptionType {
 
-        UNKNOWN_CAUSE, INVALID_URL, HTTP_404_ERROR, MOVIE_ID_NOT_FOUND, MAPPING_FAILED, CONNECTION_ERROR;
+        UNKNOWN_CAUSE, INVALID_URL, HTTP_404_ERROR, MOVIE_ID_NOT_FOUND, MAPPING_FAILED, CONNECTION_ERROR, INVALID_IMAGE;
     }
     private final MovieDbExceptionType exceptionType;
     private final String response;
