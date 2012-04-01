@@ -64,13 +64,12 @@ public class TheMovieDb {
     private final ApiUrl tmdbPersonInfo = new ApiUrl(this, BASE_PERSON);
     private final ApiUrl tmdbPersonCredits = new ApiUrl(this, BASE_PERSON, "/credits");
     private final ApiUrl tmdbPersonImages = new ApiUrl(this, BASE_PERSON, "/images");
-    /*
-     * Misc Movie - Movie Add Rating - Issue 9
-     */
+    // Misc Movie
+    // Movie Add Rating - See issue 9
     private final ApiUrl tmdbLatestMovie = new ApiUrl(this, "latest/movie");
     private final ApiUrl tmdbNowPlaying = new ApiUrl(this, "movie/now-playing");
     private final ApiUrl tmdbPopularMovieList = new ApiUrl(this, "movie/popular");
-    // - Top Rated Movies
+    private final ApiUrl tmdbTopRatedMovies = new ApiUrl(this, "movie/top-rated");
     // Company Info
     // - Company Info
     // - Company Movies
@@ -630,6 +629,8 @@ public class TheMovieDb {
      * a curated list that will normally contain 100 movies. The default
      * response will return 20 movies.
      *
+     * TODO: Implement more than 20 movies
+     *
      * @param language
      * @return
      * @throws MovieDbException
@@ -647,6 +648,16 @@ public class TheMovieDb {
         }
     }
 
+    /**
+     * This method is used to retrieve the daily movie popularity list. This
+     * list is updated daily. The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
     public List<MovieDb> getPopularMovieList(String language) throws MovieDbException {
         URL url = tmdbPopularMovieList.getIdUrl("", language);
         String webPage = WebBrowser.request(url);
@@ -656,6 +667,29 @@ public class TheMovieDb {
             return resultList.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get popular movie list: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb. The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getTopRatedMovies(String language) throws MovieDbException {
+        URL url = tmdbTopRatedMovies.getIdUrl("", language);
+        String webPage = WebBrowser.request(url);
+
+        try {
+            WrapperResultList resultList = mapper.readValue(webPage, WrapperResultList.class);
+            return resultList.getResults();
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get top rated movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
         }
     }

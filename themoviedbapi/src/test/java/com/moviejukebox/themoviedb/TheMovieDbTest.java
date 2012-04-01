@@ -349,4 +349,14 @@ public class TheMovieDbTest {
         List<MovieDb> results = tmdb.getPopularMovieList("");
         assertTrue("No popular movies found", !results.isEmpty());
     }
+
+    /**
+     * Test of getTopRatedMovies method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetTopRatedMovies() throws MovieDbException {
+        LOGGER.info("getTopRatedMovies");
+        List<MovieDb> results = tmdb.getTopRatedMovies("");
+        assertTrue("No top rated movies found", !results.isEmpty());
+    }
 }
