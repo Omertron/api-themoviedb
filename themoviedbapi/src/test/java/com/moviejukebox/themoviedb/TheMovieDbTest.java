@@ -334,9 +334,19 @@ public class TheMovieDbTest {
      * Test of getNowPlayingMovies method, of class TheMovieDb.
      */
     @Test
-    public void testGetNowPlayingMovies() throws Exception {
+    public void testGetNowPlayingMovies() throws MovieDbException {
         LOGGER.info("getNowPlayingMovies");
-        List<MovieDb> results = tmdb.getNowPlayingMovies();
-        assertTrue("No now playing movies foind", !results.isEmpty());
+        List<MovieDb> results = tmdb.getNowPlayingMovies("");
+        assertTrue("No now playing movies found", !results.isEmpty());
+    }
+
+    /**
+     * Test of getPopularMovieList method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetPopularMovieList() throws MovieDbException {
+        LOGGER.info("getPopularMovieList");
+        List<MovieDb> results = tmdb.getPopularMovieList("");
+        assertTrue("No popular movies found", !results.isEmpty());
     }
 }

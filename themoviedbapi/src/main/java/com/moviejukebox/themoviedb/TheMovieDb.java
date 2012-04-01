@@ -39,8 +39,8 @@ public class TheMovieDb {
     private String apiKey;
     private TmdbConfiguration tmdbConfig;
     /*
-     * API Methods These are not set to static so that multiple instances of the
-     * API can co-exist
+     * API Methods: These are not set to static so that multiple instances of
+     * the API can co-exist
      */
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
@@ -69,7 +69,7 @@ public class TheMovieDb {
      */
     private final ApiUrl tmdbLatestMovie = new ApiUrl(this, "latest/movie");
     private final ApiUrl tmdbNowPlaying = new ApiUrl(this, "movie/now-playing");
-    // - Populate Movie List
+    private final ApiUrl tmdbPopularMovieList = new ApiUrl(this, "movie/popular");
     // - Top Rated Movies
     // Company Info
     // - Company Info
@@ -132,6 +132,45 @@ public class TheMovieDb {
     public void setTimeout(int connect, int read) {
         WebBrowser.setWebTimeoutConnect(connect);
         WebBrowser.setWebTimeoutRead(read);
+    }
+
+    /**
+     * Compare the MovieDB object with a title & year
+     *
+     * @param moviedb The moviedb object to compare too
+     * @param title The title of the movie to compare
+     * @param year The year of the movie to compare
+     * @return True if there is a match, False otherwise.
+     */
+    public static boolean compareMovies(MovieDb moviedb, String title, String year) {
+        if ((moviedb == null) || (StringUtils.isBlank(title))) {
+            return false;
+        }
+
+        if (StringUtils.isNotBlank(year) && !year.equalsIgnoreCase("UNKNOWN") && StringUtils.isNotBlank(moviedb.getReleaseDate())) {
+            // Compare with year
+            String movieYear = moviedb.getReleaseDate().substring(0, 4);
+            if (movieYear.equals(year)) {
+                if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
+                    return true;
+                }
+
+                if (moviedb.getTitle().equalsIgnoreCase(title)) {
+                    return true;
+                }
+            }
+        }
+
+        // Compare without year
+        if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
+            return true;
+        }
+
+        if (moviedb.getTitle().equalsIgnoreCase(title)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -488,7 +527,7 @@ public class TheMovieDb {
      *
      * @param personId
      * @return
-     * @throws MovieDbException 
+     * @throws MovieDbException
      */
     public Person getPersonInfo(int personId) throws MovieDbException {
 
@@ -510,7 +549,7 @@ public class TheMovieDb {
      *
      * @param personId
      * @return
-     * @throws MovieDbException 
+     * @throws MovieDbException
      */
     public List<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
 
@@ -544,7 +583,7 @@ public class TheMovieDb {
      *
      * @param personId
      * @return
-     * @throws MovieDbException 
+     * @throws MovieDbException
      */
     public List<Artwork> getPersonImages(int personId) throws MovieDbException {
 
@@ -603,59 +642,21 @@ public class TheMovieDb {
             WrapperResultList resultList = mapper.readValue(webPage, WrapperResultList.class);
             return resultList.getResults();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
+            LOGGER.warn("Failed to get now playing movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
         }
     }
 
-    /**
-     * This method is used to retrieve the movies currently in theatres. This is
-     * a curated list that will normally contain 100 movies. The default
-     * response will return 20 movies.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public List<MovieDb> getNowPlayingMovies() throws MovieDbException {
-        return getNowPlayingMovies("");
-    }
+    public List<MovieDb> getPopularMovieList(String language) throws MovieDbException {
+        URL url = tmdbPopularMovieList.getIdUrl("", language);
+        String webPage = WebBrowser.request(url);
 
-    /**
-     * Compare the MovieDB object with a title & year
-     *
-     * @param moviedb The moviedb object to compare too
-     * @param title The title of the movie to compare
-     * @param year The year of the movie to compare
-     * @return True if there is a match, False otherwise.
-     */
-    public static boolean compareMovies(MovieDb moviedb, String title, String year) {
-        if ((moviedb == null) || (StringUtils.isBlank(title))) {
-            return false;
+        try {
+            WrapperResultList resultList = mapper.readValue(webPage, WrapperResultList.class);
+            return resultList.getResults();
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get popular movie list: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
         }
-
-        if (StringUtils.isNotBlank(year) && !year.equalsIgnoreCase("UNKNOWN") && StringUtils.isNotBlank(moviedb.getReleaseDate())) {
-            // Compare with year
-            String movieYear = moviedb.getReleaseDate().substring(0, 4);
-            if (movieYear.equals(year)) {
-                if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
-                    return true;
-                }
-
-                if (moviedb.getTitle().equalsIgnoreCase(title)) {
-                    return true;
-                }
-            }
-        }
-
-        // Compare without year
-        if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
-            return true;
-        }
-
-        if (moviedb.getTitle().equalsIgnoreCase(title)) {
-            return true;
-        }
-
-        return false;
     }
 }
