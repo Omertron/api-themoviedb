@@ -44,7 +44,6 @@ public class TheMovieDb {
      */
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
-    
     // Configuration URL
     private final ApiUrl tmdbConfigUrl = new ApiUrl(this, "configuration");
     // Search URLS
@@ -65,17 +64,16 @@ public class TheMovieDb {
     private final ApiUrl tmdbPersonInfo = new ApiUrl(this, BASE_PERSON);
     private final ApiUrl tmdbPersonCredits = new ApiUrl(this, BASE_PERSON, "/credits");
     private final ApiUrl tmdbPersonImages = new ApiUrl(this, BASE_PERSON, "/images");
-    // Misc Movie
-    // - Movie Add Rating - Issue 9
-    // - Latest Movie
+    /*
+     * Misc Movie - Movie Add Rating - Issue 9
+     */
     private final ApiUrl tmdbLatestMovie = new ApiUrl(this, "latest/movie");
-    // - Now Playing Movies
+    private final ApiUrl tmdbNowPlaying = new ApiUrl(this, "movie/now-playing");
     // - Populate Movie List
     // - Top Rated Movies
     // Company Info
     // - Company Info
     // - Company Movies
-    
     /*
      * Jackson JSON configuration
      */
@@ -564,6 +562,31 @@ public class TheMovieDb {
             LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
         }
+    }
+
+    /**
+     * This method is used to retrieve the movies currently in theatres. This is
+     * a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getNowPlayingMovies(String language) throws MovieDbException {
+        URL url = tmdbNowPlaying.getIdUrl("", language);
+        String webPage = WebBrowser.request(url);
+
+        try {
+            WrapperResultList resultList = mapper.readValue(webPage, WrapperResultList.class);
+            return resultList.getResults();
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage);
+        }
+    }
+    
+    public List<MovieDb> getNowPlayingMovies() throws MovieDbException {
+        return getNowPlayingMovies("");
     }
 
     /**

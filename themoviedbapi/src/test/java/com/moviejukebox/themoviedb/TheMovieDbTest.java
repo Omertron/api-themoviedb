@@ -77,7 +77,7 @@ public class TheMovieDbTest {
      * Test of searchMovie method, of class TheMovieDb.
      */
     @Test
-    public void testSearchMovie() throws MovieDbException  {
+    public void testSearchMovie() throws MovieDbException {
         LOGGER.info("searchMovie");
 
         // Try a movie with less than 1 page of results
@@ -302,9 +302,9 @@ public class TheMovieDbTest {
     public void testGetLatestMovie() throws MovieDbException {
         LOGGER.info("getLatestMovie");
         MovieDb result = tmdb.getLatestMovie();
-        LOGGER.info(result.toString());
+        assertTrue("No latest movie found", result != null);
         assertTrue("No latest movie found", result.getId() > 0);
-}
+    }
 
     /**
      * Test of compareMovies method, of class TheMovieDb.
@@ -312,5 +312,31 @@ public class TheMovieDbTest {
     @Test
     public void testCompareMovies() {
         // Not required
+    }
+
+    /**
+     * Test of setProxy method, of class TheMovieDb.
+     */
+    @Test
+    public void testSetProxy() {
+        // Not required
+    }
+
+    /**
+     * Test of setTimeout method, of class TheMovieDb.
+     */
+    @Test
+    public void testSetTimeout() {
+        // Not required
+    }
+
+    /**
+     * Test of getNowPlayingMovies method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetNowPlayingMovies() throws Exception {
+        LOGGER.info("getNowPlayingMovies");
+        List<MovieDb> results = tmdb.getNowPlayingMovies();
+        assertTrue("No now playing movies foind", !results.isEmpty());
     }
 }

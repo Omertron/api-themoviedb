@@ -147,7 +147,7 @@ public class ApiUrl {
             LOGGER.trace("URL: " + urlString.toString());
             return new URL(urlString.toString());
         } catch (MalformedURLException ex) {
-            LOGGER.warn("Failed to create URL " + urlString.toString());
+            LOGGER.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
             return null;
         }
     }
