@@ -44,10 +44,15 @@ public class TheMovieDb {
      */
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
+    
+    // Configuration URL
     private final ApiUrl tmdbConfigUrl = new ApiUrl(this, "configuration");
+    // Search URLS
     private final ApiUrl tmdbSearchMovie = new ApiUrl(this, "search/movie");
     private final ApiUrl tmdbSearchPeople = new ApiUrl(this, "search/person");
+    // Collections 
     private final ApiUrl tmdbCollectionInfo = new ApiUrl(this, "collection/");
+    // Movie Info
     private final ApiUrl tmdbMovieInfo = new ApiUrl(this, BASE_MOVIE);
     private final ApiUrl tmdbMovieAltTitles = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
     private final ApiUrl tmdbMovieCasts = new ApiUrl(this, BASE_MOVIE, "/casts");
@@ -56,11 +61,21 @@ public class TheMovieDb {
     private final ApiUrl tmdbMovieReleaseInfo = new ApiUrl(this, BASE_MOVIE, "/releases");
     private final ApiUrl tmdbMovieTrailers = new ApiUrl(this, BASE_MOVIE, "/trailers");
     private final ApiUrl tmdbMovieTranslations = new ApiUrl(this, BASE_MOVIE, "/translations");
+    // Person Info
     private final ApiUrl tmdbPersonInfo = new ApiUrl(this, BASE_PERSON);
     private final ApiUrl tmdbPersonCredits = new ApiUrl(this, BASE_PERSON, "/credits");
     private final ApiUrl tmdbPersonImages = new ApiUrl(this, BASE_PERSON, "/images");
+    // Misc Movie
+    // - Movie Add Rating - Issue 9
+    // - Latest Movie
     private final ApiUrl tmdbLatestMovie = new ApiUrl(this, "latest/movie");
-
+    // - Now Playing Movies
+    // - Populate Movie List
+    // - Top Rated Movies
+    // Company Info
+    // - Company Info
+    // - Company Movies
+    
     /*
      * Jackson JSON configuration
      */
