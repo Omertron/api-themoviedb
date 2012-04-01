@@ -44,6 +44,7 @@ public class TheMovieDb {
      */
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
+    private static final String BASE_COMPANY = "company/";
     // Configuration URL
     private final ApiUrl tmdbConfigUrl = new ApiUrl(this, "configuration");
     // Search URLS
@@ -71,8 +72,8 @@ public class TheMovieDb {
     private final ApiUrl tmdbPopularMovieList = new ApiUrl(this, "movie/popular");
     private final ApiUrl tmdbTopRatedMovies = new ApiUrl(this, "movie/top-rated");
     // Company Info
-    // - Company Info
-    // - Company Movies
+    private final ApiUrl tmdbCompanyInfo = new ApiUrl(this, BASE_COMPANY);
+    private final ApiUrl tmdbCompanyMovies = new ApiUrl(this, BASE_COMPANY, "/movies");
     /*
      * Jackson JSON configuration
      */
@@ -632,10 +633,11 @@ public class TheMovieDb {
      * TODO: Implement more than 20 movies
      *
      * @param language
+     * @param allResults
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getNowPlayingMovies(String language) throws MovieDbException {
+    public List<MovieDb> getNowPlayingMovies(String language, boolean allResults) throws MovieDbException {
         URL url = tmdbNowPlaying.getIdUrl("", language);
         String webPage = WebBrowser.request(url);
 
@@ -655,10 +657,11 @@ public class TheMovieDb {
      * TODO: Implement more than 20 movies
      *
      * @param language
+     * @param allResults
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getPopularMovieList(String language) throws MovieDbException {
+    public List<MovieDb> getPopularMovieList(String language, boolean allResults) throws MovieDbException {
         URL url = tmdbPopularMovieList.getIdUrl("", language);
         String webPage = WebBrowser.request(url);
 
@@ -678,10 +681,11 @@ public class TheMovieDb {
      * TODO: Implement more than 20 movies
      *
      * @param language
+     * @param allResults
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getTopRatedMovies(String language) throws MovieDbException {
+    public List<MovieDb> getTopRatedMovies(String language, boolean allResults) throws MovieDbException {
         URL url = tmdbTopRatedMovies.getIdUrl("", language);
         String webPage = WebBrowser.request(url);
 
@@ -690,6 +694,52 @@ public class TheMovieDb {
             return resultList.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get top rated movies: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the basic information about a production
+     * company on TMDb.
+     *
+     * @param companyId
+     * @return
+     * @throws MovieDbException
+     */
+    public Company getCompanyInfo(int companyId) throws MovieDbException {
+        URL url = tmdbCompanyInfo.getIdUrl(companyId);
+        String webPage = WebBrowser.request(url);
+
+        try {
+            return mapper.readValue(webPage, Company.class);
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get company information: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the movies associated with a company.
+     * These movies are returned in order of most recently released to oldest.
+     * The default response will return 20 movies per page.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param companyId
+     * @param language
+     * @param allResults
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getCompanyMovies(int companyId, String language, boolean allResults) throws MovieDbException {
+        URL url = tmdbCompanyMovies.getIdUrl(companyId, language);
+        String webPage = WebBrowser.request(url);
+
+        try {
+            WrapperCompanyMovies resultList = mapper.readValue(webPage, WrapperCompanyMovies.class);
+            return resultList.getResults();
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get company movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
         }
     }

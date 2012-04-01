@@ -27,15 +27,16 @@ import org.junit.*;
  */
 public class TheMovieDbTest {
 
+    // Logger
     private static final Logger LOGGER = Logger.getLogger(TheMovieDbTest.class);
+    // API Key
     private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
     private static TheMovieDb tmdb;
-    /*
-     * Test data
-     */
-    private static final int ID_BLADE_RUNNER = 78;
-    private static final int ID_STAR_WARS_COLLECTION = 10;
-    private static final int ID_BRUCE_WILLIS = 62;
+    // Test data
+    private static final int ID_MOVIE_BLADE_RUNNER = 78;
+    private static final int ID_MOVIE_STAR_WARS_COLLECTION = 10;
+    private static final int ID_PERSON_BRUCE_WILLIS = 62;
+    private static final int ID_COMPANY_LUCASFILM = 1;
 
     public TheMovieDbTest() throws MovieDbException {
         tmdb = new TheMovieDb(API_KEY);
@@ -100,7 +101,7 @@ public class TheMovieDbTest {
     public void testGetMovieInfo() throws MovieDbException {
         LOGGER.info("getMovieInfo");
         String language = "en";
-        MovieDb result = tmdb.getMovieInfo(ID_BLADE_RUNNER, language);
+        MovieDb result = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, language);
         assertEquals("Incorrect movie information", "Blade Runner", result.getOriginalTitle());
     }
 
@@ -111,11 +112,11 @@ public class TheMovieDbTest {
     public void testGetMovieAlternativeTitles() throws MovieDbException {
         LOGGER.info("getMovieAlternativeTitles");
         String country = "";
-        List<AlternativeTitle> results = tmdb.getMovieAlternativeTitles(ID_BLADE_RUNNER, country);
+        List<AlternativeTitle> results = tmdb.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country);
         assertTrue("No alternative titles found", results.size() > 0);
 
         country = "US";
-        results = tmdb.getMovieAlternativeTitles(ID_BLADE_RUNNER, country);
+        results = tmdb.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country);
         assertTrue("No alternative titles found", results.size() > 0);
 
     }
@@ -126,7 +127,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetMovieCasts() throws MovieDbException {
         LOGGER.info("getMovieCasts");
-        List<Person> people = tmdb.getMovieCasts(ID_BLADE_RUNNER);
+        List<Person> people = tmdb.getMovieCasts(ID_MOVIE_BLADE_RUNNER);
         assertTrue("No cast information", people.size() > 0);
 
         String name1 = "Harrison Ford";
@@ -154,7 +155,7 @@ public class TheMovieDbTest {
     public void testGetMovieImages() throws MovieDbException {
         LOGGER.info("getMovieImages");
         String language = "";
-        List<Artwork> result = tmdb.getMovieImages(ID_BLADE_RUNNER, language);
+        List<Artwork> result = tmdb.getMovieImages(ID_MOVIE_BLADE_RUNNER, language);
         assertFalse("No artwork found", result.isEmpty());
     }
 
@@ -164,7 +165,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetMovieKeywords() throws MovieDbException {
         LOGGER.info("getMovieKeywords");
-        List<Keyword> result = tmdb.getMovieKeywords(ID_BLADE_RUNNER);
+        List<Keyword> result = tmdb.getMovieKeywords(ID_MOVIE_BLADE_RUNNER);
         assertFalse("No keywords found", result.isEmpty());
     }
 
@@ -174,7 +175,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetMovieReleaseInfo() throws MovieDbException {
         LOGGER.info("getMovieReleaseInfo");
-        List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_BLADE_RUNNER, "");
+        List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Release information missing", result.isEmpty());
     }
 
@@ -184,7 +185,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetMovieTrailers() throws MovieDbException {
         LOGGER.info("getMovieTrailers");
-        List<Trailer> result = tmdb.getMovieTrailers(ID_BLADE_RUNNER, "");
+        List<Trailer> result = tmdb.getMovieTrailers(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Movie trailers missing", result.isEmpty());
     }
 
@@ -194,7 +195,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetMovieTranslations() throws MovieDbException {
         LOGGER.info("getMovieTranslations");
-        List<Translation> result = tmdb.getMovieTranslations(ID_BLADE_RUNNER);
+        List<Translation> result = tmdb.getMovieTranslations(ID_MOVIE_BLADE_RUNNER);
         assertFalse("No translations found", result.isEmpty());
     }
 
@@ -205,14 +206,14 @@ public class TheMovieDbTest {
     public void testGetCollectionInfo() throws MovieDbException {
         LOGGER.info("getCollectionInfo");
         String language = "";
-        CollectionInfo result = tmdb.getCollectionInfo(ID_STAR_WARS_COLLECTION, language);
+        CollectionInfo result = tmdb.getCollectionInfo(ID_MOVIE_STAR_WARS_COLLECTION, language);
         assertFalse("No collection information", result.getParts().isEmpty());
     }
 
     @Test
     public void testCreateImageUrl() throws MovieDbException {
         LOGGER.info("createImageUrl");
-        MovieDb movie = tmdb.getMovieInfo(ID_BLADE_RUNNER, "");
+        MovieDb movie = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, "");
         String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());
     }
@@ -269,8 +270,8 @@ public class TheMovieDbTest {
     @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOGGER.info("getPersonInfo");
-        Person result = tmdb.getPersonInfo(ID_BRUCE_WILLIS);
-        assertTrue("Wrong actor returned", result.getId() == ID_BRUCE_WILLIS);
+        Person result = tmdb.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
+        assertTrue("Wrong actor returned", result.getId() == ID_PERSON_BRUCE_WILLIS);
     }
 
     /**
@@ -280,7 +281,7 @@ public class TheMovieDbTest {
     public void testGetPersonCredits() throws MovieDbException {
         LOGGER.info("getPersonCredits");
 
-        List<PersonCredit> people = tmdb.getPersonCredits(ID_BRUCE_WILLIS);
+        List<PersonCredit> people = tmdb.getPersonCredits(ID_PERSON_BRUCE_WILLIS);
         assertTrue("No cast information", people.size() > 0);
     }
 
@@ -291,7 +292,7 @@ public class TheMovieDbTest {
     public void testGetPersonImages() throws MovieDbException {
         LOGGER.info("getPersonImages");
 
-        List<Artwork> artwork = tmdb.getPersonImages(ID_BRUCE_WILLIS);
+        List<Artwork> artwork = tmdb.getPersonImages(ID_PERSON_BRUCE_WILLIS);
         assertTrue("No cast information", artwork.size() > 0);
     }
 
@@ -336,7 +337,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
         LOGGER.info("getNowPlayingMovies");
-        List<MovieDb> results = tmdb.getNowPlayingMovies("");
+        List<MovieDb> results = tmdb.getNowPlayingMovies("", true);
         assertTrue("No now playing movies found", !results.isEmpty());
     }
 
@@ -346,7 +347,7 @@ public class TheMovieDbTest {
     @Test
     public void testGetPopularMovieList() throws MovieDbException {
         LOGGER.info("getPopularMovieList");
-        List<MovieDb> results = tmdb.getPopularMovieList("");
+        List<MovieDb> results = tmdb.getPopularMovieList("", true);
         assertTrue("No popular movies found", !results.isEmpty());
     }
 
@@ -356,7 +357,27 @@ public class TheMovieDbTest {
     @Test
     public void testGetTopRatedMovies() throws MovieDbException {
         LOGGER.info("getTopRatedMovies");
-        List<MovieDb> results = tmdb.getTopRatedMovies("");
+        List<MovieDb> results = tmdb.getTopRatedMovies("", true);
         assertTrue("No top rated movies found", !results.isEmpty());
+    }
+
+    /**
+     * Test of getCompanyInfo method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetCompanyInfo() throws Exception {
+        LOGGER.info("getCompanyInfo");
+        Company company = tmdb.getCompanyInfo(ID_COMPANY_LUCASFILM);
+        assertTrue("No company information found", company.getCompanyId() > 0);
+    }
+
+    /**
+     * Test of getCompanyMovies method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetCompanyMovies() throws Exception {
+        LOGGER.info("getCompanyMovies");
+        List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", true);
+        assertTrue("No company movies found", !results.isEmpty());
     }
 }
