@@ -100,6 +100,25 @@ public class TheMovieDb {
     }
 
     /**
+     * Output the API version information to the debug log
+     */
+    public static void showVersion() {
+        String apiTitle = TheMovieDb.class.getPackage().getSpecificationTitle();
+
+        if (StringUtils.isNotBlank(apiTitle)) {
+            String apiVersion = TheMovieDb.class.getPackage().getSpecificationVersion();
+            String apiRevision = TheMovieDb.class.getPackage().getImplementationVersion();
+            StringBuilder sv = new StringBuilder();
+            sv.append(apiTitle).append(" ");
+            sv.append(apiVersion).append(" r");
+            sv.append(apiRevision);
+            LOGGER.debug(sv.toString());
+        } else {
+            LOGGER.debug("API-TheMovieDb version/revision information not available");
+        }
+    }
+
+    /**
      * Get the API key that is to be used
      *
      * @return
