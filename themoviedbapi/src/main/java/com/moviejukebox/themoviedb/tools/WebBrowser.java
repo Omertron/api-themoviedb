@@ -113,7 +113,8 @@ public final class WebBrowser {
                 if (in != null) {
                     in.close();
                 }
-                if (cnx != null && cnx instanceof HttpURLConnection) {
+                
+                if (cnx instanceof HttpURLConnection) {
                     ((HttpURLConnection) cnx).disconnect();
                 }
             }
