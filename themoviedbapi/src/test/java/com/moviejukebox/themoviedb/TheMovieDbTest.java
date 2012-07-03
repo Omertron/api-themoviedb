@@ -367,7 +367,7 @@ public class TheMovieDbTest {
      * Test of getCompanyInfo method, of class TheMovieDb.
      */
     @Test
-    public void testGetCompanyInfo() throws Exception {
+    public void testGetCompanyInfo() throws MovieDbException {
         LOGGER.info("getCompanyInfo");
         Company company = tmdb.getCompanyInfo(ID_COMPANY_LUCASFILM);
         assertTrue("No company information found", company.getCompanyId() > 0);
@@ -377,7 +377,7 @@ public class TheMovieDbTest {
      * Test of getCompanyMovies method, of class TheMovieDb.
      */
     @Test
-    public void testGetCompanyMovies() throws Exception {
+    public void testGetCompanyMovies() throws MovieDbException {
         LOGGER.info("getCompanyMovies");
         List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", true);
         assertTrue("No company movies found", !results.isEmpty());
@@ -395,7 +395,7 @@ public class TheMovieDbTest {
      * Test of searchCompanies method, of class TheMovieDb.
      */
     @Test
-    public void testSearchCompanies() throws Exception {
+    public void testSearchCompanies() throws MovieDbException {
         LOGGER.info("searchCompanies");
         List<Company> results = tmdb.searchCompanies(COMPANY_NAME, "", true);
         assertTrue("No company information found", !results.isEmpty());
@@ -405,7 +405,7 @@ public class TheMovieDbTest {
      * Test of getSimilarMovies method, of class TheMovieDb.
      */
     @Test
-    public void testGetSimilarMovies() throws Exception {
+    public void testGetSimilarMovies() throws MovieDbException {
         LOGGER.info("getSimilarMovies");
         List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", true);
         assertTrue("No similar movies found", !results.isEmpty());

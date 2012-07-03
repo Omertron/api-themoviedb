@@ -220,8 +220,8 @@ public class TheMovieDb {
         URL url = tmdbSearchMovie.getQueryUrl(movieName, language, 1);
         String webPage = WebBrowser.request(url);
         try {
-            WrapperResultList wrapper = mapper.readValue(webPage, WrapperResultList.class);
-            return wrapper.getResults();
+            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to find movie: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
@@ -673,8 +673,8 @@ public class TheMovieDb {
         String webPage = WebBrowser.request(url);
 
         try {
-            WrapperResultList wrapper = mapper.readValue(webPage, WrapperResultList.class);
-            return wrapper.getResults();
+            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get now playing movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
@@ -698,8 +698,8 @@ public class TheMovieDb {
         String webPage = WebBrowser.request(url);
 
         try {
-            WrapperResultList wrapper = mapper.readValue(webPage, WrapperResultList.class);
-            return wrapper.getResults();
+            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get popular movie list: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
@@ -723,8 +723,8 @@ public class TheMovieDb {
         String webPage = WebBrowser.request(url);
 
         try {
-            WrapperResultList wrapper = mapper.readValue(webPage, WrapperResultList.class);
-            return wrapper.getResults();
+            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get top rated movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
@@ -825,8 +825,8 @@ public class TheMovieDb {
         String webPage = WebBrowser.request(url);
 
         try {
-            WrapperResultList wrapper = mapper.readValue(webPage, WrapperResultList.class);
-            return wrapper.getResults();
+            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get similar movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
@@ -871,8 +871,8 @@ public class TheMovieDb {
         String webPage = WebBrowser.request(url);
 
         try {
-            WrapperResultList wrapper = mapper.readValue(webPage, WrapperResultList.class);
-            return wrapper.getResults();
+            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get genre movie list: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);

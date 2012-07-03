@@ -22,19 +22,19 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  * @author stuart.boston
  */
-public class WrapperResultList {
+public class WrapperMovie {
     /*
      * Logger
      */
 
-    private static final Logger LOGGER = Logger.getLogger(WrapperResultList.class);
+    private static final Logger LOGGER = Logger.getLogger(WrapperMovie.class);
     /*
      * Properties
      */
     @JsonProperty("page")
     private int page;
     @JsonProperty("results")
-    private List<MovieDb> results;
+    private List<MovieDb> movies;
     @JsonProperty("total_pages")
     private int totalPages;
     @JsonProperty("total_results")
@@ -47,8 +47,8 @@ public class WrapperResultList {
         return page;
     }
 
-    public List<MovieDb> getResults() {
-        return results;
+    public List<MovieDb> getMovies() {
+        return movies;
     }
 
     public int getTotalPages() {
@@ -69,8 +69,8 @@ public class WrapperResultList {
         this.page = page;
     }
 
-    public void setResults(List<MovieDb> results) {
-        this.results = results;
+    public void setMovies(List<MovieDb> results) {
+        this.movies = results;
     }
 
     public void setTotalPages(int totalPages) {
@@ -104,7 +104,7 @@ public class WrapperResultList {
     public String toString() {
         StringBuilder sb = new StringBuilder("[ResultList=[");
         sb.append("[page=").append(page);
-        sb.append("],[pageResults=").append(results.size());
+        sb.append("],[pageResults=").append(movies.size());
         sb.append("],[totalPages=").append(totalPages);
         sb.append("],[totalResults=").append(totalResults);
         sb.append("],[id=").append(id);
