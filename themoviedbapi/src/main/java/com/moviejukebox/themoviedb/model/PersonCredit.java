@@ -46,6 +46,8 @@ public class PersonCredit {
     private String department = DEFAULT_STRING;
     @JsonProperty("job")
     private String job = DEFAULT_STRING;
+    @JsonProperty("adult")
+    private String adult = DEFAULT_STRING;
     private PersonType personType = PersonType.PERSON;
 
     //<editor-fold defaultstate="collapsed" desc="Getter Methods">
@@ -83,6 +85,10 @@ public class PersonCredit {
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public String getAdult() {
+        return adult;
     }
     //</editor-fold>
 
@@ -122,6 +128,10 @@ public class PersonCredit {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+    public void setAdult(String adult) {
+        this.adult = adult;
+    }
     //</editor-fold>
 
     /**
@@ -150,6 +160,7 @@ public class PersonCredit {
         sb.append("],[character=").append(character);
         sb.append("],[department=").append(department);
         sb.append("],[job=").append(job);
+        sb.append("],[adult=").append(adult);
         sb.append("]]");
         return sb.toString();
     }
