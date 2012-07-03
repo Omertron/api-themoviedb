@@ -98,7 +98,7 @@ public class Genre {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[Genre=");
-        sb.append("id=").append(id);
+        sb.append("[id=").append(id);
         sb.append("],[name=").append(name);
         sb.append("]]");
         return sb.toString();

@@ -39,6 +39,8 @@ public class WrapperResultList {
     private int totalPages;
     @JsonProperty("total_results")
     private int totalResults;
+    @JsonProperty("id")
+    private int id;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public int getPage() {
@@ -55,6 +57,10 @@ public class WrapperResultList {
 
     public int getTotalResults() {
         return totalResults;
+    }
+
+    public int getId() {
+        return id;
     }
     //</editor-fold>
 
@@ -74,10 +80,15 @@ public class WrapperResultList {
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     //</editor-fold>
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
@@ -96,6 +107,7 @@ public class WrapperResultList {
         sb.append("],[pageResults=").append(results.size());
         sb.append("],[totalPages=").append(totalPages);
         sb.append("],[totalResults=").append(totalResults);
+        sb.append("],[id=").append(id);
         sb.append("]]");
         return sb.toString();
     }

@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import static org.junit.Assert.*;
 import org.junit.*;
+import static org.junit.Assert.*;
 
 /**
  * Test cases for TheMovieDb API
@@ -37,6 +37,8 @@ public class TheMovieDbTest {
     private static final int ID_MOVIE_STAR_WARS_COLLECTION = 10;
     private static final int ID_PERSON_BRUCE_WILLIS = 62;
     private static final int ID_COMPANY_LUCASFILM = 1;
+    private static final String COMPANY_NAME = "Marvel Studios";
+    private static final int ID_GENRE_ACTION = 28;
 
     public TheMovieDbTest() throws MovieDbException {
         tmdb = new TheMovieDb(API_KEY);
@@ -379,5 +381,52 @@ public class TheMovieDbTest {
         LOGGER.info("getCompanyMovies");
         List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", true);
         assertTrue("No company movies found", !results.isEmpty());
+    }
+
+    /**
+     * Test of showVersion method, of class TheMovieDb.
+     */
+    @Test
+    public void testShowVersion() {
+        // Not required
+    }
+
+    /**
+     * Test of searchCompanies method, of class TheMovieDb.
+     */
+    @Test
+    public void testSearchCompanies() throws Exception {
+        LOGGER.info("searchCompanies");
+        List<Company> results = tmdb.searchCompanies(COMPANY_NAME, "", true);
+        assertTrue("No company information found", !results.isEmpty());
+    }
+
+    /**
+     * Test of getSimilarMovies method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetSimilarMovies() throws Exception {
+        LOGGER.info("getSimilarMovies");
+        List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", true);
+        assertTrue("No similar movies found", !results.isEmpty());
+    }
+    /**
+     * Test of getGenreList method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetGenreList() throws MovieDbException {
+        LOGGER.info("getGenreList");
+        List<Genre> results = tmdb.getGenreList("");
+        assertTrue("No genres found", !results.isEmpty());
+    }
+
+    /**
+     * Test of getGenreMovies method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetGenreMovies() throws MovieDbException {
+        LOGGER.info("getGenreMovies");
+        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, "", true);
+        assertTrue("No genre movies found", !results.isEmpty());
     }
 }
