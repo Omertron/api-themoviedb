@@ -12,6 +12,8 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
+import javax.imageio.spi.ServiceRegistry;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -22,7 +24,9 @@ import org.codehaus.jackson.map.annotate.JsonRootName;
  * @author stuart.boston
  */
 @JsonRootName("keyword")
-public class Keyword {
+public class Keyword implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /*
      * Logger
@@ -58,6 +62,7 @@ public class Keyword {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */

@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -22,11 +23,13 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  * @author stuart.boston
  */
-public class Person {
+public class Person implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /*
      * Logger
      */
-
     private static final Logger LOGGER = Logger.getLogger(Person.class);
 
     /*

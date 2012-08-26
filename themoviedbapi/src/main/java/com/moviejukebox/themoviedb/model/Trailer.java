@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 
@@ -19,11 +20,13 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
  *
  * @author Stuart
  */
-public class Trailer {
+public class Trailer implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /*
      * Logger
      */
-
     private static final Logger LOGGER = Logger.getLogger(Trailer.class);
     /*
      * Website sources
@@ -76,6 +79,7 @@ public class Trailer {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */

@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -22,8 +23,9 @@ import org.codehaus.jackson.map.annotate.JsonRootName;
  * @author stuart.boston
  */
 @JsonRootName("spoken_language")
-public class Language {
+public class Language implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /*
      * Logger
      */
@@ -58,6 +60,7 @@ public class Language {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */

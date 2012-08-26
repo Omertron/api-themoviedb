@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -22,8 +23,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  * @author stuart.boston
  */
-public class TmdbConfiguration {
+public class TmdbConfiguration implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /*
      * Logger
      */
@@ -46,19 +48,19 @@ public class TmdbConfiguration {
     public List<String> getBackdropSizes() {
         return backdropSizes;
     }
-    
+
     public String getBaseUrl() {
         return baseUrl;
     }
-    
+
     public List<String> getPosterSizes() {
         return posterSizes;
     }
-    
+
     public List<String> getProfileSizes() {
         return profileSizes;
     }
-    
+
     public List<String> getLogoSizes() {
         return logoSizes;
     }
@@ -68,19 +70,19 @@ public class TmdbConfiguration {
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
     }
-    
+
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
-    
+
     public void setPosterSizes(List<String> posterSizes) {
         this.posterSizes = posterSizes;
     }
-    
+
     public void setProfileSizes(List<String> profileSizes) {
         this.profileSizes = profileSizes;
     }
-    
+
     public void setLogoSizes(List<String> logoSizes) {
         this.logoSizes = logoSizes;
     }
@@ -158,9 +160,9 @@ public class TmdbConfiguration {
      * @return
      */
     public boolean isValidSize(String sizeToCheck) {
-        return (isValidPosterSize(sizeToCheck) 
-                || isValidBackdropSize(sizeToCheck) 
-                || isValidProfileSize(sizeToCheck) 
+        return (isValidPosterSize(sizeToCheck)
+                || isValidBackdropSize(sizeToCheck)
+                || isValidProfileSize(sizeToCheck)
                 || isValidLogoSize(sizeToCheck));
     }
 
@@ -177,7 +179,7 @@ public class TmdbConfiguration {
         sb.append("' value: '").append(value).append("'");
         LOGGER.warn(sb.toString());
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[ImageConfiguration=");

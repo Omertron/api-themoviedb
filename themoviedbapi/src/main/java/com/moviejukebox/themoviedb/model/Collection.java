@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
@@ -23,8 +24,9 @@ import org.codehaus.jackson.map.annotate.JsonRootName;
  * @author stuart.boston
  */
 @JsonRootName("collection")
-public class Collection {
+public class Collection implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     /*
      * Logger
      */
@@ -105,6 +107,7 @@ public class Collection {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */

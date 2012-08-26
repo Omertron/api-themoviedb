@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -20,7 +21,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
  *
  * @author Stuart
  */
-public class AlternativeTitle {
+public class AlternativeTitle implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /*
      * Logger
@@ -56,6 +59,7 @@ public class AlternativeTitle {
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
