@@ -93,7 +93,7 @@ public class TheMovieDbTest {
 
         // Try a movie with more than 20 results
         movieList = tmdb.searchMovie("Star Wars", "en", false);
-        assertTrue("Not enough movies found, should be 20", movieList.size() == 20);
+        assertTrue("Not enough movies found, should be over 15, found " + movieList.size(), movieList.size() >= 15);
     }
 
     /**
@@ -410,6 +410,7 @@ public class TheMovieDbTest {
         List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", true);
         assertTrue("No similar movies found", !results.isEmpty());
     }
+
     /**
      * Test of getGenreList method, of class TheMovieDb.
      */
