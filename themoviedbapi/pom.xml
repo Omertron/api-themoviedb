@@ -13,7 +13,7 @@
 
     <groupId>com.moviejukebox</groupId>
     <artifactId>themoviedbapi</artifactId>
-    <version>3.2-SNAPSHOT</version>
+    <version>3.2</version>
     <name>API-The MovieDB</name>
 
     <issueManagement>
@@ -27,9 +27,9 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:svn:http://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</connection>
-        <developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</developerConnection>
-        <url>http://code.google.com/p/themoviedbapi/source/browse/trunk/themoviedbapi</url>
+        <connection>scm:svn:http://themoviedbapi.googlecode.com/svn/tags/themoviedbapi-3.2</connection>
+        <developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/tags/themoviedbapi-3.2</developerConnection>
+        <url>http://code.google.com/p/themoviedbapi/source/browse/tags/themoviedbapi-3.2</url>
     </scm>
 
     <properties>
