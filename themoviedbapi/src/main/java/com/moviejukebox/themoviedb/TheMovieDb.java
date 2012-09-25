@@ -30,7 +30,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 /**
  * The MovieDb API
  *
- * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
+ * This is for version 3 of the API as specified here:
+ * http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -40,22 +41,33 @@ public class TheMovieDb {
     private String apiKey;
     private TmdbConfiguration tmdbConfig;
     /*
-     * API Methods: These are not set to static so that multiple instances of
+     * API Methods
+     *
+     * These are not set to static so that multiple instances of
      * the API can co-exist
+     *
+     * TODO: See issue 9 http://code.google.com/p/themoviedbapi/issues/detail?id=9
      */
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
     private static final String BASE_COMPANY = "company/";
     private static final String BASE_GENRE = "genre/";
-    // Configuration URL
+    private static final String BASE_AUTH = "authentication/";
+    private static final String BASE_COLLECTION = "collection/";
+    private static final String BASE_ACCOUNT = "account/";
+    // Configuration
     private final ApiUrl tmdbConfigUrl = new ApiUrl(this, "configuration");
-    // Search URLS
-    private final ApiUrl tmdbSearchMovie = new ApiUrl(this, "search/movie");
-    private final ApiUrl tmdbSearchPeople = new ApiUrl(this, "search/person");
-    private final ApiUrl tmdbSearchCompanies = new ApiUrl(this, "search/company");
-    // Collections
-    private final ApiUrl tmdbCollectionInfo = new ApiUrl(this, "collection/");
-    // Movie Info
+    // Authentication
+    private final ApiUrl tmdbAuthToken = new ApiUrl(this, BASE_AUTH, "token/new");
+    private final ApiUrl tmdbAuthSession = new ApiUrl(this, BASE_AUTH, "session/new");
+    // Account
+    private final ApiUrl tmdbAccount = new ApiUrl(this, BASE_ACCOUNT);
+    private final ApiUrl tmdbFavouriteMovies = new ApiUrl(this, BASE_ACCOUNT, "/favorite_movies");
+    private final ApiUrl tmdbPostFavourite = new ApiUrl(this, BASE_ACCOUNT, "/favorite");
+    private final ApiUrl tmdbRatedMovies = new ApiUrl(this, BASE_ACCOUNT, "/rated_movies");
+    private final ApiUrl tmdbMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
+    private final ApiUrl tmdbPostMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
+    // Movies
     private final ApiUrl tmdbMovieInfo = new ApiUrl(this, BASE_MOVIE);
     private final ApiUrl tmdbMovieAltTitles = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
     private final ApiUrl tmdbMovieCasts = new ApiUrl(this, BASE_MOVIE, "/casts");
@@ -65,22 +77,29 @@ public class TheMovieDb {
     private final ApiUrl tmdbMovieTrailers = new ApiUrl(this, BASE_MOVIE, "/trailers");
     private final ApiUrl tmdbMovieTranslations = new ApiUrl(this, BASE_MOVIE, "/translations");
     private final ApiUrl tmdbMovieSimilarMovies = new ApiUrl(this, BASE_MOVIE, "/similar_movies");
-    // Person Info
+    private final ApiUrl tmdbLatestMovie = new ApiUrl(this, BASE_MOVIE, "/latest");
+    private final ApiUrl tmdbUpcoming = new ApiUrl(this, BASE_MOVIE, "/upcoming");
+    private final ApiUrl tmdbNowPlaying = new ApiUrl(this, BASE_MOVIE, "/now-playing");
+    private final ApiUrl tmdbPopularMovieList = new ApiUrl(this, BASE_MOVIE, "/popular");
+    private final ApiUrl tmdbTopRatedMovies = new ApiUrl(this, BASE_MOVIE, "/top-rated");
+    private final ApiUrl tmdbPostRating = new ApiUrl(this, BASE_MOVIE, "/rating");
+    // Collections
+    private final ApiUrl tmdbCollectionInfo = new ApiUrl(this, BASE_COLLECTION);
+    private final ApiUrl tmdbCollectionImages = new ApiUrl(this, BASE_COLLECTION, "/images");
+    // People
     private final ApiUrl tmdbPersonInfo = new ApiUrl(this, BASE_PERSON);
     private final ApiUrl tmdbPersonCredits = new ApiUrl(this, BASE_PERSON, "/credits");
     private final ApiUrl tmdbPersonImages = new ApiUrl(this, BASE_PERSON, "/images");
-    // Misc Movie
-    // Movie Add Rating - See issue 9 http://code.google.com/p/themoviedbapi/issues/detail?id=9
-    private final ApiUrl tmdbLatestMovie = new ApiUrl(this, "latest/movie");
-    private final ApiUrl tmdbNowPlaying = new ApiUrl(this, "movie/now-playing");
-    private final ApiUrl tmdbPopularMovieList = new ApiUrl(this, "movie/popular");
-    private final ApiUrl tmdbTopRatedMovies = new ApiUrl(this, "movie/top-rated");
-    // Company Info
+    // Companies
     private final ApiUrl tmdbCompanyInfo = new ApiUrl(this, BASE_COMPANY);
     private final ApiUrl tmdbCompanyMovies = new ApiUrl(this, BASE_COMPANY, "/movies");
-    // Genre Info
-    private final ApiUrl tmdbGenreList = new ApiUrl(this, "genre/list");
+    // Genres
+    private final ApiUrl tmdbGenreList = new ApiUrl(this, BASE_GENRE, "/list");
     private final ApiUrl tmdbGenreMovies = new ApiUrl(this, BASE_GENRE, "/movies");
+    // Search
+    private final ApiUrl tmdbSearchMovie = new ApiUrl(this, "search/movie");
+    private final ApiUrl tmdbSearchPeople = new ApiUrl(this, "search/person");
+    private final ApiUrl tmdbSearchCompanies = new ApiUrl(this, "search/company");
 
     /*
      * Jackson JSON configuration
@@ -96,11 +115,11 @@ public class TheMovieDb {
     public TheMovieDb(String apiKey) throws MovieDbException {
         this.apiKey = apiKey;
         URL configUrl = tmdbConfigUrl.getQueryUrl("");
-        String webPage = WebBrowser.request(configUrl);
+        String webpage = WebBrowser.request(configUrl);
         FilteringLayout.addApiKey(apiKey);
 
         try {
-            WrapperConfig wc = mapper.readValue(webPage, WrapperConfig.class);
+            WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
             tmdbConfig = wc.getTmdbConfiguration();
         } catch (IOException ex) {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", ex);
@@ -201,9 +220,11 @@ public class TheMovieDb {
     }
 
     /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
+     * Search Movies This is a good starting point to start finding movies on
+     * TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through movies quickly.
+     * The idea is to be a quick and light method so you can iterate through
+     * movies quickly.
      *
      * http://help.themoviedb.org/kb/api/search-movies
      *
@@ -218,13 +239,13 @@ public class TheMovieDb {
     public List<MovieDb> searchMovie(String movieName, String language, boolean allResults) throws MovieDbException {
 
         URL url = tmdbSearchMovie.getQueryUrl(movieName, language, 1);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to find movie: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -241,12 +262,12 @@ public class TheMovieDb {
     public MovieDb getMovieInfo(int movieId, String language) throws MovieDbException {
 
         URL url = tmdbMovieInfo.getIdUrl(movieId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            return mapper.readValue(webPage, MovieDb.class);
+            return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -263,17 +284,18 @@ public class TheMovieDb {
     public MovieDb getMovieInfoImdb(String imdbId, String language) throws MovieDbException {
 
         URL url = tmdbMovieInfo.getIdUrl(imdbId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            return mapper.readValue(webPage, MovieDb.class);
+            return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for
+     * a particular movie.
      *
      * @param movieId
      * @param country
@@ -283,13 +305,13 @@ public class TheMovieDb {
     public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
 
         URL url = tmdbMovieAltTitles.getIdUrl(movieId, ApiUrl.DEFAULT_STRING, country);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            WrapperAlternativeTitles wrapper = mapper.readValue(webPage, WrapperAlternativeTitles.class);
+            WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
             return wrapper.getTitles();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie alternative titles: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -307,9 +329,9 @@ public class TheMovieDb {
         List<Person> people = new ArrayList<Person>();
 
         URL url = tmdbMovieCasts.getIdUrl(movieId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            WrapperMovieCasts wrapper = mapper.readValue(webPage, WrapperMovieCasts.class);
+            WrapperMovieCasts wrapper = mapper.readValue(webpage, WrapperMovieCasts.class);
 
             // Add a cast member
             for (PersonCast cast : wrapper.getCast()) {
@@ -328,12 +350,13 @@ public class TheMovieDb {
             return people;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie casts: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the
+     * images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -344,9 +367,9 @@ public class TheMovieDb {
 
         List<Artwork> artwork = new ArrayList<Artwork>();
         URL url = tmdbMovieImages.getIdUrl(movieId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            WrapperImages wrapper = mapper.readValue(webPage, WrapperImages.class);
+            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
 
             // Add all the posters to the list
             for (Artwork poster : wrapper.getPosters()) {
@@ -363,12 +386,13 @@ public class TheMovieDb {
             return artwork;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie images: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added
+     * to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -379,19 +403,20 @@ public class TheMovieDb {
     public List<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
 
         URL url = tmdbMovieKeywords.getIdUrl(movieId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovieKeywords wrapper = mapper.readValue(webPage, WrapperMovieKeywords.class);
+            WrapperMovieKeywords wrapper = mapper.readValue(webpage, WrapperMovieKeywords.class);
             return wrapper.getKeywords();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie keywords: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data
+     * we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -401,19 +426,20 @@ public class TheMovieDb {
     public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
 
         URL url = tmdbMovieReleaseInfo.getIdUrl(movieId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperReleaseInfo wrapper = mapper.readValue(webPage, WrapperReleaseInfo.class);
+            WrapperReleaseInfo wrapper = mapper.readValue(webpage, WrapperReleaseInfo.class);
             return wrapper.getCountries();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie release information: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular movie.
+     * This method is used to retrieve all of the trailers for a particular
+     * movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -426,10 +452,10 @@ public class TheMovieDb {
 
         List<Trailer> trailers = new ArrayList<Trailer>();
         URL url = tmdbMovieTrailers.getIdUrl(movieId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperTrailers wrapper = mapper.readValue(webPage, WrapperTrailers.class);
+            WrapperTrailers wrapper = mapper.readValue(webpage, WrapperTrailers.class);
 
             // Add the trailer to the return list along with it's source
             for (Trailer trailer : wrapper.getQuicktime()) {
@@ -444,12 +470,13 @@ public class TheMovieDb {
             return trailers;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie trailers: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
+     * This method is used to retrieve a list of the available translations for
+     * a specific movie.
      *
      * @param movieId
      * @return
@@ -458,21 +485,23 @@ public class TheMovieDb {
     public List<Translation> getMovieTranslations(int movieId) throws MovieDbException {
 
         URL url = tmdbMovieTranslations.getIdUrl(movieId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperTranslations wrapper = mapper.readValue(webPage, WrapperTranslations.class);
+            WrapperTranslations wrapper = mapper.readValue(webpage, WrapperTranslations.class);
             return wrapper.getTranslations();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie tranlations: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the basic information about a movie collection.
+     * This method is used to retrieve all of the basic information about a
+     * movie collection.
      *
-     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
+     * You can get the ID needed for this method by making a getMovieInfo
+     * request for the belongs_to_collection.
      *
      * @param movieId
      * @param language
@@ -482,13 +511,13 @@ public class TheMovieDb {
     public CollectionInfo getCollectionInfo(int movieId, String language) throws MovieDbException {
 
         URL url = tmdbCollectionInfo.getIdUrl(movieId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            return mapper.readValue(webPage, CollectionInfo.class);
+            return mapper.readValue(webpage, CollectionInfo.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie tranlations: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -528,7 +557,8 @@ public class TheMovieDb {
     /**
      * This is a good starting point to start finding people on TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
+     * The idea is to be a quick and light method so you can iterate through
+     * people quickly.
      *
      * TODO: Fix allResults
      *
@@ -540,14 +570,14 @@ public class TheMovieDb {
     public List<Person> searchPeople(String personName, boolean allResults) throws MovieDbException {
 
         URL url = tmdbSearchPeople.getQueryUrl(personName, "", 1);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperPerson wrapper = mapper.readValue(webPage, WrapperPerson.class);
+            WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
             return wrapper.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to find person: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -563,18 +593,19 @@ public class TheMovieDb {
     public Person getPersonInfo(int personId) throws MovieDbException {
 
         URL url = tmdbPersonInfo.getIdUrl(personId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            return mapper.readValue(webPage, Person.class);
+            return mapper.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get movie info: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the cast & crew information for the person.
+     * This method is used to retrieve all of the cast & crew information for
+     * the person.
      *
      * It will return the single highest rated poster for each movie record.
      *
@@ -587,10 +618,10 @@ public class TheMovieDb {
         List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
 
         URL url = tmdbPersonCredits.getIdUrl(personId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperPersonCredits wrapper = mapper.readValue(webPage, WrapperPersonCredits.class);
+            WrapperPersonCredits wrapper = mapper.readValue(webpage, WrapperPersonCredits.class);
 
             // Add a cast member
             for (PersonCredit cast : wrapper.getCast()) {
@@ -605,7 +636,7 @@ public class TheMovieDb {
             return personCredits;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get person credits: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -621,10 +652,10 @@ public class TheMovieDb {
         List<Artwork> personImages = new ArrayList<Artwork>();
 
         URL url = tmdbPersonImages.getIdUrl(personId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webPage, WrapperImages.class);
+            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
 
             // Update the image type
             for (Artwork artwork : wrapper.getProfiles()) {
@@ -634,7 +665,7 @@ public class TheMovieDb {
             return personImages;
         } catch (IOException ex) {
             LOGGER.warn("Failed to get person images: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -646,20 +677,45 @@ public class TheMovieDb {
     public MovieDb getLatestMovie() throws MovieDbException {
 
         URL url = tmdbLatestMovie.getIdUrl("");
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            return mapper.readValue(webPage, MovieDb.class);
+            return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
+    }
+
+    /**
+     * Get the list of upcoming movies.
+     *
+     * This list refreshes every day.
+     *
+     * The maximum number of items this list will include is 100.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getUpcoming(String language) throws MovieDbException {
+        URL url = tmdbUpcoming.getIdUrl("", language);
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            return wrapper.getMovies();
+        } catch (IOException ex) {
+            LOGGER.warn("Failed to get upcoming movies: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+
     }
 
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
      *
      * TODO: Implement more than 20 movies
      *
@@ -670,14 +726,14 @@ public class TheMovieDb {
      */
     public List<MovieDb> getNowPlayingMovies(String language, boolean allResults) throws MovieDbException {
         URL url = tmdbNowPlaying.getIdUrl("", language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get now playing movies: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -695,19 +751,20 @@ public class TheMovieDb {
      */
     public List<MovieDb> getPopularMovieList(String language, boolean allResults) throws MovieDbException {
         URL url = tmdbPopularMovieList.getIdUrl("", language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get popular movie list: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb.
      *
      * The default response will return 20 movies.
      *
@@ -720,19 +777,20 @@ public class TheMovieDb {
      */
     public List<MovieDb> getTopRatedMovies(String language, boolean allResults) throws MovieDbException {
         URL url = tmdbTopRatedMovies.getIdUrl("", language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get top rated movies: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * This method is used to retrieve the basic information about a production company on TMDb.
+     * This method is used to retrieve the basic information about a production
+     * company on TMDb.
      *
      * @param companyId
      * @return
@@ -740,21 +798,21 @@ public class TheMovieDb {
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
         URL url = tmdbCompanyInfo.getIdUrl(companyId);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            return mapper.readValue(webPage, Company.class);
+            return mapper.readValue(webpage, Company.class);
         } catch (IOException ex) {
             LOGGER.warn("Failed to get company information: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
      * This method is used to retrieve the movies associated with a company.
      *
-     * These movies are returned in order of most recently released to oldest. The default response will return 20
-     * movies per page.
+     * These movies are returned in order of most recently released to oldest.
+     * The default response will return 20 movies per page.
      *
      * TODO: Implement more than 20 movies
      *
@@ -766,22 +824,22 @@ public class TheMovieDb {
      */
     public List<MovieDb> getCompanyMovies(int companyId, String language, boolean allResults) throws MovieDbException {
         URL url = tmdbCompanyMovies.getIdUrl(companyId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperCompanyMovies wrapper = mapper.readValue(webPage, WrapperCompanyMovies.class);
+            WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
             return wrapper.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get company movies: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to
-     * those returned on movie calls.
+     * You can use this method to search for production companies that are part
+     * of TMDb. The company IDs will map to those returned on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
@@ -796,20 +854,22 @@ public class TheMovieDb {
     public List<Company> searchCompanies(String companyName, String language, boolean allResults) throws MovieDbException {
 
         URL url = tmdbSearchCompanies.getQueryUrl(companyName, language, 1);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
         try {
-            WrapperCompany wrapper = mapper.readValue(webPage, WrapperCompany.class);
+            WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
             return wrapper.getResults();
         } catch (IOException ex) {
             LOGGER.warn("Failed to find company: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a particular movie.
+     * The similar movies method will let you retrieve the similar movies for a
+     * particular movie.
      *
-     * This data is created dynamically but with the help of users votes on TMDb.
+     * This data is created dynamically but with the help of users votes on
+     * TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -822,14 +882,14 @@ public class TheMovieDb {
     public List<MovieDb> getSimilarMovies(int movieId, String language, boolean allResults) throws MovieDbException {
 
         URL url = tmdbMovieSimilarMovies.getIdUrl(movieId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get similar movies: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
@@ -843,23 +903,25 @@ public class TheMovieDb {
      */
     public List<Genre> getGenreList(String language) throws MovieDbException {
         URL url = tmdbGenreList.getQueryUrl("", language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperGenres wrapper = mapper.readValue(webPage, WrapperGenres.class);
+            WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
             return wrapper.getGenres();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get genre list: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
      * Get a list of movies per genre.
      *
-     * It is important to understand that only movies with more than 10 votes get listed.
+     * It is important to understand that only movies with more than 10 votes
+     * get listed.
      *
-     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
+     * This prevents movies from 1 10/10 rating from being listed first and for
+     * the first 5 pages.
      *
      * @param genreId
      * @param language
@@ -868,14 +930,14 @@ public class TheMovieDb {
      */
     public List<MovieDb> getGenreMovies(int genreId, String language, boolean allResults) throws MovieDbException {
         URL url = tmdbGenreMovies.getIdUrl(genreId, language);
-        String webPage = WebBrowser.request(url);
+        String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webPage, WrapperMovie.class);
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOGGER.warn("Failed to get genre movie list: " + ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webPage, ex);
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 }
