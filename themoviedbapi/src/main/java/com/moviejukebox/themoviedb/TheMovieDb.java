@@ -15,6 +15,7 @@ package com.moviejukebox.themoviedb;
 import com.moviejukebox.themoviedb.MovieDbException.MovieDbExceptionType;
 import com.moviejukebox.themoviedb.model.*;
 import com.moviejukebox.themoviedb.tools.ApiUrl;
+import static com.moviejukebox.themoviedb.tools.ApiUrl.*;
 import com.moviejukebox.themoviedb.tools.FilteringLayout;
 import com.moviejukebox.themoviedb.tools.WebBrowser;
 import com.moviejukebox.themoviedb.wrapper.*;
@@ -53,54 +54,17 @@ public class TheMovieDb {
     private static final String BASE_GENRE = "genre/";
     private static final String BASE_AUTH = "authentication/";
     private static final String BASE_COLLECTION = "collection/";
-    private static final String BASE_ACCOUNT = "account/";
+//    private static final String BASE_ACCOUNT = "account/";
     private static final String BASE_SEARCH = "search/";
-    // Configuration
-    private final ApiUrl tmdbConfigUrl = new ApiUrl(this, "configuration");
-    // Authentication
-    private final ApiUrl tmdbAuthorisationToken = new ApiUrl(this, BASE_AUTH, "token/new");
-    private final ApiUrl tmdbAuthorisationSession = new ApiUrl(this, BASE_AUTH, "session/new");
     // Account
-    private final ApiUrl tmdbAccount = new ApiUrl(this, BASE_ACCOUNT);
-    private final ApiUrl tmdbFavouriteMovies = new ApiUrl(this, BASE_ACCOUNT, "/favorite_movies");
-    private final ApiUrl tmdbPostFavourite = new ApiUrl(this, BASE_ACCOUNT, "/favorite");
-    private final ApiUrl tmdbRatedMovies = new ApiUrl(this, BASE_ACCOUNT, "/rated_movies");
-    private final ApiUrl tmdbMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
-    private final ApiUrl tmdbPostMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
-    // Movies
-    private final ApiUrl tmdbMovieInfo = new ApiUrl(this, BASE_MOVIE);
-    private final ApiUrl tmdbMovieAltTitles = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
-    private final ApiUrl tmdbMovieCasts = new ApiUrl(this, BASE_MOVIE, "/casts");
-    private final ApiUrl tmdbMovieImages = new ApiUrl(this, BASE_MOVIE, "/images");
-    private final ApiUrl tmdbMovieKeywords = new ApiUrl(this, BASE_MOVIE, "/keywords");
-    private final ApiUrl tmdbMovieReleaseInfo = new ApiUrl(this, BASE_MOVIE, "/releases");
-    private final ApiUrl tmdbMovieTrailers = new ApiUrl(this, BASE_MOVIE, "/trailers");
-    private final ApiUrl tmdbMovieTranslations = new ApiUrl(this, BASE_MOVIE, "/translations");
-    private final ApiUrl tmdbMovieSimilarMovies = new ApiUrl(this, BASE_MOVIE, "/similar_movies");
-    private final ApiUrl tmdbLatestMovie = new ApiUrl(this, BASE_MOVIE, "/latest");
-    private final ApiUrl tmdbUpcoming = new ApiUrl(this, BASE_MOVIE, "upcoming");
-    private final ApiUrl tmdbNowPlaying = new ApiUrl(this, BASE_MOVIE, "now-playing");
-    private final ApiUrl tmdbPopularMovieList = new ApiUrl(this, BASE_MOVIE, "popular");
-    private final ApiUrl tmdbTopRatedMovies = new ApiUrl(this, BASE_MOVIE, "top-rated");
-    private final ApiUrl tmdbPostRating = new ApiUrl(this, BASE_MOVIE, "/rating");
-    // Collections
-    private final ApiUrl tmdbCollectionInfo = new ApiUrl(this, BASE_COLLECTION);
-    private final ApiUrl tmdbCollectionImages = new ApiUrl(this, BASE_COLLECTION, "/images");
-    // People
-    private final ApiUrl tmdbPersonInfo = new ApiUrl(this, BASE_PERSON);
-    private final ApiUrl tmdbPersonCredits = new ApiUrl(this, BASE_PERSON, "/credits");
-    private final ApiUrl tmdbPersonImages = new ApiUrl(this, BASE_PERSON, "/images");
-    // Companies
-    private final ApiUrl tmdbCompanyInfo = new ApiUrl(this, BASE_COMPANY);
-    private final ApiUrl tmdbCompanyMovies = new ApiUrl(this, BASE_COMPANY, "/movies");
-    // Genres
-    private final ApiUrl tmdbGenreList = new ApiUrl(this, BASE_GENRE, "/list");
-    private final ApiUrl tmdbGenreMovies = new ApiUrl(this, BASE_GENRE, "/movies");
-    // Search
-    private final ApiUrl tmdbSearchMovie = new ApiUrl(this, BASE_SEARCH, "movie");
-    private final ApiUrl tmdbSearchPeople = new ApiUrl(this, BASE_SEARCH, "person");
-    private final ApiUrl tmdbSearchCompanies = new ApiUrl(this, BASE_SEARCH, "company");
-
+    /*
+     private final ApiUrl tmdbAccount = new ApiUrl(this, BASE_ACCOUNT);
+     private final ApiUrl tmdbFavouriteMovies = new ApiUrl(this, BASE_ACCOUNT, "/favorite_movies");
+     private final ApiUrl tmdbPostFavourite = new ApiUrl(this, BASE_ACCOUNT, "/favorite");
+     private final ApiUrl tmdbRatedMovies = new ApiUrl(this, BASE_ACCOUNT, "/rated_movies");
+     private final ApiUrl tmdbMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
+     private final ApiUrl tmdbPostMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
+     */
     /*
      * Jackson JSON configuration
      */
@@ -114,7 +78,8 @@ public class TheMovieDb {
      */
     public TheMovieDb(String apiKey) throws MovieDbException {
         this.apiKey = apiKey;
-        URL configUrl = tmdbConfigUrl.buildUrl();
+        ApiUrl apiUrl = new ApiUrl(this, "configuration");
+        URL configUrl = apiUrl.buildUrl();
         String webpage = WebBrowser.request(configUrl);
         FilteringLayout.addReplacementString(apiKey);
 
@@ -193,7 +158,7 @@ public class TheMovieDb {
             return false;
         }
 
-        if (StringUtils.isNotBlank(year) && !year.equalsIgnoreCase("UNKNOWN") && StringUtils.isNotBlank(moviedb.getReleaseDate())) {
+        if (isValidYear(year) && isValidYear(moviedb.getReleaseDate())) {
             // Compare with year
             String movieYear = moviedb.getReleaseDate().substring(0, 4);
             if (movieYear.equals(year)) {
@@ -217,6 +182,16 @@ public class TheMovieDb {
         }
 
         return false;
+    }
+
+    /**
+     * Check the year is not blank or UNKNOWN
+     *
+     * @param year
+     * @return
+     */
+    private static boolean isValidYear(String year) {
+        return (StringUtils.isNotBlank(year) && !year.equals("UNKNOWN"));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Configuration Functions">
@@ -269,7 +244,9 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
-        URL url = tmdbAuthorisationToken.buildUrl();
+        ApiUrl apiUrl = new ApiUrl(this, BASE_AUTH, "token/new");
+
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -290,13 +267,15 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_AUTH, "session/new");
+
         if (!token.getSuccess()) {
             LOGGER.warn("Authorisation token was not successful!");
             throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, "Authorisation token was not successful!");
         }
 
-        tmdbAuthorisationSession.addArgument(ApiUrl.PARAM_TOKEN, token.getRequestToken());
-        URL url = tmdbAuthorisationSession.buildUrl();
+        apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -324,14 +303,15 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public MovieDb getMovieInfo(int movieId, String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE);
 
-        tmdbMovieInfo.addArgument(ApiUrl.PARAM_ID, movieId);
+        apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbMovieInfo.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
-        URL url = tmdbMovieInfo.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
         try {
             return mapper.readValue(webpage, MovieDb.class);
@@ -352,14 +332,15 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public MovieDb getMovieInfoImdb(String imdbId, String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE);
 
-        tmdbMovieInfo.addArgument(ApiUrl.PARAM_ID, imdbId);
+        apiUrl.addArgument(PARAM_ID, imdbId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbMovieInfo.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
-        URL url = tmdbMovieInfo.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
         try {
             return mapper.readValue(webpage, MovieDb.class);
@@ -378,13 +359,14 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
-        tmdbMovieAltTitles.addArgument(ApiUrl.PARAM_ID, movieId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
+        apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(country)) {
-            tmdbMovieAltTitles.addArgument(ApiUrl.PARAM_COUNTRY, country);
+            apiUrl.addArgument(PARAM_COUNTRY, country);
         }
 
-        URL url = tmdbMovieAltTitles.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
         try {
             WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
@@ -407,8 +389,9 @@ public class TheMovieDb {
     public List<Person> getMovieCasts(int movieId) throws MovieDbException {
         List<Person> people = new ArrayList<Person>();
 
-        tmdbMovieCasts.addArgument(ApiUrl.PARAM_ID, movieId);
-        URL url = tmdbMovieCasts.buildUrl();
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/casts");
+        apiUrl.addArgument(PARAM_ID, movieId);
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -444,15 +427,15 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
-
-        tmdbMovieImages.addArgument(ApiUrl.PARAM_ID, movieId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/images");
+        apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbMovieImages.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         List<Artwork> artwork = new ArrayList<Artwork>();
-        URL url = tmdbMovieImages.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -486,10 +469,10 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/keywords");
+        apiUrl.addArgument(PARAM_ID, movieId);
 
-        tmdbMovieKeywords.addArgument(ApiUrl.PARAM_ID, movieId);
-
-        URL url = tmdbMovieKeywords.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -510,11 +493,11 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/releases");
+        apiUrl.addArgument(PARAM_ID, movieId);
+        apiUrl.addArgument(PARAM_LANGUAGE, language);
 
-        tmdbMovieReleaseInfo.addArgument(ApiUrl.PARAM_ID, movieId);
-        tmdbMovieReleaseInfo.addArgument(ApiUrl.PARAM_LANGUAGE, language);
-
-        URL url = tmdbMovieReleaseInfo.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -537,16 +520,16 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Trailer> getMovieTrailers(int movieId, String language) throws MovieDbException {
-
         List<Trailer> trailers = new ArrayList<Trailer>();
 
-        tmdbMovieTrailers.addArgument(ApiUrl.PARAM_ID, movieId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/trailers");
+        apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbMovieTrailers.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
-        URL url = tmdbMovieTrailers.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -577,9 +560,10 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Translation> getMovieTranslations(int movieId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/translations");
+        apiUrl.addArgument(PARAM_ID, movieId);
 
-        tmdbMovieTranslations.addArgument(ApiUrl.PARAM_ID, movieId);
-        URL url = tmdbMovieTranslations.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -605,17 +589,18 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> getSimilarMovies(int movieId, String language, int page) throws MovieDbException {
-        tmdbMovieSimilarMovies.addArgument(ApiUrl.PARAM_ID, movieId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/similar_movies");
+        apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbMovieSimilarMovies.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbMovieSimilarMovies.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbMovieSimilarMovies.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -633,8 +618,8 @@ public class TheMovieDb {
      * @return
      */
     public MovieDb getLatestMovie() throws MovieDbException {
-
-        URL url = tmdbLatestMovie.buildUrl();
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/latest");
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -656,15 +641,17 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "upcoming");
+
         if (StringUtils.isNotBlank(language)) {
-            tmdbUpcoming.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbUpcoming.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbUpcoming.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -690,16 +677,17 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "now-playing");
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbNowPlaying.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbNowPlaying.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbNowPlaying.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -724,15 +712,17 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "popular");
+
         if (StringUtils.isNotBlank(language)) {
-            tmdbPopularMovieList.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbPopularMovieList.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbPopularMovieList.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -757,15 +747,17 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "top-rated");
+
         if (StringUtils.isNotBlank(language)) {
-            tmdbTopRatedMovies.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbTopRatedMovies.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbTopRatedMovies.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -788,9 +780,10 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public boolean postMovieRating(String sessionId, String rating) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/rating");
 
-        tmdbPostRating.addArgument(ApiUrl.PARAM_SESSION, sessionId);
-        tmdbPostRating.addArgument(ApiUrl.PARAM_VALUE, rating);
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        apiUrl.addArgument(PARAM_VALUE, rating);
 
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
@@ -809,14 +802,14 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-
-        tmdbCollectionInfo.addArgument(ApiUrl.PARAM_ID, collectionId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_COLLECTION);
+        apiUrl.addArgument(PARAM_ID, collectionId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbCollectionInfo.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
-        URL url = tmdbCollectionInfo.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -837,14 +830,14 @@ public class TheMovieDb {
      */
     public List<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
         List<Artwork> artwork = new ArrayList<Artwork>();
-
-        tmdbCollectionImages.addArgument(ApiUrl.PARAM_ID, collectionId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_COLLECTION, "/images");
+        apiUrl.addArgument(PARAM_ID, collectionId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbCollectionImages.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
-        URL url = tmdbCollectionImages.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -883,10 +876,11 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public Person getPersonInfo(int personId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON);
 
-        tmdbPersonInfo.addArgument(ApiUrl.PARAM_ID, personId);
+        apiUrl.addArgument(PARAM_ID, personId);
 
-        URL url = tmdbPersonInfo.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -907,12 +901,13 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON, "/credits");
 
         List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
 
-        tmdbPersonCredits.addArgument(ApiUrl.PARAM_ID, personId);
+        apiUrl.addArgument(PARAM_ID, personId);
 
-        URL url = tmdbPersonCredits.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -943,12 +938,13 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Artwork> getPersonImages(int personId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON, "/images");
 
         List<Artwork> personImages = new ArrayList<Artwork>();
 
-        tmdbPersonImages.addArgument(ApiUrl.PARAM_ID, personId);
+        apiUrl.addArgument(PARAM_ID, personId);
 
-        URL url = tmdbPersonImages.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -977,10 +973,11 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_COMPANY);
 
-        tmdbCompanyInfo.addArgument(ApiUrl.PARAM_ID, companyId);
+        apiUrl.addArgument(PARAM_ID, companyId);
 
-        URL url = tmdbCompanyInfo.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -1006,18 +1003,19 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_COMPANY, "/movies");
 
-        tmdbCompanyMovies.addArgument(ApiUrl.PARAM_ID, companyId);
+        apiUrl.addArgument(PARAM_ID, companyId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbCompanyMovies.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbCompanyMovies.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbCompanyMovies.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -1041,9 +1039,10 @@ public class TheMovieDb {
      * @return
      */
     public List<Genre> getGenreList(String language) throws MovieDbException {
-        tmdbGenreList.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_GENRE, "/list");
+        apiUrl.addArgument(PARAM_LANGUAGE, language);
 
-        URL url = tmdbGenreList.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -1068,18 +1067,18 @@ public class TheMovieDb {
      * @return
      */
     public List<MovieDb> getGenreMovies(int genreId, String language, int page) throws MovieDbException {
-
-        tmdbGenreMovies.addArgument(ApiUrl.PARAM_ID, genreId);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_GENRE, "/movies");
+        apiUrl.addArgument(PARAM_ID, genreId);
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbGenreMovies.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
         if (page > 0) {
-            tmdbGenreMovies.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbGenreMovies.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
@@ -1106,25 +1105,26 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "movie");
         if (StringUtils.isNotBlank(movieName)) {
-            tmdbSearchMovie.addArgument(ApiUrl.PARAM_QUERY, movieName);
+            apiUrl.addArgument(PARAM_QUERY, movieName);
         }
 
         if (searchYear > 0) {
-            tmdbSearchMovie.addArgument(ApiUrl.PARAM_YEAR, Integer.toString(searchYear));
+            apiUrl.addArgument(PARAM_YEAR, Integer.toString(searchYear));
         }
 
         if (StringUtils.isNotBlank(language)) {
-            tmdbSearchMovie.addArgument(ApiUrl.PARAM_LANGUAGE, language);
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
-        tmdbSearchMovie.addArgument(ApiUrl.PARAM_ADULT, Boolean.toString(includeAdult));
+        apiUrl.addArgument(PARAM_ADULT, Boolean.toString(includeAdult));
 
         if (page > 0) {
-            tmdbSearchMovie.addArgument(ApiUrl.PARAM_PAGE, Integer.toString(page));
+            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
         }
 
-        URL url = tmdbSearchMovie.buildUrl();
+        URL url = apiUrl.buildUrl();
         LOGGER.info(url.toString());
 
         String webpage = WebBrowser.request(url);
@@ -1152,13 +1152,14 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        tmdbSearchCompanies.addArgument(ApiUrl.PARAM_QUERY, companyName);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "company");
+        apiUrl.addArgument(PARAM_QUERY, companyName);
 
         if (page > 0) {
-            tmdbSearchCompanies.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbSearchCompanies.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
         try {
             WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
@@ -1182,14 +1183,15 @@ public class TheMovieDb {
      * @throws MovieDbException
      */
     public List<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        tmdbSearchPeople.addArgument(ApiUrl.PARAM_QUERY, personName);
-        tmdbSearchPeople.addArgument(ApiUrl.PARAM_ADULT, includeAdult);
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "person");
+        apiUrl.addArgument(PARAM_QUERY, personName);
+        apiUrl.addArgument(PARAM_ADULT, includeAdult);
 
         if (page > 0) {
-            tmdbSearchPeople.addArgument(ApiUrl.PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, page);
         }
 
-        URL url = tmdbSearchPeople.buildUrl();
+        URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
         try {
