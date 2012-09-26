@@ -20,18 +20,27 @@ import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * Log4J Filtering routine to remove API keys from the output
+ *
  * @author Stuart.Boston
  *
  */
 public class FilteringLayout extends PatternLayout {
-    private static Pattern apiKeys = Pattern.compile("DO_NOT_MATCH");
 
-    public static void addApiKey(String apiKey) {
-        apiKeys = Pattern.compile(apiKey);
+    private static final String REPLACEMENT = "[APIKEY]";
+    private static Pattern replacementPattern = Pattern.compile("DO_NOT_MATCH");
+
+    /**
+     * Add the string to replace in the log output
+     *
+     * @param replacementString
+     */
+    public static void addReplacementString(String replacementString) {
+        replacementPattern = Pattern.compile(replacementString);
     }
 
     /**
      * Extend the format to remove the API_KEYS from the output
+     *
      * @param event
      * @return
      */
@@ -40,12 +49,12 @@ public class FilteringLayout extends PatternLayout {
         if (event.getMessage() instanceof String) {
             String message = event.getRenderedMessage();
 
-            Matcher matcher = apiKeys.matcher(message);
+            Matcher matcher = replacementPattern.matcher(message);
             if (matcher.find()) {
-                String maskedMessage = matcher.replaceAll("[APIKEY]");
+                String maskedMessage = matcher.replaceAll(REPLACEMENT);
 
-                Throwable throwable = event.getThrowableInformation() != null ?
-                        event.getThrowableInformation().getThrowable() : null;
+                Throwable throwable = event.getThrowableInformation() != null
+                        ? event.getThrowableInformation().getThrowable() : null;
 
                 LoggingEvent maskedEvent = new LoggingEvent(event.fqnOfCategoryClass,
                         Logger.getLogger(event.getLoggerName()), event.timeStamp,

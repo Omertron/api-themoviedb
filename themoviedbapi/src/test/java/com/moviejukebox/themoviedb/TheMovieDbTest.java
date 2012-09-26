@@ -13,9 +13,11 @@
 package com.moviejukebox.themoviedb;
 
 import com.moviejukebox.themoviedb.model.*;
+import com.moviejukebox.themoviedb.tools.FilteringLayout;
 import java.io.IOException;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -46,6 +48,10 @@ public class TheMovieDbTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        // Set the logger level to TRACE
+        Logger.getRootLogger().setLevel(Level.TRACE);
+        // Show the version of the API
+        TheMovieDb.showVersion();
     }
 
     @AfterClass
@@ -54,6 +60,8 @@ public class TheMovieDbTest {
 
     @Before
     public void setUp() {
+        // Make sure the filter isn't applied to the test output
+        FilteringLayout.addReplacementString("DO_NOT_MATCH");
     }
 
     @After
@@ -77,6 +85,14 @@ public class TheMovieDbTest {
     }
 
     /**
+     * Test of showVersion method, of class TheMovieDb.
+     */
+    @Test
+    public void testShowVersion() {
+        // Not required
+    }
+
+    /**
      * Test of searchMovie method, of class TheMovieDb.
      */
     @Test
@@ -84,15 +100,16 @@ public class TheMovieDbTest {
         LOGGER.info("searchMovie");
 
         // Try a movie with less than 1 page of results
-        List<MovieDb> movieList = tmdb.searchMovie("Blade Runner", "", true);
+        List<MovieDb> movieList = tmdb.searchMovie("Blade Runner", 0, "", true, 0);
+//        List<MovieDb> movieList = tmdb.searchMovie("Blade Runner", "", true);
         assertTrue("No movies found, should be at least 1", movieList.size() > 0);
 
         // Try a russian langugage movie
-        movieList = tmdb.searchMovie("О чём говорят мужчины", "ru", true);
+        movieList = tmdb.searchMovie("О чём говорят мужчины", 0, "ru", true, 0);
         assertTrue("No movies found, should be at least 1", movieList.size() > 0);
 
         // Try a movie with more than 20 results
-        movieList = tmdb.searchMovie("Star Wars", "en", false);
+        movieList = tmdb.searchMovie("Star Wars", 0, "en", false, 0);
         assertTrue("Not enough movies found, should be over 15, found " + movieList.size(), movieList.size() >= 15);
     }
 
@@ -212,6 +229,10 @@ public class TheMovieDbTest {
         assertFalse("No collection information", result.getParts().isEmpty());
     }
 
+    /**
+     * Test of createImageUrl method, of class TheMovieDb.
+     * @throws MovieDbException
+     */
     @Test
     public void testCreateImageUrl() throws MovieDbException {
         LOGGER.info("createImageUrl");
@@ -384,14 +405,6 @@ public class TheMovieDbTest {
     }
 
     /**
-     * Test of showVersion method, of class TheMovieDb.
-     */
-    @Test
-    public void testShowVersion() {
-        // Not required
-    }
-
-    /**
      * Test of searchCompanies method, of class TheMovieDb.
      */
     @Test
@@ -429,5 +442,55 @@ public class TheMovieDbTest {
         LOGGER.info("getGenreMovies");
         List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, "", true);
         assertTrue("No genre movies found", !results.isEmpty());
+    }
+
+    /**
+     * Test of getUpcoming method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetUpcoming() throws Exception {
+        LOGGER.info("getUpcoming");
+        List<MovieDb> results = tmdb.getUpcoming("");
+        assertTrue("No upcoming movies found", !results.isEmpty());
+    }
+
+    /**
+     * Test of getCollectionImages method, of class TheMovieDb.
+     */
+    @Test
+    public void testGetCollectionImages() throws Exception {
+        LOGGER.info("getCollectionImages");
+        String language = "";
+        List<Artwork> result = tmdb.getCollectionImages(ID_MOVIE_STAR_WARS_COLLECTION, language);
+        assertFalse("No artwork found", result.isEmpty());
+    }
+
+    /**
+     * Test of getAuthorisationToken method, of class TheMovieDb.
+     */
+//    @Test
+    public void testGetAuthorisationToken() throws Exception {
+        LOGGER.info("getAuthorisationToken");
+        TokenAuthorisation result = tmdb.getAuthorisationToken();
+        assertFalse("Token is null", result == null);
+        assertTrue("Token is not valid", result.getSuccess());
+        LOGGER.info(result.toString());
+    }
+
+    /**
+     * Test of getSessionToken method, of class TheMovieDb.
+     */
+//    @Test
+    public void testGetSessionToken() throws Exception {
+        LOGGER.info("getSessionToken");
+        TokenAuthorisation token = tmdb.getAuthorisationToken();
+        assertFalse("Token is null", token == null);
+        assertTrue("Token is not valid", token.getSuccess());
+        LOGGER.info(token.toString());
+
+        TokenSession result = tmdb.getSessionToken(token);
+        assertFalse("Session token is null", result == null);
+        assertTrue("Session token is not valid", result.getSuccess());
+        LOGGER.info(result.toString());
     }
 }

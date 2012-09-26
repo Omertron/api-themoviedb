@@ -17,7 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import org.apache.commons.lang3.StringUtils;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,28 +36,42 @@ public class ApiUrl {
      * TheMovieDb API Base URL
      */
     private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
+//    private static final String TMDB_API_BASE = "http://private-3aa3-themoviedb.apiary.io/3/";
     /*
      * Parameter configuration
      */
     private static final String DELIMITER_FIRST = "?";
     private static final String DELIMITER_SUBSEQUENT = "&";
-    private static final String PARAMETER_API_KEY = "api_key="; // The API Key is always needed and always first
-    private static final String PARAMETER_QUERY = "query=";
-    private static final String PARAMETER_LANGUAGE = DELIMITER_SUBSEQUENT + "language=";
-    private static final String PARAMETER_COUNTRY = DELIMITER_SUBSEQUENT + "country=";
-    private static final String PARAMETER_PAGE = DELIMITER_SUBSEQUENT + "page=";
-    public static final String DEFAULT_STRING = "";
-    public static final int DEFAULT_INT = -1;
+    private static final String DEFAULT_STRING = "";
     /*
      * Properties
      */
+    private TheMovieDb tmdb;
     private String method;
     private String submethod;
-    private TheMovieDb tmdb;
+    private Map<String, String> arguments = new HashMap<String, String>();
+    /*
+     * API Parameters
+     */
+    public static final String PARAM_ADULT = "include_adult=";
+    public static final String PARAM_API_KEY = "api_key=";
+    public static final String PARAM_COUNTRY = "country=";
+    public static final String PARAM_FAVORITE = "favorite=";
+    public static final String PARAM_ID = "id=";
+    public static final String PARAM_LANGUAGE = "language=";
+//    public static final String PARAM_MOVIE_ID = "movie_id=";
+    public static final String PARAM_MOVIE_WATCHLIST = "movie_watchlist=";
+    public static final String PARAM_PAGE = "page=";
+    public static final String PARAM_QUERY = "query=";
+    public static final String PARAM_SESSION = "session_id=";
+    public static final String PARAM_TOKEN = "request_token=";
+    public static final String PARAM_VALUE = "value=";
+    public static final String PARAM_YEAR = "year=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
     /**
      * Constructor for the simple API URL method without a sub-method
+     *
      * @param method
      */
     public ApiUrl(TheMovieDb tmdb, String method) {
@@ -67,6 +82,7 @@ public class ApiUrl {
 
     /**
      * Constructor for the API URL with a sub-method
+     *
      * @param method
      * @param submethod
      */
@@ -78,69 +94,58 @@ public class ApiUrl {
     //</editor-fold>
 
     /**
-     * Create the full URL with the API.
+     * Build the URL from the pre-created arguments.
      *
-     * @param query
-     * @param tmdbId
-     * @param language
-     * @param country
-     * @param page
      * @return
      */
-    private URL getFullUrl(String query, String movieId, String language, String country, int page) {
+    public URL buildUrl() {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
 
         // Get the start of the URL
         urlString.append(method);
 
-        // Append the search term if required
-        if (StringUtils.isNotBlank(query)) {
-            urlString.append(DELIMITER_FIRST);
-            urlString.append(PARAMETER_QUERY);
+        // We have either a queury, or a direct request
+        if (arguments.containsKey(PARAM_QUERY)) {
+            // Append the suffix of the API URL
+            urlString.append(submethod);
+
+            // Append the key information
+            urlString.append(DELIMITER_FIRST).append(PARAM_API_KEY);
+            urlString.append(tmdb.getApiKey());
+
+            // Append the search term
+            urlString.append(DELIMITER_SUBSEQUENT);
+            urlString.append(PARAM_QUERY);
+
+            String query = arguments.get(PARAM_QUERY);
 
             try {
                 urlString.append(URLEncoder.encode(query, "UTF-8"));
             } catch (UnsupportedEncodingException ex) {
+                LOGGER.trace("Unable to encode query: '" + query + "' trying raw.");
                 // If we can't encode it, try it raw
                 urlString.append(query);
             }
-        }
 
-        // Append the ID if provided
-        if (StringUtils.isNotBlank(movieId)) {
-            urlString.append(movieId);
-        }
-
-        // Append the suffix of the API URL
-        urlString.append(submethod);
-
-        // Append the key information
-        if (StringUtils.isBlank(query)) {
-            // This is the first parameter
-            urlString.append(DELIMITER_FIRST);
+            arguments.remove(PARAM_QUERY);
         } else {
-            // The first parameter was the query
-            urlString.append(DELIMITER_SUBSEQUENT);
-        }
-        urlString.append(PARAMETER_API_KEY);
-        urlString.append(tmdb.getApiKey());
+            // Append the ID if provided
+            if (arguments.containsKey(PARAM_ID)) {
+                urlString.append(arguments.get(PARAM_ID));
+                arguments.remove(PARAM_ID);
+            }
 
-        // Append the language to the URL
-        if (StringUtils.isNotBlank(language)) {
-            urlString.append(PARAMETER_LANGUAGE);
-            urlString.append(language);
-        }
+            // Append the suffix of the API URL
+            urlString.append(submethod);
 
-        // Append the country to the URL
-        if (StringUtils.isNotBlank(country)) {
-            urlString.append(PARAMETER_COUNTRY);
-            urlString.append(country);
+            // Append the key information
+            urlString.append(DELIMITER_FIRST).append(PARAM_API_KEY);
+            urlString.append(tmdb.getApiKey());
         }
 
-        // Append the page to the URL
-        if (page > DEFAULT_INT) {
-            urlString.append(PARAMETER_PAGE);
-            urlString.append(page);
+        for (Map.Entry<String, String> argEntry : arguments.entrySet()) {
+            urlString.append(DELIMITER_SUBSEQUENT).append(argEntry.getKey());
+            urlString.append(argEntry.getValue());
         }
 
         try {
@@ -149,100 +154,54 @@ public class ApiUrl {
         } catch (MalformedURLException ex) {
             LOGGER.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
             return null;
+        } finally {
+            arguments.clear();
         }
     }
 
     /**
-     * Create an URL using the query (string), language and page
+     * Add arguments individually
      *
-     * @param query
-     * @param language
-     * @param page
-     * @return
+     * @param key
+     * @param value
      */
-    public URL getQueryUrl(String query, String language, int page) {
-        return getFullUrl(query, DEFAULT_STRING, language, null, page);
+    public void addArgument(String key, String value) {
+        arguments.put(key, value);
     }
 
     /**
-     * Create an URL using the query (string)
-     * @param query
-     * @return
-     */
-    public URL getQueryUrl(String query) {
-        return getQueryUrl(query, DEFAULT_STRING, DEFAULT_INT);
-    }
-
-    /**
-     * Create an URL using the query (string) and language
-     * @param query
-     * @param language
-     * @return
-     */
-    public URL getQueryUrl(String query, String language) {
-        return getQueryUrl(query, language, DEFAULT_INT);
-    }
-
-    /**
-     * Create an URL using the movie ID, language and country code
+     * Add arguments individually
      *
-     * @param movieId
-     * @param language
-     * @param country
-     * @return
+     * @param key
+     * @param value
      */
-    public URL getIdUrl(String movieId, String language, String country) {
-        return getFullUrl(DEFAULT_STRING, movieId, language, country, DEFAULT_INT);
+    public void addArgument(String key, int value) {
+        arguments.put(key, Integer.toString(value));
     }
 
     /**
-     * Create an URL using the movie ID and language
-     * @param movieId
-     * @param language
-     * @return
-     */
-    public URL getIdUrl(String movieId, String language) {
-        return getIdUrl(movieId, language, DEFAULT_STRING);
-    }
-
-    /**
-     * Create an URL using the movie ID
-     * @param movieId
-     * @return
-     */
-    public URL getIdUrl(String movieId) {
-        return getIdUrl(movieId, DEFAULT_STRING, DEFAULT_STRING);
-    }
-
-    /**
-     * Create an URL using the movie ID, language and country code
+     * Add arguments individually
      *
-     * @param movieId
-     * @param language
-     * @param country
-     * @return
+     * @param key
+     * @param value
      */
-    public URL getIdUrl(int movieId, String language, String country) {
-        return getIdUrl(String.valueOf(movieId), language, country);
+    public void addArgument(String key, boolean value) {
+        arguments.put(key, Boolean.toString(value));
     }
 
     /**
-     * Create an URL using the movie ID and language
-     * @param movieId
-     * @param language
-     * @return
+     * Clear the arguments
      */
-    public URL getIdUrl(int movieId, String language) {
-        return getIdUrl(String.valueOf(movieId), language, DEFAULT_STRING);
+    public void clearArguments() {
+        arguments.clear();
     }
 
     /**
-     * Create an URL using the movie ID
-     * @param movieId
-     * @return
+     * Set the arguments directly
+     *
+     * @param args
      */
-    public URL getIdUrl(int movieId) {
-        return getIdUrl(String.valueOf(movieId), DEFAULT_STRING, DEFAULT_STRING);
+    public void setArguments(Map<String, String> args) {
+        arguments.putAll(args);
     }
-
 }
