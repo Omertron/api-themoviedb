@@ -13,7 +13,6 @@
 package com.moviejukebox.themoviedb.model;
 
 import java.io.Serializable;
-import javax.imageio.spi.ServiceRegistry;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
