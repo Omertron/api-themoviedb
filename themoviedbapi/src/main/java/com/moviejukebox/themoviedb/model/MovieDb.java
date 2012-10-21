@@ -77,6 +77,8 @@ public class MovieDb implements Serializable {
     private float voteAverage;
     @JsonProperty("vote_count")
     private int voteCount;
+    @JsonProperty("status")
+    private String status;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
@@ -165,6 +167,10 @@ public class MovieDb implements Serializable {
 
     public int getVoteCount() {
         return voteCount;
+    }
+
+    public String getStatus() {
+        return status;
     }
     // </editor-fold>
 
@@ -256,6 +262,11 @@ public class MovieDb implements Serializable {
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // </editor-fold>
 
     /**
@@ -329,6 +340,7 @@ public class MovieDb implements Serializable {
         sb.append("],[tagline=").append(tagline);
         sb.append("],[voteAverage=").append(voteAverage);
         sb.append("],[voteCount=").append(voteCount);
+        sb.append("],[status=").append(status);
         sb.append("]]");
         return sb.toString();
     }
