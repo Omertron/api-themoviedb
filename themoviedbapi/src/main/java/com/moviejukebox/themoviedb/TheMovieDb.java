@@ -1125,7 +1125,6 @@ public class TheMovieDb {
         }
 
         URL url = apiUrl.buildUrl();
-        LOGGER.info(url.toString());
 
         String webpage = WebBrowser.request(url);
         try {
