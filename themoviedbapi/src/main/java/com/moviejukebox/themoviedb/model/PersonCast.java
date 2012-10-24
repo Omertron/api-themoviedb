@@ -42,6 +42,8 @@ public class PersonCast implements Serializable {
     private int order;
     @JsonProperty("profile_path")
     private String profilePath;
+    @JsonProperty("cast_id")
+    private int castId;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCharacter() {
@@ -63,6 +65,11 @@ public class PersonCast implements Serializable {
     public String getProfilePath() {
         return profilePath;
     }
+
+    public int getCastId() {
+        return castId;
+    }
+
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -85,6 +92,11 @@ public class PersonCast implements Serializable {
     public void setProfilePath(String profilePath) {
         this.profilePath = profilePath;
     }
+
+    public void setCastId(int castId) {
+        this.castId = castId;
+    }
+    
     //</editor-fold>
 
     /**
@@ -98,7 +110,7 @@ public class PersonCast implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.warn(sb.toString());
+        LOGGER.trace(sb.toString());
     }
 
     @Override

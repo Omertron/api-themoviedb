@@ -69,7 +69,7 @@ public class Genre implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.warn(sb.toString());
+        LOGGER.trace(sb.toString());
     }
 
     @Override
