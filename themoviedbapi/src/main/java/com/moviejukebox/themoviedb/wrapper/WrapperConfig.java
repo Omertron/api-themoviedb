@@ -12,10 +12,10 @@
  */
 package com.moviejukebox.themoviedb.wrapper;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.moviejukebox.themoviedb.model.TmdbConfiguration;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
@@ -40,7 +40,7 @@ public class WrapperConfig {
     public void setTmdbConfiguration(TmdbConfiguration tmdbConfiguration) {
         this.tmdbConfiguration = tmdbConfiguration;
     }
-    
+
     /**
      * Handle unknown properties and print a message
      * @param key

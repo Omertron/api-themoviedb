@@ -12,11 +12,11 @@
  */
 package com.moviejukebox.themoviedb.wrapper;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.moviejukebox.themoviedb.model.Keyword;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *

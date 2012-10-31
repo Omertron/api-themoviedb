@@ -12,10 +12,10 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  *
@@ -96,7 +96,7 @@ public class PersonCast implements Serializable {
     public void setCastId(int castId) {
         this.castId = castId;
     }
-    
+
     //</editor-fold>
 
     /**

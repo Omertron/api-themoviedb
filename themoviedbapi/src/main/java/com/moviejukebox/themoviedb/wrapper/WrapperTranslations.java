@@ -12,10 +12,10 @@
  */
 package com.moviejukebox.themoviedb.wrapper;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.moviejukebox.themoviedb.model.Translation;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnySetter;
 
 /**
  *

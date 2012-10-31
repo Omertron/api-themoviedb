@@ -12,9 +12,9 @@
  */
 package com.moviejukebox.themoviedb.model;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import java.io.Serializable;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAnySetter;
 
 /**
  *

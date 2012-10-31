@@ -12,6 +12,7 @@
  */
 package com.moviejukebox.themoviedb;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviejukebox.themoviedb.MovieDbException.MovieDbExceptionType;
 import com.moviejukebox.themoviedb.model.*;
 import com.moviejukebox.themoviedb.tools.ApiUrl;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * The MovieDb API
