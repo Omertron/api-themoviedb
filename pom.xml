@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -11,14 +11,23 @@
         <maven>3.0.3</maven>
     </prerequisites>
 
-    <groupId>com.moviejukebox</groupId>
+    <groupId>com.omertron</groupId>
     <artifactId>themoviedbapi</artifactId>
     <version>3.3-SNAPSHOT</version>
     <name>API-The MovieDB</name>
+    <packaging>jar</packaging>
+    <description>API for the TheMovieDb.org website</description>
+
+    <properties>
+        <skipTests>false</skipTests>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <distribution.format>zip</distribution.format>
+    </properties>
 
     <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/themoviedbapi/issues/list</url>
+        <system>GitHub</system>
+        <url>https://github.com/Omertron/api-themoviedb/issues</url>
     </issueManagement>
 
     <ciManagement>
@@ -27,17 +36,10 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:svn:http://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</connection>
-        <developerConnection>scm:svn:https://themoviedbapi.googlecode.com/svn/trunk/themoviedbapi</developerConnection>
-        <url>http://code.google.com/p/themoviedbapi/source/browse/trunk/themoviedbapi</url>
+        <url>scm:git:git@github.com:Omertron/api-themoviedb.git</url>
+        <connection>scm:git:git@github.com:Omertron/api-themoviedb.git</connection>
+        <developerConnection>scm:git:git@github.com:Omertron/api-themoviedb.git</developerConnection>
     </scm>
-
-    <properties>
-        <skipTests>false</skipTests>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <distribution.format>zip</distribution.format>
-    </properties>
 
     <dependencies>
 
