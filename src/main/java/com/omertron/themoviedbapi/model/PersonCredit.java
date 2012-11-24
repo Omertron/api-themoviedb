@@ -25,7 +25,7 @@ public class PersonCredit implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(PersonCredit.class);
+    private static final Logger logger = Logger.getLogger(PersonCredit.class);
     private static final String DEFAULT_STRING = "";
     /*
      * Properties
@@ -145,7 +145,7 @@ public class PersonCredit implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

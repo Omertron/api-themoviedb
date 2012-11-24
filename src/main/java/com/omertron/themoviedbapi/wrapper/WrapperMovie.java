@@ -24,7 +24,7 @@ public class WrapperMovie {
      * Logger
      */
 
-    private static final Logger LOGGER = Logger.getLogger(WrapperMovie.class);
+    private static final Logger logger = Logger.getLogger(WrapperMovie.class);
     /*
      * Properties
      */
@@ -94,7 +94,7 @@ public class WrapperMovie {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

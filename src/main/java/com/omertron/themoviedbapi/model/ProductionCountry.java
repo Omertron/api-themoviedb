@@ -27,7 +27,7 @@ public class ProductionCountry implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(ProductionCountry.class);
+    private static final Logger logger = Logger.getLogger(ProductionCountry.class);
     /*
      * Properties
      */
@@ -67,7 +67,7 @@ public class ProductionCountry implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

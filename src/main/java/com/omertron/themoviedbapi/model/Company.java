@@ -23,7 +23,7 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // Logger
-    private static final Logger LOGGER = Logger.getLogger(Company.class);
+    private static final Logger logger = Logger.getLogger(Company.class);
     private static final String DEFAULT_STRING = "";
     // Properties
     @JsonProperty("id")
@@ -112,7 +112,7 @@ public class Company implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

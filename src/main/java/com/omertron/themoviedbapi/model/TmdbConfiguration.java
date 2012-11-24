@@ -26,7 +26,7 @@ public class TmdbConfiguration implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(TmdbConfiguration.class);
+    private static final Logger logger = Logger.getLogger(TmdbConfiguration.class);
     /*
      * Properties
      */
@@ -174,7 +174,7 @@ public class TmdbConfiguration implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

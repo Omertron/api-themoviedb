@@ -23,7 +23,7 @@ public class WrapperConfig {
      * Logger
      */
 
-    private static final Logger LOGGER = Logger.getLogger(WrapperConfig.class);
+    private static final Logger logger = Logger.getLogger(WrapperConfig.class);
     /*
      * Properties
      */
@@ -48,7 +48,7 @@ public class WrapperConfig {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
 }

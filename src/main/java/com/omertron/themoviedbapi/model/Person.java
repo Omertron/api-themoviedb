@@ -27,7 +27,7 @@ public class Person implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(Person.class);
+    private static final Logger logger = Logger.getLogger(Person.class);
 
     /*
      * Static fields for default cast information
@@ -239,7 +239,7 @@ public class Person implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

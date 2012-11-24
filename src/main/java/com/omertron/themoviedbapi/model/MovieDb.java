@@ -26,7 +26,7 @@ public class MovieDb implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(MovieDb.class);
+    private static final Logger logger = Logger.getLogger(MovieDb.class);
     /*
      * Properties
      */
@@ -277,7 +277,7 @@ public class MovieDb implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">

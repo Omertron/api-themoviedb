@@ -26,7 +26,7 @@ public class Genre implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(Genre.class);
+    private static final Logger logger = Logger.getLogger(Genre.class);
     /*
      * Properties
      */
@@ -66,7 +66,7 @@ public class Genre implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

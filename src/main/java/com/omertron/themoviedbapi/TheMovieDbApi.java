@@ -65,7 +65,7 @@ import org.apache.log4j.Logger;
  */
 public class TheMovieDbApi {
 
-    private static final Logger LOGGER = Logger.getLogger(TheMovieDbApi.class);
+    private static final Logger logger = Logger.getLogger(TheMovieDbApi.class);
     private String apiKey;
     private TmdbConfiguration tmdbConfig;
     /*
@@ -116,25 +116,6 @@ public class TheMovieDbApi {
             tmdbConfig = wc.getTmdbConfiguration();
         } catch (IOException ex) {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", ex);
-        }
-    }
-
-    /**
-     * Output the API version information to the debug log
-     */
-    public static void showVersion() {
-        String apiTitle = TheMovieDbApi.class.getPackage().getSpecificationTitle();
-
-        if (StringUtils.isNotBlank(apiTitle)) {
-            String apiVersion = TheMovieDbApi.class.getPackage().getSpecificationVersion();
-            String apiRevision = TheMovieDbApi.class.getPackage().getImplementationVersion();
-            StringBuilder sv = new StringBuilder();
-            sv.append(apiTitle).append(" ");
-            sv.append(apiVersion).append(" r");
-            sv.append(apiRevision);
-            LOGGER.debug(sv.toString());
-        } else {
-            LOGGER.debug("API-TheMovieDb version/revision information not available");
         }
     }
 
@@ -251,7 +232,7 @@ public class TheMovieDbApi {
         try {
             return (new URL(sb.toString()));
         } catch (MalformedURLException ex) {
-            LOGGER.warn("Failed to create image URL: " + ex.getMessage());
+            logger.warn("Failed to create image URL: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.INVALID_URL, sb.toString(), ex);
         }
     }
@@ -280,7 +261,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, TokenAuthorisation.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get Authorisation Token: " + ex.getMessage());
+            logger.warn("Failed to get Authorisation Token: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, webpage, ex);
         }
     }
@@ -298,7 +279,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(this, BASE_AUTH, "session/new");
 
         if (!token.getSuccess()) {
-            LOGGER.warn("Authorisation token was not successful!");
+            logger.warn("Authorisation token was not successful!");
             throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, "Authorisation token was not successful!");
         }
 
@@ -309,7 +290,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, TokenSession.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get Session Token: " + ex.getMessage());
+            logger.warn("Failed to get Session Token: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -344,7 +325,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+            logger.warn("Failed to get movie info: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -373,7 +354,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+            logger.warn("Failed to get movie info: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -400,7 +381,7 @@ public class TheMovieDbApi {
             WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
             return wrapper.getTitles();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie alternative titles: " + ex.getMessage());
+            logger.warn("Failed to get movie alternative titles: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -441,7 +422,7 @@ public class TheMovieDbApi {
 
             return people;
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie casts: " + ex.getMessage());
+            logger.warn("Failed to get movie casts: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -482,7 +463,7 @@ public class TheMovieDbApi {
 
             return artwork;
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie images: " + ex.getMessage());
+            logger.warn("Failed to get movie images: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -507,7 +488,7 @@ public class TheMovieDbApi {
             WrapperMovieKeywords wrapper = mapper.readValue(webpage, WrapperMovieKeywords.class);
             return wrapper.getKeywords();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie keywords: " + ex.getMessage());
+            logger.warn("Failed to get movie keywords: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -532,7 +513,7 @@ public class TheMovieDbApi {
             WrapperReleaseInfo wrapper = mapper.readValue(webpage, WrapperReleaseInfo.class);
             return wrapper.getCountries();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie release information: " + ex.getMessage());
+            logger.warn("Failed to get movie release information: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -575,7 +556,7 @@ public class TheMovieDbApi {
             }
             return trailers;
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie trailers: " + ex.getMessage());
+            logger.warn("Failed to get movie trailers: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -598,7 +579,7 @@ public class TheMovieDbApi {
             WrapperTranslations wrapper = mapper.readValue(webpage, WrapperTranslations.class);
             return wrapper.getTranslations();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie tranlations: " + ex.getMessage());
+            logger.warn("Failed to get movie tranlations: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -635,7 +616,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get similar movies: " + ex.getMessage());
+            logger.warn("Failed to get similar movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -653,7 +634,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get latest movie: " + ex.getMessage());
+            logger.warn("Failed to get latest movie: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -686,7 +667,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get upcoming movies: " + ex.getMessage());
+            logger.warn("Failed to get upcoming movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
 
@@ -722,7 +703,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get now playing movies: " + ex.getMessage());
+            logger.warn("Failed to get now playing movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -757,7 +738,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get popular movie list: " + ex.getMessage());
+            logger.warn("Failed to get popular movie list: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -792,7 +773,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get top rated movies: " + ex.getMessage());
+            logger.warn("Failed to get top rated movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -843,7 +824,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, CollectionInfo.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get collection information: " + ex.getMessage());
+            logger.warn("Failed to get collection information: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -885,7 +866,7 @@ public class TheMovieDbApi {
 
             return artwork;
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get collection images: " + ex.getMessage());
+            logger.warn("Failed to get collection images: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
 
@@ -914,7 +895,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, Person.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get movie info: " + ex.getMessage());
+            logger.warn("Failed to get movie info: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -953,7 +934,7 @@ public class TheMovieDbApi {
             }
             return personCredits;
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get person credits: " + ex.getMessage());
+            logger.warn("Failed to get person credits: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -985,7 +966,7 @@ public class TheMovieDbApi {
             }
             return personImages;
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get person images: " + ex.getMessage());
+            logger.warn("Failed to get person images: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1011,7 +992,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, Company.class);
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get company information: " + ex.getMessage());
+            logger.warn("Failed to get company information: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1050,7 +1031,7 @@ public class TheMovieDbApi {
             WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
             return wrapper.getResults();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get company movies: " + ex.getMessage());
+            logger.warn("Failed to get company movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1077,7 +1058,7 @@ public class TheMovieDbApi {
             WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
             return wrapper.getGenres();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get genre list: " + ex.getMessage());
+            logger.warn("Failed to get genre list: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1113,7 +1094,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to get genre movie list: " + ex.getMessage());
+            logger.warn("Failed to get genre movie list: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1159,7 +1140,7 @@ public class TheMovieDbApi {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             return wrapper.getMovies();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to find movie: " + ex.getMessage());
+            logger.warn("Failed to find movie: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
 
@@ -1192,7 +1173,7 @@ public class TheMovieDbApi {
             WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
             return wrapper.getResults();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to find company: " + ex.getMessage());
+            logger.warn("Failed to find company: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1225,7 +1206,7 @@ public class TheMovieDbApi {
             WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
             return wrapper.getResults();
         } catch (IOException ex) {
-            LOGGER.warn("Failed to find person: " + ex.getMessage());
+            logger.warn("Failed to find person: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }

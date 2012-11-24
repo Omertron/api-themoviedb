@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
 public class TheMovieDbApiTest {
 
     // Logger
-    private static final Logger LOGGER = Logger.getLogger(TheMovieDbApiTest.class);
+    private static final Logger logger = Logger.getLogger(TheMovieDbApiTest.class);
     // API Key
     private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
     private static TheMovieDbApi tmdb;
@@ -61,8 +61,6 @@ public class TheMovieDbApiTest {
     public static void setUpClass() throws Exception {
         // Set the logger level to TRACE
         Logger.getRootLogger().setLevel(Level.TRACE);
-        // Show the version of the API
-        TheMovieDbApi.showVersion();
     }
 
     @AfterClass
@@ -84,7 +82,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testConfiguration() throws IOException {
-        LOGGER.info("Test Configuration");
+        logger.info("Test Configuration");
 
         TmdbConfiguration tmdbConfig = tmdb.getConfiguration();
         assertNotNull("Configuration failed", tmdbConfig);
@@ -92,15 +90,7 @@ public class TheMovieDbApiTest {
         assertTrue("No backdrop sizes", tmdbConfig.getBackdropSizes().size() > 0);
         assertTrue("No poster sizes", tmdbConfig.getPosterSizes().size() > 0);
         assertTrue("No profile sizes", tmdbConfig.getProfileSizes().size() > 0);
-        LOGGER.info(tmdbConfig.toString());
-    }
-
-    /**
-     * Test of showVersion method, of class TheMovieDbApi.
-     */
-    @Test
-    public void testShowVersion() {
-        // Not required
+        logger.info(tmdbConfig.toString());
     }
 
     /**
@@ -108,7 +98,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testSearchMovie() throws MovieDbException {
-        LOGGER.info("searchMovie");
+        logger.info("searchMovie");
 
         // Try a movie with less than 1 page of results
         List<MovieDb> movieList = tmdb.searchMovie("Blade Runner", 0, "", true, 0);
@@ -129,7 +119,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieInfo() throws MovieDbException {
-        LOGGER.info("getMovieInfo");
+        logger.info("getMovieInfo");
         String language = "en";
         MovieDb result = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, language);
         assertEquals("Incorrect movie information", "Blade Runner", result.getOriginalTitle());
@@ -140,7 +130,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieAlternativeTitles() throws MovieDbException {
-        LOGGER.info("getMovieAlternativeTitles");
+        logger.info("getMovieAlternativeTitles");
         String country = "";
         List<AlternativeTitle> results = tmdb.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country);
         assertTrue("No alternative titles found", results.size() > 0);
@@ -156,7 +146,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieCasts() throws MovieDbException {
-        LOGGER.info("getMovieCasts");
+        logger.info("getMovieCasts");
         List<Person> people = tmdb.getMovieCasts(ID_MOVIE_BLADE_RUNNER);
         assertTrue("No cast information", people.size() > 0);
 
@@ -183,7 +173,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieImages() throws MovieDbException {
-        LOGGER.info("getMovieImages");
+        logger.info("getMovieImages");
         String language = "";
         List<Artwork> result = tmdb.getMovieImages(ID_MOVIE_BLADE_RUNNER, language);
         assertFalse("No artwork found", result.isEmpty());
@@ -194,7 +184,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieKeywords() throws MovieDbException {
-        LOGGER.info("getMovieKeywords");
+        logger.info("getMovieKeywords");
         List<Keyword> result = tmdb.getMovieKeywords(ID_MOVIE_BLADE_RUNNER);
         assertFalse("No keywords found", result.isEmpty());
     }
@@ -204,7 +194,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieReleaseInfo() throws MovieDbException {
-        LOGGER.info("getMovieReleaseInfo");
+        logger.info("getMovieReleaseInfo");
         List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Release information missing", result.isEmpty());
     }
@@ -214,7 +204,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieTrailers() throws MovieDbException {
-        LOGGER.info("getMovieTrailers");
+        logger.info("getMovieTrailers");
         List<Trailer> result = tmdb.getMovieTrailers(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Movie trailers missing", result.isEmpty());
     }
@@ -224,7 +214,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieTranslations() throws MovieDbException {
-        LOGGER.info("getMovieTranslations");
+        logger.info("getMovieTranslations");
         List<Translation> result = tmdb.getMovieTranslations(ID_MOVIE_BLADE_RUNNER);
         assertFalse("No translations found", result.isEmpty());
     }
@@ -234,7 +224,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetCollectionInfo() throws MovieDbException {
-        LOGGER.info("getCollectionInfo");
+        logger.info("getCollectionInfo");
         String language = "";
         CollectionInfo result = tmdb.getCollectionInfo(ID_MOVIE_STAR_WARS_COLLECTION, language);
         assertFalse("No collection information", result.getParts().isEmpty());
@@ -246,7 +236,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testCreateImageUrl() throws MovieDbException {
-        LOGGER.info("createImageUrl");
+        logger.info("createImageUrl");
         MovieDb movie = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, "");
         String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());
@@ -257,7 +247,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetMovieInfoImdb() throws MovieDbException {
-        LOGGER.info("getMovieInfoImdb");
+        logger.info("getMovieInfoImdb");
         MovieDb result = tmdb.getMovieInfoImdb("tt0076759", "en-US");
         assertTrue("Error getting the movie from IMDB ID", result.getId() == 11);
     }
@@ -291,7 +281,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testSearchPeople() throws MovieDbException {
-        LOGGER.info("searchPeople");
+        logger.info("searchPeople");
         String personName = "Bruce Willis";
         boolean allResults = false;
         List<Person> result = tmdb.searchPeople(personName, allResults);
@@ -303,7 +293,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetPersonInfo() throws MovieDbException {
-        LOGGER.info("getPersonInfo");
+        logger.info("getPersonInfo");
         Person result = tmdb.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
         assertTrue("Wrong actor returned", result.getId() == ID_PERSON_BRUCE_WILLIS);
     }
@@ -313,7 +303,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetPersonCredits() throws MovieDbException {
-        LOGGER.info("getPersonCredits");
+        logger.info("getPersonCredits");
 
         List<PersonCredit> people = tmdb.getPersonCredits(ID_PERSON_BRUCE_WILLIS);
         assertTrue("No cast information", people.size() > 0);
@@ -324,7 +314,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetPersonImages() throws MovieDbException {
-        LOGGER.info("getPersonImages");
+        logger.info("getPersonImages");
 
         List<Artwork> artwork = tmdb.getPersonImages(ID_PERSON_BRUCE_WILLIS);
         assertTrue("No cast information", artwork.size() > 0);
@@ -335,7 +325,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetLatestMovie() throws MovieDbException {
-        LOGGER.info("getLatestMovie");
+        logger.info("getLatestMovie");
         MovieDb result = tmdb.getLatestMovie();
         assertTrue("No latest movie found", result != null);
         assertTrue("No latest movie found", result.getId() > 0);
@@ -370,7 +360,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
-        LOGGER.info("getNowPlayingMovies");
+        logger.info("getNowPlayingMovies");
         List<MovieDb> results = tmdb.getNowPlayingMovies("", true);
         assertTrue("No now playing movies found", !results.isEmpty());
     }
@@ -380,7 +370,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetPopularMovieList() throws MovieDbException {
-        LOGGER.info("getPopularMovieList");
+        logger.info("getPopularMovieList");
         List<MovieDb> results = tmdb.getPopularMovieList("", true);
         assertTrue("No popular movies found", !results.isEmpty());
     }
@@ -390,7 +380,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetTopRatedMovies() throws MovieDbException {
-        LOGGER.info("getTopRatedMovies");
+        logger.info("getTopRatedMovies");
         List<MovieDb> results = tmdb.getTopRatedMovies("", true);
         assertTrue("No top rated movies found", !results.isEmpty());
     }
@@ -400,7 +390,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetCompanyInfo() throws MovieDbException {
-        LOGGER.info("getCompanyInfo");
+        logger.info("getCompanyInfo");
         Company company = tmdb.getCompanyInfo(ID_COMPANY_LUCASFILM);
         assertTrue("No company information found", company.getCompanyId() > 0);
     }
@@ -410,7 +400,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
-        LOGGER.info("getCompanyMovies");
+        logger.info("getCompanyMovies");
         List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", true);
         assertTrue("No company movies found", !results.isEmpty());
     }
@@ -420,7 +410,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testSearchCompanies() throws MovieDbException {
-        LOGGER.info("searchCompanies");
+        logger.info("searchCompanies");
         List<Company> results = tmdb.searchCompanies(COMPANY_NAME, "", true);
         assertTrue("No company information found", !results.isEmpty());
     }
@@ -430,7 +420,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetSimilarMovies() throws MovieDbException {
-        LOGGER.info("getSimilarMovies");
+        logger.info("getSimilarMovies");
         List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", true);
         assertTrue("No similar movies found", !results.isEmpty());
     }
@@ -440,7 +430,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetGenreList() throws MovieDbException {
-        LOGGER.info("getGenreList");
+        logger.info("getGenreList");
         List<Genre> results = tmdb.getGenreList("");
         assertTrue("No genres found", !results.isEmpty());
     }
@@ -450,7 +440,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetGenreMovies() throws MovieDbException {
-        LOGGER.info("getGenreMovies");
+        logger.info("getGenreMovies");
         List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, "", true);
         assertTrue("No genre movies found", !results.isEmpty());
     }
@@ -460,7 +450,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetUpcoming() throws Exception {
-        LOGGER.info("getUpcoming");
+        logger.info("getUpcoming");
         List<MovieDb> results = tmdb.getUpcoming("");
         assertTrue("No upcoming movies found", !results.isEmpty());
     }
@@ -470,7 +460,7 @@ public class TheMovieDbApiTest {
      */
     @Test
     public void testGetCollectionImages() throws Exception {
-        LOGGER.info("getCollectionImages");
+        logger.info("getCollectionImages");
         String language = "";
         List<Artwork> result = tmdb.getCollectionImages(ID_MOVIE_STAR_WARS_COLLECTION, language);
         assertFalse("No artwork found", result.isEmpty());
@@ -481,11 +471,11 @@ public class TheMovieDbApiTest {
      */
 //    @Test
     public void testGetAuthorisationToken() throws Exception {
-        LOGGER.info("getAuthorisationToken");
+        logger.info("getAuthorisationToken");
         TokenAuthorisation result = tmdb.getAuthorisationToken();
         assertFalse("Token is null", result == null);
         assertTrue("Token is not valid", result.getSuccess());
-        LOGGER.info(result.toString());
+        logger.info(result.toString());
     }
 
     /**
@@ -493,15 +483,15 @@ public class TheMovieDbApiTest {
      */
 //    @Test
     public void testGetSessionToken() throws Exception {
-        LOGGER.info("getSessionToken");
+        logger.info("getSessionToken");
         TokenAuthorisation token = tmdb.getAuthorisationToken();
         assertFalse("Token is null", token == null);
         assertTrue("Token is not valid", token.getSuccess());
-        LOGGER.info(token.toString());
+        logger.info(token.toString());
 
         TokenSession result = tmdb.getSessionToken(token);
         assertFalse("Session token is null", result == null);
         assertTrue("Session token is not valid", result.getSuccess());
-        LOGGER.info(result.toString());
+        logger.info(result.toString());
     }
 }

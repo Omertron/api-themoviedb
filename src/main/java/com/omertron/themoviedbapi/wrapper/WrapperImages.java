@@ -24,7 +24,7 @@ public class WrapperImages {
      * Logger
      */
 
-    private static final Logger LOGGER = Logger.getLogger(WrapperImages.class);
+    private static final Logger logger = Logger.getLogger(WrapperImages.class);
     /*
      * Properties
      */
@@ -84,6 +84,6 @@ public class WrapperImages {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 }

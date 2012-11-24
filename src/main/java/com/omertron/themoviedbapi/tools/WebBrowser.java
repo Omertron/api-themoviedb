@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  */
 public final class WebBrowser {
 
-    private static final Logger LOGGER = Logger.getLogger(WebBrowser.class);
+    private static final Logger logger = Logger.getLogger(WebBrowser.class);
     private static Map<String, String> browserProperties = new HashMap<String, String>();
     private static Map<String, Map<String, String>> cookies = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
@@ -123,7 +123,7 @@ public final class WebBrowser {
                 try {
                     content.close();
                 } catch (IOException ex) {
-                    LOGGER.debug("Failed to close connection: " + ex.getMessage());
+                    logger.debug("Failed to close connection: " + ex.getMessage());
                 }
             }
         }

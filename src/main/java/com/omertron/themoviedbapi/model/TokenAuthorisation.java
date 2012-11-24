@@ -17,7 +17,7 @@ public class TokenAuthorisation {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(TokenAuthorisation.class);
+    private static final Logger logger = Logger.getLogger(TokenAuthorisation.class);
     /*
      * Properties
      */
@@ -67,7 +67,7 @@ public class TokenAuthorisation {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

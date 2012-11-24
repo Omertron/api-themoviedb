@@ -17,7 +17,7 @@ public class TokenSession {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(TokenSession.class);
+    private static final Logger logger = Logger.getLogger(TokenSession.class);
     /*
      * Properties
      */
@@ -77,7 +77,7 @@ public class TokenSession {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

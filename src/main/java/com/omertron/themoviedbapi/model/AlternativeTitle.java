@@ -25,7 +25,7 @@ public class AlternativeTitle implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(AlternativeTitle.class);
+    private static final Logger logger = Logger.getLogger(AlternativeTitle.class);
     /*
      * Properties
      */
@@ -65,7 +65,7 @@ public class AlternativeTitle implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

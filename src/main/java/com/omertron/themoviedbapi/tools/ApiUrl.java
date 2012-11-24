@@ -28,7 +28,7 @@ public class ApiUrl {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(ApiUrl.class);
+    private static final Logger logger = Logger.getLogger(ApiUrl.class);
     /*
      * TheMovieDbApi API Base URL
      */
@@ -119,7 +119,7 @@ public class ApiUrl {
             try {
                 urlString.append(URLEncoder.encode(query, "UTF-8"));
             } catch (UnsupportedEncodingException ex) {
-                LOGGER.trace("Unable to encode query: '" + query + "' trying raw.");
+                logger.trace("Unable to encode query: '" + query + "' trying raw.");
                 // If we can't encode it, try it raw
                 urlString.append(query);
             }
@@ -146,10 +146,10 @@ public class ApiUrl {
         }
 
         try {
-            LOGGER.trace("URL: " + urlString.toString());
+            logger.trace("URL: " + urlString.toString());
             return new URL(urlString.toString());
         } catch (MalformedURLException ex) {
-            LOGGER.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
+            logger.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
             return null;
         } finally {
             arguments.clear();

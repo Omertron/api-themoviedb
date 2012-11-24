@@ -25,7 +25,7 @@ public class WrapperGenres {
      * Logger
      */
 
-    private static final Logger LOGGER = Logger.getLogger(WrapperGenres.class);
+    private static final Logger logger = Logger.getLogger(WrapperGenres.class);
     /*
      * Properties
      */
@@ -51,6 +51,6 @@ public class WrapperGenres {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 }

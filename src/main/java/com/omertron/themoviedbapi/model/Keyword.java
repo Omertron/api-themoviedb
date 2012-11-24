@@ -27,7 +27,7 @@ public class Keyword implements Serializable {
     /*
      * Logger
      */
-    private static final Logger LOGGER = Logger.getLogger(Keyword.class);
+    private static final Logger logger = Logger.getLogger(Keyword.class);
     /*
      * Properties
      */
@@ -67,7 +67,7 @@ public class Keyword implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override

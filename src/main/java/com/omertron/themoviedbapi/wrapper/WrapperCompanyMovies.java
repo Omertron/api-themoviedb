@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
  */
 public class WrapperCompanyMovies {
     // Loggers
-    private static final Logger LOGGER = Logger.getLogger(WrapperCompanyMovies.class);
+    private static final Logger logger = Logger.getLogger(WrapperCompanyMovies.class);
     /*
      * Properties
      */
@@ -90,7 +90,7 @@ public class WrapperCompanyMovies {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        LOGGER.trace(sb.toString());
+        logger.trace(sb.toString());
     }
 
     @Override
