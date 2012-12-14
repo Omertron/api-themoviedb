@@ -32,6 +32,8 @@ public class TmdbConfiguration implements Serializable {
      */
     @JsonProperty("base_url")
     private String baseUrl;
+    @JsonProperty("secure_base_url")
+    private String secureBaseUrl;
     @JsonProperty("poster_sizes")
     private List<String> posterSizes;
     @JsonProperty("backdrop_sizes")
@@ -61,8 +63,12 @@ public class TmdbConfiguration implements Serializable {
     public List<String> getLogoSizes() {
         return logoSizes;
     }
-    // </editor-fold>
 
+    public String getSecureBaseUrl() {
+        return secureBaseUrl;
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Setter methods">//GEN-BEGIN:setterMethods
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
@@ -82,6 +88,10 @@ public class TmdbConfiguration implements Serializable {
 
     public void setLogoSizes(List<String> logoSizes) {
         this.logoSizes = logoSizes;
+    }
+
+    public void setSecureBaseUrl(String secureBaseUrl) {
+        this.secureBaseUrl = secureBaseUrl;
     }
     // </editor-fold>
 
