@@ -12,6 +12,8 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
+import java.util.Collections;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -29,6 +31,8 @@ public class WrapperConfig {
      */
     @JsonProperty("images")
     private TmdbConfiguration tmdbConfiguration;
+    @JsonProperty("change_keys")
+    private List<String> changeKeys = Collections.EMPTY_LIST;
 
     public TmdbConfiguration getTmdbConfiguration() {
         return tmdbConfiguration;
@@ -38,8 +42,17 @@ public class WrapperConfig {
         this.tmdbConfiguration = tmdbConfiguration;
     }
 
+    public List<String> getChangeKeys() {
+        return changeKeys;
+    }
+
+    public void setChangeKeys(List<String> changeKeys) {
+        this.changeKeys = changeKeys;
+    }
+
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
@@ -50,5 +63,4 @@ public class WrapperConfig {
         sb.append("' value: '").append(value).append("'");
         logger.trace(sb.toString());
     }
-
 }
