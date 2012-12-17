@@ -164,43 +164,60 @@ public class TheMovieDbApi {
         WebBrowser.setWebTimeoutRead(read);
     }
 
+    public static boolean compareMovies(MovieDb moviedb, String title, String year) {
+        return compareMovies(moviedb, title, year, 0);
+    }
+
     /**
      * Compare the MovieDB object with a title & year
      *
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
      * @param year The year of the movie to compare
+     * @param maxDistance The Levenshtein Distance between the two titles. 0 = exact match
      * @return True if there is a match, False otherwise.
      */
-    public static boolean compareMovies(MovieDb moviedb, String title, String year) {
+    public static boolean compareMovies(MovieDb moviedb, String title, String year, int maxDistance) {
         if ((moviedb == null) || (StringUtils.isBlank(title))) {
-            return false;
+            return Boolean.FALSE;
         }
 
         if (isValidYear(year) && isValidYear(moviedb.getReleaseDate())) {
             // Compare with year
             String movieYear = moviedb.getReleaseDate().substring(0, 4);
             if (movieYear.equals(year)) {
-                if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
-                    return true;
+                if (compareDistance(moviedb.getOriginalTitle(), title, maxDistance)) {
+                    return Boolean.TRUE;
                 }
 
-                if (moviedb.getTitle().equalsIgnoreCase(title)) {
-                    return true;
+                if (compareDistance(moviedb.getTitle(), title, maxDistance)) {
+                    return Boolean.TRUE;
                 }
             }
         }
 
         // Compare without year
-        if (moviedb.getOriginalTitle().equalsIgnoreCase(title)) {
-            return true;
+        if (compareDistance(moviedb.getOriginalTitle(), title, maxDistance)) {
+            return Boolean.TRUE;
         }
 
-        if (moviedb.getTitle().equalsIgnoreCase(title)) {
-            return true;
+        if (compareDistance(moviedb.getTitle(), title, maxDistance)) {
+            return Boolean.TRUE;
         }
 
-        return false;
+        return Boolean.FALSE;
+    }
+
+    /**
+     * Compare the Levenshtein Distance between the two strings
+     *
+     * @param title1
+     * @param title2
+     * @param distance
+     * @return
+     */
+    private static boolean compareDistance(String title1, String title2, int distance) {
+        return (StringUtils.getLevenshteinDistance(title1, title2) <= distance);
     }
 
     /**
