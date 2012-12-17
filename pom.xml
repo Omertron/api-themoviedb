@@ -13,7 +13,7 @@
 
     <groupId>com.omertron</groupId>
     <artifactId>themoviedbapi</artifactId>
-    <version>3.3-SNAPSHOT</version>
+    <version>3.3</version>
     <name>API-The MovieDB</name>
     <packaging>jar</packaging>
     <description>API for the TheMovieDb.org website</description>
