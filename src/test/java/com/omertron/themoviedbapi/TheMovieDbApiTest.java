@@ -242,6 +242,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of createImageUrl method, of class TheMovieDbApi.
+     *
      * @throws MovieDbException
      */
     @Test
@@ -479,7 +480,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getAuthorisationToken method, of class TheMovieDbApi.
      */
-//    @Test
+    @Test
     public void testGetAuthorisationToken() throws Exception {
         logger.info("getAuthorisationToken");
         TokenAuthorisation result = tmdb.getAuthorisationToken();
@@ -491,7 +492,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getSessionToken method, of class TheMovieDbApi.
      */
-//    @Test
+    @Test
     public void testGetSessionToken() throws Exception {
         logger.info("getSessionToken");
         TokenAuthorisation token = tmdb.getAuthorisationToken();
@@ -503,5 +504,16 @@ public class TheMovieDbApiTest {
         assertFalse("Session token is null", result == null);
         assertTrue("Session token is not valid", result.getSuccess());
         logger.info(result.toString());
+    }
+
+    /**
+     * Test of getGuestSessionToken method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetGuestSessionToken() throws Exception {
+        logger.info("getGuestSessionToken");
+        TokenSession result = tmdb.getGuestSessionToken();
+
+        assertTrue("Failed to get guest session", result.getSuccess());
     }
 }

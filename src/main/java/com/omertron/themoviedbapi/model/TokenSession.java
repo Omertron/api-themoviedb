@@ -27,6 +27,7 @@ public class TokenSession {
     /*
      * Logger
      */
+
     private static final Logger logger = Logger.getLogger(TokenSession.class);
     /*
      * Properties
@@ -39,6 +40,10 @@ public class TokenSession {
     private String statusCode;
     @JsonProperty("status_message")
     private String statusMessage;
+    @JsonProperty("guest_session_id")
+    private String guestSessionId;
+    @JsonProperty("expires_at")
+    private String expiresAt;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getSessionId() {
@@ -55,6 +60,14 @@ public class TokenSession {
 
     public String getStatusMessage() {
         return statusMessage;
+    }
+
+    public String getGuestSessionId() {
+        return guestSessionId;
+    }
+
+    public String getExpiresAt() {
+        return expiresAt;
     }
     // </editor-fold>
 
@@ -74,6 +87,15 @@ public class TokenSession {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
+
+    public void setGuestSessionId(String guestSessionId) {
+        this.guestSessionId = guestSessionId;
+    }
+
+    public void setExpiresAt(String expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
     // </editor-fold>
 
     /**
@@ -92,7 +114,6 @@ public class TokenSession {
 
     @Override
     public String toString() {
-        return "TokenSession{" + "sessionId=" + sessionId + ", success=" + success + ", statusCode=" + statusCode + ", statusMessage=" + statusMessage + '}';
+        return "TokenSession{" + "sessionId=" + sessionId + ", success=" + success + ", statusCode=" + statusCode + ", statusMessage=" + statusMessage + ", guestSessionId=" + guestSessionId + ", expiresAt=" + expiresAt + '}';
     }
-
 }
