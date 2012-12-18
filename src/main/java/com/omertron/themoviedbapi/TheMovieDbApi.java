@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
@@ -29,6 +31,7 @@ import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCast;
 import com.omertron.themoviedbapi.model.PersonCredit;
@@ -53,6 +56,7 @@ import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.WrapperPerson;
 import com.omertron.themoviedbapi.wrapper.WrapperPersonCredits;
 import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
@@ -63,6 +67,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -693,6 +698,35 @@ public class TheMovieDbApi {
             logger.warn("Failed to get similar movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
+    }
+
+    //lists
+    public List<MovieList> getMovieLists(int movieId, String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/lists");
+        apiUrl.addArgument(PARAM_ID, movieId);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            return wrapper.getMovieList();
+        } catch (IOException ex) {
+            logger.warn("Failed to get movie lists: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    //changes
+    public void getMovieChanges() throws MovieDbException {
     }
 
     /**
