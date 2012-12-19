@@ -297,8 +297,8 @@ public class TheMovieDbApiTest {
     public void testSearchPeople() throws MovieDbException {
         logger.info("searchPeople");
         String personName = "Bruce Willis";
-        boolean allResults = false;
-        List<Person> result = tmdb.searchPeople(personName, allResults);
+        boolean includeAdult = false;
+        List<Person> result = tmdb.searchPeople(personName, includeAdult, 0);
         assertTrue("Couldn't find the person", result.size() > 0);
     }
 
@@ -415,7 +415,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
         logger.info("getCompanyMovies");
-        List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", true);
+        List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", 0);
         assertTrue("No company movies found", !results.isEmpty());
     }
 
@@ -425,7 +425,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testSearchCompanies() throws MovieDbException {
         logger.info("searchCompanies");
-        List<Company> results = tmdb.searchCompanies(COMPANY_NAME, "", true);
+        List<Company> results = tmdb.searchCompanies(COMPANY_NAME, 0);
         assertTrue("No company information found", !results.isEmpty());
     }
 
@@ -435,7 +435,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetSimilarMovies() throws MovieDbException {
         logger.info("getSimilarMovies");
-        List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", true);
+        List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", 0);
         assertTrue("No similar movies found", !results.isEmpty());
     }
 
@@ -455,7 +455,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetGenreMovies() throws MovieDbException {
         logger.info("getGenreMovies");
-        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, "", true);
+        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, "", 0);
         assertTrue("No genre movies found", !results.isEmpty());
     }
 
@@ -465,7 +465,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetUpcoming() throws Exception {
         logger.info("getUpcoming");
-        List<MovieDb> results = tmdb.getUpcoming("");
+        List<MovieDb> results = tmdb.getUpcoming("", 0);
         assertTrue("No upcoming movies found", !results.isEmpty());
     }
 
