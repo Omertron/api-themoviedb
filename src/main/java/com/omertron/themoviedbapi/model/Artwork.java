@@ -54,6 +54,8 @@ public class Artwork implements Serializable {
     private float voteAverage;
     @JsonProperty("vote_count")
     private int voteCount;
+    @JsonProperty("flag")
+    private String flag;
     private ArtworkType artworkType = ArtworkType.POSTER;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
@@ -88,6 +90,11 @@ public class Artwork implements Serializable {
     public int getVoteCount() {
         return voteCount;
     }
+
+    public String getFlag() {
+        return flag;
+    }
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -122,6 +129,11 @@ public class Artwork implements Serializable {
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
+
+        public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
     // </editor-fold>
 
     /**

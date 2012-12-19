@@ -19,8 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
@@ -30,6 +28,7 @@ import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.MovieChanges;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.Person;
@@ -48,6 +47,7 @@ import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.tools.FilteringLayout;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperCompany;
 import com.omertron.themoviedbapi.wrapper.WrapperCompanyMovies;
 import com.omertron.themoviedbapi.wrapper.WrapperConfig;
@@ -67,7 +67,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -700,7 +699,15 @@ public class TheMovieDbApi {
         }
     }
 
-    //lists
+    /**
+     * Get the lists that the movie belongs to
+     *
+     * @param movieId
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
     public List<MovieList> getMovieLists(int movieId, String language, int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/lists");
         apiUrl.addArgument(PARAM_ID, movieId);
@@ -725,8 +732,50 @@ public class TheMovieDbApi {
         }
     }
 
-    //changes
-    public void getMovieChanges() throws MovieDbException {
+    /**
+     * Get the changes for a specific movie id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is
+     * 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item
+     * changing type in the ChangeItem
+     *
+     * @param movieId
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @throws MovieDbException
+     */
+    @Deprecated
+    public List<MovieChanges> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/changes");
+        apiUrl.addArgument(PARAM_ID, movieId);
+
+        if (StringUtils.isNotBlank(startDate)) {
+            apiUrl.addArgument("start_date", startDate);
+        }
+
+        if (StringUtils.isNotBlank(endDate)) {
+            apiUrl.addArgument("end_date", endDate);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
+            return wrapper.getChanges();
+        } catch (IOException ex) {
+            logger.warn("Failed to get movie changes: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+
     }
 
     /**
