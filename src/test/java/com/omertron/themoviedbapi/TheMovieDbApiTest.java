@@ -548,4 +548,14 @@ public class TheMovieDbApiTest {
         assertNotNull("No results found", results);
         assertTrue("No results found", results.size() > 0);
     }
+
+    @Test
+    public void testGetPersonLatest() throws Exception {
+        logger.info("getPersonLatest");
+
+        Person result = tmdb.getPersonLatest();
+
+        assertNotNull("No results found", result);
+        assertTrue("No results found", StringUtils.isNotBlank(result.getName()));
+    }
 }

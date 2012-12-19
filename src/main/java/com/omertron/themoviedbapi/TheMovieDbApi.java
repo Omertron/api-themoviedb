@@ -73,8 +73,7 @@ import org.apache.log4j.Logger;
 /**
  * The MovieDb API
  *
- * This is for version 3 of the API as specified here:
- * http://help.themoviedb.org/kb/api/about-3
+ * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -169,6 +168,14 @@ public class TheMovieDbApi {
         WebBrowser.setWebTimeoutRead(read);
     }
 
+    /**
+     * Compare the MovieDB object with a title & year
+     *
+     * @param moviedb The moviedb object to compare too
+     * @param title The title of the movie to compare
+     * @param year The year of the movie to compare exact match
+     * @return True if there is a match, False otherwise.
+     */
     public static boolean compareMovies(MovieDb moviedb, String title, String year) {
         return compareMovies(moviedb, title, year, 0);
     }
@@ -179,8 +186,7 @@ public class TheMovieDbApi {
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
      * @param year The year of the movie to compare
-     * @param maxDistance The Levenshtein Distance between the two titles. 0 =
-     * exact match
+     * @param maxDistance The Levenshtein Distance between the two titles. 0 = exact match
      * @return True if there is a match, False otherwise.
      */
     public static boolean compareMovies(MovieDb moviedb, String title, String year, int maxDistance) {
@@ -274,16 +280,13 @@ public class TheMovieDbApi {
     //
     //<editor-fold defaultstate="collapsed" desc="Authentication Functions">
     /**
-     * This method is used to generate a valid request token for user based
-     * authentication.
+     * This method is used to generate a valid request token for user based authentication.
      *
      * A request token is required in order to request a session id.
      *
-     * You can generate any number of request tokens but they will expire after
-     * 60 minutes.
+     * You can generate any number of request tokens but they will expire after 60 minutes.
      *
-     * As soon as a valid session id has been created the token will be
-     * destroyed.
+     * As soon as a valid session id has been created the token will be destroyed.
      *
      * @return
      * @throws MovieDbException
@@ -303,8 +306,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to generate a session id for user based
-     * authentication.
+     * This method is used to generate a session id for user based authentication.
      *
      * A session id is required in order to use any of the write methods.
      *
@@ -335,18 +337,15 @@ public class TheMovieDbApi {
     /**
      * This method is used to generate a guest session id.
      *
-     * A guest session can be used to rate movies without having a registered
-     * TMDb user account.
+     * A guest session can be used to rate movies without having a registered TMDb user account.
      *
-     * You should only generate a single guest session per user (or device) as
-     * you will be able to attach the ratings to a TMDb user account in the
-     * future.
+     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to
+     * a TMDb user account in the future.
      *
-     * There are also IP limits in place so you should always make sure it's the
-     * end user doing the guest session actions.
+     * There are also IP limits in place so you should always make sure it's the end user doing the guest session
+     * actions.
      *
-     * If a guest session is not used for the first time within 24 hours, it
-     * will be automatically discarded.
+     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
      *
      * @return
      * @throws MovieDbException
@@ -430,8 +429,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for
-     * a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for a particular movie.
      *
      * @param movieId
      * @param country
@@ -499,8 +497,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the
-     * images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -541,8 +538,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added
-     * to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -567,8 +563,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data
-     * we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -593,8 +588,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular
-     * movie.
+     * This method is used to retrieve all of the trailers for a particular movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -637,8 +631,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for
-     * a specific movie.
+     * This method is used to retrieve a list of the available translations for a specific movie.
      *
      * @param movieId
      * @return
@@ -661,11 +654,9 @@ public class TheMovieDbApi {
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a
-     * particular movie.
+     * The similar movies method will let you retrieve the similar movies for a particular movie.
      *
-     * This data is created dynamically but with the help of users votes on
-     * TMDb.
+     * This data is created dynamically but with the help of users votes on TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -739,13 +730,11 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is
-     * 14.
+     * The maximum number of days that can be returned in a single request is 14.
      *
      * The language is present on fields that are translatable.
      *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item
-     * changing type in the ChangeItem
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
      *
      * @param movieId
      * @param startDate the start date of the changes, optional
@@ -833,8 +822,7 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default
-     * response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
      *
      * TODO: Implement more than 20 movies
      *
@@ -902,8 +890,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10
-     * votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
      *
      * The default response will return 20 movies.
      *
@@ -960,11 +947,9 @@ public class TheMovieDbApi {
     //
     //<editor-fold defaultstate="collapsed" desc="Collection Functions">
     /**
-     * This method is used to retrieve all of the basic information about a
-     * movie collection.
+     * This method is used to retrieve all of the basic information about a movie collection.
      *
-     * You can get the ID needed for this method by making a getMovieInfo
-     * request for the belongs_to_collection.
+     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
      *
      * @param collectionId
      * @param language
@@ -1062,8 +1047,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the cast & crew information for
-     * the person.
+     * This method is used to retrieve all of the cast & crew information for the person.
      *
      * It will return the single highest rated poster for each movie record.
      *
@@ -1133,12 +1117,50 @@ public class TheMovieDbApi {
         }
     }
 
+    /**
+     * Get the changes for a specific person id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * @param personId
+     * @param startDate
+     * @param endDate
+     * @throws MovieDbException
+     */
+    public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
+    /**
+     * Get the latest person id.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public Person getPersonLatest() throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON, "/latest");
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            return mapper.readValue(webpage, Person.class);
+        } catch (IOException ex) {
+            logger.warn("Failed to get latest person: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
     //</editor-fold>
     //
     //<editor-fold defaultstate="collapsed" desc="Company Functions">
     /**
-     * This method is used to retrieve the basic information about a production
-     * company on TMDb.
+     * This method is used to retrieve the basic information about a production company on TMDb.
      *
      * @param companyId
      * @return
@@ -1163,8 +1185,8 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies associated with a company.
      *
-     * These movies are returned in order of most recently released to oldest.
-     * The default response will return 20 movies per page.
+     * These movies are returned in order of most recently released to oldest. The default response will return 20
+     * movies per page.
      *
      * TODO: Implement more than 20 movies
      *
@@ -1229,11 +1251,9 @@ public class TheMovieDbApi {
     /**
      * Get a list of movies per genre.
      *
-     * It is important to understand that only movies with more than 10 votes
-     * get listed.
+     * It is important to understand that only movies with more than 10 votes get listed.
      *
-     * This prevents movies from 1 10/10 rating from being listed first and for
-     * the first 5 pages.
+     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
      *
      * @param genreId
      * @param language
@@ -1268,16 +1288,13 @@ public class TheMovieDbApi {
     //<editor-fold defaultstate="collapsed" desc="Search Functions">
 
     /**
-     * Search Movies This is a good starting point to start finding movies on
-     * TMDb.
+     * Search Movies This is a good starting point to start finding movies on TMDb.
      *
      * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will
-     * get all years
+     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
      * @param language The language to include. Can be blank/null.
      * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first
-     * page)
+     * @param page The page of results to return. 0 to get the default (first page)
      * @return
      * @throws MovieDbException
      */
@@ -1317,8 +1334,8 @@ public class TheMovieDbApi {
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part
-     * of TMDb. The company IDs will map to those returned on movie calls.
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to
+     * those returned on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
@@ -1349,8 +1366,7 @@ public class TheMovieDbApi {
     /**
      * This is a good starting point to start finding people on TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through
-     * people quickly.
+     * The idea is to be a quick and light method so you can iterate through people quickly.
      *
      * TODO: Fix allResults
      *
@@ -1379,6 +1395,5 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-
     //</editor-fold>
 }
