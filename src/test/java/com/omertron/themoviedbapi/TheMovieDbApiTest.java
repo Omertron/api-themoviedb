@@ -495,7 +495,8 @@ public class TheMovieDbApiTest {
     /**
      * Test of getSessionToken method, of class TheMovieDbApi.
      */
-    @Test
+//    Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
+//    @Test
     public void testGetSessionToken() throws Exception {
         logger.info("getSessionToken");
         TokenAuthorisation token = tmdb.getAuthorisationToken();
