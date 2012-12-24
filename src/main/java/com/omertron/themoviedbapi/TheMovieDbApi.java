@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ArtworkType;
+import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Genre;
@@ -48,6 +49,7 @@ import com.omertron.themoviedbapi.tools.FilteringLayout;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import com.omertron.themoviedbapi.wrapper.WrapperCollection;
 import com.omertron.themoviedbapi.wrapper.WrapperCompany;
 import com.omertron.themoviedbapi.wrapper.WrapperCompanyMovies;
 import com.omertron.themoviedbapi.wrapper.WrapperConfig;
@@ -1332,33 +1334,37 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Search Companies.
+     * Search for collections by name.
      *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to
-     * those returned on movie calls.
-     *
-     * http://help.themoviedb.org/kb/api/search-companies
-     *
-     * @param companyName
+     * @param query
+     * @param language
      * @param page
      * @return
      * @throws MovieDbException
      */
-    public List<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "company");
-        apiUrl.addArgument(PARAM_QUERY, companyName);
+    public List<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "collections");
+
+        if (StringUtils.isNotBlank(query)) {
+            apiUrl.addArgument(PARAM_QUERY, query);
+        }
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
 
         if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
+            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
         }
 
         URL url = apiUrl.buildUrl();
+
         String webpage = WebBrowser.request(url);
         try {
-            WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
+            WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
             return wrapper.getResults();
         } catch (IOException ex) {
-            logger.warn("Failed to find company: " + ex.getMessage());
+            logger.warn("Failed to find collection: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1395,5 +1401,78 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
+
+    /**
+     * Search for lists by name and description.
+     *
+     * @param query
+     * @param language
+     * @param page
+     * @throws MovieDbException
+     */
+    public List<MovieList> searchList(String query, String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "list");
+
+        if (StringUtils.isNotBlank(query)) {
+            apiUrl.addArgument(PARAM_QUERY, query);
+        }
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
+        }
+
+        URL url = apiUrl.buildUrl();
+
+        String webpage = WebBrowser.request(url);
+        try {
+            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            return wrapper.getMovieList();
+        } catch (IOException ex) {
+            logger.warn("Failed to find list: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     * Search Companies.
+     *
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to
+     * those returned on movie calls.
+     *
+     * http://help.themoviedb.org/kb/api/search-companies
+     *
+     * @param companyName
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public List<Company> searchCompanies(String companyName, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "company");
+        apiUrl.addArgument(PARAM_QUERY, companyName);
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+        try {
+            WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
+            return wrapper.getResults();
+        } catch (IOException ex) {
+            logger.warn("Failed to find company: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    public void searchKeyword() {
+    }
     //</editor-fold>
+    //
+    // List Functions
+    // Keywords Functions
 }

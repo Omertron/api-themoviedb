@@ -53,6 +53,8 @@ public class MovieList implements Serializable {
     private String name;
     @JsonProperty("poster_path")
     private String posterPath;
+    @JsonProperty("list_type")
+    private String listType;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getDescription() {
@@ -83,6 +85,9 @@ public class MovieList implements Serializable {
         return posterPath;
     }
 
+    public String getListType() {
+        return listType;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -114,6 +119,9 @@ public class MovieList implements Serializable {
         this.posterPath = posterPath;
     }
 
+    public void setListType(String listType) {
+        this.listType = listType;
+    }
     // </editor-fold>
 
     /**
