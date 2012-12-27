@@ -55,6 +55,7 @@ import com.omertron.themoviedbapi.wrapper.WrapperCompanyMovies;
 import com.omertron.themoviedbapi.wrapper.WrapperConfig;
 import com.omertron.themoviedbapi.wrapper.WrapperGenres;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
@@ -1469,7 +1470,34 @@ public class TheMovieDbApi {
         }
     }
 
-    public void searchKeyword() {
+    /**
+     * Search for keywords by name
+     *
+     * @param query
+     * @param page
+     * @throws MovieDbException
+     */
+    public List<Keyword> searchKeyword(String query, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "keyword");
+
+        if (StringUtils.isNotBlank(query)) {
+            apiUrl.addArgument(PARAM_QUERY, query);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
+        }
+
+        URL url = apiUrl.buildUrl();
+
+        String webpage = WebBrowser.request(url);
+        try {
+            WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
+            return wrapper.getResults();
+        } catch (IOException ex) {
+            logger.warn("Failed to find keyword: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
     //</editor-fold>
     //
