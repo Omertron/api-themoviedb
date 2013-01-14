@@ -66,6 +66,7 @@ public final class WebBrowser {
     private static void populateBrowserProperties() {
         if (browserProperties.isEmpty()) {
             browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
+            browserProperties.put("Accept", "application/json");
         }
     }
 
