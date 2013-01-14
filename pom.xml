@@ -190,12 +190,12 @@
                                 <property name="header_line" value="The MovieDb API${line.separator}" />
                                 <property name="build_date_line" value="Build Date: ${timestamp}${line.separator}" />
                                 <property name="version_line" value="Version: ${project.version}${line.separator}" />
-                                <property name="revision_line" value="Revision: r${buildNumber}${line.separator}" />
+                                <!--<property name="revision_line" value="Revision: r${buildNumber}${line.separator}" />-->
                                 <echo>Writing version file: ${version_file}</echo>
                                 <echo file="${version_file}" append="false">${header_line}</echo>
                                 <echo file="${version_file}" append="true">${build_date_line}</echo>
                                 <echo file="${version_file}" append="true">${version_line}</echo>
-                                <echo file="${version_file}" append="true">${revision_line}</echo>
+                                <!--<echo file="${version_file}" append="true">${revision_line}</echo>-->
                             </target>
                         </configuration>
                         <goals>
