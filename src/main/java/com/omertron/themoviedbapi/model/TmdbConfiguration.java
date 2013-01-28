@@ -122,7 +122,6 @@ public class TmdbConfiguration implements Serializable {
      * Check that the poster size is valid
      *
      * @param posterSize
-     * @return
      */
     public boolean isValidPosterSize(String posterSize) {
         if (StringUtils.isBlank(posterSize) || posterSizes.isEmpty()) {
@@ -135,7 +134,6 @@ public class TmdbConfiguration implements Serializable {
      * Check that the backdrop size is valid
      *
      * @param backdropSize
-     * @return
      */
     public boolean isValidBackdropSize(String backdropSize) {
         if (StringUtils.isBlank(backdropSize) || backdropSizes.isEmpty()) {
@@ -148,7 +146,6 @@ public class TmdbConfiguration implements Serializable {
      * Check that the profile size is valid
      *
      * @param profileSize
-     * @return
      */
     public boolean isValidProfileSize(String profileSize) {
         if (StringUtils.isBlank(profileSize) || profileSizes.isEmpty()) {
@@ -161,7 +158,6 @@ public class TmdbConfiguration implements Serializable {
      * Check that the logo size is valid
      *
      * @param logoSize
-     * @return
      */
     public boolean isValidLogoSize(String logoSize) {
         if (StringUtils.isBlank(logoSize) || logoSizes.isEmpty()) {
@@ -174,7 +170,6 @@ public class TmdbConfiguration implements Serializable {
      * Check to see if the size is valid for any of the images types
      *
      * @param sizeToCheck
-     * @return
      */
     public boolean isValidSize(String sizeToCheck) {
         return (isValidPosterSize(sizeToCheck)

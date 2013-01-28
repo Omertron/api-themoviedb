@@ -102,8 +102,6 @@ public class ApiUrl {
 
     /**
      * Build the URL from the pre-created arguments.
-     *
-     * @return
      */
     public URL buildUrl() {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
