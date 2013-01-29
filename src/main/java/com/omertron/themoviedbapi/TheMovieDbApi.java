@@ -75,7 +75,7 @@ import org.apache.log4j.Logger;
 
 /**
  * The MovieDb API
- *
+ *<p>
  * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
@@ -90,8 +90,6 @@ public class TheMovieDbApi {
      *
      * These are not set to static so that multiple instances of
      * the API can co-exist
-     *
-     * TODO: See issue 9 http://code.google.com/p/themoviedbapi/issues/detail?id=9
      */
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
