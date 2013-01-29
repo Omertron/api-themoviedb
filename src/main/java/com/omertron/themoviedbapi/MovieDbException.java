@@ -21,10 +21,41 @@ package com.omertron.themoviedbapi;
 
 public class MovieDbException extends Exception {
 
-    private static final long serialVersionUID = -8952129102483143278L;
+    private static final long serialVersionUID = 1L;
 
     public enum MovieDbExceptionType {
-        UNKNOWN_CAUSE, INVALID_URL, HTTP_404_ERROR, MOVIE_ID_NOT_FOUND, MAPPING_FAILED, CONNECTION_ERROR, INVALID_IMAGE, AUTHORISATION_FAILURE;
+        /*
+         * Unknown error occured
+         */
+        UNKNOWN_CAUSE,
+        /*
+         * URL is invalid
+         */
+        INVALID_URL,
+        /*
+         * Page not found
+         */
+        HTTP_404_ERROR,
+        /*
+         * The movie id was not found
+         */
+        MOVIE_ID_NOT_FOUND,
+        /*
+         * Mapping failed from target to internal onbjects
+         */
+        MAPPING_FAILED,
+        /*
+         * Error connecting to the service
+         */
+        CONNECTION_ERROR,
+        /*
+         * Image was invalid
+         */
+        INVALID_IMAGE,
+        /*
+         * Autorisation rejected
+         */
+        AUTHORISATION_FAILURE;
     }
 
     private final MovieDbExceptionType exceptionType;
