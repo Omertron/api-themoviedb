@@ -21,50 +21,12 @@ package com.omertron.themoviedbapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
-import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ArtworkType;
-import com.omertron.themoviedbapi.model.Collection;
-import com.omertron.themoviedbapi.model.CollectionInfo;
-import com.omertron.themoviedbapi.model.Company;
-import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.Keyword;
-import com.omertron.themoviedbapi.model.MovieChanges;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.MovieList;
-import com.omertron.themoviedbapi.model.Person;
-import com.omertron.themoviedbapi.model.PersonCast;
-import com.omertron.themoviedbapi.model.PersonCredit;
-import com.omertron.themoviedbapi.model.PersonCrew;
-import com.omertron.themoviedbapi.model.PersonType;
-import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.TmdbConfiguration;
-import com.omertron.themoviedbapi.model.TokenAuthorisation;
-import com.omertron.themoviedbapi.model.TokenSession;
-import com.omertron.themoviedbapi.model.Trailer;
-import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.tools.FilteringLayout;
 import com.omertron.themoviedbapi.tools.WebBrowser;
-import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
-import com.omertron.themoviedbapi.wrapper.WrapperChanges;
-import com.omertron.themoviedbapi.wrapper.WrapperCollection;
-import com.omertron.themoviedbapi.wrapper.WrapperCompany;
-import com.omertron.themoviedbapi.wrapper.WrapperCompanyMovies;
-import com.omertron.themoviedbapi.wrapper.WrapperConfig;
-import com.omertron.themoviedbapi.wrapper.WrapperGenres;
-import com.omertron.themoviedbapi.wrapper.WrapperImages;
-import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
-import com.omertron.themoviedbapi.wrapper.WrapperPerson;
-import com.omertron.themoviedbapi.wrapper.WrapperPersonCredits;
-import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
-import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
-import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
+import com.omertron.themoviedbapi.wrapper.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -74,9 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
- * The MovieDb API
- *<p>
- * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
+ * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -99,6 +59,8 @@ public class TheMovieDbApi {
     private static final String BASE_COLLECTION = "collection/";
 //    private static final String BASE_ACCOUNT = "account/";
     private static final String BASE_SEARCH = "search/";
+    private static final String BASE_LIST = "list/";
+    private static final String BASE_KEYWORD = "keyword/";
     // Account
     /*
      private final ApiUrl tmdbAccount = new ApiUrl(this, BASE_ACCOUNT);
@@ -332,11 +294,10 @@ public class TheMovieDbApi {
      *
      * A guest session can be used to rate movies without having a registered TMDb user account.
      *
-     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to
-     * a TMDb user account in the future.
+     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
+     * account in the future.
      *
-     * There are also IP limits in place so you should always make sure it's the end user doing the guest session
-     * actions.
+     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
      *
      * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
      *
@@ -1153,8 +1114,7 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies associated with a company.
      *
-     * These movies are returned in order of most recently released to oldest. The default response will return 20
-     * movies per page.
+     * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
      *
      * TODO: Implement more than 20 movies
      *
@@ -1399,8 +1359,8 @@ public class TheMovieDbApi {
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to
-     * those returned on movie calls.
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
+     * on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
@@ -1458,6 +1418,93 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
     //
-    // List Functions
-    // Keywords Functions
+    //<editor-fold defaultstate="collapsed" desc="List Functions">
+
+    /**
+     * Get a list by its ID
+     *
+     * @param listId
+     * @return The list and its items
+     * @throws MovieDbException
+     */
+    public MovieDbList getList(String listId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_LIST);
+        apiUrl.addArgument(PARAM_ID, listId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            MovieDbList movieDbList = mapper.readValue(webpage, MovieDbList.class);
+            return movieDbList;
+        } catch (IOException ex) {
+            logger.warn("Failed to get list: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+    //</editor-fold>
+    //
+    //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
+
+    /**
+     * Get the basic information for a specific keyword id.
+     *
+     * @param keywordId
+     * @return
+     * @throws MovieDbException
+     */
+    public Keyword getKeyword(String keywordId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_KEYWORD);
+        apiUrl.addArgument(PARAM_ID, keywordId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            Keyword keyword = mapper.readValue(webpage, Keyword.class);
+            return keyword;
+        } catch (IOException ex) {
+            logger.warn("Failed to get keyword: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+
+    }
+
+    /**
+     * Get the list of movies for a particular keyword by id.
+     *
+     * @param keywordId
+     * @param language
+     * @param page
+     * @return List of movies with the keyword
+     * @throws MovieDbException
+     */
+    public List<MovieList> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(this, BASE_KEYWORD, "/movies");
+        apiUrl.addArgument(PARAM_ID, keywordId);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            return wrapper.getMovieList();
+        } catch (IOException ex) {
+            logger.warn("Failed to get top rated movies: " + ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+
+    }
+    //</editor-fold>
+    //
+    //<editor-fold defaultstate="collapsed" desc="Changes Functions">
+    //</editor-fold>
 }

@@ -28,6 +28,7 @@ import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.MovieChanges;
 import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCredit;
@@ -66,6 +67,7 @@ public class TheMovieDbApiTest {
     private static final int ID_COMPANY_LUCASFILM = 1;
     private static final String COMPANY_NAME = "Marvel Studios";
     private static final int ID_GENRE_ACTION = 28;
+    private static final String ID_KEYWORD = "1721";
 
     public TheMovieDbApiTest() throws MovieDbException {
         tmdb = new TheMovieDbApi(API_KEY);
@@ -598,5 +600,67 @@ public class TheMovieDbApiTest {
         List<Keyword> result = tmdb.searchKeyword(query, page);
         assertFalse("No keywords found", result == null);
         assertTrue("No keywords found", result.size() > 0);
+    }
+
+    /**
+     * Test of postMovieRating method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testPostMovieRating() throws Exception {
+        logger.info("postMovieRating");
+        String sessionId = "";
+        String rating = "";
+        boolean expResult = false;
+        boolean result = tmdb.postMovieRating(sessionId, rating);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getPersonChanges method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetPersonChanges() throws Exception {
+        logger.info("getPersonChanges");
+        int personId = 0;
+        String startDate = "";
+        String endDate = "";
+        tmdb.getPersonChanges(personId, startDate, endDate);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getList method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetList() throws Exception {
+        logger.info("getList");
+        String listId = "509ec17b19c2950a0600050d";
+        MovieDbList result = tmdb.getList(listId);
+        assertFalse("List not found", result.getItems().isEmpty());
+    }
+
+    /**
+     * Test of getKeyword method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetKeyword() throws Exception {
+        logger.info("getKeyword");
+        Keyword result = tmdb.getKeyword(ID_KEYWORD);
+        assertEquals("fight", result.getName());
+    }
+
+    /**
+     * Test of getKeywordMovies method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetKeywordMovies() throws Exception {
+        logger.info("getKeywordMovies");
+        String language = "";
+        int page = 0;
+        List<MovieList> result = tmdb.getKeywordMovies(ID_KEYWORD, language, page);
+        assertFalse("No keyword movies found", result.isEmpty());
     }
 }
