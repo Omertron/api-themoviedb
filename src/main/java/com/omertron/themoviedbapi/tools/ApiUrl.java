@@ -43,7 +43,6 @@ public class ApiUrl {
      * TheMovieDbApi API Base URL
      */
     private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
-//    private static final String TMDB_API_BASE = "http://private-3aa3-themoviedb.apiary.io/3/";
     /*
      * Parameter configuration
      */
