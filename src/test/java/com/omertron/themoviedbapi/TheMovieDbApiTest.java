@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.*;
@@ -68,6 +69,9 @@ public class TheMovieDbApiTest {
     private static final String COMPANY_NAME = "Marvel Studios";
     private static final int ID_GENRE_ACTION = 28;
     private static final String ID_KEYWORD = "1721";
+    // Languages
+    private static final String LANGUAGE_DEFAULT = "";
+    private static final String LANGUAGE_ENGLISH = "en";
 
     public TheMovieDbApiTest() throws MovieDbException {
         tmdb = new TheMovieDbApi(API_KEY);
@@ -75,6 +79,7 @@ public class TheMovieDbApiTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        BasicConfigurator.configure();
         // Set the logger level to TRACE
         Logger.getRootLogger().setLevel(Level.TRACE);
     }
@@ -378,7 +383,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
         logger.info("getNowPlayingMovies");
-        List<MovieDb> results = tmdb.getNowPlayingMovies("", 0);
+        List<MovieDb> results = tmdb.getNowPlayingMovies(LANGUAGE_DEFAULT, 0);
         assertTrue("No now playing movies found", !results.isEmpty());
     }
 
@@ -388,7 +393,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetPopularMovieList() throws MovieDbException {
         logger.info("getPopularMovieList");
-        List<MovieDb> results = tmdb.getPopularMovieList("", 0);
+        List<MovieDb> results = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         assertTrue("No popular movies found", !results.isEmpty());
     }
 
@@ -398,7 +403,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetTopRatedMovies() throws MovieDbException {
         logger.info("getTopRatedMovies");
-        List<MovieDb> results = tmdb.getTopRatedMovies("", 0);
+        List<MovieDb> results = tmdb.getTopRatedMovies(LANGUAGE_DEFAULT, 0);
         assertTrue("No top rated movies found", !results.isEmpty());
     }
 
@@ -418,7 +423,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
         logger.info("getCompanyMovies");
-        List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, "", 0);
+        List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, LANGUAGE_DEFAULT, 0);
         assertTrue("No company movies found", !results.isEmpty());
     }
 
@@ -438,7 +443,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetSimilarMovies() throws MovieDbException {
         logger.info("getSimilarMovies");
-        List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, "", 0);
+        List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, LANGUAGE_DEFAULT, 0);
         assertTrue("No similar movies found", !results.isEmpty());
     }
 
@@ -448,7 +453,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetGenreList() throws MovieDbException {
         logger.info("getGenreList");
-        List<Genre> results = tmdb.getGenreList("");
+        List<Genre> results = tmdb.getGenreList(LANGUAGE_DEFAULT);
         assertTrue("No genres found", !results.isEmpty());
     }
 
@@ -458,7 +463,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetGenreMovies() throws MovieDbException {
         logger.info("getGenreMovies");
-        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, "", 0);
+        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0);
         assertTrue("No genre movies found", !results.isEmpty());
     }
 
@@ -468,7 +473,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetUpcoming() throws Exception {
         logger.info("getUpcoming");
-        List<MovieDb> results = tmdb.getUpcoming("", 0);
+        List<MovieDb> results = tmdb.getUpcoming(LANGUAGE_DEFAULT, 0);
         assertTrue("No upcoming movies found", !results.isEmpty());
     }
 
@@ -478,8 +483,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetCollectionImages() throws Exception {
         logger.info("getCollectionImages");
-        String language = "";
-        List<Artwork> result = tmdb.getCollectionImages(ID_MOVIE_STAR_WARS_COLLECTION, language);
+        List<Artwork> result = tmdb.getCollectionImages(ID_MOVIE_STAR_WARS_COLLECTION, LANGUAGE_DEFAULT);
         assertFalse("No artwork found", result.isEmpty());
     }
 
@@ -536,12 +540,12 @@ public class TheMovieDbApiTest {
     public void testGetMovieChanges() throws Exception {
         logger.info("getMovieChanges");
 
-        String language = "";
         String startDate = "";
         String endDate = null;
         List<MovieChanges> results = Collections.EMPTY_LIST;
 
-        List<MovieDb> movieList = tmdb.getPopularMovieList(language, 0);
+        // Get some popular movies
+        List<MovieDb> movieList = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         for (MovieDb movie : movieList) {
             results = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
             logger.info(movie.getTitle() + " has " + results.size() + " changes.");
@@ -568,9 +572,8 @@ public class TheMovieDbApiTest {
     public void testSearchCollection() throws Exception {
         logger.info("searchCollection");
         String query = "batman";
-        String language = "";
         int page = 0;
-        List<Collection> result = tmdb.searchCollection(query, language, page);
+        List<Collection> result = tmdb.searchCollection(query, LANGUAGE_DEFAULT, page);
         assertFalse("No collections found", result == null);
         assertTrue("No collections found", result.size() > 0);
     }
@@ -582,9 +585,8 @@ public class TheMovieDbApiTest {
     public void testSearchList() throws Exception {
         logger.info("searchList");
         String query = "watch";
-        String language = "";
         int page = 0;
-        List result = tmdb.searchList(query, language, page);
+        List result = tmdb.searchList(query, LANGUAGE_DEFAULT, page);
         assertFalse("No lists found", result == null);
         assertTrue("No lists found", result.size() > 0);
     }
@@ -658,9 +660,8 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetKeywordMovies() throws Exception {
         logger.info("getKeywordMovies");
-        String language = "";
         int page = 0;
-        List<MovieList> result = tmdb.getKeywordMovies(ID_KEYWORD, language, page);
+        List<MovieList> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
         assertFalse("No keyword movies found", result.isEmpty());
     }
 }
