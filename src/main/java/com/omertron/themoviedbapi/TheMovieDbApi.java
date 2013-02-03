@@ -1479,7 +1479,7 @@ public class TheMovieDbApi {
      * @return List of movies with the keyword
      * @throws MovieDbException
      */
-    public List<MovieList> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
+    public List<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(this, BASE_KEYWORD, "/movies");
         apiUrl.addArgument(PARAM_ID, keywordId);
 
@@ -1495,8 +1495,8 @@ public class TheMovieDbApi {
         String webpage = WebBrowser.request(url);
 
         try {
-            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
-            return wrapper.getMovieList();
+            WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
+            return wrapper.getResults();
         } catch (IOException ex) {
             logger.warn("Failed to get top rated movies: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -1506,5 +1506,14 @@ public class TheMovieDbApi {
     //</editor-fold>
     //
     //<editor-fold defaultstate="collapsed" desc="Changes Functions">
+
+    public void getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
+        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
+    public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
+        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
     //</editor-fold>
 }

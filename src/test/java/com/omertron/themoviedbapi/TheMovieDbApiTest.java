@@ -26,6 +26,7 @@ import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.KeywordMovie;
 import com.omertron.themoviedbapi.model.MovieChanges;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
@@ -74,7 +75,6 @@ public class TheMovieDbApiTest {
     private static final String LANGUAGE_ENGLISH = "en";
 
     public TheMovieDbApiTest() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
     }
 
     @BeforeClass
@@ -82,6 +82,7 @@ public class TheMovieDbApiTest {
         BasicConfigurator.configure();
         // Set the logger level to TRACE
         Logger.getRootLogger().setLevel(Level.TRACE);
+        tmdb = new TheMovieDbApi(API_KEY);
     }
 
     @AfterClass
@@ -501,8 +502,9 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getSessionToken method, of class TheMovieDbApi.
+     *
+     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
-//    Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
     public void testGetSessionToken() throws Exception {
         logger.info("getSessionToken");
         TokenAuthorisation token = tmdb.getAuthorisationToken();
@@ -536,7 +538,11 @@ public class TheMovieDbApiTest {
         assertTrue("No results found", results.size() > 0);
     }
 
-//    Do not test this until it is fixed
+    /**
+     * Test of getMovieChanges method,of class TheMovieDbApi
+     *
+     * TODO: Do not test this until it is fixed
+     */
     public void testGetMovieChanges() throws Exception {
         logger.info("getMovieChanges");
 
@@ -606,8 +612,9 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of postMovieRating method, of class TheMovieDbApi.
+     *
+     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
-    @Test
     public void testPostMovieRating() throws Exception {
         logger.info("postMovieRating");
         String sessionId = "";
@@ -621,16 +628,14 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPersonChanges method, of class TheMovieDbApi.
+     *
+     * TODO: Fix the method before testing
      */
-    @Test
     public void testGetPersonChanges() throws Exception {
         logger.info("getPersonChanges");
-        int personId = 0;
         String startDate = "";
         String endDate = "";
-        tmdb.getPersonChanges(personId, startDate, endDate);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        tmdb.getPersonChanges(ID_PERSON_BRUCE_WILLIS, startDate, endDate);
     }
 
     /**
@@ -661,7 +666,7 @@ public class TheMovieDbApiTest {
     public void testGetKeywordMovies() throws Exception {
         logger.info("getKeywordMovies");
         int page = 0;
-        List<MovieList> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
+        List<KeywordMovie> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
         assertFalse("No keyword movies found", result.isEmpty());
     }
 }

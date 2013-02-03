@@ -40,19 +40,19 @@ public class MovieDb implements Serializable {
     /*
      * Properties
      */
-    @JsonProperty(("backdrop_path"))
+    @JsonProperty("backdrop_path")
     private String backdropPath;
-    @JsonProperty(("id"))
+    @JsonProperty("id")
     private int id;
-    @JsonProperty(("original_title"))
+    @JsonProperty("original_title")
     private String originalTitle;
-    @JsonProperty(("popularity"))
+    @JsonProperty("popularity")
     private float popularity;
-    @JsonProperty(("poster_path"))
+    @JsonProperty("poster_path")
     private String posterPath;
-    @JsonProperty(("release_date"))
+    @JsonProperty("release_date")
     private String releaseDate;
-    @JsonProperty(("title"))
+    @JsonProperty("title")
     private String title;
     @JsonProperty("adult")
     private boolean adult;
@@ -275,7 +275,6 @@ public class MovieDb implements Serializable {
     }
 
     // </editor-fold>
-
     /**
      * Handle unknown properties and print a message
      *
