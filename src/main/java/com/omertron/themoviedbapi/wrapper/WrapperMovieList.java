@@ -19,9 +19,7 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.MovieList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -30,81 +28,23 @@ import org.apache.log4j.Logger;
  *
  * @author Stuart
  */
-public class WrapperMovieList {
-    /*
-     * Logger
-     */
-
-    private static final Logger logger = Logger.getLogger(WrapperMovieList.class);
+public class WrapperMovieList extends WrapperBase {
     /*
      * Properties
      */
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("page")
-    private int page;
+
     @JsonProperty("results")
     private List<MovieList> movieList;
-    @JsonProperty("total_pages")
-    private int totalPages;
-    @JsonProperty("total_results")
-    private int totalResults;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter Methods">
-    public int getId() {
-        return id;
-    }
-
-    public int getPage() {
-        return page;
+    public WrapperMovieList() {
+        super(Logger.getLogger(WrapperMovieList.class));
     }
 
     public List<MovieList> getMovieList() {
         return movieList;
     }
 
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public int getTotalResults() {
-        return totalResults;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Setter Methods">
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
     public void setMovieList(List<MovieList> movieList) {
         this.movieList = movieList;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public void setTotalResults(int totalResults) {
-        this.totalResults = totalResults;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
     }
 }

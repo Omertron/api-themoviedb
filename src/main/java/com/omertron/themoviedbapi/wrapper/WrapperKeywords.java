@@ -19,9 +19,7 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.Keyword;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -30,71 +28,22 @@ import org.apache.log4j.Logger;
  *
  * @author stuart.boston
  */
-public class WrapperKeywords {
-    /*
-     * Logger
-     */
-
-    private static final Logger logger = Logger.getLogger(WrapperKeywords.class);
+public class WrapperKeywords extends WrapperBase {
     /*
      * Properties
      */
-    @JsonProperty("page")
-    private int page;
     @JsonProperty("results")
     private List<Keyword> results;
-    @JsonProperty("total_pages")
-    private int totalPages;
-    @JsonProperty("total_results")
-    private int totalResults;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
-    public int getPage() {
-        return page;
+    public WrapperKeywords() {
+        super(Logger.getLogger(WrapperKeywords.class));
     }
 
     public List<Keyword> getResults() {
         return results;
     }
 
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public int getTotalResults() {
-        return totalResults;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setPage(int page) {
-        this.page = page;
-    }
-
     public void setResults(List<Keyword> results) {
         this.results = results;
-    }
-
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public void setTotalResults(int totalResults) {
-        this.totalResults = totalResults;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
     }
 }

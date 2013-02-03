@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Artwork;
 import java.util.List;
@@ -29,17 +28,10 @@ import org.apache.log4j.Logger;
  *
  * @author Stuart
  */
-public class WrapperImages {
-    /*
-     * Logger
-     */
-
-    private static final Logger logger = Logger.getLogger(WrapperImages.class);
+public class WrapperImages extends WrapperBase {
     /*
      * Properties
      */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("backdrops")
     private List<Artwork> backdrops;
     @JsonProperty("posters")
@@ -47,11 +39,11 @@ public class WrapperImages {
     @JsonProperty("profiles")
     private List<Artwork> profiles;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
-    public int getId() {
-        return id;
+    public WrapperImages() {
+        super(Logger.getLogger(WrapperImages.class));
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public List<Artwork> getBackdrops() {
         return backdrops;
     }
@@ -66,10 +58,6 @@ public class WrapperImages {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setBackdrops(List<Artwork> backdrops) {
         this.backdrops = backdrops;
     }
@@ -82,18 +70,4 @@ public class WrapperImages {
         this.profiles = profiles;
     }
     //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
-    }
 }

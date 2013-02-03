@@ -21,50 +21,77 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.model.AlternativeTitle;
+import com.omertron.themoviedbapi.model.MovieList;
 import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
+ * Base class for the wrappers
  *
  * @author Stuart
  */
-public class WrapperTranslations {
+public class WrapperBase {
     /*
-     * Logger
+     * Logger - set but the sub-classes
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperTranslations.class);
+    private Logger logger;
     /*
      * Properties
      */
     @JsonProperty("id")
     private int id;
-    @JsonProperty("translations")
-    private List<Translation> translations;
+    @JsonProperty("page")
+    private int page;
+    @JsonProperty("total_pages")
+    private int totalPages;
+    @JsonProperty("total_results")
+    private int totalResults;
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setId(int id) {
-        this.id = id;
+    public WrapperBase(Logger logger) {
+        this.logger = logger;
     }
 
-    public void setTranslations(List<Translation> translations) {
-        this.translations = translations;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
+    //<editor-fold defaultstate="collapsed" desc="Getter Methods">
     public int getId() {
         return id;
     }
 
-    public List<Translation> getTranslations() {
-        return translations;
+    public int getPage() {
+        return page;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public int getTotalResults() {
+        return totalResults;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Setter Methods">
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public void setTotalResults(int totalResults) {
+        this.totalResults = totalResults;
     }
     //</editor-fold>
 
     /**
      * Handle unknown properties and print a message
+     *
      * @param key
      * @param value
      */
