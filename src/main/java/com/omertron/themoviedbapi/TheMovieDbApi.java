@@ -1435,8 +1435,7 @@ public class TheMovieDbApi {
         String webpage = WebBrowser.request(url);
 
         try {
-            MovieDbList movieDbList = mapper.readValue(webpage, MovieDbList.class);
-            return movieDbList;
+            return mapper.readValue(webpage, MovieDbList.class);
         } catch (IOException ex) {
             logger.warn("Failed to get list: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -1461,8 +1460,7 @@ public class TheMovieDbApi {
         String webpage = WebBrowser.request(url);
 
         try {
-            Keyword keyword = mapper.readValue(webpage, Keyword.class);
-            return keyword;
+            return mapper.readValue(webpage, Keyword.class);
         } catch (IOException ex) {
             logger.warn("Failed to get keyword: " + ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -1514,6 +1512,5 @@ public class TheMovieDbApi {
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
-
     //</editor-fold>
 }
