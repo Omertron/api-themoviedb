@@ -22,7 +22,8 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Keyword;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +37,7 @@ public class WrapperKeywords extends WrapperBase {
     private List<Keyword> results;
 
     public WrapperKeywords() {
-        super(Logger.getLogger(WrapperKeywords.class));
+        super(LoggerFactory.getLogger(WrapperKeywords.class));
     }
 
     public List<Keyword> getResults() {

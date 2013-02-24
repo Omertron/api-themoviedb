@@ -22,7 +22,8 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.MovieList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,7 +38,7 @@ public class WrapperMovieList extends WrapperBase {
     private List<MovieList> movieList;
 
     public WrapperMovieList() {
-        super(Logger.getLogger(WrapperMovieList.class));
+        super(LoggerFactory.getLogger(WrapperMovieList.class));
     }
 
     public List<MovieList> getMovieList() {

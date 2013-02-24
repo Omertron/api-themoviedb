@@ -21,7 +21,8 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ChangeValue {
 
@@ -30,7 +31,7 @@ public class ChangeValue {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(MovieChanges.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MovieChanges.class);
     /*
      * Properties
      */
@@ -122,6 +123,6 @@ public class ChangeValue {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 }

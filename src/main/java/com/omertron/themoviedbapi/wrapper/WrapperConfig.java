@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -35,7 +36,7 @@ public class WrapperConfig {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperConfig.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WrapperConfig.class);
     /*
      * Properties
      */
@@ -71,6 +72,6 @@ public class WrapperConfig {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 }

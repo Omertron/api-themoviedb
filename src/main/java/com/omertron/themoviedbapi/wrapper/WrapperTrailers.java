@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Trailer;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -34,7 +35,7 @@ public class WrapperTrailers {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperTrailers.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WrapperTrailers.class);
     /*
      * Properties
      */
@@ -83,6 +84,6 @@ public class WrapperTrailers {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 }

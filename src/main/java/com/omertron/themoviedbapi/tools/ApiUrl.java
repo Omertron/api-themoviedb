@@ -26,7 +26,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The API URL that is used to construct the API call
@@ -38,7 +39,7 @@ public class ApiUrl {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(ApiUrl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApiUrl.class);
     /*
      * TheMovieDbApi API Base URL
      */
@@ -126,7 +127,7 @@ public class ApiUrl {
             try {
                 urlString.append(URLEncoder.encode(query, "UTF-8"));
             } catch (UnsupportedEncodingException ex) {
-                logger.trace("Unable to encode query: '" + query + "' trying raw.");
+                LOG.trace("Unable to encode query: '" + query + "' trying raw.");
                 // If we can't encode it, try it raw
                 urlString.append(query);
             }
@@ -153,10 +154,10 @@ public class ApiUrl {
         }
 
         try {
-            logger.trace("URL: " + urlString.toString());
+            LOG.trace("URL: " + urlString.toString());
             return new URL(urlString.toString());
         } catch (MalformedURLException ex) {
-            logger.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
+            LOG.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
             return null;
         } finally {
             arguments.clear();

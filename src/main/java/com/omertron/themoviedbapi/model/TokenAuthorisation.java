@@ -21,13 +21,14 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TokenAuthorisation {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(TokenAuthorisation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TokenAuthorisation.class);
     /*
      * Properties
      */
@@ -77,7 +78,7 @@ public class TokenAuthorisation {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 
     @Override

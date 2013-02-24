@@ -22,7 +22,8 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.PersonCredit;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -38,7 +39,7 @@ public class WrapperPersonCredits extends WrapperBase{
     private List<PersonCredit> crew;
 
     public WrapperPersonCredits() {
-        super(Logger.getLogger(WrapperMovieCasts.class));
+        super(LoggerFactory.getLogger(WrapperMovieCasts.class));
     }
 
     public List<PersonCredit> getCast() {

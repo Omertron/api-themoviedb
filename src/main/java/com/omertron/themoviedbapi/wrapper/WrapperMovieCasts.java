@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.PersonCast;
 import com.omertron.themoviedbapi.model.PersonCrew;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -35,7 +36,7 @@ public class WrapperMovieCasts {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(WrapperMovieCasts.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WrapperMovieCasts.class);
     /*
      * Properties
      */
@@ -84,6 +85,6 @@ public class WrapperMovieCasts {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 }

@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +37,7 @@ public class TmdbConfiguration implements Serializable {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(TmdbConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbConfiguration.class);
     /*
      * Properties
      */
@@ -189,7 +190,7 @@ public class TmdbConfiguration implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 
     @Override

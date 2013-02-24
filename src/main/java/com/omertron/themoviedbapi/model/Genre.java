@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import java.io.Serializable;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Genre implements Serializable {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(Genre.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Genre.class);
     /*
      * Properties
      */
@@ -76,7 +77,7 @@ public class Genre implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 
     @Override

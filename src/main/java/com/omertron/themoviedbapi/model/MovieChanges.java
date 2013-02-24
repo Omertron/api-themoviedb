@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,7 +37,7 @@ public class MovieChanges implements Serializable {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(MovieChanges.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MovieChanges.class);
     /*
      * Properties
      */
@@ -76,6 +77,6 @@ public class MovieChanges implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 }

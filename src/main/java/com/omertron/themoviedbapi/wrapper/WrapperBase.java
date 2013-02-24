@@ -21,7 +21,8 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for the wrappers
@@ -33,7 +34,7 @@ public class WrapperBase {
      * Logger - set but the sub-classes
      */
 
-    private Logger logger;
+    private Logger LOG;
     /*
      * Properties
      */
@@ -46,8 +47,8 @@ public class WrapperBase {
     @JsonProperty("total_results")
     private int totalResults;
 
-    public WrapperBase(Logger logger) {
-        this.logger = logger;
+    public WrapperBase(Logger LOG) {
+        this.LOG = LOG;
     }
 
     //<editor-fold defaultstate="collapsed" desc="Getter Methods">
@@ -97,6 +98,6 @@ public class WrapperBase {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 }

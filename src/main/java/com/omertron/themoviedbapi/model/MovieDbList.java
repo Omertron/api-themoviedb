@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper for the MovieDbList function
@@ -34,7 +35,7 @@ public class MovieDbList {
      * Logger
      */
 
-    private static final Logger logger = Logger.getLogger(MovieDbList.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MovieDbList.class);
     /*
      * Properties
      */
@@ -144,7 +145,7 @@ public class MovieDbList {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 
 }

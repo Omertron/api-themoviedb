@@ -22,7 +22,8 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Artwork;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -40,7 +41,7 @@ public class WrapperImages extends WrapperBase {
     private List<Artwork> profiles;
 
     public WrapperImages() {
-        super(Logger.getLogger(WrapperImages.class));
+        super(LoggerFactory.getLogger(WrapperImages.class));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">

@@ -22,7 +22,8 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -35,7 +36,7 @@ public class PersonCredit implements Serializable {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(PersonCredit.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PersonCredit.class);
     private static final String DEFAULT_STRING = "";
     /*
      * Properties
@@ -155,7 +156,7 @@ public class PersonCredit implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 
     @Override

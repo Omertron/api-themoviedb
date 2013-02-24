@@ -22,7 +22,8 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The artwork type information
@@ -36,7 +37,7 @@ public class Artwork implements Serializable {
     /*
      * Logger
      */
-    private static final Logger logger = Logger.getLogger(Artwork.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Artwork.class);
     /*
      * Properties
      */
@@ -147,7 +148,7 @@ public class Artwork implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        logger.trace(sb.toString());
+        LOG.trace(sb.toString());
     }
 
     @Override
