@@ -123,8 +123,8 @@ public class TheMovieDbApiTest {
         assertTrue("No movies found, should be at least 1", movieList.size() > 0);
 
         // Try a russian langugage movie
-        movieList = tmdb.searchMovie("О чём говор�?т мужчины", 0, "ru", true, 0);
-        assertTrue("No movies found, should be at least 1", movieList.size() > 0);
+        movieList = tmdb.searchMovie("О чём говорят мужчины", 0, "ru", true, 0);
+        assertTrue("No 'RU' movies found, should be at least 1", movieList.size() > 0);
 
         // Try a movie with more than 20 results
         movieList = tmdb.searchMovie("Star Wars", 0, "en", false, 0);
