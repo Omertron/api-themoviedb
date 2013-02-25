@@ -154,10 +154,10 @@ public class ApiUrl {
         }
 
         try {
-            LOG.trace("URL: " + urlString.toString());
+            LOG.trace("URL: {}", urlString.toString());
             return new URL(urlString.toString());
         } catch (MalformedURLException ex) {
-            LOG.warn("Failed to create URL " + urlString.toString() + " - " + ex.toString());
+            LOG.warn("Failed to create URL {} - {}", urlString.toString(), ex.toString());
             return null;
         } finally {
             arguments.clear();
