@@ -128,7 +128,7 @@ public class TheMovieDbApiTest {
         assertTrue("No 'RU' movies found, should be at least 1", movieList.size() > 0);
 
         // Try a movie with more than 20 results
-        movieList = tmdb.searchMovie("Star Wars", 0, "en", false, 0);
+        movieList = tmdb.searchMovie("Star Wars", 0, LANGUAGE_ENGLISH, false, 0);
         assertTrue("Not enough movies found, should be over 15, found " + movieList.size(), movieList.size() >= 15);
     }
 
@@ -138,8 +138,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetMovieInfo() throws MovieDbException {
         LOG.info("getMovieInfo");
-        String language = "en";
-        MovieDb result = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, language);
+        MovieDb result = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH);
         assertEquals("Incorrect movie information", "Blade Runner", result.getOriginalTitle());
     }
 
@@ -528,8 +527,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetMovieLists() throws Exception {
         LOG.info("getMovieLists");
-        String language = "en";
-        List<MovieList> results = tmdb.getMovieLists(ID_MOVIE_BLADE_RUNNER, language, 0);
+        List<MovieList> results = tmdb.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
         assertNotNull("No results found", results);
         assertTrue("No results found", results.size() > 0);
     }
