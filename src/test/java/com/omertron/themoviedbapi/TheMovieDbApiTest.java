@@ -42,11 +42,11 @@ import com.omertron.themoviedbapi.model.Translation;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.*;
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test cases for TheMovieDbApi API
@@ -56,7 +56,7 @@ import static org.junit.Assert.*;
 public class TheMovieDbApiTest {
 
     // Logger
-    private static final Logger LOG = Logger.getLogger(TheMovieDbApiTest.class.getSimpleName());
+    private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApiTest.class);
     // API Key
     private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
     private static TheMovieDbApi tmdb;
@@ -78,9 +78,8 @@ public class TheMovieDbApiTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        // Set the LOG level to ALL
-        LOG.setLevel(Level.ALL);
         tmdb = new TheMovieDbApi(API_KEY);
+        TestLogger.Configure();
     }
 
     @AfterClass
@@ -548,7 +547,7 @@ public class TheMovieDbApiTest {
         List<MovieDb> movieList = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         for (MovieDb movie : movieList) {
             results = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
-            LOG.log(Level.INFO, "{0} has {1} changes.", new Object[]{movie.getTitle(), results.size()});
+            LOG.info("{} has {} changes.", new Object[]{movie.getTitle(), results.size()});
         }
 
         assertNotNull("No results found", results);
