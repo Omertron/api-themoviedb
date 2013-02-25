@@ -71,6 +71,7 @@ public class TheMovieDbApiTest {
     // Languages
     private static final String LANGUAGE_DEFAULT = "";
     private static final String LANGUAGE_ENGLISH = "en";
+    private static final String LANGUAGE_RUSSIAN = "ru";
 
     public TheMovieDbApiTest() throws MovieDbException {
     }
@@ -123,7 +124,7 @@ public class TheMovieDbApiTest {
         assertTrue("No movies found, should be at least 1", movieList.size() > 0);
 
         // Try a russian langugage movie
-        movieList = tmdb.searchMovie("О чём говорят мужчины", 0, "ru", true, 0);
+        movieList = tmdb.searchMovie("О чём говорят мужчины", 0, LANGUAGE_RUSSIAN, true, 0);
         assertTrue("No 'RU' movies found, should be at least 1", movieList.size() > 0);
 
         // Try a movie with more than 20 results
