@@ -22,7 +22,6 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Artwork;
 import java.util.List;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -33,6 +32,7 @@ public class WrapperImages extends WrapperBase {
     /*
      * Properties
      */
+
     @JsonProperty("backdrops")
     private List<Artwork> backdrops;
     @JsonProperty("posters")
