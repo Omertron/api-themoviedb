@@ -74,6 +74,10 @@ public class Person implements Serializable {
     private String homepage = DEFAULT_STRING;
     @JsonProperty("place_of_birth")
     private String birthplace = DEFAULT_STRING;
+    @JsonProperty("imdb_id")
+    private String imdbId = DEFAULT_STRING;
+    @JsonProperty("popularity")
+    private float popularity = 0.0f;
 
     /**
      * Add a crew member
@@ -175,6 +179,14 @@ public class Person implements Serializable {
     public String getHomepage() {
         return homepage;
     }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public float getPopularity() {
+        return popularity;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -236,6 +248,14 @@ public class Person implements Serializable {
 
     public void setHomepage(String homepage) {
         this.homepage = homepage;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
     }
     // </editor-fold>
 
