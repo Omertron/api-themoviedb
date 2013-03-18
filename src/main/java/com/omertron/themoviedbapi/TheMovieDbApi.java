@@ -1173,6 +1173,11 @@ public class TheMovieDbApi {
         }
     }
 
+    @Deprecated
+    public List<MovieDb> getGenreMovies(int genreId, String language, int page) throws MovieDbException {
+        return getGenreMovies(genreId, language, page, Boolean.TRUE);
+    }
+
     /**
      * Get a list of movies per genre.
      *
@@ -1184,7 +1189,7 @@ public class TheMovieDbApi {
      * @param language
      * @param page
      */
-    public List<MovieDb> getGenreMovies(int genreId, String language, int page) throws MovieDbException {
+    public List<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(this, BASE_GENRE, "/movies");
         apiUrl.addArgument(PARAM_ID, genreId);
 
@@ -1195,6 +1200,8 @@ public class TheMovieDbApi {
         if (page > 0) {
             apiUrl.addArgument(PARAM_PAGE, page);
         }
+
+        apiUrl.addArgument(PARAM_INCLUDE_ALL_MOVIES, includeAllMovies);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);

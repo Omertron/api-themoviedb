@@ -66,6 +66,7 @@ public class ApiUrl {
     public static final String PARAM_FAVORITE = "favorite=";
     public static final String PARAM_ID = "id=";
     public static final String PARAM_LANGUAGE = "language=";
+    public static final String PARAM_INCLUDE_ALL_MOVIES = "include_all_movies=";
 //    public static final String PARAM_MOVIE_ID = "movie_id=";
     public static final String PARAM_MOVIE_WATCHLIST = "movie_watchlist=";
     public static final String PARAM_PAGE = "page=";
