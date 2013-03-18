@@ -458,7 +458,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetGenreMovies() throws MovieDbException {
         LOG.info("getGenreMovies");
-        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0);
+        List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0, Boolean.TRUE);
         assertTrue("No genre movies found", !results.isEmpty());
     }
 
