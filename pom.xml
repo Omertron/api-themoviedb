@@ -196,7 +196,7 @@
                                 <echo file="${version_file}" append="false">${header_line}</echo>
                                 <echo file="${version_file}" append="true">${build_date_line}</echo>
                                 <echo file="${version_file}" append="true">${version_line}</echo>
-                                <echo file="${version_file}" append="true">${revision_line}</echo>
+                                <echo file="${version_file}" append="true">${buildnumber_line}</echo>
                             </target>
                         </configuration>
                         <goals>
