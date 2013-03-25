@@ -108,12 +108,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.3</version>
+            <version>1.7.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -127,8 +127,9 @@
                 <artifactId>buildnumber-maven-plugin</artifactId>
                 <version>1.2</version>
                 <configuration>
-                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
-                    <revisionOnScmFailure>0000</revisionOnScmFailure>
+                    <shortRevisionLength>10</shortRevisionLength>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
                     <timestampFormat>{0,date,yyyy-MM-dd HH:mm:ss}</timestampFormat>
                 </configuration>
                 <executions>
@@ -145,8 +146,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <failOnError>true</failOnError>
                     <verbose>true</verbose>
                     <!-- excludes><exclude>**/*</exclude></excludes -->
@@ -190,12 +191,12 @@
                                 <property name="header_line" value="The MovieDb API${line.separator}" />
                                 <property name="build_date_line" value="Build Date: ${timestamp}${line.separator}" />
                                 <property name="version_line" value="Version: ${project.version}${line.separator}" />
-                                <!--<property name="revision_line" value="Revision: r${buildNumber}${line.separator}" />-->
+                                <property name="revision_line" value="Revision: r${buildNumber}${line.separator}" />
                                 <echo>Writing version file: ${version_file}</echo>
                                 <echo file="${version_file}" append="false">${header_line}</echo>
                                 <echo file="${version_file}" append="true">${build_date_line}</echo>
                                 <echo file="${version_file}" append="true">${version_line}</echo>
-                                <!--<echo file="${version_file}" append="true">${revision_line}</echo>-->
+                                <echo file="${version_file}" append="true">${revision_line}</echo>
                             </target>
                         </configuration>
                         <goals>
