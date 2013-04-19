@@ -62,7 +62,7 @@
     </issueManagement>
 
     <ciManagement>
-        <system>Hudson CI</system>
+        <system>Jenkins CI</system>
         <url>http://jenkins.omertron.com/job/API-TheMovieDb/</url>
     </ciManagement>
 
@@ -119,7 +119,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
+        <finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
 
         <plugins>
             <plugin>
