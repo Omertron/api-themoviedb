@@ -63,12 +63,12 @@ public class TheMovieDbApi {
     private static final String BASE_KEYWORD = "keyword/";
     // Account
     /*
-     private final ApiUrl tmdbAccount = new ApiUrl(this, BASE_ACCOUNT);
-     private final ApiUrl tmdbFavouriteMovies = new ApiUrl(this, BASE_ACCOUNT, "/favorite_movies");
-     private final ApiUrl tmdbPostFavourite = new ApiUrl(this, BASE_ACCOUNT, "/favorite");
-     private final ApiUrl tmdbRatedMovies = new ApiUrl(this, BASE_ACCOUNT, "/rated_movies");
-     private final ApiUrl tmdbMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
-     private final ApiUrl tmdbPostMovieWatchList = new ApiUrl(this, BASE_ACCOUNT, "/movie_watchlist");
+     private final ApiUrl tmdbAccount = new ApiUrl(apiKey, BASE_ACCOUNT);
+     private final ApiUrl tmdbFavouriteMovies = new ApiUrl(apiKey, BASE_ACCOUNT, "/favorite_movies");
+     private final ApiUrl tmdbPostFavourite = new ApiUrl(apiKey, BASE_ACCOUNT, "/favorite");
+     private final ApiUrl tmdbRatedMovies = new ApiUrl(apiKey, BASE_ACCOUNT, "/rated_movies");
+     private final ApiUrl tmdbMovieWatchList = new ApiUrl(apiKey, BASE_ACCOUNT, "/movie_watchlist");
+     private final ApiUrl tmdbPostMovieWatchList = new ApiUrl(apiKey, BASE_ACCOUNT, "/movie_watchlist");
      */
     /*
      * Jackson JSON configuration
@@ -83,7 +83,7 @@ public class TheMovieDbApi {
      */
     public TheMovieDbApi(String apiKey) throws MovieDbException {
         this.apiKey = apiKey;
-        ApiUrl apiUrl = new ApiUrl(this, "configuration");
+        ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
         String webpage = WebBrowser.request(configUrl);
 
@@ -247,7 +247,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_AUTH, "token/new");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "token/new");
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -269,7 +269,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_AUTH, "session/new");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "session/new");
 
         if (!token.getSuccess()) {
             LOG.warn("Authorisation token was not successful!");
@@ -303,7 +303,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenSession getGuestSessionToken() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_AUTH, "guest_session/new");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "guest_session/new");
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -331,14 +331,16 @@ public class TheMovieDbApi {
      * @param language
      * @throws MovieDbException
      */
-    public MovieDb getMovieInfo(int movieId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE);
+    public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE);
 
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -360,7 +362,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public MovieDb getMovieInfoImdb(String imdbId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE);
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE);
 
         apiUrl.addArgument(PARAM_ID, imdbId);
 
@@ -386,7 +388,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/alternative_titles");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/alternative_titles");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(country)) {
@@ -415,7 +417,7 @@ public class TheMovieDbApi {
     public List<Person> getMovieCasts(int movieId) throws MovieDbException {
         List<Person> people = new ArrayList<Person>();
 
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/casts");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/casts");
         apiUrl.addArgument(PARAM_ID, movieId);
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -452,7 +454,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/images");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/images");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -493,7 +495,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/keywords");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/keywords");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         URL url = apiUrl.buildUrl();
@@ -516,7 +518,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/releases");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/releases");
         apiUrl.addArgument(PARAM_ID, movieId);
         apiUrl.addArgument(PARAM_LANGUAGE, language);
 
@@ -544,7 +546,7 @@ public class TheMovieDbApi {
     public List<Trailer> getMovieTrailers(int movieId, String language) throws MovieDbException {
         List<Trailer> trailers = new ArrayList<Trailer>();
 
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/trailers");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/trailers");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -581,7 +583,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Translation> getMovieTranslations(int movieId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/translations");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/translations");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         URL url = apiUrl.buildUrl();
@@ -609,7 +611,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getSimilarMovies(int movieId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/similar_movies");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/similar_movies");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -641,7 +643,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieList> getMovieLists(int movieId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/lists");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/lists");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -684,7 +686,7 @@ public class TheMovieDbApi {
      */
     @Deprecated
     public List<MovieChanges> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/changes");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/changes");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(startDate)) {
@@ -713,7 +715,7 @@ public class TheMovieDbApi {
      *
      */
     public MovieDb getLatestMovie() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/latest");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/latest");
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
@@ -735,7 +737,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "upcoming");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "upcoming");
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
@@ -770,7 +772,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "now-playing");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "now-playing");
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
@@ -804,7 +806,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "popular");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "popular");
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
@@ -838,7 +840,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "top-rated");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "top-rated");
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
@@ -870,7 +872,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public boolean postMovieRating(String sessionId, String rating) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_MOVIE, "/rating");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/rating");
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
         apiUrl.addArgument(PARAM_VALUE, rating);
@@ -891,7 +893,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_COLLECTION);
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION);
         apiUrl.addArgument(PARAM_ID, collectionId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -918,7 +920,7 @@ public class TheMovieDbApi {
      */
     public List<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
         List<Artwork> artwork = new ArrayList<Artwork>();
-        ApiUrl apiUrl = new ApiUrl(this, BASE_COLLECTION, "/images");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION, "/images");
         apiUrl.addArgument(PARAM_ID, collectionId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -963,7 +965,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Person getPersonInfo(int personId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON);
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON);
 
         apiUrl.addArgument(PARAM_ID, personId);
 
@@ -987,7 +989,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON, "/credits");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
 
         List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
 
@@ -1023,7 +1025,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Artwork> getPersonImages(int personId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON, "/images");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/images");
 
         List<Artwork> personImages = new ArrayList<Artwork>();
 
@@ -1073,7 +1075,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Person getPersonLatest() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_PERSON, "/latest");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
@@ -1095,7 +1097,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_COMPANY);
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COMPANY);
 
         apiUrl.addArgument(PARAM_ID, companyId);
 
@@ -1123,7 +1125,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_COMPANY, "/movies");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COMPANY, "/movies");
 
         apiUrl.addArgument(PARAM_ID, companyId);
 
@@ -1158,7 +1160,7 @@ public class TheMovieDbApi {
      * @param language
      */
     public List<Genre> getGenreList(String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_GENRE, "/list");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/list");
         apiUrl.addArgument(PARAM_LANGUAGE, language);
 
         URL url = apiUrl.buildUrl();
@@ -1190,7 +1192,7 @@ public class TheMovieDbApi {
      * @param page
      */
     public List<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_GENRE, "/movies");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/movies");
         apiUrl.addArgument(PARAM_ID, genreId);
 
         if (StringUtils.isNotBlank(language)) {
@@ -1229,7 +1231,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "movie");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "movie");
         if (StringUtils.isNotBlank(movieName)) {
             apiUrl.addArgument(PARAM_QUERY, movieName);
         }
@@ -1270,7 +1272,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "collections");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collections");
 
         if (StringUtils.isNotBlank(query)) {
             apiUrl.addArgument(PARAM_QUERY, query);
@@ -1307,7 +1309,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "person");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "person");
         apiUrl.addArgument(PARAM_QUERY, personName);
         apiUrl.addArgument(PARAM_ADULT, includeAdult);
 
@@ -1336,7 +1338,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieList> searchList(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "list");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "list");
 
         if (StringUtils.isNotBlank(query)) {
             apiUrl.addArgument(PARAM_QUERY, query);
@@ -1375,7 +1377,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "company");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "company");
         apiUrl.addArgument(PARAM_QUERY, companyName);
 
         if (page > 0) {
@@ -1401,7 +1403,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Keyword> searchKeyword(String query, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_SEARCH, "keyword");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "keyword");
 
         if (StringUtils.isNotBlank(query)) {
             apiUrl.addArgument(PARAM_QUERY, query);
@@ -1434,7 +1436,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public MovieDbList getList(String listId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_LIST);
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST);
         apiUrl.addArgument(PARAM_ID, listId);
 
         URL url = apiUrl.buildUrl();
@@ -1459,7 +1461,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Keyword getKeyword(String keywordId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_KEYWORD);
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD);
         apiUrl.addArgument(PARAM_ID, keywordId);
 
         URL url = apiUrl.buildUrl();
@@ -1484,7 +1486,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(this, BASE_KEYWORD, "/movies");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD, "/movies");
         apiUrl.addArgument(PARAM_ID, keywordId);
 
         if (StringUtils.isNotBlank(language)) {

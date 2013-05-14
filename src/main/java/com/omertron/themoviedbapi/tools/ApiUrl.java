@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.tools;
 
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -53,7 +52,7 @@ public class ApiUrl {
     /*
      * Properties
      */
-    private TheMovieDbApi tmdb;
+    private String apiKey;
     private String method;
     private String submethod;
     private Map<String, String> arguments = new HashMap<String, String>();
@@ -75,6 +74,7 @@ public class ApiUrl {
     public static final String PARAM_TOKEN = "request_token=";
     public static final String PARAM_VALUE = "value=";
     public static final String PARAM_YEAR = "year=";
+    private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
     /**
@@ -82,8 +82,8 @@ public class ApiUrl {
      *
      * @param method
      */
-    public ApiUrl(TheMovieDbApi tmdb, String method) {
-        this.tmdb = tmdb;
+    public ApiUrl(String apiKey, String method) {
+        this.apiKey = apiKey;
         this.method = method;
         this.submethod = DEFAULT_STRING;
     }
@@ -94,8 +94,8 @@ public class ApiUrl {
      * @param method
      * @param submethod
      */
-    public ApiUrl(TheMovieDbApi tmdb, String method, String submethod) {
-        this.tmdb = tmdb;
+    public ApiUrl(String apiKey, String method, String submethod) {
+        this.apiKey = apiKey;
         this.method = method;
         this.submethod = submethod;
     }
@@ -117,7 +117,7 @@ public class ApiUrl {
 
             // Append the key information
             urlString.append(DELIMITER_FIRST).append(PARAM_API_KEY);
-            urlString.append(tmdb.getApiKey());
+            urlString.append(apiKey);
 
             // Append the search term
             urlString.append(DELIMITER_SUBSEQUENT);
@@ -128,7 +128,7 @@ public class ApiUrl {
             try {
                 urlString.append(URLEncoder.encode(query, "UTF-8"));
             } catch (UnsupportedEncodingException ex) {
-                LOG.trace("Unable to encode query: '" + query + "' trying raw.");
+                LOG.trace("Unable to encode query: '{}' trying raw.", query);
                 // If we can't encode it, try it raw
                 urlString.append(query);
             }
@@ -146,7 +146,7 @@ public class ApiUrl {
 
             // Append the key information
             urlString.append(DELIMITER_FIRST).append(PARAM_API_KEY);
-            urlString.append(tmdb.getApiKey());
+            urlString.append(apiKey);
         }
 
         for (Map.Entry<String, String> argEntry : arguments.entrySet()) {
@@ -209,5 +209,16 @@ public class ApiUrl {
      */
     public void setArguments(Map<String, String> args) {
         arguments.putAll(args);
+    }
+
+    /**
+     * Append any optional parameters to the URL
+     *
+     * @param appendToResponse
+     */
+    public void appendToResponse(String[] appendToResponse) {
+        if (appendToResponse.length > 0) {
+            addArgument(APPEND_TO_RESPONSE, appendToResponse[0]);
+        }
     }
 }
