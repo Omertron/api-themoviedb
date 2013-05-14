@@ -361,7 +361,7 @@ public class TheMovieDbApi {
      * @param language
      * @throws MovieDbException
      */
-    public MovieDb getMovieInfoImdb(String imdbId, String language) throws MovieDbException {
+    public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE);
 
         apiUrl.addArgument(PARAM_ID, imdbId);
@@ -369,6 +369,8 @@ public class TheMovieDbApi {
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -387,13 +389,15 @@ public class TheMovieDbApi {
      * @param country
      * @throws MovieDbException
      */
-    public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
+    public List<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/alternative_titles");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(country)) {
             apiUrl.addArgument(PARAM_COUNTRY, country);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -414,11 +418,14 @@ public class TheMovieDbApi {
      * @param movieId
      * @throws MovieDbException
      */
-    public List<Person> getMovieCasts(int movieId) throws MovieDbException {
+    public List<Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
         List<Person> people = new ArrayList<Person>();
 
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/casts");
         apiUrl.addArgument(PARAM_ID, movieId);
+
+        apiUrl.appendToResponse(appendToResponse);
+
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
 
@@ -453,13 +460,15 @@ public class TheMovieDbApi {
      * @param language
      * @throws MovieDbException
      */
-    public List<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
+    public List<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/images");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         List<Artwork> artwork = new ArrayList<Artwork>();
         URL url = apiUrl.buildUrl();
@@ -494,9 +503,11 @@ public class TheMovieDbApi {
      * @param movieId
      * @throws MovieDbException
      */
-    public List<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
+    public List<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/keywords");
         apiUrl.addArgument(PARAM_ID, movieId);
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -517,10 +528,12 @@ public class TheMovieDbApi {
      * @param language
      * @throws MovieDbException
      */
-    public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
+    public List<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/releases");
         apiUrl.addArgument(PARAM_ID, movieId);
         apiUrl.addArgument(PARAM_LANGUAGE, language);
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -543,7 +556,7 @@ public class TheMovieDbApi {
      * @param language
      * @throws MovieDbException
      */
-    public List<Trailer> getMovieTrailers(int movieId, String language) throws MovieDbException {
+    public List<Trailer> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
         List<Trailer> trailers = new ArrayList<Trailer>();
 
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/trailers");
@@ -552,6 +565,8 @@ public class TheMovieDbApi {
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -582,9 +597,11 @@ public class TheMovieDbApi {
      * @param movieId
      * @throws MovieDbException
      */
-    public List<Translation> getMovieTranslations(int movieId) throws MovieDbException {
+    public List<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/translations");
         apiUrl.addArgument(PARAM_ID, movieId);
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -610,7 +627,7 @@ public class TheMovieDbApi {
      * @param page
      * @throws MovieDbException
      */
-    public List<MovieDb> getSimilarMovies(int movieId, String language, int page) throws MovieDbException {
+    public List<MovieDb> getSimilarMovies(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/similar_movies");
         apiUrl.addArgument(PARAM_ID, movieId);
 
@@ -621,6 +638,8 @@ public class TheMovieDbApi {
         if (page > 0) {
             apiUrl.addArgument(PARAM_PAGE, page);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -642,7 +661,7 @@ public class TheMovieDbApi {
      * @param page
      * @throws MovieDbException
      */
-    public List<MovieList> getMovieLists(int movieId, String language, int page) throws MovieDbException {
+    public List<MovieList> getMovieLists(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/lists");
         apiUrl.addArgument(PARAM_ID, movieId);
 
@@ -653,6 +672,8 @@ public class TheMovieDbApi {
         if (page > 0) {
             apiUrl.addArgument(PARAM_PAGE, page);
         }
+
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
