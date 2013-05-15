@@ -21,6 +21,16 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
+import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.wrapper.WrapperReviews;
+import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import java.io.Serializable;
 import java.util.List;
 import org.slf4j.Logger;
@@ -87,6 +97,27 @@ public class MovieDb implements Serializable {
     private int voteCount;
     @JsonProperty("status")
     private String status;
+    // AppendToResponse Properties
+    @JsonProperty("alternative_titles")
+    private WrapperAlternativeTitles alternativeTitles;
+    @JsonProperty("casts")
+    private WrapperMovieCasts casts;
+    @JsonProperty("images")
+    private WrapperImages images;
+    @JsonProperty("keywords")
+    private WrapperMovieKeywords keywords;
+    @JsonProperty("releases")
+    private WrapperReleaseInfo releases;
+    @JsonProperty("trailers")
+    private WrapperTrailers trailers;
+    @JsonProperty("translations")
+    private WrapperTranslations translations;
+    @JsonProperty("similar_movies")
+    private WrapperMovie similarMovies;
+    @JsonProperty("reviews")
+    private WrapperReviews reviews;
+    @JsonProperty("lists")
+    private WrapperMovieList lists;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
@@ -276,7 +307,96 @@ public class MovieDb implements Serializable {
     }
 
     // </editor-fold>
-    //
+
+    //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
+    public List<AlternativeTitle> getAlternativeTitles() {
+        return alternativeTitles.getTitles();
+    }
+
+    public List<PersonCast> getCast() {
+        return casts.getCast();
+    }
+
+    public List<PersonCrew> getCrew() {
+        return casts.getCrew();
+    }
+
+    public List<Artwork> getImages() {
+        return images.getAll();
+    }
+
+    public List<Keyword> getKeywords() {
+        return keywords.getKeywords();
+    }
+
+    public List<ReleaseInfo> getReleases() {
+        return releases.getCountries();
+    }
+
+    public List<Trailer> getTrailers() {
+        return trailers.getAll();
+    }
+
+    public List<Translation> getTranslations() {
+        return translations.getTranslations();
+    }
+
+    public List<MovieDb> getSimilarMovies() {
+        return similarMovies.getMovies();
+    }
+
+    public List<MovieList> getLists() {
+        return lists.getMovieList();
+    }
+
+    public List<Reviews> getReviews() {
+        return reviews.getReviews();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
+    public void setAlternativeTitles(WrapperAlternativeTitles alternativeTitles) {
+        this.alternativeTitles = alternativeTitles;
+    }
+
+    public void setCasts(WrapperMovieCasts casts) {
+        this.casts = casts;
+    }
+
+    public void setImages(WrapperImages images) {
+        this.images = images;
+    }
+
+    public void setKeywords(WrapperMovieKeywords keywords) {
+        this.keywords = keywords;
+    }
+
+    public void setReleases(WrapperReleaseInfo releases) {
+        this.releases = releases;
+    }
+
+    public void setTrailers(WrapperTrailers trailers) {
+        this.trailers = trailers;
+    }
+
+    public void setTranslations(WrapperTranslations translations) {
+        this.translations = translations;
+    }
+
+    public void setSimilarMovies(WrapperMovie similarMovies) {
+        this.similarMovies = similarMovies;
+    }
+
+    public void setLists(WrapperMovieList lists) {
+        this.lists = lists;
+    }
+
+    public void setReviews(WrapperReviews reviews) {
+        this.reviews = reviews;
+    }
+    
+    //</editor-fold>
+
     /**
      * Handle unknown properties and print a message
      *
