@@ -470,25 +470,12 @@ public class TheMovieDbApi {
 
         apiUrl.appendToResponse(appendToResponse);
 
-        List<Artwork> artwork = new ArrayList<Artwork>();
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
+
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
-
-            // Add all the posters to the list
-            for (Artwork poster : wrapper.getPosters()) {
-                poster.setArtworkType(ArtworkType.POSTER);
-                artwork.add(poster);
-            }
-
-            // Add all the backdrops to the list
-            for (Artwork backdrop : wrapper.getBackdrops()) {
-                backdrop.setArtworkType(ArtworkType.BACKDROP);
-                artwork.add(backdrop);
-            }
-
-            return artwork;
+            return wrapper.getAll();
         } catch (IOException ex) {
             LOG.warn("Failed to get movie images: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -557,8 +544,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<Trailer> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        List<Trailer> trailers = new ArrayList<Trailer>();
-
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/trailers");
         apiUrl.addArgument(PARAM_ID, movieId);
 
@@ -573,18 +558,7 @@ public class TheMovieDbApi {
 
         try {
             WrapperTrailers wrapper = mapper.readValue(webpage, WrapperTrailers.class);
-
-            // Add the trailer to the return list along with it's source
-            for (Trailer trailer : wrapper.getQuicktime()) {
-                trailer.setWebsite(Trailer.WEBSITE_QUICKTIME);
-                trailers.add(trailer);
-            }
-            // Add the trailer to the return list along with it's source
-            for (Trailer trailer : wrapper.getYoutube()) {
-                trailer.setWebsite(Trailer.WEBSITE_YOUTUBE);
-                trailers.add(trailer);
-            }
-            return trailers;
+            return wrapper.getAll();
         } catch (IOException ex) {
             LOG.warn("Failed to get movie trailers: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -649,6 +623,32 @@ public class TheMovieDbApi {
             return wrapper.getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get similar movies: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    public List<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/reviews");
+        apiUrl.addArgument(PARAM_ID, movieId);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        apiUrl.appendToResponse(appendToResponse);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperReviews wrapper = mapper.readValue(webpage, WrapperReviews.class);
+            return wrapper.getReviews();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get reviews: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }

@@ -21,6 +21,9 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.ArtworkType;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.slf4j.LoggerFactory;
 
@@ -71,4 +74,48 @@ public class WrapperImages extends WrapperBase {
         this.profiles = profiles;
     }
     //</editor-fold>
+
+    /**
+     * Return a list of all the artwork with their types.
+     *
+     * Leaving the parameters blank will return all types
+     *
+     * @return
+     */
+    public List<Artwork> getAll(ArtworkType... artworkList) {
+        List<Artwork> artwork = new ArrayList<Artwork>();
+        List<ArtworkType> types;
+
+        if (artworkList.length > 0) {
+            types = new ArrayList<ArtworkType>(Arrays.asList(artworkList));
+        } else {
+            types = new ArrayList<ArtworkType>(Arrays.asList(ArtworkType.values()));
+        }
+
+        if (types.contains(ArtworkType.POSTER)) {
+            // Add all the posters to the list
+            for (Artwork poster : posters) {
+                poster.setArtworkType(ArtworkType.POSTER);
+                artwork.add(poster);
+            }
+        }
+
+        if (types.contains(ArtworkType.BACKDROP)) {
+            // Add all the backdrops to the list
+            for (Artwork backdrop : backdrops) {
+                backdrop.setArtworkType(ArtworkType.BACKDROP);
+                artwork.add(backdrop);
+            }
+        }
+
+        if (types.contains(ArtworkType.PROFILE)) {
+            // Add all the backdrops to the list
+            for (Artwork backdrop : profiles) {
+                backdrop.setArtworkType(ArtworkType.PROFILE);
+                artwork.add(backdrop);
+            }
+        }
+
+        return artwork;
+    }
 }

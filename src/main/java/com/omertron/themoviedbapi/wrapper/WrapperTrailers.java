@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Trailer;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +74,27 @@ public class WrapperTrailers {
         this.youtube = youtube;
     }
     //</editor-fold>
+
+    /**
+     * Get a combined list of the trailers with their source website
+     * @return
+     */
+    public List<Trailer> getAll() {
+        List<Trailer> trailers = new ArrayList<Trailer>();
+
+        // Add the trailer to the return list along with it's source
+        for (Trailer trailer : quicktime) {
+            trailer.setWebsite(Trailer.WEBSITE_QUICKTIME);
+            trailers.add(trailer);
+        }
+        // Add the trailer to the return list along with it's source
+        for (Trailer trailer : youtube) {
+            trailer.setWebsite(Trailer.WEBSITE_YOUTUBE);
+            trailers.add(trailer);
+        }
+
+        return trailers;
+    }
 
     /**
      * Handle unknown properties and print a message
