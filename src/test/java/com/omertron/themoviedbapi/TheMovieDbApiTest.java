@@ -98,7 +98,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getConfiguration method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testConfiguration() throws IOException {
         LOG.info("Test Configuration");
 
@@ -114,7 +114,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of searchMovie method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSearchMovie() throws MovieDbException {
         LOG.info("searchMovie");
 
@@ -145,7 +145,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieAlternativeTitles method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieAlternativeTitles() throws MovieDbException {
         LOG.info("getMovieAlternativeTitles");
         String country = "";
@@ -161,7 +161,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieCasts method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieCasts() throws MovieDbException {
         LOG.info("getMovieCasts");
         List<Person> people = tmdb.getMovieCasts(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
@@ -188,7 +188,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieImages method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieImages() throws MovieDbException {
         LOG.info("getMovieImages");
         String language = "";
@@ -199,7 +199,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieKeywords method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieKeywords() throws MovieDbException {
         LOG.info("getMovieKeywords");
         List<Keyword> result = tmdb.getMovieKeywords(ID_MOVIE_BLADE_RUNNER);
@@ -209,7 +209,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieReleaseInfo method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieReleaseInfo() throws MovieDbException {
         LOG.info("getMovieReleaseInfo");
         List<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_MOVIE_BLADE_RUNNER, "");
@@ -219,7 +219,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieTrailers method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieTrailers() throws MovieDbException {
         LOG.info("getMovieTrailers");
         List<Trailer> result = tmdb.getMovieTrailers(ID_MOVIE_BLADE_RUNNER, "");
@@ -229,7 +229,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieTranslations method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieTranslations() throws MovieDbException {
         LOG.info("getMovieTranslations");
         List<Translation> result = tmdb.getMovieTranslations(ID_MOVIE_BLADE_RUNNER);
@@ -239,7 +239,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getCollectionInfo method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetCollectionInfo() throws MovieDbException {
         LOG.info("getCollectionInfo");
         String language = "";
@@ -252,7 +252,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    @Ignore
+    @Test
     public void testCreateImageUrl() throws MovieDbException {
         LOG.info("createImageUrl");
         MovieDb movie = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, "");
@@ -263,7 +263,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getMovieInfoImdb method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetMovieInfoImdb() throws MovieDbException {
         LOG.info("getMovieInfoImdb");
         MovieDb result = tmdb.getMovieInfoImdb("tt0076759", "en-US");
@@ -273,7 +273,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getApiKey method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetApiKey() {
         // Not required
     }
@@ -281,7 +281,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getApiBase method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetApiBase() {
         // Not required
     }
@@ -289,7 +289,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getConfiguration method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetConfiguration() {
         // Not required
     }
@@ -297,7 +297,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of searchPeople method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSearchPeople() throws MovieDbException {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
@@ -309,7 +309,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonInfo method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
         Person result = tmdb.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
@@ -319,7 +319,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonCredits method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetPersonCredits() throws MovieDbException {
         LOG.info("getPersonCredits");
 
@@ -330,7 +330,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonImages method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetPersonImages() throws MovieDbException {
         LOG.info("getPersonImages");
 
@@ -341,7 +341,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getLatestMovie method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetLatestMovie() throws MovieDbException {
         LOG.info("getLatestMovie");
         MovieDb result = tmdb.getLatestMovie();
@@ -352,7 +352,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of compareMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testCompareMovies() {
         // Not required
     }
@@ -360,7 +360,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of setProxy method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSetProxy() {
         // Not required
     }
@@ -368,7 +368,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of setTimeout method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSetTimeout() {
         // Not required
     }
@@ -376,7 +376,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getNowPlayingMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
         LOG.info("getNowPlayingMovies");
         List<MovieDb> results = tmdb.getNowPlayingMovies(LANGUAGE_DEFAULT, 0);
@@ -386,7 +386,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPopularMovieList method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetPopularMovieList() throws MovieDbException {
         LOG.info("getPopularMovieList");
         List<MovieDb> results = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
@@ -396,7 +396,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getTopRatedMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetTopRatedMovies() throws MovieDbException {
         LOG.info("getTopRatedMovies");
         List<MovieDb> results = tmdb.getTopRatedMovies(LANGUAGE_DEFAULT, 0);
@@ -406,7 +406,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getCompanyInfo method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetCompanyInfo() throws MovieDbException {
         LOG.info("getCompanyInfo");
         Company company = tmdb.getCompanyInfo(ID_COMPANY_LUCASFILM);
@@ -416,7 +416,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getCompanyMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
         List<MovieDb> results = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, LANGUAGE_DEFAULT, 0);
@@ -426,7 +426,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of searchCompanies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSearchCompanies() throws MovieDbException {
         LOG.info("searchCompanies");
         List<Company> results = tmdb.searchCompanies(COMPANY_NAME, 0);
@@ -436,7 +436,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getSimilarMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetSimilarMovies() throws MovieDbException {
         LOG.info("getSimilarMovies");
         List<MovieDb> results = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, LANGUAGE_DEFAULT, 0);
@@ -446,7 +446,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getGenreList method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetGenreList() throws MovieDbException {
         LOG.info("getGenreList");
         List<Genre> results = tmdb.getGenreList(LANGUAGE_DEFAULT);
@@ -456,7 +456,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getGenreMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetGenreMovies() throws MovieDbException {
         LOG.info("getGenreMovies");
         List<MovieDb> results = tmdb.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0, Boolean.TRUE);
@@ -466,7 +466,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getUpcoming method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetUpcoming() throws Exception {
         LOG.info("getUpcoming");
         List<MovieDb> results = tmdb.getUpcoming(LANGUAGE_DEFAULT, 0);
@@ -476,7 +476,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getCollectionImages method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetCollectionImages() throws Exception {
         LOG.info("getCollectionImages");
         List<Artwork> result = tmdb.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
@@ -486,7 +486,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getAuthorisationToken method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetAuthorisationToken() throws Exception {
         LOG.info("getAuthorisationToken");
         TokenAuthorisation result = tmdb.getAuthorisationToken();
@@ -516,7 +516,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getGuestSessionToken method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetGuestSessionToken() throws Exception {
         LOG.info("getGuestSessionToken");
         TokenSession result = tmdb.getGuestSessionToken();
@@ -524,7 +524,7 @@ public class TheMovieDbApiTest {
         assertTrue("Failed to get guest session", result.getSuccess());
     }
 
-    @Ignore
+    @Test
     public void testGetMovieLists() throws Exception {
         LOG.info("getMovieLists");
         List<MovieList> results = tmdb.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
@@ -555,7 +555,7 @@ public class TheMovieDbApiTest {
         assertTrue("No results found", results.size() > 0);
     }
 
-    @Ignore
+    @Test
     public void testGetPersonLatest() throws Exception {
         LOG.info("getPersonLatest");
 
@@ -568,7 +568,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of searchCollection method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSearchCollection() throws Exception {
         LOG.info("searchCollection");
         String query = "batman";
@@ -581,7 +581,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of searchList method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSearchList() throws Exception {
         LOG.info("searchList");
         String query = "watch";
@@ -594,7 +594,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of searchKeyword method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testSearchKeyword() throws Exception {
         LOG.info("searchKeyword");
         String query = "action";
@@ -635,7 +635,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getList method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetList() throws Exception {
         LOG.info("getList");
         String listId = "509ec17b19c2950a0600050d";
@@ -646,7 +646,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getKeyword method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetKeyword() throws Exception {
         LOG.info("getKeyword");
         Keyword result = tmdb.getKeyword(ID_KEYWORD);
@@ -656,7 +656,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getKeywordMovies method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetKeywordMovies() throws Exception {
         LOG.info("getKeywordMovies");
         int page = 0;
