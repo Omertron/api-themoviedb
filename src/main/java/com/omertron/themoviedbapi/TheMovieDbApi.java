@@ -45,12 +45,7 @@ public class TheMovieDbApi {
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
     private String apiKey;
     private TmdbConfiguration tmdbConfig;
-    /*
-     * API Methods
-     *
-     * These are not set to static so that multiple instances of
-     * the API can co-exist
-     */
+    // API Methods
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
     private static final String BASE_COMPANY = "company/";
@@ -61,18 +56,7 @@ public class TheMovieDbApi {
     private static final String BASE_SEARCH = "search/";
     private static final String BASE_LIST = "list/";
     private static final String BASE_KEYWORD = "keyword/";
-    // Account
-    /*
-     private final ApiUrl tmdbAccount = new ApiUrl(apiKey, BASE_ACCOUNT);
-     private final ApiUrl tmdbFavouriteMovies = new ApiUrl(apiKey, BASE_ACCOUNT, "/favorite_movies");
-     private final ApiUrl tmdbPostFavourite = new ApiUrl(apiKey, BASE_ACCOUNT, "/favorite");
-     private final ApiUrl tmdbRatedMovies = new ApiUrl(apiKey, BASE_ACCOUNT, "/rated_movies");
-     private final ApiUrl tmdbMovieWatchList = new ApiUrl(apiKey, BASE_ACCOUNT, "/movie_watchlist");
-     private final ApiUrl tmdbPostMovieWatchList = new ApiUrl(apiKey, BASE_ACCOUNT, "/movie_watchlist");
-     */
-    /*
-     * Jackson JSON configuration
-     */
+    // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -1088,6 +1072,29 @@ public class TheMovieDbApi {
      */
     public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
+    public List<Person> getPersonPopular() throws MovieDbException {
+        return getPersonPopular(0);
+    }
+
+    public List<Person> getPersonPopular(int page) throws MovieDbException{
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/popular");
+
+        if(page>0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
+            return wrapper.getPersonList();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get person images: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     /**

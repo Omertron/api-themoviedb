@@ -609,6 +609,7 @@ public class TheMovieDbApiTest {
      *
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
+    @Ignore("Not ready yet")
     public void testPostMovieRating() throws Exception {
         LOG.info("postMovieRating");
         String sessionId = "";
@@ -623,8 +624,8 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonChanges method, of class TheMovieDbApi.
      *
-     * TODO: Fix the method before testing
      */
+    @Ignore("Not ready yet")
     public void testGetPersonChanges() throws Exception {
         LOG.info("getPersonChanges");
         String startDate = "";
@@ -676,4 +677,77 @@ public class TheMovieDbApiTest {
         assertFalse("No reviews found", result.isEmpty());
     }
 
+    /**
+     * Test of compareMovies method, of class TheMovieDbApi.
+     */
+    @Ignore("Not required")
+    public void testCompareMovies_3args() {
+    }
+
+    /**
+     * Test of compareMovies method, of class TheMovieDbApi.
+     */
+    @Ignore("Not required")
+    public void testCompareMovies_4args() {
+    }
+
+    /**
+     * Test of getPersonPopular method, of class TheMovieDbApi.
+     */
+    @Ignore("Not required")
+    public void testGetPersonPopular_0args() throws Exception {
+    }
+
+    /**
+     * Test of getPersonPopular method, of class TheMovieDbApi.
+     */
+    @Ignore
+    public void testGetPersonPopular_int() throws Exception {
+        LOG.info("getPersonPopular");
+        int page = 0;
+        List result = tmdb.getPersonPopular(page);
+        assertFalse("No popular people", result.isEmpty());
+    }
+
+    /**
+     * Test of getGenreMovies method, of class TheMovieDbApi.
+     */
+    @Ignore("Not required")
+    public void testGetGenreMovies_3args() throws Exception {
+    }
+
+    /**
+     * Test of getGenreMovies method, of class TheMovieDbApi.
+     */
+    @Ignore("Not required")
+    public void testGetGenreMovies_4args() throws Exception {
+    }
+
+    /**
+     * Test of getMovieChangesList method, of class TheMovieDbApi.
+     */
+    @Ignore("Not ready yet")
+    public void testGetMovieChangesList() throws Exception {
+        LOG.info("getMovieChangesList");
+        int page = 0;
+        String startDate = "";
+        String endDate = "";
+        tmdb.getMovieChangesList(page, startDate, endDate);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getPersonChangesList method, of class TheMovieDbApi.
+     */
+    @Ignore("Not ready yet")
+    public void testGetPersonChangesList() throws Exception {
+        LOG.info("getPersonChangesList");
+        int page = 0;
+        String startDate = "";
+        String endDate = "";
+        tmdb.getPersonChangesList(page, startDate, endDate);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
 }

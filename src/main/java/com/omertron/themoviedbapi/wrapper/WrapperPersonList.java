@@ -20,31 +20,32 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.MovieList;
+import com.omertron.themoviedbapi.model.Person;
 import java.util.List;
 import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author stuart.boston
+ * @author Stuart
  */
-public class WrapperReviews extends WrapperBase {
+public class WrapperPersonList extends WrapperBase {
     /*
      * Properties
      */
 
     @JsonProperty("results")
-    private List<Reviews> reviews;
+    private List<Person> personList;
 
-    public WrapperReviews() {
-        super(LoggerFactory.getLogger(WrapperReviews.class));
+    public WrapperPersonList() {
+        super(LoggerFactory.getLogger(WrapperPersonList.class));
     }
 
-    public List<Reviews> getReviews() {
-        return reviews;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setReviews(List<Reviews> reviews) {
-        this.reviews = reviews;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 }
