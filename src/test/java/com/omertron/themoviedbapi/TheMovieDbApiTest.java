@@ -519,7 +519,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getGuestSessionToken method, of class TheMovieDbApi.
      */
-    @Test
+    @Ignore("Not ready yet")
     public void testGetGuestSessionToken() throws Exception {
         LOG.info("getGuestSessionToken");
         TokenSession result = tmdb.getGuestSessionToken();
