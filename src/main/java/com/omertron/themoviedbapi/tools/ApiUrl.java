@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,6 @@ public class ApiUrl {
     public static final String PARAM_ID = "id=";
     public static final String PARAM_LANGUAGE = "language=";
     public static final String PARAM_INCLUDE_ALL_MOVIES = "include_all_movies=";
-//    public static final String PARAM_MOVIE_ID = "movie_id=";
     public static final String PARAM_MOVIE_WATCHLIST = "movie_watchlist=";
     public static final String PARAM_PAGE = "page=";
     public static final String PARAM_QUERY = "query=";
@@ -113,6 +113,9 @@ public class ApiUrl {
         // We have either a queury, or a direct request
         if (arguments.containsKey(PARAM_QUERY)) {
             // Append the suffix of the API URL
+            if(StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
+                urlString.deleteCharAt(urlString.length()-1);
+            }
             urlString.append(submethod);
 
             // Append the key information
@@ -133,6 +136,7 @@ public class ApiUrl {
                 urlString.append(query);
             }
 
+            // Remove the query from the arguments so it is not added later
             arguments.remove(PARAM_QUERY);
         } else {
             // Append the ID if provided
@@ -142,6 +146,9 @@ public class ApiUrl {
             }
 
             // Append the suffix of the API URL
+            if(StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
+                urlString.deleteCharAt(urlString.length()-1);
+            }
             urlString.append(submethod);
 
             // Append the key information
@@ -193,6 +200,16 @@ public class ApiUrl {
      */
     public void addArgument(String key, boolean value) {
         arguments.put(key, Boolean.toString(value));
+    }
+
+    /**
+     * Add arguments individually
+     *
+     * @param key
+     * @param value
+     */
+    public void addArgument(String key, float value) {
+        arguments.put(key, Float.toString(value));
     }
 
     /**

@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model.Discover;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.model.Keyword;
@@ -703,7 +704,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonPopular method, of class TheMovieDbApi.
      */
-    @Ignore
+    @Test
     public void testGetPersonPopular_int() throws Exception {
         LOG.info("getPersonPopular");
         int page = 0;
@@ -761,5 +762,30 @@ public class TheMovieDbApiTest {
         LOG.info("getJobs");
         List<JobDepartment> result = tmdb.getJobs();
         assertFalse("No jobs found", result.isEmpty());
+    }
+
+    /**
+     * Test of getDiscover method, of class TheMovieDbApi.
+     */
+    @Ignore("Not required")
+    public void testGetDiscover_14args() throws Exception {
+    }
+
+    /**
+     * Test of getDiscover method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetDiscover_Discover() throws Exception {
+        LOG.info("getDiscover");
+        Discover discover = new Discover();
+        discover.year(2013).language(LANGUAGE_ENGLISH);
+
+        List<MovieDb> result = tmdb.getDiscover(discover);
+
+        for(MovieDb m : result) {
+            LOG.info("  {} : {}",m.getTitle(),m.toString());
+        }
+
+        assertFalse("No movies discovered", result.isEmpty());
     }
 }
