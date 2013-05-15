@@ -781,11 +781,6 @@ public class TheMovieDbApiTest {
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
         List<MovieDb> result = tmdb.getDiscover(discover);
-
-        for(MovieDb m : result) {
-            LOG.info("  {} : {}",m.getTitle(),m.toString());
-        }
-
         assertFalse("No movies discovered", result.isEmpty());
     }
 }
