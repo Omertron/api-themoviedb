@@ -45,6 +45,8 @@ public class CollectionInfo implements Serializable {
     private int id;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("overview")
+    private String overview;
     @JsonProperty("poster_path")
     private String posterPath;
     @JsonProperty("backdrop_path")
@@ -63,6 +65,10 @@ public class CollectionInfo implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getOverview() {
+        return overview;
     }
 
     public List<Collection> getParts() {
@@ -85,6 +91,10 @@ public class CollectionInfo implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     public void setParts(List<Collection> parts) {
@@ -115,6 +125,7 @@ public class CollectionInfo implements Serializable {
         StringBuilder sb = new StringBuilder("[CollectionInfo=");
         sb.append("[id=").append(id);
         sb.append("],[name=").append(name);
+        sb.append("],[overview=").append(overview);
         sb.append("],[posterPath=").append(posterPath);
         sb.append("],[backdropPath=").append(backdropPath);
         sb.append("],[# of parts=").append(parts.size());
