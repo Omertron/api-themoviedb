@@ -56,6 +56,7 @@ public class TheMovieDbApi {
     private static final String BASE_SEARCH = "search/";
     private static final String BASE_LIST = "list/";
     private static final String BASE_KEYWORD = "keyword/";
+    private static final String BASE_JOB = "job/";
     // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
 
@@ -1074,14 +1075,31 @@ public class TheMovieDbApi {
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
 
+    /**
+     * Get the list of popular people on The Movie Database.
+     *
+     * This list refreshes every day.
+     *
+     * @return
+     * @throws MovieDbException
+     */
     public List<Person> getPersonPopular() throws MovieDbException {
         return getPersonPopular(0);
     }
 
-    public List<Person> getPersonPopular(int page) throws MovieDbException{
+    /**
+     * Get the list of popular people on The Movie Database.
+     *
+     * This list refreshes every day.
+     *
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public List<Person> getPersonPopular(int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/popular");
 
-        if(page>0) {
+        if (page > 0) {
             apiUrl.addArgument(PARAM_PAGE, page);
         }
 
@@ -1547,6 +1565,24 @@ public class TheMovieDbApi {
 
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+    //</editor-fold>
+    //
+
+    //<editor-fold defaultstate="collapsed" desc="Jobs">
+    public List<JobDepartment> getJobs() throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_JOB, "/list");
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            WrapperJobList wrapper = mapper.readValue(webpage, WrapperJobList.class);
+            return wrapper.getJobs();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get job list: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
     //</editor-fold>
 }

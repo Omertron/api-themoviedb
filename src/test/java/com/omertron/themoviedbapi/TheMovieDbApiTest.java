@@ -750,4 +750,14 @@ public class TheMovieDbApiTest {
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+
+    /**
+     * Test of getJobs method, of class TheMovieDbApi.
+     */
+    @Test
+    public void testGetJobs() throws Exception {
+        LOG.info("getJobs");
+        List result = tmdb.getJobs();
+        assertFalse("No jobs found", result.isEmpty());
+    }
 }
