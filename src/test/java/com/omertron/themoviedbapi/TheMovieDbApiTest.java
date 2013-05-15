@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.KeywordMovie;
 import com.omertron.themoviedbapi.model.MovieChanges;
@@ -34,6 +35,7 @@ import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCredit;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
+import com.omertron.themoviedbapi.model.Reviews;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
@@ -586,7 +588,7 @@ public class TheMovieDbApiTest {
         LOG.info("searchList");
         String query = "watch";
         int page = 0;
-        List result = tmdb.searchList(query, LANGUAGE_DEFAULT, page);
+        List<MovieList> result = tmdb.searchList(query, LANGUAGE_DEFAULT, page);
         assertFalse("No lists found", result == null);
         assertTrue("No lists found", result.size() > 0);
     }
@@ -672,7 +674,7 @@ public class TheMovieDbApiTest {
     public void testGetReviews() throws Exception {
         LOG.info("getReviews");
         int page = 0;
-        List result = tmdb.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
+        List<Reviews> result = tmdb.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
 
         assertFalse("No reviews found", result.isEmpty());
     }
@@ -705,7 +707,7 @@ public class TheMovieDbApiTest {
     public void testGetPersonPopular_int() throws Exception {
         LOG.info("getPersonPopular");
         int page = 0;
-        List result = tmdb.getPersonPopular(page);
+        List<Person> result = tmdb.getPersonPopular(page);
         assertFalse("No popular people", result.isEmpty());
     }
 
@@ -757,7 +759,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetJobs() throws Exception {
         LOG.info("getJobs");
-        List result = tmdb.getJobs();
+        List<JobDepartment> result = tmdb.getJobs();
         assertFalse("No jobs found", result.isEmpty());
     }
 }

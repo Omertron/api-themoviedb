@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ArtworkType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.slf4j.LoggerFactory;
 
@@ -37,11 +38,11 @@ public class WrapperImages extends WrapperBase {
      */
 
     @JsonProperty("backdrops")
-    private List<Artwork> backdrops;
+    private List<Artwork> backdrops = Collections.EMPTY_LIST;
     @JsonProperty("posters")
-    private List<Artwork> posters;
+    private List<Artwork> posters = Collections.EMPTY_LIST;
     @JsonProperty("profiles")
-    private List<Artwork> profiles;
+    private List<Artwork> profiles = Collections.EMPTY_LIST;
 
     public WrapperImages() {
         super(LoggerFactory.getLogger(WrapperImages.class));
