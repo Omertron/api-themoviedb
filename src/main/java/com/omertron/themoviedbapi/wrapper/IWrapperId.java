@@ -19,28 +19,9 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Person;
-import java.util.List;
+public interface IWrapperId {
 
-/**
- *
- * @author stuart.boston
- */
-public class WrapperPerson extends AbstractWrapperAll {
+    int getId();
 
-    @JsonProperty("results")
-    private List<Person> results;
-
-    public WrapperPerson() {
-        super(WrapperPerson.class);
-    }
-
-    public List<Person> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Person> results) {
-        this.results = results;
-    }
+    void setId(int id);
 }

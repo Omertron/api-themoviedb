@@ -19,52 +19,28 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.MovieChanges;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author stuart.boston
  */
-public class WrapperChanges {
-    /*
-     * Logger
-     */
+public class WrapperChanges extends AbstractWrapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperChanges.class);
-    /*
-     * Properties
-     */
     @JsonProperty("changes")
     private List<MovieChanges> changes;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
+    public WrapperChanges() {
+        super(WrapperChanges.class);
+    }
+
     public List<MovieChanges> getChanges() {
         return changes;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setChanges(List<MovieChanges> changes) {
         this.changes = changes;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

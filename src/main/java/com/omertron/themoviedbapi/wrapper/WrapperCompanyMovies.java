@@ -22,22 +22,18 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.MovieDb;
 import java.util.List;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author stuart.boston
  */
-public class WrapperCompanyMovies extends WrapperBase {
-    /*
-     * Properties
-     */
+public class WrapperCompanyMovies extends AbstractWrapperAll {
 
     @JsonProperty("results")
     private List<MovieDb> results;
 
     public WrapperCompanyMovies() {
-        super(LoggerFactory.getLogger(WrapperCompanyMovies.class));
+        super(WrapperCompanyMovies.class);
     }
 
     public List<MovieDb> getResults() {

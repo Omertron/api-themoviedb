@@ -20,27 +20,55 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.JobDepartment;
-import java.util.List;
 
 /**
+ * Base class for the wrappers
  *
  * @author Stuart
  */
-public class WrapperJobList extends AbstractWrapper {
+public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId, IWrapperPages {
+    /*
+     * Properties
+     */
 
-    @JsonProperty("jobs")
-    private List<JobDepartment> jobs;
+    @JsonProperty("page")
+    private int page;
+    @JsonProperty("total_pages")
+    private int totalPages;
+    @JsonProperty("total_results")
+    private int totalResults;
 
-    public WrapperJobList() {
-        super(WrapperJobList.class);
+    public AbstractWrapperAll(Class classToLog) {
+        super(classToLog);
     }
 
-    public List<JobDepartment> getJobs() {
-        return jobs;
+    @Override
+    public int getPage() {
+        return page;
     }
 
-    public void setJobs(List<JobDepartment> jobs) {
-        this.jobs = jobs;
+    @Override
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    @Override
+    public int getTotalResults() {
+        return totalResults;
+    }
+
+    @Override
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    @Override
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    @Override
+    public void setTotalResults(int totalResults) {
+        this.totalResults = totalResults;
     }
 }

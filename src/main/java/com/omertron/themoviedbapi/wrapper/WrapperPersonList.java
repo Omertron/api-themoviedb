@@ -20,25 +20,20 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.Person;
 import java.util.List;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperPersonList extends WrapperBase {
-    /*
-     * Properties
-     */
+public class WrapperPersonList extends AbstractWrapperAll {
 
     @JsonProperty("results")
     private List<Person> personList;
 
     public WrapperPersonList() {
-        super(LoggerFactory.getLogger(WrapperPersonList.class));
+        super(WrapperPersonList.class);
     }
 
     public List<Person> getPersonList() {

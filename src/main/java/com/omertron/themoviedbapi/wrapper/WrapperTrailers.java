@@ -19,37 +19,24 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Trailer;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperTrailers {
-    /*
-     * Logger
-     */
+public class WrapperTrailers extends AbstractWrapperId {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperTrailers.class);
-    /*
-     * Properties
-     */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("quicktime")
     private List<Trailer> quicktime;
     @JsonProperty("youtube")
     private List<Trailer> youtube;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
-    public int getId() {
-        return id;
+    public WrapperTrailers() {
+        super(WrapperTrailers.class);
     }
 
     public List<Trailer> getQuicktime() {
@@ -59,12 +46,6 @@ public class WrapperTrailers {
     public List<Trailer> getYoutube() {
         return youtube;
     }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setQuicktime(List<Trailer> quicktime) {
         this.quicktime = quicktime;
@@ -73,10 +54,10 @@ public class WrapperTrailers {
     public void setYoutube(List<Trailer> youtube) {
         this.youtube = youtube;
     }
-    //</editor-fold>
 
     /**
      * Get a combined list of the trailers with their source website
+     *
      * @return
      */
     public List<Trailer> getAll() {
@@ -94,19 +75,5 @@ public class WrapperTrailers {
         }
 
         return trailers;
-    }
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

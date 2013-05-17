@@ -26,16 +26,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperImages extends WrapperBase {
-    /*
-     * Properties
-     */
+public class WrapperImages extends AbstractWrapperAll {
 
     @JsonProperty("backdrops")
     private List<Artwork> backdrops = Collections.EMPTY_LIST;
@@ -45,10 +41,9 @@ public class WrapperImages extends WrapperBase {
     private List<Artwork> profiles = Collections.EMPTY_LIST;
 
     public WrapperImages() {
-        super(LoggerFactory.getLogger(WrapperImages.class));
+        super(WrapperImages.class);
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public List<Artwork> getBackdrops() {
         return backdrops;
     }
@@ -60,9 +55,7 @@ public class WrapperImages extends WrapperBase {
     public List<Artwork> getProfiles() {
         return profiles;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setBackdrops(List<Artwork> backdrops) {
         this.backdrops = backdrops;
     }
@@ -74,7 +67,6 @@ public class WrapperImages extends WrapperBase {
     public void setProfiles(List<Artwork> profiles) {
         this.profiles = profiles;
     }
-    //</editor-fold>
 
     /**
      * Return a list of all the artwork with their types.

@@ -22,16 +22,12 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.PersonCredit;
 import java.util.List;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author stuart.boston
  */
-public class WrapperPersonCredits extends WrapperBase {
-    /*
-     * Properties
-     */
+public class WrapperPersonCredits extends AbstractWrapperAll {
 
     @JsonProperty("cast")
     private List<PersonCredit> cast;
@@ -39,7 +35,7 @@ public class WrapperPersonCredits extends WrapperBase {
     private List<PersonCredit> crew;
 
     public WrapperPersonCredits() {
-        super(LoggerFactory.getLogger(WrapperMovieCasts.class));
+        super(WrapperMovieCasts.class);
     }
 
     public List<PersonCredit> getCast() {

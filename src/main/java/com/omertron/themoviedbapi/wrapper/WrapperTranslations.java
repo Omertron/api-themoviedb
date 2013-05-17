@@ -19,62 +19,28 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Translation;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperTranslations {
-    /*
-     * Logger
-     */
+public class WrapperTranslations extends AbstractWrapperId {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperTranslations.class);
-    /*
-     * Properties
-     */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("translations")
     private List<Translation> translations;
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setId(int id) {
-        this.id = id;
+    public WrapperTranslations() {
+        super(WrapperTranslations.class);
     }
 
     public void setTranslations(List<Translation> translations) {
         this.translations = translations;
     }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
-    public int getId() {
-        return id;
-    }
 
     public List<Translation> getTranslations() {
         return translations;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

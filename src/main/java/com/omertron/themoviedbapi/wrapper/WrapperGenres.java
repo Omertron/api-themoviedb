@@ -19,29 +19,23 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Genre;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper class for the Genres searches
  *
  * @author Stuart
  */
-public class WrapperGenres {
-    /*
-     * Logger
-     */
+public class WrapperGenres extends AbstractWrapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperGenres.class);
-    /*
-     * Properties
-     */
     @JsonProperty("genres")
     private List<Genre> genres;
+
+    public WrapperGenres() {
+        super(WrapperGenres.class);
+    }
 
     public List<Genre> getGenres() {
         return genres;
@@ -49,19 +43,5 @@ public class WrapperGenres {
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
-    }
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

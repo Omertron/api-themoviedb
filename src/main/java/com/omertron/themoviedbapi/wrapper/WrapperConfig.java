@@ -19,31 +19,25 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
 import java.util.Collections;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperConfig {
-    /*
-     * Logger
-     */
+public class WrapperConfig extends AbstractWrapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperConfig.class);
-    /*
-     * Properties
-     */
     @JsonProperty("images")
     private TmdbConfiguration tmdbConfiguration;
     @JsonProperty("change_keys")
     private List<String> changeKeys = Collections.EMPTY_LIST;
+
+    public WrapperConfig() {
+        super(WrapperConfig.class);
+    }
 
     public TmdbConfiguration getTmdbConfiguration() {
         return tmdbConfiguration;
@@ -59,19 +53,5 @@ public class WrapperConfig {
 
     public void setChangeKeys(List<String> changeKeys) {
         this.changeKeys = changeKeys;
-    }
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

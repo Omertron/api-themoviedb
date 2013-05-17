@@ -19,58 +19,28 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperAlternativeTitles {
-    /*
-     * Logger
-     */
+public class WrapperAlternativeTitles extends AbstractWrapperId {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperAlternativeTitles.class);
-    /*
-     * Properties
-     */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("titles")
     private List<AlternativeTitle> titles;
 
-    public int getId() {
-        return id;
+    public WrapperAlternativeTitles() {
+        super(WrapperAlternativeTitles.class);
     }
 
     public List<AlternativeTitle> getTitles() {
         return titles;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setTitles(List<AlternativeTitle> titles) {
         this.titles = titles;
-    }
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

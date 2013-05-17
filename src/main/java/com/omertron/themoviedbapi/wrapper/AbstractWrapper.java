@@ -19,28 +19,29 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Person;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author stuart.boston
- */
-public class WrapperPerson extends AbstractWrapperAll {
+public class AbstractWrapper {
 
-    @JsonProperty("results")
-    private List<Person> results;
+    private Logger log;
 
-    public WrapperPerson() {
-        super(WrapperPerson.class);
+    public AbstractWrapper(Class classToLog) {
+        this.log = LoggerFactory.getLogger(classToLog);
     }
 
-    public List<Person> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Person> results) {
-        this.results = results;
+    /**
+     * Handle unknown properties and print a message
+     *
+     * @param key
+     * @param value
+     */
+    @JsonAnySetter
+    public void handleUnknown(String key, Object value) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Unknown property: '").append(key);
+        sb.append("' value: '").append(value).append("'");
+        log.trace(sb.toString());
     }
 }

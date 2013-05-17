@@ -19,35 +19,26 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.PersonCast;
 import com.omertron.themoviedbapi.model.PersonCrew;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperMovieCasts {
-    /*
-     * Logger
-     */
+public class WrapperMovieCasts extends AbstractWrapperId {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WrapperMovieCasts.class);
-    /*
-     * Properties
-     */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("cast")
     private List<PersonCast> cast;
     @JsonProperty("crew")
     private List<PersonCrew> crew;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
+    public WrapperMovieCasts() {
+        super(WrapperMovieCasts.class);
+    }
+
     public List<PersonCast> getCast() {
         return cast;
     }
@@ -56,36 +47,11 @@ public class WrapperMovieCasts {
         return crew;
     }
 
-    public int getId() {
-        return id;
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setCast(List<PersonCast> cast) {
         this.cast = cast;
     }
 
     public void setCrew(List<PersonCrew> crew) {
         this.crew = crew;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 }

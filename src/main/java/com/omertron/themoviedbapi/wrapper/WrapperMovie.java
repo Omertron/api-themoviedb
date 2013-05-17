@@ -28,16 +28,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author stuart.boston
  */
-public class WrapperMovie extends WrapperBase {
-    /*
-     * Properties
-     */
+public class WrapperMovie extends AbstractWrapperAll {
 
     @JsonProperty("results")
     private List<MovieDb> movies;
 
     public WrapperMovie() {
-        super(LoggerFactory.getLogger(WrapperMovie.class));
+        super(WrapperMovie.class);
     }
 
     public List<MovieDb> getMovies() {
