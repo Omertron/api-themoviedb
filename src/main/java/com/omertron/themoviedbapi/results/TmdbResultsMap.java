@@ -19,18 +19,23 @@
  */
 package com.omertron.themoviedbapi.results;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Map of the results from TheMovieDb
+ *
  * @author Stuart
  * @param <K>
  * @param <V>
  */
 public final class TmdbResultsMap<K, V> extends TmdbResults {
 
-    private Map<K, V> results = Collections.EMPTY_MAP;
+    private Map<K, V> results;
+
+    public TmdbResultsMap(Map<K, V> resultsMap) {
+        results = new HashMap<K, V>(results);
+    }
 
     public Map<K, V> getResults() {
         return results;

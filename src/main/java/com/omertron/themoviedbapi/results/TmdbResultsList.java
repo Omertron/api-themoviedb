@@ -19,17 +19,22 @@
  */
 package com.omertron.themoviedbapi.results;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * List of the results from TheMovieDb
+ *
  * @author Stuart
  * @param <T>
  */
 public final class TmdbResultsList<T> extends TmdbResults {
 
-    private List<T> results = Collections.EMPTY_LIST;
+    private List<T> results;
+
+    public TmdbResultsList(List<T> resultList) {
+        results = new ArrayList<T>(resultList);
+    }
 
     public List<T> getResults() {
         return results;

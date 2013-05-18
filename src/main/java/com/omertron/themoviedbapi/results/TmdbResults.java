@@ -19,11 +19,13 @@
  */
 package com.omertron.themoviedbapi.results;
 
+import com.omertron.themoviedbapi.wrapper.AbstractWrapper;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperId;
 
 /**
  * Abstract class to return the results and the id/page info
+ *
  * @author Stuart
  */
 public abstract class TmdbResults {
@@ -68,6 +70,10 @@ public abstract class TmdbResults {
         this.totalResults = totalResults;
     }
     //</editor-fold>
+
+    public void copyWrapper(AbstractWrapper wrapper) {
+        // Nothing to copy, just a placeholder
+    }
 
     /**
      * Copy the Id from the wrapper

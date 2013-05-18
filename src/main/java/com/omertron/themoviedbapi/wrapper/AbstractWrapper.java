@@ -20,15 +20,35 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AbstractWrapper {
+public abstract class AbstractWrapper {
 
     private Logger log;
 
     public AbstractWrapper(Class classToLog) {
         this.log = LoggerFactory.getLogger(classToLog);
+    }
+
+    /**
+     * Get a list of the enums passed
+     *
+     * @param <E>
+     * @param clz Class of the enum
+     * @param typeList Array of the enums
+     * @return
+     */
+    public <E extends Enum<E>> List<E> getTypeList(Class<E> clz, E[] typeList) {
+        if (typeList.length > 0) {
+            return new ArrayList<E>(Arrays.asList(typeList));
+        } else {
+            return new ArrayList<E>(EnumSet.allOf(clz));
+        }
     }
 
     /**

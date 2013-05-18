@@ -85,30 +85,36 @@ public class WrapperImages extends AbstractWrapperAll {
             types = new ArrayList<ArtworkType>(Arrays.asList(ArtworkType.values()));
         }
 
+        // Add all the posters to the list
         if (types.contains(ArtworkType.POSTER)) {
-            // Add all the posters to the list
-            for (Artwork poster : posters) {
-                poster.setArtworkType(ArtworkType.POSTER);
-                artwork.add(poster);
-            }
+            updateArtworkType(posters, ArtworkType.POSTER);
+            artwork.addAll(posters);
         }
 
+        // Add all the backdrops to the list
         if (types.contains(ArtworkType.BACKDROP)) {
-            // Add all the backdrops to the list
-            for (Artwork backdrop : backdrops) {
-                backdrop.setArtworkType(ArtworkType.BACKDROP);
-                artwork.add(backdrop);
-            }
+            updateArtworkType(backdrops, ArtworkType.BACKDROP);
+            artwork.addAll(backdrops);
         }
 
+        // Add all the backdrops to the list
         if (types.contains(ArtworkType.PROFILE)) {
-            // Add all the backdrops to the list
-            for (Artwork backdrop : profiles) {
-                backdrop.setArtworkType(ArtworkType.PROFILE);
-                artwork.add(backdrop);
-            }
+            updateArtworkType(profiles, ArtworkType.PROFILE);
+            artwork.addAll(profiles);
         }
 
         return artwork;
+    }
+
+    /**
+     * Update the artwork type for the artwork list
+     *
+     * @param artworkList
+     * @param type
+     */
+    private void updateArtworkType(List<Artwork> artworkList, ArtworkType type) {
+        for (Artwork artwork : artworkList) {
+            artwork.setArtworkType(type);
+        }
     }
 }

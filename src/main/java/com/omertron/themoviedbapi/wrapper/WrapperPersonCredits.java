@@ -21,6 +21,10 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.PersonCredit;
+import com.omertron.themoviedbapi.model.PersonType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -52,5 +56,28 @@ public class WrapperPersonCredits extends AbstractWrapperAll {
 
     public void setCrew(List<PersonCredit> crew) {
         this.crew = crew;
+    }
+
+    public List<PersonCredit> getAll(PersonType... typeList) {
+        List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
+        List<PersonType> types = getTypeList(PersonType.class, typeList);
+
+        // Add a cast member
+        if (types.contains(PersonType.CAST)) {
+            for (PersonCredit member : cast) {
+                member.setPersonType(PersonType.CAST);
+                personCredits.add(member);
+            }
+        }
+
+        // Add a crew member
+        if (types.contains(PersonType.CREW)) {
+            for (PersonCredit member : crew) {
+                member.setPersonType(PersonType.CREW);
+                personCredits.add(member);
+            }
+        }
+
+        return personCredits;
     }
 }

@@ -20,8 +20,10 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCast;
 import com.omertron.themoviedbapi.model.PersonCrew;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,5 +55,25 @@ public class WrapperMovieCasts extends AbstractWrapperId {
 
     public void setCrew(List<PersonCrew> crew) {
         this.crew = crew;
+    }
+
+    public List<Person> getAll() {
+        List<Person> people = new ArrayList<Person>();
+
+        // Add a cast member
+        for (PersonCast member : cast) {
+            Person person = new Person();
+            person.addCast(member.getId(), member.getName(), member.getProfilePath(), member.getCharacter(), member.getOrder());
+            people.add(person);
+        }
+
+        // Add a crew member
+        for (PersonCrew member : crew) {
+            Person person = new Person();
+            person.addCrew(member.getId(), member.getName(), member.getProfilePath(), member.getDepartment(), member.getJob());
+            people.add(person);
+        }
+
+        return people;
     }
 }
