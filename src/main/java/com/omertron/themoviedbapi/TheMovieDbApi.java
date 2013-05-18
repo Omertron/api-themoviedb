@@ -940,7 +940,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
-        List<Artwork> artwork = new ArrayList<Artwork>();
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION, "/images");
         apiUrl.addArgument(PARAM_ID, collectionId);
 
@@ -1000,8 +999,6 @@ public class TheMovieDbApi {
     public TmdbResultsList<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
 
-        List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
-
         apiUrl.addArgument(PARAM_ID, personId);
 
         URL url = apiUrl.buildUrl();
@@ -1026,8 +1023,6 @@ public class TheMovieDbApi {
      */
     public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/images");
-
-        List<Artwork> personImages = new ArrayList<Artwork>();
 
         apiUrl.addArgument(PARAM_ID, personId);
 

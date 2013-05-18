@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.PersonCredit;
 import com.omertron.themoviedbapi.model.PersonType;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 /**
