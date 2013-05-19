@@ -34,7 +34,7 @@ public final class TmdbResultsMap<K, V> extends TmdbResults {
     private Map<K, V> results;
 
     public TmdbResultsMap(Map<K, V> resultsMap) {
-        results = new HashMap<K, V>(results);
+        results = new HashMap<K, V>(resultsMap);
     }
 
     public Map<K, V> getResults() {
