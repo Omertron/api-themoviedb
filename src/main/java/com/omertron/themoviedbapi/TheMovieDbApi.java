@@ -970,10 +970,11 @@ public class TheMovieDbApi {
      * @param personId
      * @throws MovieDbException
      */
-    public Person getPersonInfo(int personId) throws MovieDbException {
+    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON);
 
         apiUrl.addArgument(PARAM_ID, personId);
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
@@ -994,10 +995,11 @@ public class TheMovieDbApi {
      * @param personId
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonCredit> getPersonCredits(int personId) throws MovieDbException {
+    public TmdbResultsList<PersonCredit> getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
 
         apiUrl.addArgument(PARAM_ID, personId);
+        apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
