@@ -29,7 +29,7 @@ public class JobDepartment {
 
     private static final long serialVersionUID = 1L;
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(MovieChanges.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JobDepartment.class);
     // Properties
     @JsonProperty("department")
     private String department;
