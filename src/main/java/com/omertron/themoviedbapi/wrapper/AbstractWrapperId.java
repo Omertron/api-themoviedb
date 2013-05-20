@@ -30,6 +30,7 @@ public class AbstractWrapperId extends AbstractWrapper implements IWrapperId {
     /*
      * Properties
      */
+
     @JsonProperty("id")
     private int id;
 
@@ -46,5 +47,4 @@ public class AbstractWrapperId extends AbstractWrapper implements IWrapperId {
     public void setId(int id) {
         this.id = id;
     }
-
 }

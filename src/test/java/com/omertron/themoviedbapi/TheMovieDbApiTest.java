@@ -21,6 +21,8 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
@@ -29,7 +31,6 @@ import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.KeywordMovie;
-import com.omertron.themoviedbapi.model.MovieChanges;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.MovieList;
@@ -43,7 +44,9 @@ import com.omertron.themoviedbapi.model.TokenSession;
 import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import java.io.IOException;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -539,6 +542,7 @@ public class TheMovieDbApiTest {
      *
      * TODO: Do not test this until it is fixed
      */
+    @Test
     public void testGetMovieChanges() throws Exception {
         LOG.info("getMovieChanges");
 
@@ -548,12 +552,11 @@ public class TheMovieDbApiTest {
         // Get some popular movies
         TmdbResultsList<MovieDb> movieList = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         for (MovieDb movie : movieList.getResults()) {
-            TmdbResultsList<MovieChanges> result = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
-            LOG.info("{} has {} changes.", new Object[]{movie.getTitle(), result.getResults().size()});
+            TmdbResultsMap<String, List<ChangedItem>> result = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
+            LOG.info("{} has {} changes.", movie.getTitle(), result.getResults().size());
+            assertTrue("No changes found", result.getResults().size() > 0);
+            break;
         }
-
-        assertNotNull("No results found", movieList.getResults());
-        assertTrue("No results found", movieList.getResults().size() > 0);
     }
 
     @Test

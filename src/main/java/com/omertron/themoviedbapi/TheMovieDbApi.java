@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.*;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.*;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.tools.WebBrowser;
@@ -30,6 +30,9 @@ import com.omertron.themoviedbapi.wrapper.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -693,27 +696,29 @@ public class TheMovieDbApi {
      * @param endDate the end date of the changes, optional
      * @throws MovieDbException
      */
-    @Deprecated
-    public TmdbResultsList<MovieChanges> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
+    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/changes");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         if (StringUtils.isNotBlank(startDate)) {
-            apiUrl.addArgument("start_date", startDate);
+            apiUrl.addArgument(PARAM_START_DATE, startDate);
         }
 
         if (StringUtils.isNotBlank(endDate)) {
-            apiUrl.addArgument("end_date", endDate);
+            apiUrl.addArgument(PARAM_END_DATE, endDate);
         }
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url);
-
         try {
             WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
-            TmdbResultsList<MovieChanges> results = new TmdbResultsList<MovieChanges>(wrapper.getChanges());
-            results.copyWrapper(wrapper);
-            return results;
+
+            Map<String, List<ChangedItem>> results = new HashMap<String, List<ChangedItem>>();
+            for (ChangeKeyItem changeItem : wrapper.getChangedItems()) {
+                results.put(changeItem.getKey(), changeItem.getChangedItems());
+            }
+
+            return new TmdbResultsMap<String, List<ChangedItem>>(results);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie changes: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
