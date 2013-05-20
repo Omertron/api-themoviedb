@@ -74,6 +74,8 @@ public class ApiUrl {
     public static final String PARAM_TOKEN = "request_token=";
     public static final String PARAM_VALUE = "value=";
     public static final String PARAM_YEAR = "year=";
+    public static final String PARAM_START_DATE="start_date=";
+    public static final String PARAM_END_DATE="end_date=";
     private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">

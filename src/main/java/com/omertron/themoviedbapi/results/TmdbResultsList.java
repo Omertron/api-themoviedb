@@ -33,7 +33,11 @@ public final class TmdbResultsList<T> extends TmdbResults {
     private List<T> results;
 
     public TmdbResultsList(List<T> resultList) {
-        results = new ArrayList<T>(resultList);
+        if (resultList != null) {
+            results = new ArrayList<T>(resultList);
+        } else {
+            results = new ArrayList<T>(0);
+        }
     }
 
     public List<T> getResults() {
