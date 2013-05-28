@@ -19,21 +19,25 @@
  */
 package com.omertron.themoviedbapi;
 
+import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moviejukebox.api.common.http.CommonHttpClient;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.*;
-import com.omertron.themoviedbapi.results.*;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +50,7 @@ public class TheMovieDbApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
     private String apiKey;
+    private CommonHttpClient httpClient;
     private TmdbConfiguration tmdbConfig;
     // API Methods
     private static final String BASE_MOVIE = "movie/";
@@ -70,10 +75,23 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TheMovieDbApi(String apiKey) throws MovieDbException {
+        this(apiKey, null);
+    }
+
+    /**
+     * API for The Movie Db.
+     *
+     * @param apiKey
+     * @param httpClient The httpClient to use for web requests.
+     * @throws MovieDbException
+     */
+    public TheMovieDbApi(String apiKey, CommonHttpClient httpClient) throws MovieDbException {
         this.apiKey = apiKey;
+        this.httpClient = httpClient;
+
         ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(configUrl);
+        String webpage = requestWebPage(configUrl);
 
         try {
             WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
@@ -91,6 +109,24 @@ public class TheMovieDbApi {
         return apiKey;
     }
 
+    private String requestWebPage(URL url) throws MovieDbException {
+        // use HTTP client implementation
+        if (httpClient != null) {
+            try {
+                HttpGet httpGet = new HttpGet(url.toURI());
+                httpGet.addHeader("accept", "application/json");
+                return httpClient.requestContent(httpGet);
+            } catch (URISyntaxException ex) {
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+            } catch (IOException ex) {
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+            }
+        }
+
+        // use web browser
+        return WebBrowser.request(url);
+    }
+
     /**
      * Set the proxy information
      *
@@ -100,6 +136,11 @@ public class TheMovieDbApi {
      * @param password
      */
     public void setProxy(String host, String port, String username, String password) {
+        // should be set in HTTP client already
+        if (httpClient != null) {
+            return;
+        }
+
         WebBrowser.setProxyHost(host);
         WebBrowser.setProxyPort(port);
         WebBrowser.setProxyUsername(username);
@@ -113,6 +154,11 @@ public class TheMovieDbApi {
      * @param read
      */
     public void setTimeout(int connect, int read) {
+        // should be set in HTTP client already
+        if (httpClient != null) {
+            return;
+        }
+
         WebBrowser.setWebTimeoutConnect(connect);
         WebBrowser.setWebTimeoutRead(read);
     }
@@ -238,7 +284,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "token/new");
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, TokenAuthorisation.class);
@@ -266,7 +312,7 @@ public class TheMovieDbApi {
 
         apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, TokenSession.class);
@@ -294,7 +340,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "guest_session/new");
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, TokenSession.class);
@@ -331,7 +377,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
@@ -361,7 +407,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
@@ -388,7 +434,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
             TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
@@ -415,7 +461,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovieCasts wrapper = mapper.readValue(webpage, WrapperMovieCasts.class);
@@ -446,7 +492,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -474,7 +520,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovieKeywords wrapper = mapper.readValue(webpage, WrapperMovieKeywords.class);
@@ -502,7 +548,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperReleaseInfo wrapper = mapper.readValue(webpage, WrapperReleaseInfo.class);
@@ -535,7 +581,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperTrailers wrapper = mapper.readValue(webpage, WrapperTrailers.class);
@@ -561,7 +607,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperTranslations wrapper = mapper.readValue(webpage, WrapperTranslations.class);
@@ -601,7 +647,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -629,7 +675,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperReviews wrapper = mapper.readValue(webpage, WrapperReviews.class);
@@ -665,7 +711,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
@@ -709,7 +755,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
 
@@ -733,7 +779,7 @@ public class TheMovieDbApi {
     public MovieDb getLatestMovie() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/latest");
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, MovieDb.class);
@@ -764,7 +810,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -801,7 +847,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -837,7 +883,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -873,7 +919,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -925,7 +971,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, CollectionInfo.class);
@@ -951,7 +997,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -982,7 +1028,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, Person.class);
@@ -1007,7 +1053,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperPersonCredits wrapper = mapper.readValue(webpage, WrapperPersonCredits.class);
@@ -1032,7 +1078,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, personId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -1094,7 +1140,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
@@ -1115,7 +1161,7 @@ public class TheMovieDbApi {
     public Person getPersonLatest() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, Person.class);
@@ -1140,7 +1186,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, companyId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, Company.class);
@@ -1176,7 +1222,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
@@ -1204,7 +1250,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_LANGUAGE, language);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
@@ -1243,7 +1289,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_INCLUDE_ALL_MOVIES, includeAllMovies);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -1291,7 +1337,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
@@ -1329,7 +1375,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
             TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
@@ -1361,7 +1407,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
@@ -1399,7 +1445,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
@@ -1432,7 +1478,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
             TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
@@ -1464,7 +1510,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
         try {
             WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
@@ -1491,7 +1537,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, listId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, MovieDbList.class);
@@ -1516,7 +1562,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, keywordId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, Keyword.class);
@@ -1549,7 +1595,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
@@ -1580,7 +1626,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_JOB, "/list");
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperJobList wrapper = mapper.readValue(webpage, WrapperJobList.class);
@@ -1659,7 +1705,7 @@ public class TheMovieDbApi {
         apiUrl.setArguments(discover.getParams());
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
