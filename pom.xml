@@ -107,7 +107,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.yamj</groupId>
+            <groupId>com.moviejukebox</groupId>
             <artifactId>api-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
