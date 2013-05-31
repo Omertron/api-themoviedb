@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi;
 
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moviejukebox.api.common.http.CommonHttpClient;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -40,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.CommonHttpClient;
 
 /**
  * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
