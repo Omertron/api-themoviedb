@@ -56,6 +56,10 @@ public class KeywordMovie implements Serializable {
     private float voteAverage;
     @JsonProperty("vote_count")
     private double voteCount;
+    @JsonProperty("adult")
+    private boolean adult;
+    @JsonProperty("popularity")
+    private float popularity;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public static long getSerialVersionUID() {
@@ -93,6 +97,14 @@ public class KeywordMovie implements Serializable {
     public double getVoteCount() {
         return voteCount;
     }
+
+    public boolean isAdult() {
+        return adult;
+    }
+
+    public float getPopularity() {
+        return popularity;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -127,6 +139,14 @@ public class KeywordMovie implements Serializable {
     public void setVoteCount(double voteCount) {
         this.voteCount = voteCount;
     }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
+    }
     // </editor-fold>
 
     /**
@@ -142,5 +162,4 @@ public class KeywordMovie implements Serializable {
         sb.append("' value: '").append(value).append("'");
         LOG.trace(sb.toString());
     }
-
 }
