@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -321,23 +323,6 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[Person=");
-        sb.append("[id=").append(id);
-        sb.append("],[name=").append(name);
-        sb.append("],[profilePath=").append(profilePath);
-        sb.append("],[personType=").append(personType);
-        sb.append("],[department=").append(department);
-        sb.append("],[job=").append(job);
-        sb.append("],[character=").append(character);
-        sb.append("],[order=").append(order);
-        sb.append("],[adult=").append(adult);
-        sb.append("],[=aka").append(aka.toString());
-        sb.append("],[biography=").append(biography);
-        sb.append("],[birthday=").append(birthday);
-        sb.append("],[deathday=").append(deathday);
-        sb.append("],[homepage=").append(homepage);
-        sb.append("],[birthplace=").append(birthplace);
-        sb.append("]]");
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

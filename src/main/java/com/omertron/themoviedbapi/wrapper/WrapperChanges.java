@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.ChangeKeyItem;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class WrapperChanges {
 
@@ -36,6 +37,6 @@ public class WrapperChanges {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

@@ -23,11 +23,14 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper for the MovieDbList function
+ *
  * @author stuart.boston
  */
 public class MovieDbList {
@@ -148,4 +151,8 @@ public class MovieDbList {
         LOG.trace(sb.toString());
     }
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+    }
 }

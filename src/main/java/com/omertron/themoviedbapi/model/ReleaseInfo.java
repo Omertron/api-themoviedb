@@ -22,6 +22,8 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,11 +123,6 @@ public class ReleaseInfo implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[ReleaseInfo=");
-        sb.append("[country=").append(country);
-        sb.append("],[certification=").append(certification);
-        sb.append("],[releaseDate=").append(releaseDate);
-        sb.append("]]");
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

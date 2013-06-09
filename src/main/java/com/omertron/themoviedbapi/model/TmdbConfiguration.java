@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,13 +197,6 @@ public class TmdbConfiguration implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[ImageConfiguration=");
-        sb.append("[baseUrl=").append(baseUrl);
-        sb.append("],[posterSizes=").append(posterSizes.toString());
-        sb.append("],[backdropSizes=").append(backdropSizes.toString());
-        sb.append("],[profileSizes=").append(profileSizes.toString());
-        sb.append("],[logoSizes=").append(logoSizes.toString());
-        sb.append(("]]"));
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

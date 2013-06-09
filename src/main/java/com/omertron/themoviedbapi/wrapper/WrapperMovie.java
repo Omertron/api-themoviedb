@@ -22,6 +22,8 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.MovieDb;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  *
@@ -42,17 +44,5 @@ public class WrapperMovie extends AbstractWrapperAll {
 
     public void setMovies(List<MovieDb> movies) {
         this.movies = movies;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("[ResultList=[");
-        sb.append("[page=").append(getPage());
-        sb.append("],[pageResults=").append(getMovies().size());
-        sb.append("],[totalPages=").append(getTotalPages());
-        sb.append("],[totalResults=").append(getTotalResults());
-        sb.append("],[id=").append(getId());
-        sb.append("]]");
-        return sb.toString();
     }
 }

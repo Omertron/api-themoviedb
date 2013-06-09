@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class ChangedItem {
 
@@ -74,6 +75,6 @@ public class ChangedItem {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

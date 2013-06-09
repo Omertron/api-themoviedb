@@ -33,6 +33,8 @@ import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import java.io.Serializable;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -394,7 +396,7 @@ public class MovieDb implements Serializable {
     public void setReviews(WrapperReviews reviews) {
         this.reviews = reviews;
     }
-    
+
     //</editor-fold>
 
     /**
@@ -445,31 +447,6 @@ public class MovieDb implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[MovieDB=");
-        sb.append("[backdropPath=").append(backdropPath);
-        sb.append("],[id=").append(id);
-        sb.append("],[originalTitle=").append(originalTitle);
-        sb.append("],[popularity=").append(popularity);
-        sb.append("],[posterPath=").append(posterPath);
-        sb.append("],[releaseDate=").append(releaseDate);
-        sb.append("],[title=").append(title);
-        sb.append("],[adult=").append(adult);
-        sb.append("],[belongsToCollection=").append(belongsToCollection);
-        sb.append("],[budget=").append(budget);
-        sb.append("],[genres=").append(genres);
-        sb.append("],[homepage=").append(homepage);
-        sb.append("],[imdbID=").append(imdbID);
-        sb.append("],[overview=").append(overview);
-        sb.append("],[productionCompanies=").append(productionCompanies);
-        sb.append("],[productionCountries=").append(productionCountries);
-        sb.append("],[revenue=").append(revenue);
-        sb.append("],[runtime=").append(runtime);
-        sb.append("],[spokenLanguages=").append(spokenLanguages);
-        sb.append("],[tagline=").append(tagline);
-        sb.append("],[voteAverage=").append(voteAverage);
-        sb.append("],[voteCount=").append(voteCount);
-        sb.append("],[status=").append(status);
-        sb.append("]]");
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

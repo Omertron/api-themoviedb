@@ -22,6 +22,8 @@ package com.omertron.themoviedbapi.results;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapper;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperId;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Abstract class to return the results and the id/page info
@@ -72,7 +74,7 @@ public abstract class TmdbResults {
     //</editor-fold>
 
     public void copyWrapper(AbstractWrapper wrapper) {
-        // Nothing to copy, just a placeholder
+        // These results have nothing to copy, so this is just a placeholder
     }
 
     /**
@@ -94,5 +96,10 @@ public abstract class TmdbResults {
         this.page = wrapper.getPage();
         this.totalPages = wrapper.getTotalPages();
         this.totalResults = wrapper.getTotalResults();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

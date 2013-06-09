@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,14 +124,6 @@ public class CollectionInfo implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[CollectionInfo=");
-        sb.append("[id=").append(id);
-        sb.append("],[name=").append(name);
-        sb.append("],[overview=").append(overview);
-        sb.append("],[posterPath=").append(posterPath);
-        sb.append("],[backdropPath=").append(backdropPath);
-        sb.append("],[# of parts=").append(parts.size());
-        sb.append("]]");
-        return sb.toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }

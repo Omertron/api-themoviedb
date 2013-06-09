@@ -267,9 +267,8 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.INVALID_URL, sb.toString(), ex);
         }
     }
-
     //</editor-fold>
-    //
+
     //<editor-fold defaultstate="collapsed" desc="Authentication Functions">
     /**
      * This method is used to generate a valid request token for user based authentication.
@@ -351,10 +350,10 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-
     //</editor-fold>
-    //
+
     //<editor-fold defaultstate="collapsed" desc="Account Functions">
+    // No account functions
     //</editor-fold>
     //
     //<editor-fold defaultstate="collapsed" desc="Movie Functions">
@@ -951,9 +950,8 @@ public class TheMovieDbApi {
 
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
-
     //</editor-fold>
-    //
+
     //<editor-fold defaultstate="collapsed" desc="Collection Functions">
     /**
      * This method is used to retrieve all of the basic information about a movie collection.
@@ -1011,9 +1009,8 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-
     //</editor-fold>
-    //
+
     //<editor-fold defaultstate="collapsed" desc="People Functions">
     /**
      * This method is used to retrieve all of the basic person information.
@@ -1172,9 +1169,8 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-
     //</editor-fold>
-    //
+
     //<editor-fold defaultstate="collapsed" desc="Company Functions">
     /**
      * This method is used to retrieve the basic information about a production company on TMDb.
@@ -1236,9 +1232,8 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-
     //</editor-fold>
-    //
+
     //<editor-fold defaultstate="collapsed" desc="Genre Functions">
     /**
      * You can use this method to retrieve the list of genres used on TMDb.
@@ -1304,9 +1299,8 @@ public class TheMovieDbApi {
         }
     }
     //</editor-fold>
-    //
-    //<editor-fold defaultstate="collapsed" desc="Search Functions">
 
+    //<editor-fold defaultstate="collapsed" desc="Search Functions">
     /**
      * Search Movies This is a good starting point to start finding movies on TMDb.
      *
@@ -1524,9 +1518,8 @@ public class TheMovieDbApi {
         }
     }
     //</editor-fold>
-    //
-    //<editor-fold defaultstate="collapsed" desc="List Functions">
 
+    //<editor-fold defaultstate="collapsed" desc="List Functions">
     /**
      * Get a list by its ID
      *
@@ -1549,9 +1542,8 @@ public class TheMovieDbApi {
         }
     }
     //</editor-fold>
-    //
-    //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
 
+    //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
     /**
      * Get the basic information for a specific keyword id.
      *
@@ -1611,9 +1603,8 @@ public class TheMovieDbApi {
 
     }
     //</editor-fold>
-    //
-    //<editor-fold defaultstate="collapsed" desc="Changes Functions">
 
+    //<editor-fold defaultstate="collapsed" desc="Changes Functions">
     public void getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
