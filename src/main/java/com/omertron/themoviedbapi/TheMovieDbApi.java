@@ -120,6 +120,8 @@ public class TheMovieDbApi {
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
             } catch (IOException ex) {
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+            } catch (RuntimeException ex) {
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
             }
         }
 
