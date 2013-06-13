@@ -55,7 +55,11 @@ public class MovieDbException extends Exception {
         /*
          * Autorisation rejected
          */
-        AUTHORISATION_FAILURE;
+        AUTHORISATION_FAILURE,
+        /*
+         * Service Unavailable, usually temporary
+         */
+        HTTP_503_ERROR;
     }
 
     private final MovieDbExceptionType exceptionType;
