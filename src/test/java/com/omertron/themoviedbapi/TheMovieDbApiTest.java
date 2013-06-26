@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
