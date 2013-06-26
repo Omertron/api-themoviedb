@@ -541,7 +541,7 @@ public class TheMovieDbApiTest {
      *
      * TODO: Do not test this until it is fixed
      */
-    @Test
+    @Ignore("Do not test this until it is fixed")
     public void testGetMovieChanges() throws Exception {
         LOG.info("getMovieChanges");
 
