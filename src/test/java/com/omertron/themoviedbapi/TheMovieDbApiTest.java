@@ -69,7 +69,7 @@ public class TheMovieDbApiTest {
     private static final int ID_MOVIE_THE_AVENGERS = 24428;
     private static final int ID_COLLECTION_STAR_WARS = 10;
     private static final int ID_PERSON_BRUCE_WILLIS = 62;
-    private static final int ID_COMPANY_LUCASFILM = 1;
+    private static final int ID_COMPANY = 2;
     private static final String COMPANY_NAME = "Marvel Studios";
     private static final int ID_GENRE_ACTION = 28;
     private static final String ID_KEYWORD = "1721";
@@ -413,8 +413,9 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetCompanyInfo() throws MovieDbException {
         LOG.info("getCompanyInfo");
-        Company company = tmdb.getCompanyInfo(ID_COMPANY_LUCASFILM);
+        Company company = tmdb.getCompanyInfo(ID_COMPANY);
         assertTrue("No company information found", company.getCompanyId() > 0);
+        assertNotNull("No parent company found", company.getParentCompany());
     }
 
     /**
@@ -423,7 +424,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getCompanyMovies(ID_COMPANY_LUCASFILM, LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = tmdb.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
         assertTrue("No company movies found", !result.getResults().isEmpty());
     }
 

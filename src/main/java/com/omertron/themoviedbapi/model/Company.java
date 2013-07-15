@@ -52,7 +52,7 @@ public class Company implements Serializable {
     @JsonProperty("logo_path")
     private String logoPath = DEFAULT_STRING;
     @JsonProperty("parent_company")
-    private String parentCompany = DEFAULT_STRING;
+    private Company parentCompany = null;
 
     //<editor-fold defaultstate="collapsed" desc="Getter Methods">
     public int getCompanyId() {
@@ -79,7 +79,7 @@ public class Company implements Serializable {
         return name;
     }
 
-    public String getParentCompany() {
+    public Company getParentCompany() {
         return parentCompany;
     }
     //</editor-fold>
@@ -109,8 +109,16 @@ public class Company implements Serializable {
         this.name = name;
     }
 
-    public void setParentCompany(String parentCompany) {
+    public void setParentCompany(Company parentCompany) {
         this.parentCompany = parentCompany;
+    }
+
+    public void setParentCompany(int id, String name, String logoPath) {
+        Company parent = new Company();
+        parent.setCompanyId(companyId);
+        parent.setName(name);
+        parent.setLogoPath(logoPath);
+        this.parentCompany = parent;
     }
     //</editor-fold>
 
