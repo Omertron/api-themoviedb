@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -91,14 +92,14 @@ public class Person implements Serializable {
      * @param job
      */
     public void addCrew(int id, String name, String profilePath, String department, String job) {
-        this.personType = PersonType.CREW;
-        this.id = id;
-        this.name = name;
-        this.profilePath = profilePath;
-        this.department = department;
-        this.job = job;
-        this.character = "";
-        this.order = -1;
+        setPersonType(PersonType.CREW);
+        setId(id);
+        setName(name);
+        setProfilePath(profilePath);
+        setDepartment(department);
+        setJob(job);
+        setCharacter("");
+        setOrder(-1);
     }
 
     /**
@@ -111,14 +112,14 @@ public class Person implements Serializable {
      * @param order
      */
     public void addCast(int id, String name, String profilePath, String character, int order) {
-        this.personType = PersonType.CAST;
-        this.id = id;
-        this.name = name;
-        this.profilePath = profilePath;
-        this.character = character;
-        this.order = order;
-        this.department = CAST_DEPARTMENT;
-        this.job = CAST_JOB;
+        setPersonType(PersonType.CAST);
+        setId(id);
+        setName(name);
+        setProfilePath(profilePath);
+        setCharacter(character);
+        setOrder(order);
+        setDepartment(CAST_DEPARTMENT);
+        setJob(CAST_JOB);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
@@ -205,11 +206,11 @@ public class Person implements Serializable {
     }
 
     public void setJob(String job) {
-        this.job = job;
+        this.job = StringUtils.trimToEmpty(job);
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = StringUtils.trimToEmpty(name);
     }
 
     public void setOrder(int order) {
@@ -221,7 +222,7 @@ public class Person implements Serializable {
     }
 
     public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
+        this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
 
     public void setAdult(boolean adult) {
@@ -233,27 +234,27 @@ public class Person implements Serializable {
     }
 
     public void setBiography(String biography) {
-        this.biography = biography;
+        this.biography = StringUtils.trimToEmpty(biography);
     }
 
     public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        this.birthday = StringUtils.trimToEmpty(birthday);
     }
 
     public void setBirthplace(String birthplace) {
-        this.birthplace = birthplace;
+        this.birthplace = StringUtils.trimToEmpty(birthplace);
     }
 
     public void setDeathday(String deathday) {
-        this.deathday = deathday;
+        this.deathday = StringUtils.trimToEmpty(deathday);
     }
 
     public void setHomepage(String homepage) {
-        this.homepage = homepage;
+        this.homepage = StringUtils.trimToEmpty(homepage);
     }
 
     public void setImdbId(String imdbId) {
-        this.imdbId = imdbId;
+        this.imdbId = StringUtils.trimToEmpty(imdbId);
     }
 
     public void setPopularity(float popularity) {

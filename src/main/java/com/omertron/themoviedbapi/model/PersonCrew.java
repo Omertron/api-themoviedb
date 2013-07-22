@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class PersonCrew implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setDepartment(String department) {
-        this.department = department;
+        this.department = StringUtils.trimToEmpty(department);
     }
 
     public void setId(int id) {
@@ -85,15 +86,15 @@ public class PersonCrew implements Serializable {
     }
 
     public void setJob(String job) {
-        this.job = job;
+        this.job = StringUtils.trimToEmpty(job);
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = StringUtils.trimToEmpty(name);
     }
 
     public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
+        this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
     //</editor-fold>
 

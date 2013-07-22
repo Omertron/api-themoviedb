@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -84,7 +85,7 @@ public class PersonCast implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setCharacter(String character) {
-        this.character = character;
+        this.character = StringUtils.trimToEmpty(character);
     }
 
     public void setId(int id) {
@@ -92,7 +93,7 @@ public class PersonCast implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = StringUtils.trimToEmpty(name);
     }
 
     public void setOrder(int order) {
@@ -100,7 +101,7 @@ public class PersonCast implements Serializable {
     }
 
     public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
+        this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
 
     public void setCastId(int castId) {

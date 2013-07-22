@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -107,15 +108,15 @@ public class PersonCredit implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="Setter Methods">
     public void setCharacter(String character) {
-        this.character = character;
+        this.character = StringUtils.trimToEmpty(character);
     }
 
     public void setDepartment(String department) {
-        this.department = department;
+        this.department = StringUtils.trimToEmpty(department);
     }
 
     public void setJob(String job) {
-        this.job = job;
+        this.job = StringUtils.trimToEmpty(job);
     }
 
     public void setMovieId(int movieId) {
@@ -123,11 +124,11 @@ public class PersonCredit implements Serializable {
     }
 
     public void setMovieOriginalTitle(String movieOriginalTitle) {
-        this.movieOriginalTitle = movieOriginalTitle;
+        this.movieOriginalTitle = StringUtils.trimToEmpty(movieOriginalTitle);
     }
 
     public void setMovieTitle(String movieTitle) {
-        this.movieTitle = movieTitle;
+        this.movieTitle = StringUtils.trimToEmpty(movieTitle);
     }
 
     public void setPersonType(PersonType personType) {
@@ -135,15 +136,15 @@ public class PersonCredit implements Serializable {
     }
 
     public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+        this.posterPath = StringUtils.trimToEmpty(posterPath);
     }
 
     public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+        this.releaseDate = StringUtils.trimToEmpty(releaseDate);
     }
 
     public void setAdult(String adult) {
-        this.adult = adult;
+        this.adult = StringUtils.trimToEmpty(adult);
     }
     //</editor-fold>
 
