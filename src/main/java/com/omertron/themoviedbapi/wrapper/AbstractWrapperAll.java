@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author Stuart
  */
-public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId, IWrapperPages {
+public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId, IWrapperPages, IWrapperDates {
     /*
      * Properties
      */
@@ -37,6 +37,8 @@ public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId,
     private int totalPages;
     @JsonProperty("total_results")
     private int totalResults;
+    @JsonProperty("dates")
+    private ResultDates dates = new ResultDates();
 
     public AbstractWrapperAll(Class classToLog) {
         super(classToLog);
@@ -58,6 +60,11 @@ public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId,
     }
 
     @Override
+    public ResultDates getDates() {
+        return dates;
+    }
+
+    @Override
     public void setPage(int page) {
         this.page = page;
     }
@@ -70,5 +77,10 @@ public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId,
     @Override
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
+    }
+
+    @Override
+    public void setDates(ResultDates dates) {
+        this.dates = dates;
     }
 }
