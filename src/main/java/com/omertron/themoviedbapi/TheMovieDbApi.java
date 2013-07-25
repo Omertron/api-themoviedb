@@ -352,10 +352,6 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Account Functions">
-    // No account functions
-    //</editor-fold>
-    //
     //<editor-fold defaultstate="collapsed" desc="Movie Functions">
     /**
      * This method is used to retrieve all of the basic movie information.
