@@ -75,6 +75,8 @@ public class MovieDb extends AbstractJsonMapping {
     private List<Language> spokenLanguages;
     @JsonProperty("tagline")
     private String tagline;
+    @JsonProperty("rating")
+    private float userRating;
     @JsonProperty("vote_average")
     private float voteAverage;
     @JsonProperty("vote_count")
@@ -409,4 +411,11 @@ public class MovieDb extends AbstractJsonMapping {
         return hash;
     }
 
+    public float getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(float userRating) {
+        this.userRating = userRating;
+    }
 }

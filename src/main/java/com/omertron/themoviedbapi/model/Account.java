@@ -8,8 +8,8 @@ public class Account extends AbstractJsonMapping {
     private int id;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("johndoe")
-    private String johndoe;
+    @JsonProperty("username")
+    private String userName;
 
     @JsonProperty("include_adult")
     private boolean includeAdult;
@@ -30,19 +30,19 @@ public class Account extends AbstractJsonMapping {
         this.name = name;
     }
 
-    public String getJohndoe() {
-        return johndoe;
-    }
-
-    public void setJohndoe(String johndoe) {
-        this.johndoe = johndoe;
-    }
-
     public boolean isIncludeAdult() {
         return includeAdult;
     }
 
     public void setIncludeAdult(boolean includeAdult) {
         this.includeAdult = includeAdult;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

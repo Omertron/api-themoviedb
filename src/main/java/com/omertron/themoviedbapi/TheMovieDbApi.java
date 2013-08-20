@@ -1069,7 +1069,12 @@ public class TheMovieDbApi {
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url, jsonBody);
 
-        return webpage.contains("The item/record was updated successfully");
+        try {
+            return mapper.readValue(webpage, StatusCode.class).getStatusCode()==12;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     //</editor-fold>
