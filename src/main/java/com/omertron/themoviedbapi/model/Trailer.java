@@ -19,25 +19,13 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import java.io.Serializable;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
- *
  * @author Stuart
  */
-public class Trailer implements Serializable {
+public class Trailer extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(Trailer.class);
     /*
      * Website sources
      */
@@ -67,9 +55,7 @@ public class Trailer implements Serializable {
     public String getWebsite() {
         return website;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setName(String name) {
         this.name = name;
     }
@@ -84,21 +70,6 @@ public class Trailer implements Serializable {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 
     @Override
@@ -130,10 +101,5 @@ public class Trailer implements Serializable {
         hash = 61 * hash + (this.source != null ? this.source.hashCode() : 0);
         hash = 61 * hash + (this.website != null ? this.website.hashCode() : 0);
         return hash;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

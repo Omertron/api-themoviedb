@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -58,8 +59,9 @@ public class TheMovieDbApiTest {
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String LANGUAGE_RUSSIAN = "ru";
 
-    // session id of test users named 'apitests'
+    // session and account id of test users named 'apitests'
     private static final String SESSION_ID_APITESTS = "63c85deb39337e29b69d78265eb28d639cbd6f72";
+    private static final int ACCOUNT_ID_APITESTS = 6065849;
 
     public TheMovieDbApiTest() throws MovieDbException {
     }
@@ -96,6 +98,50 @@ public class TheMovieDbApiTest {
         assertTrue("No poster sizes", tmdbConfig.getPosterSizes().size() > 0);
         assertTrue("No profile sizes", tmdbConfig.getProfileSizes().size() > 0);
         LOG.info(tmdbConfig.toString());
+    }
+
+
+    @Test
+    public void testAccount() throws MovieDbException {
+        Account account = tmdb.getAccount(SESSION_ID_APITESTS);
+
+        // Make sure properties are extracted correctly
+        assertEquals(account.getUserName(), "apitests");
+        assertEquals(account.getId(), ACCOUNT_ID_APITESTS);
+    }
+
+    @Test
+    public void testWatchList() throws MovieDbException {
+        // make sure it's empty (because it's just a test account
+        Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
+
+        // add a movie
+        tmdb.addToWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
+
+        List<MovieDb> watchList = tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        assertTrue(watchList.size()==1);
+
+        // clean up again
+        tmdb.removeFromWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
+
+        Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
+    }
+
+    @Test
+    public void testFavorites() throws MovieDbException {
+        // make sure it's empty (because it's just a test account
+        Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
+
+        // add a movie
+        tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, true);
+
+        List<MovieDb> watchList = tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        assertTrue(watchList.size()==1);
+
+        // clean up again
+        tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
+
+        Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
     }
 
     /**
@@ -597,20 +643,60 @@ public class TheMovieDbApiTest {
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
     @Test
-    public void testPostMovieRating() throws Exception {
+    public void testMovieRating() throws Exception {
         LOG.info("postMovieRating");
         Integer movieID = 68724;
-        Integer rating = 3;
+        Integer rating = new Random().nextInt(10)+1;
 
         boolean wasPosted = tmdb.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
 
         assertTrue(wasPosted);
+
+        // get all rated movies
+
+        List<MovieDb> ratedMovies = tmdb.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        assertTrue(ratedMovies.size()>0);
+
+        // make sure that we find the movie and it is rated correctly
+        boolean foundMovie = false;
+        for (MovieDb movie : ratedMovies) {
+            if(movie.getId()==movieID){
+                assertEquals(movie.getUserRating(), (float) rating, 0);
+                foundMovie = true;
+            }
+        }
+        assertTrue(foundMovie);
     }
 
-    /**
-     * Test of getPersonChanges method, of class TheMovieDbApi.
-     *
-     */
+    @Test
+    public void testMovieLists() throws Exception {
+        Integer movieID = 68724;
+
+        // use a random name to avoid that we clash we leftovers of incomplete test runs
+        String name = "test list " + new Random().nextInt(100);
+
+        // create the list
+        String listId = tmdb.createList(SESSION_ID_APITESTS, name, "api testing only");
+
+        // add a movie, and test that it is on the list now
+        tmdb.addMovieToList(SESSION_ID_APITESTS, listId, movieID);
+        MovieDbList list = tmdb.getList(listId);
+        Assert.assertEquals(list.getItemCount(), 1);
+        Assert.assertEquals(list.getItems().get(0).getId(), (int) movieID);
+
+        // now remove the movie
+        tmdb.removeMovieFromList(SESSION_ID_APITESTS, listId, movieID);
+        Assert.assertEquals(tmdb.getList(listId).getItemCount(), 0);
+
+        // delete the test list
+        StatusCode statusCode = tmdb.deleteMovieList(SESSION_ID_APITESTS, listId);
+        assertEquals(statusCode.getStatusCode(), 13);
+    }
+
+        /**
+         * Test of getPersonChanges method, of class TheMovieDbApi.
+         *
+         */
     @Ignore("Not ready yet")
     public void testGetPersonChanges() throws Exception {
         LOG.info("getPersonChanges");

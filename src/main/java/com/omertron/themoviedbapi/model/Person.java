@@ -19,29 +19,18 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author stuart.boston
  */
-public class Person implements Serializable {
+public class Person extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
-
-    /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(Person.class);
 
     /*
      * Static fields for default cast information
@@ -262,20 +251,6 @@ public class Person implements Serializable {
     }
     // </editor-fold>
 
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -320,10 +295,5 @@ public class Person implements Serializable {
         hash = 37 * hash + (this.job != null ? this.job.hashCode() : 0);
         hash = 37 * hash + (this.character != null ? this.character.hashCode() : 0);
         return hash;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

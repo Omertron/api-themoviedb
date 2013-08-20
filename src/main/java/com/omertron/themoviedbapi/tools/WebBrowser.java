@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi.tools;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -103,16 +105,27 @@ public final class WebBrowser {
     }
 
     public static String request(URL url, String jsonBody) throws MovieDbException {
+        return request(url, jsonBody, false);
+    }
+
+    public static String request(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
+
         StringWriter content = null;
 
         try {
             content = new StringWriter();
 
             BufferedReader in = null;
-            URLConnection cnx = null;
+            HttpURLConnection cnx = null;
             OutputStreamWriter wr = null;
             try {
-                cnx = openProxiedConnection(url);
+                cnx = (HttpURLConnection) openProxiedConnection(url);
+
+                if (isDeleteRequest) {
+                    cnx.setDoOutput(true);
+                    cnx.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    cnx.setRequestMethod("DELETE");
+                }
 
                 sendHeader(cnx);
 
@@ -124,7 +137,13 @@ public final class WebBrowser {
 
                 readHeader(cnx);
 
-                in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), getCharset(cnx)));
+                // http://stackoverflow.com/questions/4633048/httpurlconnection-reading-response-content-on-403-error
+                if (cnx.getResponseCode() >= 400) {
+                    in = new BufferedReader(new InputStreamReader(cnx.getErrorStream(), getCharset(cnx)));
+                } else {
+                    in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), getCharset(cnx)));
+                }
+
                 String line;
                 while ((line = in.readLine()) != null) {
                     content.write(line);
@@ -301,5 +320,17 @@ public final class WebBrowser {
 
     public static void setWebTimeoutRead(int webTimeoutRead) {
         WebBrowser.webTimeoutRead = webTimeoutRead;
+    }
+
+    /**
+     * Use Jackson to convert Map to json string.
+     */
+    public static String convertToJson(Map<String, ?> map) {
+        try {
+            return new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException jpe) {
+            throw new RuntimeException("json conversion failed", jpe);
+        }
+
     }
 }

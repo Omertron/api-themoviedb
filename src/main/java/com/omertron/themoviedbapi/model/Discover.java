@@ -19,14 +19,16 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Generate a discover object for use in the MovieDbApi
- *
+ * <p/>
  * This allows you to just add the search components you are concerned with
  *
  * @author stuart.boston
@@ -49,7 +51,7 @@ public class Discover {
 
     /**
      * Get the parameters
-     *
+     * <p/>
      * This will be used to construct the URL in the API
      *
      * @return
@@ -160,11 +162,11 @@ public class Discover {
 
     /**
      * Only include movies with the specified genres.
-     *
+     * <p/>
      * Expected value is an integer (the id of a genre).
-     *
+     * <p/>
      * Multiple values can be specified.
-     *
+     * <p/>
      * Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'
      *
      * @param withGenres
@@ -178,7 +180,7 @@ public class Discover {
 
     /**
      * The minimum release to include.
-     *
+     * <p/>
      * Expected format is YYYY-MM-DD.
      *
      * @param releaseDateGte
@@ -192,7 +194,7 @@ public class Discover {
 
     /**
      * The maximum release to include.
-     *
+     * <p/>
      * Expected format is YYYY-MM-DD.
      *
      * @param releaseDateLte
@@ -206,9 +208,9 @@ public class Discover {
 
     /**
      * Only include movies with certifications for a specific country.
-     *
+     * <p/>
      * When this value is specified, 'certificationLte' is required.
-     *
+     * <p/>
      * A ISO 3166-1 is expected
      *
      * @param certificationCountry
@@ -222,7 +224,7 @@ public class Discover {
 
     /**
      * Only include movies with this certification and lower.
-     *
+     * <p/>
      * Expected value is a valid certification for the specified 'certificationCountry'.
      *
      * @param certificationLte
@@ -236,9 +238,9 @@ public class Discover {
 
     /**
      * Filter movies to include a specific company.
-     *
+     * <p/>
      * Expected value is an integer (the id of a company).
-     *
+     * <p/>
      * They can be comma separated to indicate an 'AND' query
      *
      * @param withCompanies

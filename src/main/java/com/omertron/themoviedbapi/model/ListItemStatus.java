@@ -21,32 +21,31 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
-public class JobDepartment {
+/**
+ * @author Holger Brandl
+ */
+public class ListItemStatus extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
-    // Properties
-    @JsonProperty("department")
-    private String department;
-    @JsonProperty("job_list")
-    private List<String> jobs;
 
-    //<editor-fold defaultstate="collapsed" desc="Getters">
-    public String getDepartment() {
-        return department;
+    @JsonProperty("status_code")
+    private int statusCode;
+    @JsonProperty("item_present")
+    private boolean itemPresent;
+
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public List<String> getJobs() {
-        return jobs;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Setters">
-    public void setDepartment(String department) {
-        this.department = department;
+    public boolean isItemPresent() {
+        return itemPresent;
     }
 
-    public void setJobs(List<String> jobs) {
-        this.jobs = jobs;
+    public void setItemPresent(boolean itemPresent) {
+        this.itemPresent = itemPresent;
     }
 }

@@ -19,26 +19,15 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Stuart
  */
-public class ReleaseInfo implements Serializable {
+public class ReleaseInfo extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(ReleaseInfo.class);
     /*
      * Properties
      */
@@ -61,9 +50,7 @@ public class ReleaseInfo implements Serializable {
     public String getReleaseDate() {
         return releaseDate;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setCertification(String certification) {
         this.certification = certification;
     }
@@ -74,21 +61,6 @@ public class ReleaseInfo implements Serializable {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 
     @Override
@@ -119,10 +91,5 @@ public class ReleaseInfo implements Serializable {
         hash = 89 * hash + (this.certification != null ? this.certification.hashCode() : 0);
         hash = 89 * hash + (this.releaseDate != null ? this.releaseDate.hashCode() : 0);
         return hash;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

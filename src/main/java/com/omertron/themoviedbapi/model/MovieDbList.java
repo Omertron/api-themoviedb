@@ -19,14 +19,10 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper for the MovieDbList function
@@ -34,11 +30,7 @@ import org.slf4j.LoggerFactory;
  * @author stuart.boston
  */
 public class MovieDbList {
-    /*
-     * Logger
-     */
 
-    private static final Logger LOG = LoggerFactory.getLogger(MovieDbList.class);
     /*
      * Properties
      */
@@ -97,9 +89,7 @@ public class MovieDbList {
     public String getPosterPath() {
         return posterPath;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter Methods">
     public void setId(String id) {
         this.id = id;
     }
@@ -134,25 +124,5 @@ public class MovieDbList {
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

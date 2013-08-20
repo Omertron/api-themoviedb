@@ -19,27 +19,16 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Stuart
  */
-public class PersonCrew implements Serializable {
+public class PersonCrew extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(PersonCrew.class);
     /*
      * Properties
      */
@@ -74,9 +63,7 @@ public class PersonCrew implements Serializable {
     public String getProfilePath() {
         return profilePath;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setDepartment(String department) {
         this.department = StringUtils.trimToEmpty(department);
     }
@@ -95,21 +82,6 @@ public class PersonCrew implements Serializable {
 
     public void setProfilePath(String profilePath) {
         this.profilePath = StringUtils.trimToEmpty(profilePath);
-    }
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 
     @Override
@@ -145,10 +117,5 @@ public class PersonCrew implements Serializable {
         hash = 59 * hash + (this.name != null ? this.name.hashCode() : 0);
         hash = 59 * hash + (this.profilePath != null ? this.profilePath.hashCode() : 0);
         return hash;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
