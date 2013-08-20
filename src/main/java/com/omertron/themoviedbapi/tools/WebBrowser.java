@@ -20,10 +20,11 @@
 package com.omertron.themoviedbapi.tools;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,9 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Web browser with simple cookies support
@@ -68,6 +66,7 @@ public final class WebBrowser {
         if (browserProperties.isEmpty()) {
             browserProperties.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
             browserProperties.put("Accept", "application/json");
+            browserProperties.put("Content-type", "application/json");
         }
     }
 
@@ -100,6 +99,10 @@ public final class WebBrowser {
     }
 
     public static String request(URL url) throws MovieDbException {
+        return request(url, null);
+    }
+
+    public static String request(URL url, String jsonBody) throws MovieDbException {
         StringWriter content = null;
 
         try {
@@ -111,6 +114,14 @@ public final class WebBrowser {
                 cnx = openProxiedConnection(url);
 
                 sendHeader(cnx);
+
+                if (jsonBody != null) {
+                    cnx.setDoOutput(true);
+                    OutputStreamWriter wr = new OutputStreamWriter(cnx.getOutputStream());
+                    wr.write(jsonBody);
+                    wr.flush();
+                }
+
                 readHeader(cnx);
 
                 in = new BufferedReader(new InputStreamReader(cnx.getInputStream(), getCharset(cnx)));

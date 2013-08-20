@@ -19,38 +19,18 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ChangedItem;
-import com.omertron.themoviedbapi.model.Collection;
-import com.omertron.themoviedbapi.model.CollectionInfo;
-import com.omertron.themoviedbapi.model.Company;
-import com.omertron.themoviedbapi.model.Discover;
-import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.JobDepartment;
-import com.omertron.themoviedbapi.model.Keyword;
-import com.omertron.themoviedbapi.model.KeywordMovie;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.MovieDbList;
-import com.omertron.themoviedbapi.model.MovieList;
-import com.omertron.themoviedbapi.model.Person;
-import com.omertron.themoviedbapi.model.PersonCredit;
-import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
-import com.omertron.themoviedbapi.model.TmdbConfiguration;
-import com.omertron.themoviedbapi.model.TokenAuthorisation;
-import com.omertron.themoviedbapi.model.TokenSession;
-import com.omertron.themoviedbapi.model.Trailer;
-import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
-import java.io.IOException;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.*;
-import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Test cases for TheMovieDbApi API
@@ -77,6 +57,9 @@ public class TheMovieDbApiTest {
     private static final String LANGUAGE_DEFAULT = "";
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String LANGUAGE_RUSSIAN = "ru";
+
+    // session id of test users named 'apitests'
+    private static final String SESSION_ID_APITESTS = "63c85deb39337e29b69d78265eb28d639cbd6f72";
 
     public TheMovieDbApiTest() throws MovieDbException {
     }
@@ -613,16 +596,15 @@ public class TheMovieDbApiTest {
      *
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
-    @Ignore("Not ready yet")
+    @Test
     public void testPostMovieRating() throws Exception {
         LOG.info("postMovieRating");
-        String sessionId = "";
-        String rating = "";
-        boolean expResult = false;
-        boolean result = tmdb.postMovieRating(sessionId, rating);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Integer movieID = 68724;
+        Integer rating = 3;
+
+        boolean wasPosted = tmdb.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
+
+        assertTrue(wasPosted);
     }
 
     /**
