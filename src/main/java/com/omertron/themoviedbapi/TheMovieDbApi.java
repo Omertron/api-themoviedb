@@ -63,7 +63,7 @@ public class TheMovieDbApi {
     private static final String BASE_GENRE = "genre/";
     private static final String BASE_AUTH = "authentication/";
     private static final String BASE_COLLECTION = "collection/";
-//    private static final String BASE_ACCOUNT = "account/";
+    private static final String BASE_ACCOUNT = "account/";
     private static final String BASE_SEARCH = "search/";
     private static final String BASE_LIST = "list/";
     private static final String BASE_KEYWORD = "keyword/";
@@ -354,8 +354,100 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-    //</editor-fold>
 
+    /**
+     * Get the basic information for an account. You will need to have a valid session id.     *
+     * @throws MovieDbException
+     */
+    public Account getAccount(String sessionId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT.replace("/", ""));
+
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            return mapper.readValue(webpage, Account.class);
+        } catch (IOException ex) {
+            LOG.warn("Failed to get Session Token: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+
+
+    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId+ "/favorite_movies");
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer movieId, boolean isFavorite) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId+ "/favorite");
+
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("movie_id", movieId);
+        body.put("favorite", isFavorite);
+        String jsonBody = WebBrowser.convertToJson(body);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url, jsonBody);
+
+        try {
+            return mapper.readValue(webpage, StatusCode.class);
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     *  Add a movie to an account's watch list.
+     */
+    public StatusCode addToWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
+        return modifyWatchList(sessionId, accountId, movieId, true);
+    }
+
+    /**
+     *  Remove a movie from an account's watch list.
+     */
+    public StatusCode removeFromWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
+        return modifyWatchList(sessionId, accountId, movieId, false);
+    }
+
+    private StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, boolean add) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId+ "/movie_watchlist");
+
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("movie_id", movieId);
+        body.put("movie_watchlist", add);
+        String jsonBody = WebBrowser.convertToJson(body);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url, jsonBody);
+
+        try {
+            return mapper.readValue(webpage, StatusCode.class);
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
     //<editor-fold defaultstate="collapsed" desc="Account Functions">
     // No account functions
     //</editor-fold>
@@ -937,6 +1029,21 @@ public class TheMovieDbApi {
         }
     }
 
+    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId+ "/rated_movies");
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
     /**
      * This method lets users rate a movie.
      *
@@ -957,14 +1064,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "rating out of range");
         }
 
-        String jsonBody;
-
-        // note exception will never be thrown
-        try {
-            jsonBody = new ObjectMapper().writeValueAsString(Collections.singletonMap("value", (double) rating));
-        } catch (JsonProcessingException ignored) {
-            throw new RuntimeException(ignored);
-        }
+        String jsonBody = WebBrowser.convertToJson(Collections.singletonMap("value", rating));
 
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url, jsonBody);
@@ -1563,7 +1663,159 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-    //</editor-fold>
+
+    /**
+     * Get all lists of a given user
+     *
+     * @return The lists
+     * @throws MovieDbException
+     */
+    public List<MovieDbList> getUserLists(String sessionId, int accountID) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountID +"/lists");
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            return mapper.readValue(webpage, WrapperMovieDbList.class).getLists();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get lists: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+
+    /**
+     * This method lets users create a new list. A valid session id is required.
+     *
+     * @return The list id
+     * @throws MovieDbException
+     */
+    public String createList(String sessionId, String name, String description) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, "list");
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        HashMap<String, String> body = new HashMap<String, String>();
+        body.put("name", StringUtils.trimToEmpty(name));
+        body.put("description", StringUtils.trimToEmpty(description));
+
+        String jsonBody = WebBrowser.convertToJson(body);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url, jsonBody);
+
+
+        try {
+            return mapper.readValue(webpage, MovieDbListStatus.class).getListId();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     * Check to see if a movie ID is already added to a list.
+     *
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST, listId+"/item_status");
+        apiUrl.addArgument("movie_id", movieId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+
+    /**
+     * This method lets users add new movies to a list that they created. A valid session id is required.
+     *
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
+        return modifyMovieList(sessionId, listId, movieId, "/add_item");
+    }
+
+    /**
+     * This method lets users remove movies from a list that they created. A valid session id is required.
+     *
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
+        return modifyMovieList(sessionId, listId, movieId, "/remove_item");
+    }
+
+    private StatusCode modifyMovieList(String sessionId, String listId, Integer movieId, String operation) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST, listId+ operation);
+
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        String jsonBody = WebBrowser.convertToJson(Collections.singletonMap("media_id", movieId + ""));
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url, jsonBody);
+
+        try {
+            return mapper.readValue(webpage, StatusCode.class);
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     * Get the list of movies on an accounts watchlist.
+     *
+     * @return The watchlist of the user
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getWatchList(String sessionId, int accountId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId+ "/movie_watchlist");
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url);
+
+        try {
+            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     * This method lets users delete a list that they created. A valid session id is required.
+     * @throws MovieDbException
+     */
+    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST, listId);
+
+        apiUrl.addArgument(PARAM_SESSION, sessionId);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url, null, true);
+
+
+        try {
+            return mapper.readValue(webpage, StatusCode.class);
+        } catch (IOException ex) {
+            LOG.warn("Failed to get keyword: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
 
     //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
     /**
