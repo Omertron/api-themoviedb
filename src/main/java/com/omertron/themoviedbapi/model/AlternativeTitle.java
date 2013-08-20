@@ -33,10 +33,6 @@ public class AlternativeTitle implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(AlternativeTitle.class);
-    /*
      * Properties
      */
     @JsonProperty("iso_3166_1")

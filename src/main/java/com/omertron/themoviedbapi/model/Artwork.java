@@ -33,10 +33,6 @@ public class Artwork extends AbstractJsonMapping {
     private static final long serialVersionUID = 1L;
 
     /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(Artwork.class);
-    /*
      * Properties
      */
     @JsonProperty("aspect_ratio")
