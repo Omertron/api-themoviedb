@@ -323,14 +323,13 @@ public final class WebBrowser {
     }
 
     /**
-     * Use Jackson to convert Map to json string.
+     * Use Jackson to convert Map to JSON string.
      */
-    public static String convertToJson(Map<String, ?> map) {
+    public static String convertToJson(Map<String, ?> map) throws MovieDbException {
         try {
             return new ObjectMapper().writeValueAsString(map);
         } catch (JsonProcessingException jpe) {
-            throw new RuntimeException("json conversion failed", jpe);
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
         }
-
     }
 }
