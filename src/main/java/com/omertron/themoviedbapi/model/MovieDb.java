@@ -19,37 +19,19 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
-import com.omertron.themoviedbapi.wrapper.WrapperImages;
-import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
-import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
-import com.omertron.themoviedbapi.wrapper.WrapperReviews;
-import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
-import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
-import java.io.Serializable;
+import com.omertron.themoviedbapi.wrapper.*;
+
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Movie Bean
  *
  * @author stuart.boston
  */
-public class MovieDb implements Serializable {
+public class MovieDb extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
-    /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(MovieDb.class);
     /*
      * Properties
      */
@@ -354,7 +336,6 @@ public class MovieDb implements Serializable {
     public List<Reviews> getReviews() {
         return reviews.getReviews();
     }
-    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
     public void setAlternativeTitles(WrapperAlternativeTitles alternativeTitles) {
@@ -397,22 +378,6 @@ public class MovieDb implements Serializable {
         this.reviews = reviews;
     }
 
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
-    }
-
     //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">
     @Override
     public boolean equals(Object obj) {
@@ -443,10 +408,5 @@ public class MovieDb implements Serializable {
         hash = 89 * hash + this.runtime;
         return hash;
     }
-    //</editor-fold>
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-    }
 }

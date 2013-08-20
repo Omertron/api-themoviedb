@@ -19,27 +19,16 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Stuart
  */
-public class PersonCast implements Serializable {
+public class PersonCast extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(PersonCast.class);
     /*
      * Properties
      */
@@ -81,9 +70,6 @@ public class PersonCast implements Serializable {
         return castId;
     }
 
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setCharacter(String character) {
         this.character = StringUtils.trimToEmpty(character);
     }
@@ -106,22 +92,6 @@ public class PersonCast implements Serializable {
 
     public void setCastId(int castId) {
         this.castId = castId;
-    }
-
-    //</editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
     }
 
     @Override
@@ -162,8 +132,4 @@ public class PersonCast implements Serializable {
         return hash;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-    }
 }

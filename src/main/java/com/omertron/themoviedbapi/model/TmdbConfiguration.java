@@ -19,30 +19,20 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
- *
  * @author stuart.boston
  */
-public class TmdbConfiguration implements Serializable {
+public class TmdbConfiguration extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
     /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbConfiguration.class);
-    /*
-     * Properties
-     */
+    * Properties
+    */
     @JsonProperty("base_url")
     private String baseUrl;
     @JsonProperty("secure_base_url")
@@ -181,22 +171,4 @@ public class TmdbConfiguration implements Serializable {
                 || isValidLogoSize(sizeToCheck));
     }
 
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-    }
 }

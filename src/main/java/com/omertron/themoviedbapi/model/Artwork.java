@@ -19,11 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +28,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Stuart
  */
-public class Artwork implements Serializable {
+public class Artwork extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
@@ -133,25 +129,11 @@ public class Artwork implements Serializable {
         this.voteCount = voteCount;
     }
 
-        public void setFlag(String flag) {
+    public void setFlag(String flag) {
         this.flag = flag;
     }
 
     // </editor-fold>
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -195,8 +177,4 @@ public class Artwork implements Serializable {
         return hash;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-    }
 }

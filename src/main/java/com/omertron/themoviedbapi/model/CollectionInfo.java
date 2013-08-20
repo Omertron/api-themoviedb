@@ -19,30 +19,21 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Stuart
  */
-public class CollectionInfo implements Serializable {
+public class CollectionInfo extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
+
     /*
-     * Logger
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(CollectionInfo.class);
-    /*
-     * Properties
-     */
+  * Properties
+  */
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")
@@ -80,9 +71,7 @@ public class CollectionInfo implements Serializable {
     public String getPosterPath() {
         return posterPath;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
@@ -106,24 +95,5 @@ public class CollectionInfo implements Serializable {
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
-    //</editor-fold>
 
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        LOG.trace(sb.toString());
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
-    }
 }

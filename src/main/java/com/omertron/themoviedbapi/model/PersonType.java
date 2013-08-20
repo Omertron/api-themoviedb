@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.model;
 
 /**
- *
  * @author stuart.boston
  */
 public enum PersonType {
