@@ -110,6 +110,7 @@ public final class WebBrowser {
 
             BufferedReader in = null;
             URLConnection cnx = null;
+            OutputStreamWriter wr = null;
             try {
                 cnx = openProxiedConnection(url);
 
@@ -117,9 +118,8 @@ public final class WebBrowser {
 
                 if (jsonBody != null) {
                     cnx.setDoOutput(true);
-                    OutputStreamWriter wr = new OutputStreamWriter(cnx.getOutputStream());
+                    wr = new OutputStreamWriter(cnx.getOutputStream());
                     wr.write(jsonBody);
-                    wr.flush();
                 }
 
                 readHeader(cnx);
@@ -130,6 +130,11 @@ public final class WebBrowser {
                     content.write(line);
                 }
             } finally {
+                if (wr != null) {
+                    wr.flush();
+                    wr.close();
+                }
+
                 if (in != null) {
                     in.close();
                 }
