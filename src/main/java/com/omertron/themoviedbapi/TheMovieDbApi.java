@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.*;
@@ -1055,7 +1054,6 @@ public class TheMovieDbApi {
      * @param movieId
      * @param rating
      * @throws MovieDbException
-     * @throws JsonProcessingException
      */
     public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, movieId + "/rating");
