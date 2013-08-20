@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi;
 
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.*;
@@ -28,18 +28,22 @@ import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 
 /**
  * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
@@ -935,17 +939,35 @@ public class TheMovieDbApi {
      * A valid session id is required.
      *
      * @param sessionId
+     * @param movieId
      * @param rating
      * @throws MovieDbException
+     * @throws JsonProcessingException
      */
-    public boolean postMovieRating(String sessionId, String rating) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/rating");
+    public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, movieId+ "/rating");
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
-        apiUrl.addArgument(PARAM_VALUE, rating);
 
-        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+        if(rating <0 || rating > 10) {
+            throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "rating out of range");
+        }
+
+        String jsonBody;
+
+        // note exception will never be thrown
+        try {
+            jsonBody = new ObjectMapper().writeValueAsString(Collections.singletonMap("value", (double) rating));
+        } catch (JsonProcessingException ignored) {
+            throw new RuntimeException(ignored);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = WebBrowser.request(url, jsonBody);
+
+        return webpage.contains("The item/record was updated successfully");
     }
+
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Collection Functions">
