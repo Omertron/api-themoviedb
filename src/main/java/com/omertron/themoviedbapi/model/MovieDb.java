@@ -197,6 +197,10 @@ public class MovieDb extends AbstractJsonMapping {
     public String getStatus() {
         return status;
     }
+
+    public float getUserRating() {
+        return userRating;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -292,7 +296,11 @@ public class MovieDb extends AbstractJsonMapping {
         this.status = status;
     }
 
+    public void setUserRating(float userRating) {
+        this.userRating = userRating;
+    }
     // </editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
     public List<AlternativeTitle> getAlternativeTitles() {
         return alternativeTitles.getTitles();
@@ -337,6 +345,7 @@ public class MovieDb extends AbstractJsonMapping {
     public List<Reviews> getReviews() {
         return reviews.getReviews();
     }
+    // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
     public void setAlternativeTitles(WrapperAlternativeTitles alternativeTitles) {
@@ -378,6 +387,7 @@ public class MovieDb extends AbstractJsonMapping {
     public void setReviews(WrapperReviews reviews) {
         this.reviews = reviews;
     }
+    // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">
     @Override
@@ -409,12 +419,5 @@ public class MovieDb extends AbstractJsonMapping {
         hash = 89 * hash + this.runtime;
         return hash;
     }
-
-    public float getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating(float userRating) {
-        this.userRating = userRating;
-    }
+    // </editor-fold>
 }

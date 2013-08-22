@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author stuart.boston
  */
-public class MovieDbList {
+public class MovieDbList extends AbstractJsonMapping {
 
     /*
      * Properties
@@ -52,6 +52,10 @@ public class MovieDbList {
     private String name;
     @JsonProperty("poster_path")
     private String posterPath;
+    @JsonProperty("status_code")
+    private String statusCode;
+    @JsonProperty("status_message")
+    private String statusMessage;
 
     //<editor-fold defaultstate="collapsed" desc="Getter Methods">
     public String getId() {
@@ -90,6 +94,16 @@ public class MovieDbList {
         return posterPath;
     }
 
+    public String getStatusCode() {
+        return statusCode;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Setter Methods">
     public void setId(String id) {
         this.id = id;
     }
@@ -125,4 +139,13 @@ public class MovieDbList {
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
+
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+    //</editor-fold>
 }

@@ -1076,8 +1076,8 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Collection Functions">
     /**
      * This method is used to retrieve all of the basic information about a movie collection.
@@ -1818,6 +1818,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
     /**
