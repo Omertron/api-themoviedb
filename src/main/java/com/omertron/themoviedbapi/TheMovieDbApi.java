@@ -1061,16 +1061,19 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         if (rating < 0 || rating > 10) {
-            throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "rating out of range");
+            throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Rating out of range");
         }
 
         String jsonBody = WebBrowser.convertToJson(Collections.singletonMap("value", rating));
-
+        LOG.info("Body: {}", jsonBody);
         URL url = apiUrl.buildUrl();
         String webpage = WebBrowser.request(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class).getStatusCode() == 12;
+            StatusCode status = mapper.readValue(webpage, StatusCode.class);
+            LOG.info("Status: {}", status);
+            int code = status.getStatusCode();
+            return code == 12;
         } catch (IOException ex) {
             LOG.warn(FAILED_KEYWORD, ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

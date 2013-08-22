@@ -58,7 +58,6 @@ public class TheMovieDbApiTest {
     private static final String LANGUAGE_DEFAULT = "";
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String LANGUAGE_RUSSIAN = "ru";
-
     // session and account id of test users named 'apitests'
     private static final String SESSION_ID_APITESTS = "63c85deb39337e29b69d78265eb28d639cbd6f72";
     private static final int ACCOUNT_ID_APITESTS = 6065849;
@@ -100,7 +99,6 @@ public class TheMovieDbApiTest {
         LOG.info(tmdbConfig.toString());
     }
 
-
     @Test
     public void testAccount() throws MovieDbException {
         Account account = tmdb.getAccount(SESSION_ID_APITESTS);
@@ -110,7 +108,7 @@ public class TheMovieDbApiTest {
         assertEquals(account.getId(), ACCOUNT_ID_APITESTS);
     }
 
-    @Test
+    @Ignore("Session required")
     public void testWatchList() throws MovieDbException {
         // make sure it's empty (because it's just a test account
         Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
@@ -119,7 +117,8 @@ public class TheMovieDbApiTest {
         tmdb.addToWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
 
         List<MovieDb> watchList = tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertTrue(watchList.size()==1);
+        assertNotNull("Empty watch list returned", watchList);
+        assertEquals("Watchlist wrong size", 1, watchList.size());
 
         // clean up again
         tmdb.removeFromWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
@@ -127,7 +126,7 @@ public class TheMovieDbApiTest {
         Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
     }
 
-    @Test
+    @Ignore("Session required")
     public void testFavorites() throws MovieDbException {
         // make sure it's empty (because it's just a test account
         Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
@@ -136,7 +135,8 @@ public class TheMovieDbApiTest {
         tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, true);
 
         List<MovieDb> watchList = tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertTrue(watchList.size()==1);
+        assertNotNull("Empty watch list returned", watchList);
+        assertEquals("Watchlist wrong size", 1, watchList.size());
 
         // clean up again
         tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
@@ -534,12 +534,13 @@ public class TheMovieDbApiTest {
      *
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
+    @Ignore("Session required")
     public void testGetSessionToken() throws Exception {
         LOG.info("getSessionToken");
         TokenAuthorisation token = tmdb.getAuthorisationToken();
         assertFalse("Token is null", token == null);
         assertTrue("Token is not valid", token.getSuccess());
-        LOG.info(token.toString());
+        LOG.info("Token: {}", token.toString());
 
         TokenSession result = tmdb.getSessionToken(token);
         assertFalse("Session token is null", result == null);
@@ -642,25 +643,26 @@ public class TheMovieDbApiTest {
      *
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      */
-    @Test
+    @Ignore("Session required")
     public void testMovieRating() throws Exception {
         LOG.info("postMovieRating");
         Integer movieID = 68724;
-        Integer rating = new Random().nextInt(10)+1;
+        Integer rating = new Random().nextInt(10) + 1;
 
         boolean wasPosted = tmdb.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
 
+        assertNotNull(wasPosted);
         assertTrue(wasPosted);
 
         // get all rated movies
 
         List<MovieDb> ratedMovies = tmdb.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertTrue(ratedMovies.size()>0);
+        assertTrue(ratedMovies.size() > 0);
 
         // make sure that we find the movie and it is rated correctly
         boolean foundMovie = false;
         for (MovieDb movie : ratedMovies) {
-            if(movie.getId()==movieID){
+            if (movie.getId() == movieID) {
                 assertEquals(movie.getUserRating(), (float) rating, 0);
                 foundMovie = true;
             }
@@ -668,7 +670,7 @@ public class TheMovieDbApiTest {
         assertTrue(foundMovie);
     }
 
-    @Test
+    @Ignore("Session required")
     public void testMovieLists() throws Exception {
         Integer movieID = 68724;
 
@@ -681,22 +683,23 @@ public class TheMovieDbApiTest {
         // add a movie, and test that it is on the list now
         tmdb.addMovieToList(SESSION_ID_APITESTS, listId, movieID);
         MovieDbList list = tmdb.getList(listId);
-        Assert.assertEquals(list.getItemCount(), 1);
-        Assert.assertEquals(list.getItems().get(0).getId(), (int) movieID);
+        assertNotNull("Movie list returned was null", list);
+        assertEquals("Unexpected number of items returned", 1, list.getItemCount());
+        assertEquals((int) movieID, list.getItems().get(0).getId());
 
         // now remove the movie
         tmdb.removeMovieFromList(SESSION_ID_APITESTS, listId, movieID);
-        Assert.assertEquals(tmdb.getList(listId).getItemCount(), 0);
+        assertEquals(tmdb.getList(listId).getItemCount(), 0);
 
         // delete the test list
         StatusCode statusCode = tmdb.deleteMovieList(SESSION_ID_APITESTS, listId);
         assertEquals(statusCode.getStatusCode(), 13);
     }
 
-        /**
-         * Test of getPersonChanges method, of class TheMovieDbApi.
-         *
-         */
+    /**
+     * Test of getPersonChanges method, of class TheMovieDbApi.
+     *
+     */
     @Ignore("Not ready yet")
     public void testGetPersonChanges() throws Exception {
         LOG.info("getPersonChanges");
