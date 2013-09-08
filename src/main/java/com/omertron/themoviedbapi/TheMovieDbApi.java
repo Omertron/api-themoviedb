@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.*;
@@ -114,11 +115,26 @@ public class TheMovieDbApi {
     }
 
     private String requestWebPage(URL url) throws MovieDbException {
+        return requestWebPage(url, null, Boolean.FALSE);
+    }
+
+    private String requestWebPage(URL url, String jsonBody) throws MovieDbException {
+        return requestWebPage(url, jsonBody, Boolean.FALSE);
+    }
+
+    private String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
         // use HTTP client implementation
         if (httpClient != null) {
             try {
                 HttpGet httpGet = new HttpGet(url.toURI());
                 httpGet.addHeader("accept", "application/json");
+
+                if (StringUtils.isNotBlank(jsonBody)) {
+                    // TODO: Add the json body to the request
+                }
+
+                //TODO: Handle delete request
+
                 return httpClient.requestContent(httpGet);
             } catch (URISyntaxException ex) {
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
@@ -130,7 +146,7 @@ public class TheMovieDbApi {
         }
 
         // use web browser
-        return WebBrowser.request(url);
+        return WebBrowser.request(url, jsonBody, isDeleteRequest);
     }
 
     /**
@@ -383,7 +399,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
@@ -401,10 +417,10 @@ public class TheMovieDbApi {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("movie_id", movieId);
         body.put("favorite", isFavorite);
-        String jsonBody = WebBrowser.convertToJson(body);
+        String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url, jsonBody);
+        String webpage = requestWebPage(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -436,10 +452,10 @@ public class TheMovieDbApi {
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("movie_id", movieId);
         body.put("movie_watchlist", add);
-        String jsonBody = WebBrowser.convertToJson(body);
+        String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url, jsonBody);
+        String webpage = requestWebPage(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -448,12 +464,12 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Account Functions">
     // No account functions
-    //</editor-fold>
     //
     //<editor-fold defaultstate="collapsed" desc="Movie Functions">
-
     /**
      * This method is used to retrieve all of the basic movie information.
      *
@@ -1035,7 +1051,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
@@ -1064,10 +1080,10 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Rating out of range");
         }
 
-        String jsonBody = WebBrowser.convertToJson(Collections.singletonMap("value", rating));
+        String jsonBody = convertToJson(Collections.singletonMap("value", rating));
         LOG.info("Body: {}", jsonBody);
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url, jsonBody);
+        String webpage = requestWebPage(url, jsonBody);
 
         try {
             StatusCode status = mapper.readValue(webpage, StatusCode.class);
@@ -1706,10 +1722,10 @@ public class TheMovieDbApi {
         body.put("name", StringUtils.trimToEmpty(name));
         body.put("description", StringUtils.trimToEmpty(description));
 
-        String jsonBody = WebBrowser.convertToJson(body);
+        String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url, jsonBody);
+        String webpage = requestWebPage(url, jsonBody);
 
 
         try {
@@ -1731,7 +1747,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument("movie_id", movieId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
@@ -1766,10 +1782,10 @@ public class TheMovieDbApi {
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
-        String jsonBody = WebBrowser.convertToJson(Collections.singletonMap("media_id", movieId + ""));
+        String jsonBody = convertToJson(Collections.singletonMap("media_id", movieId + ""));
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url, jsonBody);
+        String webpage = requestWebPage(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -1790,7 +1806,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url);
+        String webpage = requestWebPage(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
@@ -1811,7 +1827,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = WebBrowser.request(url, null, true);
+        String webpage = requestWebPage(url, null, true);
 
 
         try {
@@ -1991,4 +2007,15 @@ public class TheMovieDbApi {
         }
     }
     //</editor-fold>
+
+    /**
+     * Use Jackson to convert Map to JSON string.
+     */
+    public static String convertToJson(Map<String, ?> map) throws MovieDbException {
+        try {
+            return mapper.writeValueAsString(map);
+        } catch (JsonProcessingException jpe) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
+        }
+    }
 }

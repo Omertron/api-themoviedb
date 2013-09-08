@@ -19,8 +19,6 @@
  */
 package com.omertron.themoviedbapi.tools;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -38,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Web browser with simple cookies support
@@ -101,11 +100,11 @@ public final class WebBrowser {
     }
 
     public static String request(URL url) throws MovieDbException {
-        return request(url, null);
+        return request(url, null, Boolean.FALSE);
     }
 
     public static String request(URL url, String jsonBody) throws MovieDbException {
-        return request(url, jsonBody, false);
+        return request(url, jsonBody, Boolean.FALSE);
     }
 
     public static String request(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
@@ -129,7 +128,7 @@ public final class WebBrowser {
 
                 sendHeader(cnx);
 
-                if (jsonBody != null) {
+                if (StringUtils.isNotBlank(jsonBody)) {
                     cnx.setDoOutput(true);
                     wr = new OutputStreamWriter(cnx.getOutputStream());
                     wr.write(jsonBody);
@@ -320,16 +319,5 @@ public final class WebBrowser {
 
     public static void setWebTimeoutRead(int webTimeoutRead) {
         WebBrowser.webTimeoutRead = webTimeoutRead;
-    }
-
-    /**
-     * Use Jackson to convert Map to JSON string.
-     */
-    public static String convertToJson(Map<String, ?> map) throws MovieDbException {
-        try {
-            return new ObjectMapper().writeValueAsString(map);
-        } catch (JsonProcessingException jpe) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
-        }
     }
 }
