@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 
 /**
  * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
@@ -131,9 +133,13 @@ public class TheMovieDbApi {
 
                 if (StringUtils.isNotBlank(jsonBody)) {
                     // TODO: Add the json body to the request
+                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
                 }
 
-                //TODO: Handle delete request
+                if (isDeleteRequest) {
+                    //TODO: Handle delete request
+                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
+                }
 
                 return httpClient.requestContent(httpGet);
             } catch (URISyntaxException ex) {
