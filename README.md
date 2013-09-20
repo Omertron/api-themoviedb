@@ -8,6 +8,8 @@ This API uses the [TheMovieDB.org API](http://api.themoviedb.org/)
 Originally written for use by Yet Another Movie Jukebox [(YAMJ)](http://code.google.com/p/moviejukebox/)
 
 But anyone can use it for other projects as well.
+
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Omertron&url=https://github.com/Omertron/api-themoviedb&title=TheMovieDB API&language=&tags=github&category=software) 
 ***
 ### TheMovieDB.org
 This is an excellent open database for movie and film content. 
