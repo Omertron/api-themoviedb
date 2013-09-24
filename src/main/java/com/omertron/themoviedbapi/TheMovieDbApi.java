@@ -19,20 +19,18 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
-import com.omertron.themoviedbapi.model.*;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import com.omertron.themoviedbapi.tools.WebBrowser;
-import com.omertron.themoviedbapi.wrapper.*;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.CommonHttpClient;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ADULT;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_COUNTRY;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_END_DATE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_INCLUDE_ALL_MOVIES;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_QUERY;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_START_DATE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_TOKEN;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_YEAR;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -43,9 +41,73 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.CommonHttpClient;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
+import com.omertron.themoviedbapi.model.Account;
+import com.omertron.themoviedbapi.model.AlternativeTitle;
+import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.ArtworkType;
+import com.omertron.themoviedbapi.model.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.ChangedItem;
+import com.omertron.themoviedbapi.model.ChangedMovie;
+import com.omertron.themoviedbapi.model.Collection;
+import com.omertron.themoviedbapi.model.CollectionInfo;
+import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model.Discover;
+import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.JobDepartment;
+import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.KeywordMovie;
+import com.omertron.themoviedbapi.model.ListItemStatus;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.MovieDbList;
+import com.omertron.themoviedbapi.model.MovieDbListStatus;
+import com.omertron.themoviedbapi.model.MovieList;
+import com.omertron.themoviedbapi.model.Person;
+import com.omertron.themoviedbapi.model.PersonCredit;
+import com.omertron.themoviedbapi.model.ReleaseInfo;
+import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.TmdbConfiguration;
+import com.omertron.themoviedbapi.model.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.TokenSession;
+import com.omertron.themoviedbapi.model.Trailer;
+import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.TmdbResultsMap;
+import com.omertron.themoviedbapi.tools.ApiUrl;
+import com.omertron.themoviedbapi.tools.WebBrowser;
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import com.omertron.themoviedbapi.wrapper.WrapperCollection;
+import com.omertron.themoviedbapi.wrapper.WrapperCompany;
+import com.omertron.themoviedbapi.wrapper.WrapperCompanyMovies;
+import com.omertron.themoviedbapi.wrapper.WrapperConfig;
+import com.omertron.themoviedbapi.wrapper.WrapperGenres;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperJobList;
+import com.omertron.themoviedbapi.wrapper.WrapperKeywordMovies;
+import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieChanges;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieDbList;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
+import com.omertron.themoviedbapi.wrapper.WrapperPerson;
+import com.omertron.themoviedbapi.wrapper.WrapperPersonCredits;
+import com.omertron.themoviedbapi.wrapper.WrapperPersonList;
+import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.wrapper.WrapperReviews;
+import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 
 /**
  * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
@@ -1907,8 +1969,46 @@ public class TheMovieDbApi {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Changes Functions">
-    public void getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    /**
+     * Get a list of movie ids that have been edited.
+     * By default we show the last 24 hours and only 100 items per page.
+     * The maximum number of days that can be returned in a single request is 14.
+     * You can then use the movie changes API to get the actual data that has been changed.
+     * Please note that the change log system to support this was changed on October 5, 2012
+     * and will only show movies that have been edited since.
+     * @param page
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<ChangedMovie> getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
+    	ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/changes");
+    	
+    	if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+    	
+        if (StringUtils.isNotBlank(startDate)) {
+            apiUrl.addArgument(PARAM_START_DATE, startDate);
+        }
+
+        if (StringUtils.isNotBlank(endDate)) {
+            apiUrl.addArgument(PARAM_END_DATE, endDate);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+        try {
+            WrapperMovieChanges wrapper = mapper.readValue(webpage, WrapperMovieChanges.class);
+
+            TmdbResultsList<ChangedMovie> results = new TmdbResultsList<ChangedMovie>(wrapper.getResults());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get movie changes: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
