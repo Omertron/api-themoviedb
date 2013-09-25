@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Trailer;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +29,13 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class WrapperTrailers extends AbstractWrapperId {
+public class WrapperTrailers extends AbstractWrapperId implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("quicktime")
     private List<Trailer> quicktime;
     @JsonProperty("youtube")
     private List<Trailer> youtube;
-
-    public WrapperTrailers() {
-        super(WrapperTrailers.class);
-    }
 
     public List<Trailer> getQuicktime() {
         return quicktime;

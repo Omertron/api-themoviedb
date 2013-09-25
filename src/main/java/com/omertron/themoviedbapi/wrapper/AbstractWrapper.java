@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractWrapper {
 
-    private Logger log;
+    private static final long serialVersionUID = 1L;
 
-    public AbstractWrapper(Class classToLog) {
-        this.log = LoggerFactory.getLogger(classToLog);
+    private static Logger getLogger(Class<?> aClass) {
+        return LoggerFactory.getLogger(aClass);
     }
 
     /**
@@ -64,7 +64,7 @@ public abstract class AbstractWrapper {
         StringBuilder sb = new StringBuilder();
         sb.append("Unknown property: '").append(key);
         sb.append("' value: '").append(value).append("'");
-        log.trace(sb.toString());
+        getLogger(this.getClass()).trace(sb.toString());
     }
 
     @Override

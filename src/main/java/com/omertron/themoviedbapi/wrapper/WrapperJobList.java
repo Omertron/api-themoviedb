@@ -32,10 +32,6 @@ public class WrapperJobList extends AbstractWrapper {
     @JsonProperty("jobs")
     private List<JobDepartment> jobs;
 
-    public WrapperJobList() {
-        super(WrapperJobList.class);
-    }
-
     public List<JobDepartment> getJobs() {
         return jobs;
     }

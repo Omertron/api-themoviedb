@@ -32,10 +32,6 @@ public class WrapperAlternativeTitles extends AbstractWrapperId {
     @JsonProperty("titles")
     private List<AlternativeTitle> titles;
 
-    public WrapperAlternativeTitles() {
-        super(WrapperAlternativeTitles.class);
-    }
-
     public List<AlternativeTitle> getTitles() {
         return titles;
     }

@@ -37,10 +37,6 @@ public class WrapperMovieCasts extends AbstractWrapperId {
     @JsonProperty("crew")
     private List<PersonCrew> crew;
 
-    public WrapperMovieCasts() {
-        super(WrapperMovieCasts.class);
-    }
-
     public List<PersonCast> getCast() {
         return cast;
     }

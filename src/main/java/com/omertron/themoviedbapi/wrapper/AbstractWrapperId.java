@@ -27,16 +27,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Stuart
  */
 public class AbstractWrapperId extends AbstractWrapper implements IWrapperId {
-    /*
-     * Properties
-     */
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("id")
     private int id;
-
-    public AbstractWrapperId(Class classToLog) {
-        super(classToLog);
-    }
 
     @Override
     public int getId() {

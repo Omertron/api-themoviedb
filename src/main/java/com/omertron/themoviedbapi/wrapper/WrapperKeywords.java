@@ -32,10 +32,6 @@ public class WrapperKeywords extends AbstractWrapperAll {
     @JsonProperty("results")
     private List<Keyword> results;
 
-    public WrapperKeywords() {
-        super(WrapperKeywords.class);
-    }
-
     public List<Keyword> getResults() {
         return results;
     }

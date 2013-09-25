@@ -32,10 +32,6 @@ public class WrapperCompany extends AbstractWrapperAll {
     @JsonProperty("results")
     private List<Company> results;
 
-    public WrapperCompany() {
-        super(WrapperCompany.class);
-    }
-
     public List<Company> getResults() {
         return results;
     }

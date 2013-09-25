@@ -32,10 +32,6 @@ public class WrapperReleaseInfo extends AbstractWrapperId {
     @JsonProperty("countries")
     private List<ReleaseInfo> countries;
 
-    public WrapperReleaseInfo() {
-        super(WrapperReleaseInfo.class);
-    }
-
     public List<ReleaseInfo> getCountries() {
         return countries;
     }

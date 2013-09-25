@@ -32,10 +32,6 @@ public class WrapperReviews extends AbstractWrapperAll {
     @JsonProperty("results")
     private List<Reviews> reviews;
 
-    public WrapperReviews() {
-        super(WrapperReviews.class);
-    }
-
     public List<Reviews> getReviews() {
         return reviews;
     }

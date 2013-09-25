@@ -36,10 +36,6 @@ public class WrapperPersonCredits extends AbstractWrapperAll {
     @JsonProperty("crew")
     private List<PersonCredit> crew;
 
-    public WrapperPersonCredits() {
-        super(WrapperMovieCasts.class);
-    }
-
     public List<PersonCredit> getCast() {
         return cast;
     }

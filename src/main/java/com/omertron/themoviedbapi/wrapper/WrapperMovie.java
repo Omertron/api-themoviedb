@@ -32,10 +32,6 @@ public class WrapperMovie extends AbstractWrapperAll {
     @JsonProperty("results")
     private List<MovieDb> movies;
 
-    public WrapperMovie() {
-        super(WrapperMovie.class);
-    }
-
     public List<MovieDb> getMovies() {
         return movies;
     }

@@ -32,10 +32,6 @@ public class WrapperMovieKeywords extends AbstractWrapperId {
     @JsonProperty("keywords")
     private List<Keyword> keywords;
 
-    public WrapperMovieKeywords() {
-        super(WrapperMovieKeywords.class);
-    }
-
     public List<Keyword> getKeywords() {
         return keywords;
     }

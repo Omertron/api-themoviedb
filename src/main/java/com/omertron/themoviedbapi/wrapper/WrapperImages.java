@@ -40,10 +40,6 @@ public class WrapperImages extends AbstractWrapperAll {
     @JsonProperty("profiles")
     private List<Artwork> profiles = Collections.EMPTY_LIST;
 
-    public WrapperImages() {
-        super(WrapperImages.class);
-    }
-
     public List<Artwork> getBackdrops() {
         return backdrops;
     }

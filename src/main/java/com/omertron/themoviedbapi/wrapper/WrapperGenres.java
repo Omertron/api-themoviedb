@@ -33,10 +33,6 @@ public class WrapperGenres extends AbstractWrapper {
     @JsonProperty("genres")
     private List<Genre> genres;
 
-    public WrapperGenres() {
-        super(WrapperGenres.class);
-    }
-
     public List<Genre> getGenres() {
         return genres;
     }

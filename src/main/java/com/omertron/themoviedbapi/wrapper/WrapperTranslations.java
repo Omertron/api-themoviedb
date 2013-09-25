@@ -32,10 +32,6 @@ public class WrapperTranslations extends AbstractWrapperId {
     @JsonProperty("translations")
     private List<Translation> translations;
 
-    public WrapperTranslations() {
-        super(WrapperTranslations.class);
-    }
-
     public void setTranslations(List<Translation> translations) {
         this.translations = translations;
     }

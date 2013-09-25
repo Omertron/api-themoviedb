@@ -35,10 +35,6 @@ public class WrapperConfig extends AbstractWrapper {
     @JsonProperty("change_keys")
     private List<String> changeKeys = Collections.EMPTY_LIST;
 
-    public WrapperConfig() {
-        super(WrapperConfig.class);
-    }
-
     public TmdbConfiguration getTmdbConfiguration() {
         return tmdbConfiguration;
     }
