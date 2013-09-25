@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCast;
 import com.omertron.themoviedbapi.model.PersonCrew;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,9 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class WrapperMovieCasts extends AbstractWrapperId {
+public class WrapperMovieCasts extends AbstractWrapperId implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("cast")
     private List<PersonCast> cast;
     @JsonProperty("crew")

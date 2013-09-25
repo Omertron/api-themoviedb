@@ -21,14 +21,16 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.MovieList;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperMovieList extends AbstractWrapperAll {
+public class WrapperMovieList extends AbstractWrapperAll implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("results")
     private List<MovieList> movieList;
 

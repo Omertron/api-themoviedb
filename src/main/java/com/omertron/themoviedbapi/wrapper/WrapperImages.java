@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ArtworkType;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,8 +32,9 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class WrapperImages extends AbstractWrapperAll {
+public class WrapperImages extends AbstractWrapperAll implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("backdrops")
     private List<Artwork> backdrops = Collections.EMPTY_LIST;
     @JsonProperty("posters")

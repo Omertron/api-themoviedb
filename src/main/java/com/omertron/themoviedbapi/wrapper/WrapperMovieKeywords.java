@@ -21,14 +21,16 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Keyword;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperMovieKeywords extends AbstractWrapperId {
+public class WrapperMovieKeywords extends AbstractWrapperId implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("keywords")
     private List<Keyword> keywords;
 

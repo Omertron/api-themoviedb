@@ -32,9 +32,6 @@ import java.util.List;
 public class MovieDb extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
-    /*
-     * Properties
-     */
     @JsonProperty("backdrop_path")
     private String backdropPath;
     @JsonProperty("id")
