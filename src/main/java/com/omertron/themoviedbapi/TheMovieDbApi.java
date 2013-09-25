@@ -44,8 +44,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
 
 /**
  * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
