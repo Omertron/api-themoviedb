@@ -31,6 +31,10 @@ public class Account extends AbstractJsonMapping {
     private String userName;
     @JsonProperty("include_adult")
     private boolean includeAdult;
+    @JsonProperty("iso_639_1")
+    private String language;
+    @JsonProperty("iso_3166_1")
+    private String country;
 
     public int getId() {
         return id;
@@ -62,5 +66,21 @@ public class Account extends AbstractJsonMapping {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }
