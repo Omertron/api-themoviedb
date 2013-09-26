@@ -19,6 +19,20 @@
  */
 package com.omertron.themoviedbapi;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import static com.omertron.themoviedbapi.tools.ApiUrl.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.CommonHttpClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
@@ -28,22 +42,6 @@ import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.CommonHttpClient;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 
 /**
  * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
@@ -1905,8 +1903,45 @@ public class TheMovieDbApi {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Changes Functions">
-    public void getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    /**
+     * Get a list of movie ids that have been edited. By default we show the last 24 hours and only 100 items per page. The maximum
+     * number of days that can be returned in a single request is 14. You can then use the movie changes API to get the actual data
+     * that has been changed. Please note that the change log system to support this was changed on October 5, 2012 and will only
+     * show movies that have been edited since.
+     *
+     * @param page
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<ChangedMovie> getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/changes");
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        if (StringUtils.isNotBlank(startDate)) {
+            apiUrl.addArgument(PARAM_START_DATE, startDate);
+        }
+
+        if (StringUtils.isNotBlank(endDate)) {
+            apiUrl.addArgument(PARAM_END_DATE, endDate);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+        try {
+            WrapperMovieChanges wrapper = mapper.readValue(webpage, WrapperMovieChanges.class);
+
+            TmdbResultsList<ChangedMovie> results = new TmdbResultsList<ChangedMovie>(wrapper.getResults());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get movie changes: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
