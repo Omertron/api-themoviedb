@@ -477,6 +477,8 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
+     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     *
      * @param movieId
      * @param language
      * @throws MovieDbException
@@ -495,7 +497,12 @@ public class TheMovieDbApi {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            return mapper.readValue(webpage, MovieDb.class);
+            MovieDb movie = mapper.readValue(webpage, MovieDb.class);
+            if (movie == null || movie.getId() == 0) {
+                LOG.warn("No movie foind for ID '{}'", movieId);
+                throw new MovieDbException(MovieDbExceptionType.MOVIE_ID_NOT_FOUND, "No movie foind for ID: " + movieId);
+            }
+            return movie;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -506,6 +513,8 @@ public class TheMovieDbApi {
      * This method is used to retrieve all of the basic movie information.
      *
      * It will return the single highest rated poster and backdrop.
+     *
+     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param imdbId
      * @param language
@@ -525,7 +534,12 @@ public class TheMovieDbApi {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            return mapper.readValue(webpage, MovieDb.class);
+            MovieDb movie = mapper.readValue(webpage, MovieDb.class);
+            if (movie == null || movie.getId() == 0) {
+                LOG.warn("No movie foind for IMDB ID: '{}'", imdbId);
+                throw new MovieDbException(MovieDbExceptionType.MOVIE_ID_NOT_FOUND, "No movie foind for IMDB ID: " + imdbId);
+            }
+            return movie;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
