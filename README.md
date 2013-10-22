@@ -9,10 +9,13 @@ Originally written for use by Yet Another Movie Jukebox [(YAMJ)](http://code.goo
 
 But anyone can use it for other projects as well.
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Omertron&url=https://github.com/Omertron/api-themoviedb&title=TheMovieDB API&language=&tags=github&category=software) 
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=Omertron&url=https://github.com/Omertron/api-themoviedb&title=TheMovieDB API&language=&tags=github&category=software)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Omertron/api-themoviedb/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 ***
 ### TheMovieDB.org
-This is an excellent open database for movie and film content. 
+This is an excellent open database for movie and film content.
 
 I *strongly* encourage you to check it out and contribute to keep it growing.
 
