@@ -53,10 +53,10 @@ public class ApiUrl {
     /*
      * Properties
      */
-    private String apiKey;
-    private String method;
-    private String submethod;
-    private Map<String, String> arguments = new HashMap<String, String>();
+    private final String apiKey;
+    private final String method;
+    private final String submethod;
+    private final Map<String, String> arguments = new HashMap<String, String>();
     /*
      * API Parameters
      */
@@ -74,14 +74,15 @@ public class ApiUrl {
     public static final String PARAM_TOKEN = "request_token=";
     public static final String PARAM_VALUE = "value=";
     public static final String PARAM_YEAR = "year=";
-    public static final String PARAM_START_DATE="start_date=";
-    public static final String PARAM_END_DATE="end_date=";
+    public static final String PARAM_START_DATE = "start_date=";
+    public static final String PARAM_END_DATE = "end_date=";
     private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
     /**
      * Constructor for the simple API URL method without a sub-method
      *
+     * @param apiKey
      * @param method
      */
     public ApiUrl(String apiKey, String method) {
@@ -93,6 +94,7 @@ public class ApiUrl {
     /**
      * Constructor for the API URL with a sub-method
      *
+     * @param apiKey
      * @param method
      * @param submethod
      */
@@ -105,6 +107,8 @@ public class ApiUrl {
 
     /**
      * Build the URL from the pre-created arguments.
+     *
+     * @return
      */
     public URL buildUrl() {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
@@ -115,8 +119,8 @@ public class ApiUrl {
         // We have either a queury, or a direct request
         if (arguments.containsKey(PARAM_QUERY)) {
             // Append the suffix of the API URL
-            if(StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
-                urlString.deleteCharAt(urlString.length()-1);
+            if (StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
+                urlString.deleteCharAt(urlString.length() - 1);
             }
             urlString.append(submethod);
 
@@ -148,8 +152,8 @@ public class ApiUrl {
             }
 
             // Append the suffix of the API URL
-            if(StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
-                urlString.deleteCharAt(urlString.length()-1);
+            if (StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
+                urlString.deleteCharAt(urlString.length() - 1);
             }
             urlString.append(submethod);
 

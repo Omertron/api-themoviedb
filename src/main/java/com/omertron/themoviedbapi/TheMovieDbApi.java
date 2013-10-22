@@ -44,7 +44,9 @@ import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
 
 /**
- * The MovieDb API <p> This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
+ * The MovieDb API
+ * <p>
+ * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -107,6 +109,7 @@ public class TheMovieDbApi {
     /**
      * Get the API key that is to be used
      *
+     * @return
      */
     public String getApiKey() {
         return apiKey;
@@ -121,8 +124,12 @@ public class TheMovieDbApi {
     }
 
     private String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
+        String webpage;
         // use HTTP client implementation
-        if (httpClient != null) {
+        if (httpClient == null) {
+            // use web browser
+            webpage = WebBrowser.request(url, jsonBody, isDeleteRequest);
+        } else {
             try {
                 HttpGet httpGet = new HttpGet(url.toURI());
                 httpGet.addHeader("accept", "application/json");
@@ -137,7 +144,7 @@ public class TheMovieDbApi {
                     throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
                 }
 
-                return httpClient.requestContent(httpGet);
+                webpage = httpClient.requestContent(httpGet);
             } catch (URISyntaxException ex) {
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
             } catch (IOException ex) {
@@ -146,9 +153,7 @@ public class TheMovieDbApi {
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
             }
         }
-
-        // use web browser
-        return WebBrowser.request(url, jsonBody, isDeleteRequest);
+        return webpage;
     }
 
     /**
@@ -262,6 +267,8 @@ public class TheMovieDbApi {
     //<editor-fold defaultstate="collapsed" desc="Configuration Functions">
     /**
      * Get the configuration information
+     *
+     * @return
      */
     public TmdbConfiguration getConfiguration() {
         return tmdbConfig;
@@ -272,6 +279,7 @@ public class TheMovieDbApi {
      *
      * @param imagePath
      * @param requiredSize
+     * @return
      * @throws MovieDbException
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
@@ -301,6 +309,7 @@ public class TheMovieDbApi {
      *
      * As soon as a valid session id has been created the token will be destroyed.
      *
+     * @return
      * @throws MovieDbException
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
@@ -323,6 +332,7 @@ public class TheMovieDbApi {
      * A session id is required in order to use any of the write methods.
      *
      * @param token
+     * @return
      * @throws MovieDbException
      */
     public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
@@ -357,6 +367,7 @@ public class TheMovieDbApi {
      *
      * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
      *
+     * @return
      * @throws MovieDbException
      */
     public TokenSession getGuestSessionToken() throws MovieDbException {
@@ -376,14 +387,14 @@ public class TheMovieDbApi {
     /**
      * Get the basic information for an account. You will need to have a valid session id.
      *
-     *
+     * @param sessionId
+     * @return
      * @throws MovieDbException
      */
     public Account getAccount(String sessionId) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT.replace("/", ""));
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
-
 
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
@@ -434,6 +445,12 @@ public class TheMovieDbApi {
 
     /**
      * Add a movie to an account's watch list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param movieId
+     * @return
+     * @throws MovieDbException
      */
     public StatusCode addToWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
         return modifyWatchList(sessionId, accountId, movieId, true);
@@ -441,6 +458,12 @@ public class TheMovieDbApi {
 
     /**
      * Remove a movie from an account's watch list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param movieId
+     * @return
+     * @throws MovieDbException
      */
     public StatusCode removeFromWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
         return modifyWatchList(sessionId, accountId, movieId, false);
@@ -481,6 +504,8 @@ public class TheMovieDbApi {
      *
      * @param movieId
      * @param language
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
@@ -518,6 +543,8 @@ public class TheMovieDbApi {
      *
      * @param imdbId
      * @param language
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
@@ -551,6 +578,8 @@ public class TheMovieDbApi {
      *
      * @param movieId
      * @param country
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
@@ -582,6 +611,8 @@ public class TheMovieDbApi {
      * TODO: Add a function to enrich the data with the people methods
      *
      * @param movieId
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
@@ -609,6 +640,8 @@ public class TheMovieDbApi {
      *
      * @param movieId
      * @param language
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
@@ -641,6 +674,8 @@ public class TheMovieDbApi {
      * Currently, only English keywords exist.
      *
      * @param movieId
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
@@ -668,6 +703,8 @@ public class TheMovieDbApi {
      *
      * @param movieId
      * @param language
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
@@ -698,6 +735,8 @@ public class TheMovieDbApi {
      *
      * @param movieId
      * @param language
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Trailer> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
@@ -728,6 +767,8 @@ public class TheMovieDbApi {
      * This method is used to retrieve a list of the available translations for a specific movie.
      *
      * @param movieId
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
@@ -760,6 +801,8 @@ public class TheMovieDbApi {
      * @param movieId
      * @param language
      * @param page
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
@@ -824,6 +867,8 @@ public class TheMovieDbApi {
      * @param movieId
      * @param language
      * @param page
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieList> getMovieLists(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
@@ -870,6 +915,7 @@ public class TheMovieDbApi {
      * @param movieId
      * @param startDate the start date of the changes, optional
      * @param endDate the end date of the changes, optional
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
@@ -905,6 +951,8 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the newest movie that was added to TMDb.
      *
+     * @return
+     * @throws MovieDbException
      */
     public MovieDb getLatestMovie() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/latest");
@@ -926,6 +974,9 @@ public class TheMovieDbApi {
      *
      * The maximum number of items this list will include is 100.
      *
+     * @param language
+     * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
@@ -963,6 +1014,7 @@ public class TheMovieDbApi {
      *
      * @param language
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
@@ -999,6 +1051,7 @@ public class TheMovieDbApi {
      *
      * @param language
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
@@ -1035,6 +1088,7 @@ public class TheMovieDbApi {
      *
      * @param language
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
@@ -1062,6 +1116,14 @@ public class TheMovieDbApi {
         }
     }
 
+    /**
+     * Get the list of rated movies (and associated rating) for an account.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
     public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/rated_movies");
         apiUrl.addArgument(PARAM_SESSION, sessionId);
@@ -1085,6 +1147,7 @@ public class TheMovieDbApi {
      * @param sessionId
      * @param movieId
      * @param rating
+     * @return
      * @throws MovieDbException
      */
     public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
@@ -1121,6 +1184,7 @@ public class TheMovieDbApi {
      *
      * @param collectionId
      * @param language
+     * @return
      * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
@@ -1147,6 +1211,7 @@ public class TheMovieDbApi {
      *
      * @param collectionId
      * @param language
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
@@ -1179,6 +1244,8 @@ public class TheMovieDbApi {
      * It will return the single highest rated profile image.
      *
      * @param personId
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
@@ -1204,6 +1271,8 @@ public class TheMovieDbApi {
      * It will return the single highest rated poster for each movie record.
      *
      * @param personId
+     * @param appendToResponse
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<PersonCredit> getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
@@ -1230,6 +1299,7 @@ public class TheMovieDbApi {
      * This method is used to retrieve all of the profile images for a person.
      *
      * @param personId
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
@@ -1316,6 +1386,7 @@ public class TheMovieDbApi {
     /**
      * Get the latest person id.
      *
+     * @return
      * @throws MovieDbException
      */
     public Person getPersonLatest() throws MovieDbException {
@@ -1337,6 +1408,7 @@ public class TheMovieDbApi {
      * This method is used to retrieve the basic information about a production company on TMDb.
      *
      * @param companyId
+     * @return
      * @throws MovieDbException
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
@@ -1365,6 +1437,7 @@ public class TheMovieDbApi {
      * @param companyId
      * @param language
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
@@ -1402,6 +1475,8 @@ public class TheMovieDbApi {
      * These IDs will correspond to those found in movie calls.
      *
      * @param language
+     * @return
+     * @throws MovieDbException
      */
     public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/list");
@@ -1431,6 +1506,9 @@ public class TheMovieDbApi {
      * @param genreId
      * @param language
      * @param page
+     * @param includeAllMovies
+     * @return
+     * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/movies");
@@ -1470,6 +1548,7 @@ public class TheMovieDbApi {
      * @param language The language to include. Can be blank/null.
      * @param includeAdult true or false to include adult titles in the search
      * @param page The page of results to return. 0 to get the default (first page)
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
@@ -1513,6 +1592,7 @@ public class TheMovieDbApi {
      * @param query
      * @param language
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
@@ -1552,6 +1632,7 @@ public class TheMovieDbApi {
      * @param personName
      * @param includeAdult
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
@@ -1583,6 +1664,7 @@ public class TheMovieDbApi {
      * @param query
      * @param language
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
@@ -1624,6 +1706,7 @@ public class TheMovieDbApi {
      *
      * @param companyName
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
@@ -1652,6 +1735,7 @@ public class TheMovieDbApi {
      *
      * @param query
      * @param page
+     * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
@@ -1706,6 +1790,8 @@ public class TheMovieDbApi {
     /**
      * Get all lists of a given user
      *
+     * @param sessionId
+     * @param accountID
      * @return The lists
      * @throws MovieDbException
      */
@@ -1727,6 +1813,9 @@ public class TheMovieDbApi {
     /**
      * This method lets users create a new list. A valid session id is required.
      *
+     * @param sessionId
+     * @param name
+     * @param description
      * @return The list id
      * @throws MovieDbException
      */
@@ -1743,7 +1832,6 @@ public class TheMovieDbApi {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url, jsonBody);
 
-
         try {
             return mapper.readValue(webpage, MovieDbListStatus.class).getListId();
         } catch (IOException ex) {
@@ -1755,6 +1843,8 @@ public class TheMovieDbApi {
     /**
      * Check to see if a movie ID is already added to a list.
      *
+     * @param listId
+     * @param movieId
      * @return true if the movie is on the list
      * @throws MovieDbException
      */
@@ -1776,6 +1866,9 @@ public class TheMovieDbApi {
     /**
      * This method lets users add new movies to a list that they created. A valid session id is required.
      *
+     * @param sessionId
+     * @param listId
+     * @param movieId
      * @return true if the movie is on the list
      * @throws MovieDbException
      */
@@ -1786,6 +1879,9 @@ public class TheMovieDbApi {
     /**
      * This method lets users remove movies from a list that they created. A valid session id is required.
      *
+     * @param sessionId
+     * @param listId
+     * @param movieId
      * @return true if the movie is on the list
      * @throws MovieDbException
      */
@@ -1814,6 +1910,8 @@ public class TheMovieDbApi {
     /**
      * Get the list of movies on an accounts watchlist.
      *
+     * @param sessionId
+     * @param accountId
      * @return The watchlist of the user
      * @throws MovieDbException
      */
@@ -1835,6 +1933,9 @@ public class TheMovieDbApi {
     /**
      * This method lets users delete a list that they created. A valid session id is required.
      *
+     * @param sessionId
+     * @param listId
+     * @return
      * @throws MovieDbException
      */
     public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
@@ -1844,7 +1945,6 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url, null, true);
-
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -2063,6 +2163,10 @@ public class TheMovieDbApi {
 
     /**
      * Use Jackson to convert Map to JSON string.
+     *
+     * @param map
+     * @return
+     * @throws MovieDbException
      */
     public static String convertToJson(Map<String, ?> map) throws MovieDbException {
         try {
