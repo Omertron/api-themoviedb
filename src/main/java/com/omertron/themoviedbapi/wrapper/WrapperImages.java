@@ -71,6 +71,7 @@ public class WrapperImages extends AbstractWrapperAll implements Serializable {
      *
      * Leaving the parameters blank will return all types
      *
+     * @param artworkList
      * @return
      */
     public List<Artwork> getAll(ArtworkType... artworkList) {

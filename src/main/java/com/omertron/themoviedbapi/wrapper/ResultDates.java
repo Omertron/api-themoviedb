@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;

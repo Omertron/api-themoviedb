@@ -25,7 +25,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -123,7 +122,7 @@ public class TheMovieDbApiTest {
      * Test of getConfiguration method, of class TheMovieDbApi.
      */
     @Test
-    public void testConfiguration() throws IOException {
+    public void testConfiguration() {
         LOG.info("Test Configuration");
 
         TmdbConfiguration tmdbConfig = tmdb.getConfiguration();
@@ -182,6 +181,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of searchMovie method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testSearchMovie() throws MovieDbException {
@@ -203,6 +204,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieInfo method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieInfo() throws MovieDbException {
@@ -213,6 +216,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieAlternativeTitles method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieAlternativeTitles() throws MovieDbException {
@@ -229,6 +234,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieCasts method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieCasts() throws MovieDbException {
@@ -256,6 +263,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieImages method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieImages() throws MovieDbException {
@@ -267,6 +276,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieKeywords method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieKeywords() throws MovieDbException {
@@ -277,6 +288,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieReleaseInfo method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieReleaseInfo() throws MovieDbException {
@@ -287,6 +300,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieTrailers method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieTrailers() throws MovieDbException {
@@ -297,6 +312,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieTranslations method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieTranslations() throws MovieDbException {
@@ -307,6 +324,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getCollectionInfo method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetCollectionInfo() throws MovieDbException {
@@ -331,6 +350,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieInfoImdb method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieInfoImdb() throws MovieDbException {
@@ -341,6 +362,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getApiKey method, of class TheMovieDbApi.
+     *
      */
     @Test
     public void testGetApiKey() {
@@ -349,6 +371,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getApiBase method, of class TheMovieDbApi.
+     *
      */
     @Test
     public void testGetApiBase() {
@@ -357,6 +380,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getConfiguration method, of class TheMovieDbApi.
+     *
      */
     @Test
     public void testGetConfiguration() {
@@ -365,6 +389,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of searchPeople method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testSearchPeople() throws MovieDbException {
@@ -377,6 +403,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPersonInfo method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetPersonInfo() throws MovieDbException {
@@ -387,6 +415,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPersonCredits method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetPersonCredits() throws MovieDbException {
@@ -398,6 +428,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPersonImages method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetPersonImages() throws MovieDbException {
@@ -409,6 +441,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getLatestMovie method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetLatestMovie() throws MovieDbException {
@@ -420,6 +454,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of compareMovies method, of class TheMovieDbApi.
+     *
      */
     @Test
     public void testCompareMovies() {
@@ -428,6 +463,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of setProxy method, of class TheMovieDbApi.
+     *
      */
     @Test
     public void testSetProxy() {
@@ -436,6 +472,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of setTimeout method, of class TheMovieDbApi.
+     *
      */
     @Test
     public void testSetTimeout() {
@@ -444,6 +481,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getNowPlayingMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
@@ -454,6 +493,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPopularMovieList method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetPopularMovieList() throws MovieDbException {
@@ -464,6 +505,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getTopRatedMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetTopRatedMovies() throws MovieDbException {
@@ -474,6 +517,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getCompanyInfo method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetCompanyInfo() throws MovieDbException {
@@ -485,6 +530,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getCompanyMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
@@ -495,6 +542,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of searchCompanies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testSearchCompanies() throws MovieDbException {
@@ -505,6 +554,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getSimilarMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetSimilarMovies() throws MovieDbException {
@@ -515,6 +566,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getGenreList method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetGenreList() throws MovieDbException {
@@ -525,6 +578,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getGenreMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetGenreMovies() throws MovieDbException {
@@ -535,6 +590,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getUpcoming method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetUpcoming() throws Exception {
@@ -545,6 +602,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getCollectionImages method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetCollectionImages() throws Exception {
@@ -555,6 +614,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getAuthorisationToken method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetAuthorisationToken() throws Exception {
@@ -569,6 +630,8 @@ public class TheMovieDbApiTest {
      * Test of getSessionToken method, of class TheMovieDbApi.
      *
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
+     *
+     * @throws MovieDbException
      */
     @Ignore("Session required")
     public void testGetSessionToken() throws Exception {
@@ -586,6 +649,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getGuestSessionToken method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Ignore("Not ready yet")
     public void testGetGuestSessionToken() throws Exception {
@@ -607,6 +672,8 @@ public class TheMovieDbApiTest {
      * Test of getMovieChanges method,of class TheMovieDbApi
      *
      * TODO: Do not test this until it is fixed
+     *
+     * @throws MovieDbException
      */
     @Ignore("Do not test this until it is fixed")
     public void testGetMovieChanges() throws Exception {
@@ -637,6 +704,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of searchCollection method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testSearchCollection() throws Exception {
@@ -650,6 +719,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of searchList method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testSearchList() throws Exception {
@@ -663,6 +734,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of searchKeyword method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testSearchKeyword() throws Exception {
@@ -678,6 +751,8 @@ public class TheMovieDbApiTest {
      * Test of postMovieRating method, of class TheMovieDbApi.
      *
      * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
+     *
+     * @throws MovieDbException
      */
     @Ignore("Session required")
     public void testMovieRating() throws Exception {
@@ -691,7 +766,6 @@ public class TheMovieDbApiTest {
         assertTrue(wasPosted);
 
         // get all rated movies
-
         List<MovieDb> ratedMovies = tmdb.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
         assertTrue(ratedMovies.size() > 0);
 
@@ -735,6 +809,7 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonChanges method, of class TheMovieDbApi.
      *
+     * @throws MovieDbException
      */
     @Ignore("Not ready yet")
     public void testGetPersonChanges() throws Exception {
@@ -746,6 +821,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getList method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetList() throws Exception {
@@ -757,6 +834,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getKeyword method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetKeyword() throws Exception {
@@ -767,6 +846,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getKeywordMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetKeywordMovies() throws Exception {
@@ -778,6 +859,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getReviews method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetReviews() throws Exception {
@@ -790,6 +873,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of compareMovies method, of class TheMovieDbApi.
+     *
      */
     @Ignore("Not required")
     public void testCompareMovies_3args() {
@@ -797,6 +881,7 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of compareMovies method, of class TheMovieDbApi.
+     *
      */
     @Ignore("Not required")
     public void testCompareMovies_4args() {
@@ -804,13 +889,17 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPersonPopular method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Ignore("Not required")
-    public void testGetPersonPopular_0args() throws Exception {
+    public void testGetPersonPopular_0args() {
     }
 
     /**
      * Test of getPersonPopular method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetPersonPopular_int() throws Exception {
@@ -822,6 +911,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getGenreMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Ignore("Not required")
     public void testGetGenreMovies_3args() throws Exception {
@@ -829,6 +920,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getGenreMovies method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Ignore("Not required")
     public void testGetGenreMovies_4args() throws Exception {
@@ -836,6 +929,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getMovieChangesList method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetMovieChangesList() throws Exception {
@@ -849,6 +944,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getPersonChangesList method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Ignore("Not ready yet")
     public void testGetPersonChangesList() throws Exception {
@@ -863,6 +960,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getJobs method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetJobs() throws Exception {
@@ -873,6 +972,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getDiscover method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Ignore("Not required")
     public void testGetDiscover_14args() throws Exception {
@@ -880,6 +981,8 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getDiscover method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
      */
     @Test
     public void testGetDiscover_Discover() throws Exception {

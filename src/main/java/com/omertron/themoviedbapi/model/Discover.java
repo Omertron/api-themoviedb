@@ -35,7 +35,7 @@ import static com.omertron.themoviedbapi.tools.ApiUrl.*;
  */
 public class Discover {
 
-    private Map<String, String> params = new HashMap<String, String>();
+    private final Map<String, String> params = new HashMap<String, String>();
     private static final String PARAM_PRIMARY_RELEASE_YEAR = "primary_release_year=";
     private static final String PARAM_VOTE_COUNT_GTE = "vote_count.gte=";
     private static final String PARAM_VOTE_AVERAGE_GTE = "vote_average.gte=";
@@ -64,6 +64,7 @@ public class Discover {
      * Minimum value is 1 if included.
      *
      * @param page
+     * @return
      */
     public Discover page(int page) {
         if (page > 0) {
@@ -76,6 +77,7 @@ public class Discover {
      * ISO 639-1 code
      *
      * @param language
+     * @return
      */
     public Discover language(String language) {
         if (StringUtils.isNotBlank(language)) {
@@ -94,6 +96,7 @@ public class Discover {
      * popularity.asc
      *
      * @param sortBy
+     * @return
      */
     public Discover sortBy(String sortBy) {
         if (StringUtils.isNotBlank(sortBy)) {
@@ -106,6 +109,7 @@ public class Discover {
      * Toggle the inclusion of adult titles
      *
      * @param includeAdult
+     * @return
      */
     public Discover includeAdult(boolean includeAdult) {
         params.put(PARAM_ADULT, String.valueOf(includeAdult));
@@ -116,6 +120,7 @@ public class Discover {
      * Filter the results release dates to matches that include this value.
      *
      * @param year
+     * @return
      */
     public Discover year(int year) {
         if (checkYear(year)) {
@@ -128,6 +133,7 @@ public class Discover {
      * Filter the results so that only the primary release date year has this value
      *
      * @param primaryReleaseYear
+     * @return
      */
     public Discover primaryReleaseYear(int primaryReleaseYear) {
         if (checkYear(primaryReleaseYear)) {
@@ -140,6 +146,7 @@ public class Discover {
      * Only include movies that are equal to, or have a vote count higher than this value
      *
      * @param voteCountGte
+     * @return
      */
     public Discover voteCountGte(int voteCountGte) {
         if (voteCountGte > 0) {
@@ -152,6 +159,7 @@ public class Discover {
      * Only include movies that are equal to, or have a higher average rating than this value
      *
      * @param voteAverageGte
+     * @return
      */
     public Discover voteAverageGte(float voteAverageGte) {
         if (voteAverageGte > 0) {
@@ -170,6 +178,7 @@ public class Discover {
      * Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'
      *
      * @param withGenres
+     * @return
      */
     public Discover withGenres(String withGenres) {
         if (StringUtils.isNotBlank(withGenres)) {
@@ -184,6 +193,7 @@ public class Discover {
      * Expected format is YYYY-MM-DD.
      *
      * @param releaseDateGte
+     * @return
      */
     public Discover releaseDateGte(String releaseDateGte) {
         if (StringUtils.isNotBlank(releaseDateGte)) {
@@ -198,6 +208,7 @@ public class Discover {
      * Expected format is YYYY-MM-DD.
      *
      * @param releaseDateLte
+     * @return
      */
     public Discover releaseDateLte(String releaseDateLte) {
         if (StringUtils.isNotBlank(releaseDateLte)) {
@@ -214,6 +225,7 @@ public class Discover {
      * A ISO 3166-1 is expected
      *
      * @param certificationCountry
+     * @return
      */
     public Discover certificationCountry(String certificationCountry) {
         if (StringUtils.isNotBlank(certificationCountry)) {
@@ -228,6 +240,7 @@ public class Discover {
      * Expected value is a valid certification for the specified 'certificationCountry'.
      *
      * @param certificationLte
+     * @return
      */
     public Discover certificationLte(String certificationLte) {
         if (StringUtils.isNotBlank(certificationLte)) {
@@ -244,6 +257,7 @@ public class Discover {
      * They can be comma separated to indicate an 'AND' query
      *
      * @param withCompanies
+     * @return
      */
     public Discover withCompanies(String withCompanies) {
         if (StringUtils.isNotBlank(withCompanies)) {

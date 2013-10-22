@@ -20,7 +20,7 @@ public class ChangedItem extends AbstractJsonMapping {
     private String language;
     @JsonProperty("value")
     private Object value;
-    private Map<String, Object> newItems = new HashMap<String, Object>();
+    private final Map<String, Object> newItems = new HashMap<String, Object>();
 
     public String getId() {
         return id;

@@ -70,8 +70,8 @@ public class TmdbConfiguration extends AbstractJsonMapping {
     public String getSecureBaseUrl() {
         return secureBaseUrl;
     }
-
     // </editor-fold>
+
     // <editor-fold defaultstate="collapsed" desc="Setter methods">//GEN-BEGIN:setterMethods
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
@@ -115,6 +115,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      * Check that the poster size is valid
      *
      * @param posterSize
+     * @return
      */
     public boolean isValidPosterSize(String posterSize) {
         if (StringUtils.isBlank(posterSize) || posterSizes.isEmpty()) {
@@ -127,6 +128,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      * Check that the backdrop size is valid
      *
      * @param backdropSize
+     * @return
      */
     public boolean isValidBackdropSize(String backdropSize) {
         if (StringUtils.isBlank(backdropSize) || backdropSizes.isEmpty()) {
@@ -139,6 +141,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      * Check that the profile size is valid
      *
      * @param profileSize
+     * @return
      */
     public boolean isValidProfileSize(String profileSize) {
         if (StringUtils.isBlank(profileSize) || profileSizes.isEmpty()) {
@@ -151,6 +154,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      * Check that the logo size is valid
      *
      * @param logoSize
+     * @return
      */
     public boolean isValidLogoSize(String logoSize) {
         if (StringUtils.isBlank(logoSize) || logoSizes.isEmpty()) {
@@ -163,6 +167,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      * Check to see if the size is valid for any of the images types
      *
      * @param sizeToCheck
+     * @return
      */
     public boolean isValidSize(String sizeToCheck) {
         return (isValidPosterSize(sizeToCheck)

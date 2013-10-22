@@ -15,7 +15,7 @@ public class WrapperChanges {
 
     @JsonProperty("changes")
     private List<ChangeKeyItem> changedItems = new ArrayList<ChangeKeyItem>();
-    private Map<String, Object> newItems = new HashMap<String, Object>();
+    private final Map<String, Object> newItems = new HashMap<String, Object>();
 
     public List<ChangeKeyItem> getChangedItems() {
         return changedItems;
