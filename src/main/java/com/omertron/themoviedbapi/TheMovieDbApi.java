@@ -36,7 +36,9 @@ import org.yamj.api.common.http.CommonHttpClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
+import com.omertron.themoviedbapi.methods.TV;
 import com.omertron.themoviedbapi.model.*;
+import com.omertron.themoviedbapi.model.tv.TVSeries;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -72,6 +74,8 @@ public class TheMovieDbApi {
     private static final String BASE_DISCOVER = "discover/";
     // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
+    // Sub-objects
+    private TV tv;
 
     /**
      * API for The Movie Db.
@@ -93,6 +97,8 @@ public class TheMovieDbApi {
     public TheMovieDbApi(String apiKey, CommonHttpClient httpClient) throws MovieDbException {
         this.apiKey = apiKey;
         this.httpClient = httpClient;
+
+        tv = new TV(apiKey, httpClient);
 
         ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
@@ -493,7 +499,7 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Account Functions">
     // No account functions
-    //
+    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Movie Functions">
     /**
      * This method is used to retrieve all of the basic movie information.
@@ -2158,6 +2164,21 @@ public class TheMovieDbApi {
             LOG.warn("Failed to get discover list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="TV Methods">
+    /**
+     * Get the primary information about a TV series by id.
+     *
+     * @param id
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TVSeries getTv(int id, String language, String... appendToResponse) throws MovieDbException {
+        return tv.getTv(id, language, appendToResponse);
     }
     //</editor-fold>
 
