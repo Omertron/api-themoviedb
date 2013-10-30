@@ -2201,6 +2201,119 @@ public class TheMovieDbApi {
     public TmdbResultsList<Person> getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
         return tv.getTvCredits(id, language, appendToResponse);
     }
+
+    /**
+     * Get the external ids that we have stored for a TV series.
+     *
+     * @param id
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public ExternalIds getTvExternalIds(int id, String language) throws MovieDbException {
+        return tv.getTvExternalIds(id, language);
+    }
+
+    /**
+     * Get the images (posters and backdrops) for a TV series.
+     *
+     * @param id
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Artwork> getTvImages(int id, String language) throws MovieDbException {
+        return tv.getTvImages(id, language);
+    }
+    /**
+     * Get the primary information about a TV season by its season number.
+     *
+     * @param id
+     * @param seasonNumber
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvSeason(int id, int seasonNumber, String language, String... appendToResponse) throws MovieDbException {
+        return tv.getTvSeason(id, seasonNumber, language, appendToResponse);
+    }
+
+    /**
+     * Get the external ids that we have stored for a TV season by season number.
+     *
+     * @param id
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvSeasonExternalIds(int id, String language) throws MovieDbException {
+        return tv.getTvSeasonExternalIds(id, language);
+    }
+
+    /**
+     * Get the images (posters) that we have stored for a TV season by season number.
+     *
+     * @param id
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvSeasonImages(int id, String language) throws MovieDbException {
+        return tv.getTvSeasonImages(id, language);
+    }
+    /**
+     * Get the primary information about a TV episode by combination of a season and episode number.
+     *
+     * @param id
+     * @param seasonNumber
+     * @param episodeNumber
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvEpisode(int id, int seasonNumber, int episodeNumber, String language, String... appendToResponse) throws MovieDbException {
+        return tv.getTvEpisode(id, seasonNumber, episodeNumber, language, appendToResponse);
+    }
+
+    /**
+     * Get the TV episode credits by combination of season and episode number.
+     *
+     * @param id
+     * @param seasonNumber
+     * @param episodeNumber
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+        return tv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
+    }
+
+    /**
+     * Get the external ids for a TV episode by combination of a season and episode number.
+     *
+     * @param id
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvEpisodeExternalIds(int id, String language) throws MovieDbException {
+        return tv.getTvEpisodeExternalIds(id, language);
+    }
+
+    /**
+     * Get the images (episode stills) for a TV episode by combination of a season and episode number.
+     *
+     * @param id
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public String getTvEpisodeImages(int id, String language) throws MovieDbException {
+        return tv.getTvEpisodeImages(id, language);
+    }
     //</editor-fold>
 
     /**
