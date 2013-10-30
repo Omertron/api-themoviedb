@@ -17,10 +17,11 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.wrapper.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Person;
+import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import java.util.List;
 
 /**

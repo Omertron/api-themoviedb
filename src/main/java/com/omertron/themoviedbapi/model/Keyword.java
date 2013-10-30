@@ -30,15 +30,11 @@ public class Keyword extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")
     private String name;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public int getId() {
         return id;
     }

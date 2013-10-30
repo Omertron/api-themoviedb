@@ -24,15 +24,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author Stuart
  */
-public class KeywordMovie extends AbstractJsonMapping {
+public class MovieDbBasic extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("id")
-    private String id;
+    private int id;
     @JsonProperty("backdrop_path")
     private String backdropPath;
     @JsonProperty("original_title")
@@ -61,7 +58,7 @@ public class KeywordMovie extends AbstractJsonMapping {
         return backdropPath;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -103,7 +100,7 @@ public class KeywordMovie extends AbstractJsonMapping {
         this.backdropPath = backdropPath;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

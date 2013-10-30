@@ -51,7 +51,7 @@ import com.omertron.themoviedbapi.model.Discover;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.model.Keyword;
-import com.omertron.themoviedbapi.model.KeywordMovie;
+import com.omertron.themoviedbapi.model.MovieDbBasic;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.MovieList;
@@ -847,7 +847,7 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of getKeywordMovies method, of class TheMovieDbApi.
+     * Test of getMovieDbBasics method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -855,7 +855,7 @@ public class TheMovieDbApiTest {
     public void testGetKeywordMovies() throws MovieDbException {
         LOG.info("getKeywordMovies");
         int page = 0;
-        TmdbResultsList<KeywordMovie> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
+        TmdbResultsList<MovieDbBasic> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
         assertFalse("No keyword movies found", result.getResults().isEmpty());
     }
 

@@ -21,6 +21,8 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
 
 import java.util.List;
@@ -30,25 +32,11 @@ import java.util.List;
  *
  * @author stuart.boston
  */
-public class MovieDb extends AbstractJsonMapping {
+public class MovieDb extends MovieDbBasic {
 
     private static final long serialVersionUID = 1L;
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
     @JsonProperty("id")
     private int id;
-    @JsonProperty("original_title")
-    private String originalTitle;
-    @JsonProperty("popularity")
-    private float popularity;
-    @JsonProperty("poster_path")
-    private String posterPath;
-    @JsonProperty("release_date")
-    private String releaseDate;
-    @JsonProperty("title")
-    private String title;
-    @JsonProperty("adult")
-    private boolean adult;
     @JsonProperty("belongs_to_collection")
     private Collection belongsToCollection;
     @JsonProperty("budget")
@@ -76,10 +64,6 @@ public class MovieDb extends AbstractJsonMapping {
     @JsonProperty("rating")
     private float userRating;
     @JsonProperty("vote_average")
-    private float voteAverage;
-    @JsonProperty("vote_count")
-    private int voteCount;
-    @JsonProperty("status")
     private String status;
     // AppendToResponse Properties
     @JsonProperty("alternative_titles")
@@ -89,7 +73,7 @@ public class MovieDb extends AbstractJsonMapping {
     @JsonProperty("images")
     private WrapperImages images;
     @JsonProperty("keywords")
-    private WrapperMovieKeywords keywords;
+    private WrapperKeywords keywords;
     @JsonProperty("releases")
     private WrapperReleaseInfo releases;
     @JsonProperty("trailers")
@@ -104,38 +88,6 @@ public class MovieDb extends AbstractJsonMapping {
     private WrapperMovieList lists;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public float getPopularity() {
-        return popularity;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isAdult() {
-        return adult;
-    }
-
     public Collection getBelongsToCollection() {
         return belongsToCollection;
     }
@@ -184,14 +136,6 @@ public class MovieDb extends AbstractJsonMapping {
         return tagline;
     }
 
-    public float getVoteAverage() {
-        return voteAverage;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -202,38 +146,6 @@ public class MovieDb extends AbstractJsonMapping {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setAdult(boolean adult) {
-        this.adult = adult;
-    }
-
     public void setBelongsToCollection(Collection belongsToCollection) {
         this.belongsToCollection = belongsToCollection;
     }
@@ -282,14 +194,6 @@ public class MovieDb extends AbstractJsonMapping {
         this.tagline = tagline;
     }
 
-    public void setVoteAverage(float voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
     public void setStatus(String status) {
         this.status = status;
     }
@@ -317,7 +221,7 @@ public class MovieDb extends AbstractJsonMapping {
     }
 
     public List<Keyword> getKeywords() {
-        return keywords.getKeywords();
+        return keywords.getResults();
     }
 
     public List<ReleaseInfo> getReleases() {
@@ -358,7 +262,7 @@ public class MovieDb extends AbstractJsonMapping {
         this.images = images;
     }
 
-    public void setKeywords(WrapperMovieKeywords keywords) {
+    public void setKeywords(WrapperKeywords keywords) {
         this.keywords = keywords;
     }
 
@@ -403,10 +307,7 @@ public class MovieDb extends AbstractJsonMapping {
         if ((this.imdbID == null) ? (other.imdbID != null) : !this.imdbID.equals(other.imdbID)) {
             return false;
         }
-        if (this.runtime != other.runtime) {
-            return false;
-        }
-        return true;
+        return this.runtime == other.runtime;
     }
 
     @Override

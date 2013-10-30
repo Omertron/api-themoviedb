@@ -17,26 +17,25 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.wrapper.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Person;
+import com.omertron.themoviedbapi.model.MovieDbList;
+import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
+
 import java.util.List;
 
-/**
- *
- * @author Stuart
- */
-public class WrapperPersonList extends AbstractWrapperAll {
+public class WrapperMovieDbList extends AbstractWrapperAll {
+
 
     @JsonProperty("results")
-    private List<Person> personList;
+    private List<MovieDbList> lists;
 
-    public List<Person> getPersonList() {
-        return personList;
+    public List<MovieDbList> getLists() {
+        return lists;
     }
 
-    public void setPersonList(List<Person> personList) {
-        this.personList = personList;
+    public void setLists(List<MovieDbList> lists) {
+        this.lists = lists;
     }
 }

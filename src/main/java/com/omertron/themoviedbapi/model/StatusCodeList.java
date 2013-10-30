@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MovieDbListStatus extends StatusCode {
+public class StatusCodeList extends StatusCode {
 
     @JsonProperty("list_id")
     private String listId;

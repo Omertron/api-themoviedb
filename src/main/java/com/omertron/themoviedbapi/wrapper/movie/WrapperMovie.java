@@ -17,28 +17,29 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.wrapper.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.MovieList;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import java.io.Serializable;
 import java.util.List;
 
 /**
  *
- * @author Stuart
+ * @author stuart.boston
  */
-public class WrapperMovieList extends AbstractWrapperAll implements Serializable {
+public class WrapperMovie extends AbstractWrapperAll implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("results")
-    private List<MovieList> movieList;
+    private List<MovieDb> movies;
 
-    public List<MovieList> getMovieList() {
-        return movieList;
+    public List<MovieDb> getMovies() {
+        return movies;
     }
 
-    public void setMovieList(List<MovieList> movieList) {
-        this.movieList = movieList;
+    public void setMovies(List<MovieDb> movies) {
+        this.movies = movies;
     }
 }

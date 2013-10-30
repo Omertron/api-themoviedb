@@ -44,7 +44,14 @@ import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieChanges;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieDbList;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
+import com.omertron.themoviedbapi.wrapper.person.WrapperPerson;
+import com.omertron.themoviedbapi.wrapper.person.WrapperPersonCredits;
+import com.omertron.themoviedbapi.wrapper.person.WrapperPersonList;
 
 /**
  * The MovieDb API
@@ -692,8 +699,8 @@ public class TheMovieDbApi {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovieKeywords wrapper = mapper.readValue(webpage, WrapperMovieKeywords.class);
-            TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getKeywords());
+            WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
+            TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -1837,7 +1844,7 @@ public class TheMovieDbApi {
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, MovieDbListStatus.class).getListId();
+            return mapper.readValue(webpage, StatusCodeList.class).getListId();
         } catch (IOException ex) {
             LOG.warn(FAILED_KEYWORD, ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -1992,7 +1999,7 @@ public class TheMovieDbApi {
      * @return List of movies with the keyword
      * @throws MovieDbException
      */
-    public TmdbResultsList<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
+    public TmdbResultsList<MovieDbBasic> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD, "/movies");
         apiUrl.addArgument(PARAM_ID, keywordId);
 
@@ -2009,7 +2016,7 @@ public class TheMovieDbApi {
 
         try {
             WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
-            TmdbResultsList<KeywordMovie> results = new TmdbResultsList<KeywordMovie>(wrapper.getResults());
+            TmdbResultsList<MovieDbBasic> results = new TmdbResultsList<MovieDbBasic>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
