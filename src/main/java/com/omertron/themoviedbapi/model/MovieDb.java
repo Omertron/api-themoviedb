@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
 
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class MovieDb extends AbstractJsonMapping {
     @JsonProperty("alternative_titles")
     private WrapperAlternativeTitles alternativeTitles;
     @JsonProperty("casts")
-    private WrapperMovieCasts casts;
+    private WrapperCasts casts;
     @JsonProperty("images")
     private WrapperImages images;
     @JsonProperty("keywords")
@@ -349,7 +350,7 @@ public class MovieDb extends AbstractJsonMapping {
         this.alternativeTitles = alternativeTitles;
     }
 
-    public void setCasts(WrapperMovieCasts casts) {
+    public void setCasts(WrapperCasts casts) {
         this.casts = casts;
     }
 

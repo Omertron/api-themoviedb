@@ -21,14 +21,14 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
-import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
-import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
+import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
@@ -82,4 +82,29 @@ public class TV extends AbstractMethod {
 
     }
 
+    public TmdbResultsList<Person> getTvCredits(int id, String language, String[] appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/credits");
+
+        apiUrl.addArgument(PARAM_ID, id);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        apiUrl.appendToResponse(appendToResponse);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
+            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get TV Credis: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+
+    }
 }

@@ -44,6 +44,8 @@ public class PersonCast extends AbstractJsonMapping {
     private String profilePath;
     @JsonProperty("cast_id")
     private int castId;
+    @JsonProperty("credit_id")
+    private String creditId;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCharacter() {
@@ -70,8 +72,22 @@ public class PersonCast extends AbstractJsonMapping {
         return castId;
     }
 
+    public String getCreditId() {
+        return creditId;
+    }
+
     public void setCharacter(String character) {
         this.character = StringUtils.trimToEmpty(character);
+    }
+
+    /**
+     * Set the character name.
+     * Used by TV cast
+     * @param character
+     */
+    @JsonProperty("character_name")
+    public void setCharacterName(String character) {
+        setCharacter(character);
     }
 
     public void setId(int id) {
@@ -86,12 +102,26 @@ public class PersonCast extends AbstractJsonMapping {
         this.order = order;
     }
 
+    /**
+     * Set the sort order.
+     * Used by TV cast
+     * @param order
+     */
+    @JsonProperty("sort_order")
+    public void setSortOrder(int order) {
+        setOrder(order);
+    }
+
     public void setProfilePath(String profilePath) {
         this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
 
     public void setCastId(int castId) {
         this.castId = castId;
+    }
+
+    public void setCreditId(String creditId) {
+        this.creditId = creditId;
     }
 
     @Override
@@ -115,10 +145,7 @@ public class PersonCast extends AbstractJsonMapping {
         if (this.order != other.order) {
             return false;
         }
-        if ((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath)) {
-            return false;
-        }
-        return true;
+        return !((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath));
     }
 
     @Override

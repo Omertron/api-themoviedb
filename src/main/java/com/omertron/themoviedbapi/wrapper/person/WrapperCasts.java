@@ -17,12 +17,13 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.wrapper.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCast;
 import com.omertron.themoviedbapi.model.PersonCrew;
+import com.omertron.themoviedbapi.wrapper.AbstractWrapperId;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class WrapperMovieCasts extends AbstractWrapperId implements Serializable {
+public class WrapperCasts extends AbstractWrapperId implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("cast")

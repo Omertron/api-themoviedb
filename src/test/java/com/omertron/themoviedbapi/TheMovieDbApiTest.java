@@ -90,6 +90,7 @@ public class TheMovieDbApiTest {
     private static final String COMPANY_NAME = "Marvel Studios";
     private static final int ID_GENRE_ACTION = 28;
     private static final String ID_KEYWORD = "1721";
+    private static final int ID_BIG_BANG_THEORY = 1418;
     // Languages
     private static final String LANGUAGE_DEFAULT = "";
     private static final String LANGUAGE_ENGLISH = "en";
@@ -1001,9 +1002,18 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetTv() throws MovieDbException {
         LOG.info("getTv");
-        int id = 1418;
-        String language = "";
-        TVSeries result = tmdb.getTv(id, language);
+        TVSeries result = tmdb.getTv(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
         LOG.info("{}", result);
+    }
+
+    @Test
+    public void testGetTvCredits() throws MovieDbException {
+        LOG.info("getTvCredits");
+
+        TmdbResultsList<Person> result = tmdb.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
+
+        assertNotNull("Null results", result.getResults());
+        assertFalse("Empty results", result.getResults().isEmpty());
+        assertTrue("No credits returned", result.getResults().size() > 0);
     }
 }

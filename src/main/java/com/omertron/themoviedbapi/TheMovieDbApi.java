@@ -44,6 +44,7 @@ import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
 
 /**
  * The MovieDb API
@@ -497,9 +498,6 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Account Functions">
-    // No account functions
-    //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Movie Functions">
     /**
      * This method is used to retrieve all of the basic movie information.
@@ -631,7 +629,7 @@ public class TheMovieDbApi {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovieCasts wrapper = mapper.readValue(webpage, WrapperMovieCasts.class);
+            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
             TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -2179,6 +2177,20 @@ public class TheMovieDbApi {
      */
     public TVSeries getTv(int id, String language, String... appendToResponse) throws MovieDbException {
         return tv.getTv(id, language, appendToResponse);
+    }
+
+    /**
+     * Get the cast & crew information about a TV series. <br/>
+     * Just like the website, this information is pulled from the LAST season of the series.
+     *
+     * @param id
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Person> getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
+        return tv.getTvCredits(id, language, appendToResponse);
     }
     //</editor-fold>
 
