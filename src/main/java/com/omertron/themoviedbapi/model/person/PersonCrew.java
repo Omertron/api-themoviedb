@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -25,63 +25,30 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Stuart
  */
-public class PersonCrew extends AbstractJsonMapping {
+public class PersonCrew extends PersonBasic {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    /*
-     * Properties
-     */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("department")
     private String department;
     @JsonProperty("job")
     private String job;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("profile_path")
-    private String profilePath;
 
     //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getDepartment() {
         return department;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getJob() {
         return job;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
     }
 
     public void setDepartment(String department) {
         this.department = StringUtils.trimToEmpty(department);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setJob(String job) {
         this.job = StringUtils.trimToEmpty(job);
-    }
-
-    public void setName(String name) {
-        this.name = StringUtils.trimToEmpty(name);
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
 
     @Override
@@ -92,30 +59,27 @@ public class PersonCrew extends AbstractJsonMapping {
         if (getClass() != obj.getClass()) {
             return false;
         }
+
+        if (!super.equals(obj)) {
+            return false;
+        }
+
         final PersonCrew other = (PersonCrew) obj;
-        if (this.id != other.id) {
+
+        if (!StringUtils.equals(this.department, other.department)) {
             return false;
         }
-        if ((this.department == null) ? (other.department != null) : !this.department.equals(other.department)) {
-            return false;
-        }
-        if ((this.job == null) ? (other.job != null) : !this.job.equals(other.job)) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
+        return StringUtils.equals(this.job, other.job);
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + this.id;
+        hash = 59 * hash + this.getId();
         hash = 59 * hash + (this.department != null ? this.department.hashCode() : 0);
         hash = 59 * hash + (this.job != null ? this.job.hashCode() : 0);
-        hash = 59 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 59 * hash + (this.profilePath != null ? this.profilePath.hashCode() : 0);
+        hash = 59 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
+        hash = 59 * hash + (this.getProfilePath() != null ? this.getProfilePath().hashCode() : 0);
         return hash;
     }
 }

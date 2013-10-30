@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -25,23 +25,14 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Stuart
  */
-public class PersonCast extends AbstractJsonMapping {
+public class PersonCast extends PersonBasic {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    /*
-     * Properties
-     */
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("character")
     private String character;
-    @JsonProperty("name")
-    private String name;
     @JsonProperty("order")
     private int order;
-    @JsonProperty("profile_path")
-    private String profilePath;
     @JsonProperty("cast_id")
     private int castId;
     @JsonProperty("credit_id")
@@ -52,20 +43,8 @@ public class PersonCast extends AbstractJsonMapping {
         return character;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public int getOrder() {
         return order;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
     }
 
     public int getCastId() {
@@ -81,8 +60,8 @@ public class PersonCast extends AbstractJsonMapping {
     }
 
     /**
-     * Set the character name.
-     * Used by TV cast
+     * Set the character name. Used by TV cast
+     *
      * @param character
      */
     @JsonProperty("character_name")
@@ -90,30 +69,18 @@ public class PersonCast extends AbstractJsonMapping {
         setCharacter(character);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = StringUtils.trimToEmpty(name);
-    }
-
     public void setOrder(int order) {
         this.order = order;
     }
 
     /**
-     * Set the sort order.
-     * Used by TV cast
+     * Set the sort order. Used by TV cast
+     *
      * @param order
      */
     @JsonProperty("sort_order")
     public void setSortOrder(int order) {
         setOrder(order);
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
 
     public void setCastId(int castId) {
@@ -132,30 +99,30 @@ public class PersonCast extends AbstractJsonMapping {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        if (!super.equals(obj)) {
+            return false;
+        }
         final PersonCast other = (PersonCast) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if ((this.character == null) ? (other.character != null) : !this.character.equals(other.character)) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (!StringUtils.equals(this.character, other.character)) {
             return false;
         }
         if (this.order != other.order) {
             return false;
         }
-        return !((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath));
+        if (this.castId != other.castId) {
+            return false;
+        }
+        return StringUtils.equals(this.creditId, other.creditId);
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + this.id;
+        hash = 41 * hash + this.getId();
         hash = 41 * hash + (this.character != null ? this.character.hashCode() : 0);
-        hash = 41 * hash + (this.name != null ? this.name.hashCode() : 0);
+        hash = 41 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         hash = 41 * hash + this.order;
-        hash = 41 * hash + (this.profilePath != null ? this.profilePath.hashCode() : 0);
+        hash = 41 * hash + (this.getProfilePath() != null ? this.getProfilePath().hashCode() : 0);
         return hash;
     }
 }

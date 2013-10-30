@@ -21,10 +21,6 @@ package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.Network;
-import com.omertron.themoviedbapi.model.PersonCrew;
-import java.util.List;
 
 /**
  *
@@ -62,5 +58,5 @@ public class TVSeason extends AbstractJsonMapping {
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
-    
+
 }

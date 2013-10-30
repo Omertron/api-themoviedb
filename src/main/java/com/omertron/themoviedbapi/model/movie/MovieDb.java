@@ -17,14 +17,33 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.model.AlternativeTitle;
+import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.Collection;
+import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.Language;
+import com.omertron.themoviedbapi.model.ProductionCompany;
+import com.omertron.themoviedbapi.model.ProductionCountry;
+import com.omertron.themoviedbapi.model.ReleaseInfo;
+import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.Trailer;
+import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.model.person.PersonCast;
+import com.omertron.themoviedbapi.model.person.PersonCrew;
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.wrapper.WrapperReviews;
+import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
-
 import java.util.List;
 
 /**

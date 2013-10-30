@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author stuart.boston
  */
-public class Person extends AbstractJsonMapping {
+public class Person extends PersonBasic {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,12 +41,6 @@ public class Person extends AbstractJsonMapping {
     /*
      * Properties
      */
-    @JsonProperty("id")
-    private int id = -1;
-    @JsonProperty("name")
-    private String name = "";
-    @JsonProperty("profile_path")
-    private String profilePath = DEFAULT_STRING;
     private PersonType personType = PersonType.PERSON;
     private String department = DEFAULT_STRING;  // Crew
     private String job = DEFAULT_STRING;         // Crew
@@ -120,16 +114,8 @@ public class Person extends AbstractJsonMapping {
         return department;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getJob() {
         return job;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getOrder() {
@@ -138,10 +124,6 @@ public class Person extends AbstractJsonMapping {
 
     public PersonType getPersonType() {
         return personType;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
     }
 
     public boolean isAdult() {
@@ -190,16 +172,8 @@ public class Person extends AbstractJsonMapping {
         this.department = department;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setJob(String job) {
         this.job = StringUtils.trimToEmpty(job);
-    }
-
-    public void setName(String name) {
-        this.name = StringUtils.trimToEmpty(name);
     }
 
     public void setOrder(int order) {
@@ -208,10 +182,6 @@ public class Person extends AbstractJsonMapping {
 
     public void setPersonType(PersonType personType) {
         this.personType = personType;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = StringUtils.trimToEmpty(profilePath);
     }
 
     public void setAdult(boolean adult) {
@@ -259,37 +229,29 @@ public class Person extends AbstractJsonMapping {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        if (!super.equals(obj)) {
+            return false;
+        }
         final Person other = (Person) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-        if ((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath)) {
-            return false;
-        }
         if (this.personType != other.personType) {
             return false;
         }
-        if ((this.department == null) ? (other.department != null) : !this.department.equals(other.department)) {
+        if (!StringUtils.equals(this.department, other.department)) {
             return false;
         }
-        if ((this.job == null) ? (other.job != null) : !this.job.equals(other.job)) {
+        if (!StringUtils.equals(this.job, other.job)) {
             return false;
         }
-        if ((this.character == null) ? (other.character != null) : !this.character.equals(other.character)) {
-            return false;
-        }
-        return true;
+
+        return StringUtils.equals(this.character, other.character);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + this.id;
-        hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 37 * hash + (this.profilePath != null ? this.profilePath.hashCode() : 0);
+        hash = 37 * hash + this.getId();
+        hash = 37 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
+        hash = 37 * hash + (this.getProfilePath() != null ? this.getProfilePath().hashCode() : 0);
         hash = 37 * hash + (this.personType != null ? this.personType.hashCode() : 0);
         hash = 37 * hash + (this.department != null ? this.department.hashCode() : 0);
         hash = 37 * hash + (this.job != null ? this.job.hashCode() : 0);
