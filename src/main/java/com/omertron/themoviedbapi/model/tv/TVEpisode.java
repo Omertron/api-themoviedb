@@ -20,25 +20,21 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.util.List;
 
 /**
- * Information on the Season for a TV Series <br/>
- * Extends the information provided by TVSeasonBasic
+ * Information on an Episode for a TV Series <br/>
+ * Extends the information provided by TVEpisodeBasic
  *
  * @author stuart.boston
  */
-public class TVSeason extends TVSeasonBasic {
+public class TVEpisode extends TVEpisodeBasic {
 
     @JsonProperty("id")
     private int id;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("overview")
-    private String overview;
-    @JsonProperty("episodes")
-    private List<TVEpisodeBasic> episodes;
+    @JsonProperty("production_code")
+    private String productionCode;
+    @JsonProperty("season_number")
+    private int seasonNumber;
 
     public int getId() {
         return id;
@@ -48,27 +44,20 @@ public class TVSeason extends TVSeasonBasic {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getProductionCode() {
+        return productionCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductionCode(String productionCode) {
+        this.productionCode = productionCode;
     }
 
-    public String getOverview() {
-        return overview;
+    public int getSeasonNumber() {
+        return seasonNumber;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
+    public void setSeasonNumber(int seasonNumber) {
+        this.seasonNumber = seasonNumber;
     }
 
-    public List<TVEpisodeBasic> getEpisodes() {
-        return episodes;
-    }
-
-    public void setEpisodes(List<TVEpisodeBasic> episodes) {
-        this.episodes = episodes;
-    }
 }

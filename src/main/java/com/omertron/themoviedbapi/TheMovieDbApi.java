@@ -123,92 +123,6 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get the API key that is to be used
-     *
-     * @return
-     */
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    private String requestWebPage(URL url) throws MovieDbException {
-        return requestWebPage(url, null, Boolean.FALSE);
-    }
-
-    private String requestWebPage(URL url, String jsonBody) throws MovieDbException {
-        return requestWebPage(url, jsonBody, Boolean.FALSE);
-    }
-
-    private String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
-        String webpage;
-        // use HTTP client implementation
-        if (httpClient == null) {
-            // use web browser
-            webpage = WebBrowser.request(url, jsonBody, isDeleteRequest);
-        } else {
-            try {
-                HttpGet httpGet = new HttpGet(url.toURI());
-                httpGet.addHeader("accept", "application/json");
-
-                if (StringUtils.isNotBlank(jsonBody)) {
-                    // TODO: Add the json body to the request
-                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
-                }
-
-                if (isDeleteRequest) {
-                    //TODO: Handle delete request
-                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
-                }
-
-                webpage = httpClient.requestContent(httpGet);
-            } catch (URISyntaxException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
-            } catch (IOException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
-            } catch (RuntimeException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
-            }
-        }
-        return webpage;
-    }
-
-    /**
-     * Set the proxy information
-     *
-     * @param host
-     * @param port
-     * @param username
-     * @param password
-     */
-    public void setProxy(String host, String port, String username, String password) {
-        // should be set in HTTP client already
-        if (httpClient != null) {
-            return;
-        }
-
-        WebBrowser.setProxyHost(host);
-        WebBrowser.setProxyPort(port);
-        WebBrowser.setProxyUsername(username);
-        WebBrowser.setProxyPassword(password);
-    }
-
-    /**
-     * Set the connection and read time out values
-     *
-     * @param connect
-     * @param read
-     */
-    public void setTimeout(int connect, int read) {
-        // should be set in HTTP client already
-        if (httpClient != null) {
-            return;
-        }
-
-        WebBrowser.setWebTimeoutConnect(connect);
-        WebBrowser.setWebTimeoutRead(read);
-    }
-
-    /**
      * Compare the MovieDB object with a title & year
      *
      * @param moviedb The moviedb object to compare too
@@ -1600,6 +1514,34 @@ public class TheMovieDbApi {
     }
 
     /**
+     * Search for TV shows by title.
+     *
+     * @param name
+     * @param searchYear
+     * @param language
+     * @param searchType
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
+        return tv.searchTv(name, searchYear, language, searchType, page);
+    }
+
+    /**
+     * Search for TV shows by title.
+     *
+     * @param name
+     * @param searchYear
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language) throws MovieDbException {
+        return tv.searchTv(name, searchYear, language, null, 0);
+    }
+
+    /**
      * Search for collections by name.
      *
      * @param query
@@ -2225,6 +2167,7 @@ public class TheMovieDbApi {
     public TmdbResultsList<Artwork> getTvImages(int id, String language) throws MovieDbException {
         return tv.getTvImages(id, language);
     }
+
     /**
      * Get the primary information about a TV season by its season number.
      *
@@ -2235,7 +2178,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public String getTvSeason(int id, int seasonNumber, String language, String... appendToResponse) throws MovieDbException {
+    public TVSeason getTvSeason(int id, int seasonNumber, String language, String... appendToResponse) throws MovieDbException {
         return tv.getTvSeason(id, seasonNumber, language, appendToResponse);
     }
 
@@ -2243,12 +2186,13 @@ public class TheMovieDbApi {
      * Get the external ids that we have stored for a TV season by season number.
      *
      * @param id
+     * @param seasonNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvSeasonExternalIds(int id, String language) throws MovieDbException {
-        return tv.getTvSeasonExternalIds(id, language);
+    public ExternalIds getTvSeasonExternalIds(int id, int seasonNumber, String language) throws MovieDbException {
+        return tv.getTvSeasonExternalIds(id, seasonNumber, language);
     }
 
     /**
@@ -2262,6 +2206,7 @@ public class TheMovieDbApi {
     public String getTvSeasonImages(int id, String language) throws MovieDbException {
         return tv.getTvSeasonImages(id, language);
     }
+
     /**
      * Get the primary information about a TV episode by combination of a season and episode number.
      *
@@ -2295,24 +2240,28 @@ public class TheMovieDbApi {
      * Get the external ids for a TV episode by combination of a season and episode number.
      *
      * @param id
+     * @param seasonNumber
+     * @param episodeNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvEpisodeExternalIds(int id, String language) throws MovieDbException {
-        return tv.getTvEpisodeExternalIds(id, language);
+    public ExternalIds getTvEpisodeExternalIds(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+        return tv.getTvEpisodeExternalIds(id, seasonNumber, episodeNumber, language);
     }
 
     /**
      * Get the images (episode stills) for a TV episode by combination of a season and episode number.
      *
      * @param id
+     * @param seasonNumber
+     * @param episodeNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvEpisodeImages(int id, String language) throws MovieDbException {
-        return tv.getTvEpisodeImages(id, language);
+    public String getTvEpisodeImages(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+        return tv.getTvEpisodeImages(id, seasonNumber, episodeNumber, language);
     }
     //</editor-fold>
 
@@ -2330,4 +2279,83 @@ public class TheMovieDbApi {
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
         }
     }
+
+    //<editor-fold defaultstate="collapsed" desc="Web download methods">
+    private String requestWebPage(URL url) throws MovieDbException {
+        return requestWebPage(url, null, Boolean.FALSE);
+    }
+
+    private String requestWebPage(URL url, String jsonBody) throws MovieDbException {
+        return requestWebPage(url, jsonBody, Boolean.FALSE);
+    }
+
+    private String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
+        String webpage;
+        // use HTTP client implementation
+        if (httpClient == null) {
+            // use web browser
+            webpage = WebBrowser.request(url, jsonBody, isDeleteRequest);
+        } else {
+            try {
+                HttpGet httpGet = new HttpGet(url.toURI());
+                httpGet.addHeader("accept", "application/json");
+
+                if (StringUtils.isNotBlank(jsonBody)) {
+                    // TODO: Add the json body to the request
+                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
+                }
+
+                if (isDeleteRequest) {
+                    //TODO: Handle delete request
+                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
+                }
+
+                webpage = httpClient.requestContent(httpGet);
+            } catch (URISyntaxException ex) {
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+            } catch (IOException ex) {
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+            } catch (RuntimeException ex) {
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
+            }
+        }
+        return webpage;
+    }
+
+    /**
+     * Set the proxy information
+     *
+     * @param host
+     * @param port
+     * @param username
+     * @param password
+     */
+    public void setProxy(String host, String port, String username, String password) {
+        // should be set in HTTP client already
+        if (httpClient != null) {
+            return;
+        }
+
+        WebBrowser.setProxyHost(host);
+        WebBrowser.setProxyPort(port);
+        WebBrowser.setProxyUsername(username);
+        WebBrowser.setProxyPassword(password);
+    }
+
+    /**
+     * Set the connection and read time out values
+     *
+     * @param connect
+     * @param read
+     */
+    public void setTimeout(int connect, int read) {
+        // should be set in HTTP client already
+        if (httpClient != null) {
+            return;
+        }
+
+        WebBrowser.setWebTimeoutConnect(connect);
+        WebBrowser.setWebTimeoutRead(read);
+    }
+    //</editor-fold>
 }

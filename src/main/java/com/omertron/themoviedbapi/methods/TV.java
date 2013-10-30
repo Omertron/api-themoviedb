@@ -19,12 +19,17 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
+import com.omertron.themoviedbapi.model.SearchType;
 import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.tv.TVSeason;
+import com.omertron.themoviedbapi.model.tv.TVSeasonBasic;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
+import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import org.slf4j.Logger;
@@ -32,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
+import com.omertron.themoviedbapi.wrapper.tv.WrapperTVSeries;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
@@ -46,10 +52,48 @@ public class TV extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TV.class);
     // API URL Parameters
+    private static final String BASE_SEARCH = "search/";
     private static final String BASE_TV = "tv/";
 
     public TV(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
+    }
+
+    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "tv");
+        if (StringUtils.isNotBlank(name)) {
+            apiUrl.addArgument(PARAM_QUERY, name);
+        }
+
+        if (searchYear > 0) {
+            apiUrl.addArgument(PARAM_FIRST_AIR_DATE_YEAR, Integer.toString(searchYear));
+        }
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
+        }
+
+        if (searchType != null) {
+            apiUrl.addArgument(PARAM_SEARCH_TYPE, searchType.toString());
+        }
+
+        URL url = apiUrl.buildUrl();
+
+        String webpage = requestWebPage(url);
+        try {
+            WrapperTVSeries wrapper = mapper.readValue(webpage, WrapperTVSeries.class);
+            TmdbResultsList<TVSeriesBasic> results = new TmdbResultsList<TVSeriesBasic>(wrapper.getSeries());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to find TV Series: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+
     }
 
 //<editor-fold defaultstate="collapsed" desc="TV methods">
@@ -141,6 +185,10 @@ public class TV extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
 
+        if (StringUtils.isBlank(webpage)) {
+            return new ExternalIds();
+        }
+
         try {
             ExternalIds results = mapper.readValue(webpage, ExternalIds.class);
             return results;
@@ -194,20 +242,63 @@ public class TV extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public String getTvSeason(int id, int seasonNumber, String language, String[] appendToResponse) throws MovieDbException {
-        return null;
+    public TVSeason getTvSeason(int id, int seasonNumber, String language, String[] appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV);
+
+        apiUrl.addArgument(PARAM_ID, id);
+        apiUrl.addArgument(PARAM_SEASON_NUMBER, seasonNumber);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        apiUrl.appendToResponse(appendToResponse);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            TVSeason result = mapper.readValue(webpage, TVSeason.class);
+            return result;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get TV Season: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     /**
      * Get the external ids that we have stored for a TV season by season number.
      *
      * @param id
+     * @param seasonNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvSeasonExternalIds(int id, String language) throws MovieDbException {
-        return null;
+    public ExternalIds getTvSeasonExternalIds(int id, int seasonNumber, String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/external_ids");
+
+        apiUrl.addArgument(PARAM_ID, id);
+        apiUrl.addArgument(PARAM_SEASON_NUMBER, seasonNumber);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        if (StringUtils.isBlank(webpage)) {
+            return new ExternalIds();
+        }
+
+        try {
+            ExternalIds results = mapper.readValue(webpage, ExternalIds.class);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get External IDs: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     /**
@@ -257,24 +348,50 @@ public class TV extends AbstractMethod {
      * Get the external ids for a TV episode by combination of a season and episode number.
      *
      * @param id
+     * @param seasonNumber
+     * @param episodeNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvEpisodeExternalIds(int id, String language) throws MovieDbException {
-        return null;
+    public ExternalIds getTvEpisodeExternalIds(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/external_ids");
+
+        apiUrl.addArgument(PARAM_ID, id);
+        apiUrl.addArgument(PARAM_SEASON_NUMBER, seasonNumber);
+        apiUrl.addArgument(PARAM_EPISODE_NUMBER, episodeNumber);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        LOG.info(webpage);
+
+        try {
+            ExternalIds results = mapper.readValue(webpage, ExternalIds.class);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get External IDs: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 
     /**
      * Get the images (episode stills) for a TV episode by combination of a season and episode number.
      *
      * @param id
+     * @param seasonNumber
+     * @param episodeNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvEpisodeImages(int id, String language) throws MovieDbException {
+    public String getTvEpisodeImages(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return null;
     }
 //</editor-fold>
+
 }

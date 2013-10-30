@@ -35,7 +35,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,9 @@ import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import com.omertron.themoviedbapi.model.movie.MovieList;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredit;
+import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
+import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 
@@ -902,7 +903,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    ////@Test
+    //@Test
     public void testGetPersonPopular_int() throws MovieDbException {
         LOG.info("getPersonPopular");
         int page = 0;
@@ -933,7 +934,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    ////@Test
+    //@Test
     public void testGetMovieChangesList() throws MovieDbException {
         LOG.info("getMovieChangesList");
         int page = 0;
@@ -964,7 +965,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    ////@Test
+    //@Test
     public void testGetJobs() throws MovieDbException {
         LOG.info("getJobs");
         TmdbResultsList<JobDepartment> result = tmdb.getJobs();
@@ -985,7 +986,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    ////@Test
+    //@Test
     public void testGetDiscover_Discover() throws MovieDbException {
         LOG.info("getDiscover");
         Discover discover = new Discover();
@@ -993,6 +994,19 @@ public class TheMovieDbApiTest {
 
         TmdbResultsList<MovieDb> result = tmdb.getDiscover(discover);
         assertFalse("No movies discovered", result.getResults().isEmpty());
+    }
+
+    /**
+     * Test of searchTv method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
+     */
+//    @Test
+    public void testSearchTv() throws MovieDbException {
+        LOG.info("searchTv");
+
+        TmdbResultsList<TVSeriesBasic> results = tmdb.searchTv("Big Bang Theory", 0, LANGUAGE_DEFAULT);
+        assertFalse("No shows found, should be at least 1", results.getResults().isEmpty());
     }
 
     /**
@@ -1054,19 +1068,14 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    @Test
+//    @Test
     public void testGetTvSeason() throws MovieDbException {
         LOG.info("getTvSeason");
-        int id = 0;
-        int seasonNumber = 0;
-        String language = "";
-        String[] appendToResponse = null;
 
-        String expResult = "";
-        String result = tmdb.getTvSeason(ID_BIG_BANG_THEORY, seasonNumber, LANGUAGE_DEFAULT);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TVSeason result = tmdb.getTvSeason(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
+        assertFalse("No episodes found for season", result.getEpisodes().isEmpty());
+        assertEquals("Wrong air date", "2007-09-24", result.getAirDate());
+        assertEquals("Wrong season name", "Season 1", result.getName());
     }
 
     /**
@@ -1074,17 +1083,15 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+//    @Test
     public void testGetTvSeasonExternalIds() throws MovieDbException {
         LOG.info("getTvSeasonExternalIds");
-        int id = 0;
-        String language = "";
 
-        String expResult = "";
-        String result = tmdb.getTvSeasonExternalIds(id, language);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ExternalIds result = tmdb.getTvSeasonExternalIds(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
+        assertFalse("No ids found", result.getIds().isEmpty());
+        assertTrue("TMDB Id not found", result.hasId("id"));
+        assertEquals("Wrong season id returned", "3738", result.getId("id"));
+        assertEquals("Wrong TVDB Id returned", "28047", result.getId("tvdb_id"));
     }
 
     /**
@@ -1095,14 +1102,7 @@ public class TheMovieDbApiTest {
     //@Test
     public void testGetTvSeasonImages() throws MovieDbException {
         LOG.info("getTvSeasonImages");
-        int id = 0;
-        String language = "";
-
-        String expResult = "";
         String result = tmdb.getTvSeasonImages(id, language);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -1151,17 +1151,15 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+    @Ignore("Find an episode with ids to test this on")
     public void testGetTvEpisodeExternalIds() throws MovieDbException {
         LOG.info("getTvEpisodeExternalIds");
-        int id = 0;
-        String language = "";
-
-        String expResult = "";
-        String result = tmdb.getTvEpisodeExternalIds(id, language);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ExternalIds result = tmdb.getTvEpisodeExternalIds(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
+        LOG.info("{}", result);
+        assertFalse("No ids found", result.getIds().isEmpty());
+        assertTrue("TMDB Id not found", result.hasId("id"));
+        assertEquals("Wrong season id returned", "3738", result.getId("id"));
+        assertEquals("Wrong TVDB Id returned", "28047", result.getId("tvdb_id"));
     }
 
     /**
@@ -1172,14 +1170,7 @@ public class TheMovieDbApiTest {
     //@Test
     public void testGetTvEpisodeImages() throws MovieDbException {
         LOG.info("getTvEpisodeImages");
-        int id = 0;
-        String language = "";
-
-        String expResult = "";
-        String result = tmdb.getTvEpisodeImages(id, language);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String result = tmdb.getTvEpisodeImages(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
     }
 
     /**

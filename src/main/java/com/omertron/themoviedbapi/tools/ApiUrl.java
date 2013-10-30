@@ -65,6 +65,8 @@ public class ApiUrl {
     public static final String PARAM_COUNTRY = "country=";
     public static final String PARAM_FAVORITE = "favorite=";
     public static final String PARAM_ID = "id=";
+    public static final String PARAM_SEASON_NUMBER = "season_number=";
+    public static final String PARAM_EPISODE_NUMBER = "episode_number=";
     public static final String PARAM_LANGUAGE = "language=";
     public static final String PARAM_INCLUDE_ALL_MOVIES = "include_all_movies=";
     public static final String PARAM_MOVIE_WATCHLIST = "movie_watchlist=";
@@ -76,6 +78,8 @@ public class ApiUrl {
     public static final String PARAM_YEAR = "year=";
     public static final String PARAM_START_DATE = "start_date=";
     public static final String PARAM_END_DATE = "end_date=";
+    public static final String PARAM_FIRST_AIR_DATE_YEAR = "first_air_date_year";
+    public static final String PARAM_SEARCH_TYPE = "search_type";
     private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
@@ -86,9 +90,7 @@ public class ApiUrl {
      * @param method
      */
     public ApiUrl(String apiKey, String method) {
-        this.apiKey = apiKey;
-        this.method = method;
-        this.submethod = DEFAULT_STRING;
+        this(apiKey, method, DEFAULT_STRING);
     }
 
     /**
@@ -149,6 +151,20 @@ public class ApiUrl {
             if (arguments.containsKey(PARAM_ID)) {
                 urlString.append(arguments.get(PARAM_ID));
                 arguments.remove(PARAM_ID);
+            }
+
+            // The next parameter needs to be the season number if it exists
+            if (arguments.containsKey(PARAM_SEASON_NUMBER)) {
+                urlString.append("/season/");
+                urlString.append(arguments.get(PARAM_SEASON_NUMBER));
+                arguments.remove(PARAM_SEASON_NUMBER);
+            }
+
+            // The next parameter needs to be the episode number if it exists
+            if (arguments.containsKey(PARAM_EPISODE_NUMBER)) {
+                urlString.append("/epsiode/");
+                urlString.append(arguments.get(PARAM_EPISODE_NUMBER));
+                arguments.remove(PARAM_EPISODE_NUMBER);
             }
 
             // Append the suffix of the API URL

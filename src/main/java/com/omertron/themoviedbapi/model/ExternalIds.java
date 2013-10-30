@@ -38,7 +38,7 @@ public class ExternalIds {
 
     @JsonAnySetter
     public void setIds(String id, Object value) {
-        ids.put(id, value.toString());
+        ids.put(id, (value == null ? "" : value.toString()));
     }
 
     public boolean hasId(String id) {

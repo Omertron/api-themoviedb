@@ -20,30 +20,21 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Network;
 import com.omertron.themoviedbapi.model.person.PersonCrew;
 import java.util.List;
 
 /**
+ * TV Series information<br/>
+ * Represents all the information returned.
  *
  * @author Stuart
  */
-public class TVSeries extends AbstractJsonMapping {
+public class TVSeries extends TVSeriesBasic {
 
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("original_name")
-    private String originalName;
     @JsonProperty("overview")
     private String overview;
-    @JsonProperty("backdrop_path")
-    private String backdrop;
-    @JsonProperty("first_air_date")
-    private String firstAirDate;
     @JsonProperty("last_air_date")
     private String lastAirDate;
     @JsonProperty("created_by")
@@ -66,26 +57,10 @@ public class TVSeries extends AbstractJsonMapping {
     private int numberSeasons;
     @JsonProperty("origin_country")
     private List<String> originCountry;
-    @JsonProperty("popularity")
-    private float popularity;
-    @JsonProperty("poster_path")
-    private String posterPath;
     @JsonProperty("status")
     private String status;
-    @JsonProperty("vote_average")
-    private float voteAverage;
-    @JsonProperty("vote_count")
-    private double voteCount;
     @JsonProperty("seasons")
-    private List<TVSeason> seasons;
-
-    public List<TVSeason> getSeasons() {
-        return seasons;
-    }
-
-    public void setSeasons(List<TVSeason> seasons) {
-        this.seasons = seasons;
-    }
+    private List<TVSeasonBasic> seasons;
 
     public String getOverview() {
         return overview;
@@ -95,68 +70,60 @@ public class TVSeries extends AbstractJsonMapping {
         this.overview = overview;
     }
 
-    public float getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public float getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(float voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public double getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(double voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
-
     public String getLastAirDate() {
         return lastAirDate;
     }
 
     public void setLastAirDate(String lastAirDate) {
         this.lastAirDate = lastAirDate;
+    }
+
+    public List<PersonCrew> getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(List<PersonCrew> createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public List<Integer> getEpisodeRuntime() {
+        return episodeRuntime;
+    }
+
+    public void setEpisodeRuntime(List<Integer> episodeRuntime) {
+        this.episodeRuntime = episodeRuntime;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    public boolean isInProduction() {
+        return inProduction;
+    }
+
+    public void setInProduction(boolean inProduction) {
+        this.inProduction = inProduction;
+    }
+
+    public List<String> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<String> languages) {
+        this.languages = languages;
     }
 
     public List<Network> getNetworks() {
@@ -191,76 +158,20 @@ public class TVSeries extends AbstractJsonMapping {
         this.originCountry = originCountry;
     }
 
-    public boolean isInProduction() {
-        return inProduction;
+    public String getStatus() {
+        return status;
     }
 
-    public void setInProduction(boolean inProduction) {
-        this.inProduction = inProduction;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public List<String> getLanguages() {
-        return languages;
+    public List<TVSeasonBasic> getSeasons() {
+        return seasons;
     }
 
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public List<Integer> getEpisodeRuntime() {
-        return episodeRuntime;
-    }
-
-    public void setEpisodeRuntime(List<Integer> episodeRuntime) {
-        this.episodeRuntime = episodeRuntime;
-    }
-
-    public List<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(List<Genre> genres) {
-        this.genres = genres;
-    }
-
-    public String getHomepage() {
-        return homepage;
-    }
-
-    public void setHomepage(String homepage) {
-        this.homepage = homepage;
-    }
-
-    public List<PersonCrew> getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(List<PersonCrew> createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getBackdrop() {
-        return backdrop;
-    }
-
-    public String getFirstAirDate() {
-        return firstAirDate;
-    }
-
-    public void setBackdrop(String backdrop) {
-        this.backdrop = backdrop;
-    }
-
-    public void setFirstAirDate(String firstAirDate) {
-        this.firstAirDate = firstAirDate;
+    public void setSeasons(List<TVSeasonBasic> seasons) {
+        this.seasons = seasons;
     }
 
 }
