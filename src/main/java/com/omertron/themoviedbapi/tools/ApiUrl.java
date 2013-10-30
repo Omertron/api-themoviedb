@@ -162,7 +162,7 @@ public class ApiUrl {
 
             // The next parameter needs to be the episode number if it exists
             if (arguments.containsKey(PARAM_EPISODE_NUMBER)) {
-                urlString.append("/epsiode/");
+                urlString.append("/episode/");
                 urlString.append(arguments.get(PARAM_EPISODE_NUMBER));
                 arguments.remove(PARAM_EPISODE_NUMBER);
             }
