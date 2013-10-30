@@ -2199,12 +2199,13 @@ public class TheMovieDbApi {
      * Get the images (posters) that we have stored for a TV season by season number.
      *
      * @param id
+     * @param seasonNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvSeasonImages(int id, String language) throws MovieDbException {
-        return tv.getTvSeasonImages(id, language);
+    public TmdbResultsList<Artwork> getTvSeasonImages(int id, int seasonNumber, String language) throws MovieDbException {
+        return tv.getTvSeasonImages(id, seasonNumber, language);
     }
 
     /**

@@ -70,6 +70,7 @@ import com.omertron.themoviedbapi.model.tv.TVSeries;
 import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
+import org.junit.Test;
 
 /**
  * Test cases for TheMovieDbApi API
@@ -1099,10 +1100,11 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+//    @Test
     public void testGetTvSeasonImages() throws MovieDbException {
         LOG.info("getTvSeasonImages");
-        String result = tmdb.getTvSeasonImages(id, language);
+        TmdbResultsList<Artwork> result = tmdb.getTvSeasonImages(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
+        assertFalse("No results found", result.getResults().isEmpty());
     }
 
     /**
@@ -1110,7 +1112,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTvEpisode() throws MovieDbException {
         LOG.info("getTvEpisode");
         int id = 0;

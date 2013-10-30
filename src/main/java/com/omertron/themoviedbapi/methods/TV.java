@@ -305,12 +305,34 @@ public class TV extends AbstractMethod {
      * Get the images (posters) that we have stored for a TV season by season number.
      *
      * @param id
+     * @param seasonNumber
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public String getTvSeasonImages(int id, String language) throws MovieDbException {
-        return null;
+    public TmdbResultsList<Artwork> getTvSeasonImages(int id, int seasonNumber, String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/images");
+
+        apiUrl.addArgument(PARAM_ID, id);
+        apiUrl.addArgument(PARAM_SEASON_NUMBER, seasonNumber);
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll());
+            results.copyWrapper(wrapper);
+            results.setTotalResults(results.getResults().size());
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get External IDs: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
     }
 //</editor-fold>
 
