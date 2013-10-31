@@ -2219,7 +2219,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public String getTvEpisode(int id, int seasonNumber, int episodeNumber, String language, String... appendToResponse) throws MovieDbException {
+    public TVEpisode getTvEpisode(int id, int seasonNumber, int episodeNumber, String language, String... appendToResponse) throws MovieDbException {
         return tv.getTvEpisode(id, seasonNumber, episodeNumber, language, appendToResponse);
     }
 
@@ -2233,7 +2233,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public String getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+    public TmdbResultsList<Person> getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return tv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
     }
 

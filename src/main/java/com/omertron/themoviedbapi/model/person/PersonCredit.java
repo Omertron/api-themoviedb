@@ -53,7 +53,6 @@ public class PersonCredit extends AbstractJsonMapping {
     private String adult = DEFAULT_STRING;
     private PersonType personType = PersonType.PERSON;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter Methods">
     public String getCharacter() {
         return character;
     }
