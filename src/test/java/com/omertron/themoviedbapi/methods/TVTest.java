@@ -84,7 +84,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testSearchTv() throws MovieDbException {
         LOG.info("searchTv");
         TmdbResultsList<TVSeriesBasic> results = tmdb.searchTv("Big Bang Theory", 0, LANGUAGE_DEFAULT);
@@ -96,7 +96,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTv() throws MovieDbException {
         LOG.info("getTv");
         TVSeries result = tmdb.getTv(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
@@ -117,7 +117,7 @@ public class TVTest {
         LOG.info("getTvCredits");
 
         TmdbResultsList<Person> result = tmdb.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
-
+        LOG.info("{}",result);
         assertNotNull("Null results", result.getResults());
         assertFalse("Empty results", result.getResults().isEmpty());
         assertTrue("No credits returned", result.getResults().size() > 0);
@@ -128,7 +128,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvExternalIds() throws MovieDbException {
         LOG.info("getTvExternalIds");
         ExternalIds result = tmdb.getTvExternalIds(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
@@ -143,7 +143,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvImages() throws MovieDbException {
         LOG.info("getTvImages");
         TmdbResultsList<Artwork> result = tmdb.getTvImages(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
@@ -155,7 +155,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvSeason() throws MovieDbException {
         LOG.info("getTvSeason");
 
@@ -170,7 +170,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvSeasonExternalIds() throws MovieDbException {
         LOG.info("getTvSeasonExternalIds");
 
@@ -186,7 +186,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvSeasonImages() throws MovieDbException {
         LOG.info("getTvSeasonImages");
         TmdbResultsList<Artwork> result = tmdb.getTvSeasonImages(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
@@ -198,7 +198,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvEpisode() throws MovieDbException {
         LOG.info("getTvEpisode");
         TVEpisode result = tmdb.getTvEpisode(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
@@ -241,7 +241,7 @@ public class TVTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetTvEpisodeImages() throws MovieDbException {
         LOG.info("getTvEpisodeImages");
         String result = tmdb.getTvEpisodeImages(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
