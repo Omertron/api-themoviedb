@@ -19,17 +19,15 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractWrapper {
+public abstract class AbstractWrapper extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,24 +49,5 @@ public abstract class AbstractWrapper {
         } else {
             return new ArrayList<E>(EnumSet.allOf(clz));
         }
-    }
-
-    /**
-     * Handle unknown properties and print a message
-     *
-     * @param key
-     * @param value
-     */
-    @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Unknown property: '").append(key);
-        sb.append("' value: '").append(value).append("'");
-        getLogger(this.getClass()).trace(sb.toString());
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
     }
 }
