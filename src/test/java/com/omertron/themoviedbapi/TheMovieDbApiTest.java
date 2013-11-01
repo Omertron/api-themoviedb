@@ -1003,7 +1003,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchTv() throws MovieDbException {
         LOG.info("searchTv");
 
@@ -1016,7 +1016,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTv() throws MovieDbException {
         LOG.info("getTv");
         TVSeries result = tmdb.getTv(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
@@ -1027,7 +1027,12 @@ public class TheMovieDbApiTest {
         assertFalse("No created by", result.getCreatedBy().isEmpty());
     }
 
-    //@Test
+    /**
+     * Test of getTvCredits method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
+     */
+    @Test
     public void testGetTvCredits() throws MovieDbException {
         LOG.info("getTvCredits");
 
@@ -1043,7 +1048,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTvExternalIds() throws MovieDbException {
         LOG.info("getTvExternalIds");
         ExternalIds result = tmdb.getTvExternalIds(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
@@ -1058,7 +1063,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTvImages() throws MovieDbException {
         LOG.info("getTvImages");
         TmdbResultsList<Artwork> result = tmdb.getTvImages(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
@@ -1070,7 +1075,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTvSeason() throws MovieDbException {
         LOG.info("getTvSeason");
 
@@ -1085,7 +1090,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTvSeasonExternalIds() throws MovieDbException {
         LOG.info("getTvSeasonExternalIds");
 
@@ -1101,7 +1106,7 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTvSeasonImages() throws MovieDbException {
         LOG.info("getTvSeasonImages");
         TmdbResultsList<Artwork> result = tmdb.getTvSeasonImages(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
@@ -1113,11 +1118,11 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTvEpisode() throws MovieDbException {
         LOG.info("getTvEpisode");
         TVEpisode result = tmdb.getTvEpisode(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
-        assertEquals("Wrong ID", "64766", result.getId());
+        assertEquals("Wrong ID", 64766, result.getId());
         assertEquals("Wrong date", "2007-09-24", result.getAirDate());
         assertTrue("No overview", StringUtils.isNotBlank(result.getOverview()));
     }
@@ -1131,7 +1136,7 @@ public class TheMovieDbApiTest {
     public void testGetTvEpisodeCredits() throws MovieDbException {
         LOG.info("getTvEpisodeCredits");
         TmdbResultsList<Person> result = tmdb.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
-        LOG.info("{}",result );
+        LOG.info("{}", result);
     }
 
     /**
