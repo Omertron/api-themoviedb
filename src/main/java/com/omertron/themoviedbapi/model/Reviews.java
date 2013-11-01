@@ -40,7 +40,6 @@ public class Reviews extends AbstractJsonMapping {
     @JsonProperty("url")
     private String url;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getId() {
         return id;
     }
@@ -56,9 +55,7 @@ public class Reviews extends AbstractJsonMapping {
     public String getUrl() {
         return url;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setId(String id) {
         this.id = id;
     }
@@ -74,5 +71,4 @@ public class Reviews extends AbstractJsonMapping {
     public void setUrl(String url) {
         this.url = url;
     }
-    // </editor-fold>
 }

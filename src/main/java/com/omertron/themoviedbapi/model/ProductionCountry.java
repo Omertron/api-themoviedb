@@ -38,7 +38,6 @@ public class ProductionCountry extends AbstractJsonMapping {
     @JsonProperty("name")
     private String name;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getIsoCode() {
         return isoCode;
     }

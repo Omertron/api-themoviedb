@@ -55,7 +55,6 @@ public class MovieDbList extends AbstractJsonMapping {
     @JsonProperty("status_message")
     private String statusMessage;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter Methods">
     public String getId() {
         return id;
     }
@@ -99,9 +98,7 @@ public class MovieDbList extends AbstractJsonMapping {
     public String getStatusMessage() {
         return statusMessage;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setter Methods">
     public void setId(String id) {
         this.id = id;
     }
@@ -145,5 +142,4 @@ public class MovieDbList extends AbstractJsonMapping {
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
     }
-    //</editor-fold>
 }

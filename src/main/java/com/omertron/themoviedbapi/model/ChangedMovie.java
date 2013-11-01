@@ -25,15 +25,11 @@ public class ChangedMovie extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("id")
     private String id;
     @JsonProperty("adult")
     private boolean adult;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getId() {
         return id;
     }
@@ -41,9 +37,7 @@ public class ChangedMovie extends AbstractJsonMapping {
     public boolean isAdult() {
         return adult;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setId(String id) {
         this.id = id;
     }
@@ -51,5 +45,4 @@ public class ChangedMovie extends AbstractJsonMapping {
     public void setAdult(boolean adult) {
         this.adult = adult;
     }
-    // </editor-fold>
 }

@@ -38,7 +38,6 @@ public class PersonCast extends PersonBasic {
     @JsonProperty("credit_id")
     private String creditId;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCharacter() {
         return character;
     }

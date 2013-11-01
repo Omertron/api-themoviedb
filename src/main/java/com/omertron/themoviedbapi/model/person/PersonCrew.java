@@ -34,7 +34,6 @@ public class PersonCrew extends PersonBasic {
     @JsonProperty("job")
     private String job;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getDepartment() {
         return department;
     }

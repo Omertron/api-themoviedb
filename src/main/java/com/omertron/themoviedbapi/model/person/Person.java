@@ -105,7 +105,6 @@ public class Person extends PersonBasic {
         setJob(CAST_JOB);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCharacter() {
         return character;
     }
@@ -161,9 +160,7 @@ public class Person extends PersonBasic {
     public float getPopularity() {
         return popularity;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setCharacter(String character) {
         this.character = character;
     }
@@ -219,7 +216,6 @@ public class Person extends PersonBasic {
     public void setPopularity(float popularity) {
         this.popularity = popularity;
     }
-    // </editor-fold>
 
     @Override
     public boolean equals(Object obj) {

@@ -47,7 +47,6 @@ public class Collection extends AbstractJsonMapping {
     @JsonProperty("release_date")
     private String releaseDate;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
         return backdropPath;
     }

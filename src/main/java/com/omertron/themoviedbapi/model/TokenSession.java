@@ -39,7 +39,6 @@ public class TokenSession extends AbstractJsonMapping {
     @JsonProperty("expires_at")
     private String expiresAt;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getSessionId() {
         return sessionId;
     }
@@ -63,9 +62,7 @@ public class TokenSession extends AbstractJsonMapping {
     public String getExpiresAt() {
         return expiresAt;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
@@ -89,5 +86,4 @@ public class TokenSession extends AbstractJsonMapping {
     public void setExpiresAt(String expiresAt) {
         this.expiresAt = expiresAt;
     }
-    // </editor-fold>
 }

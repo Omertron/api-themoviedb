@@ -38,7 +38,6 @@ public class ReleaseInfo extends AbstractJsonMapping {
     @JsonProperty("release_date")
     private String releaseDate;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCertification() {
         return certification;
     }

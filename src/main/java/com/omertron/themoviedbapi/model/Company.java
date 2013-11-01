@@ -46,7 +46,6 @@ public class Company extends AbstractJsonMapping {
     @JsonProperty("parent_company")
     private Company parentCompany = null;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter Methods">
     public int getCompanyId() {
         return companyId;
     }
