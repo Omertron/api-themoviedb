@@ -28,12 +28,24 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 
 /**
- * @author Holger Brandl
+ * Abstract class to handle any unknown properties by outputting a log message
+ *
+ * @author stuart.boston
  */
 public abstract class AbstractJsonMapping implements Serializable {
 
-    private static Logger getLogger(Class<?> aClass) {
-        return LoggerFactory.getLogger(aClass);
+    private Logger log = null;
+
+    /**
+     * Return the current logger.
+     *
+     * @return
+     */
+    private Logger getLogger() {
+        if (log == null) {
+            log = LoggerFactory.getLogger(this.getClass());
+        }
+        return log;
     }
 
     /**
@@ -43,12 +55,12 @@ public abstract class AbstractJsonMapping implements Serializable {
      * @param value
      */
     @JsonAnySetter
-    public void handleUnknown(String key, Object value) {
-        StringBuilder unknown = new StringBuilder();
-        unknown.append("Unknown property: '").append(key);
-        unknown.append("' value: '").append(value).append("'");
+    protected void handleUnknown(String key, Object value) {
+        StringBuilder unknown = new StringBuilder(this.getClass().getSimpleName());
+        unknown.append(": Unknown property='").append(key);
+        unknown.append("' value='").append(value).append("'");
 
-        getLogger(this.getClass()).trace(unknown.toString());
+        getLogger().trace(unknown.toString());
     }
 
     @Override
