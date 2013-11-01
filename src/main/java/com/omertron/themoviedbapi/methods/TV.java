@@ -106,7 +106,7 @@ public class TV extends AbstractMethod {
 
     }
 
-//<editor-fold defaultstate="collapsed" desc="TV methods">
+    //<editor-fold defaultstate="collapsed" desc="TV methods">
     /**
      * Get the primary information about a TV series by id.
      *
@@ -239,9 +239,9 @@ public class TV extends AbstractMethod {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="TV Season methods">
+    //<editor-fold defaultstate="collapsed" desc="TV Season methods">
     /**
      * Get the primary information about a TV season by its season number.
      *
@@ -344,9 +344,9 @@ public class TV extends AbstractMethod {
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="TV Episode methods">
+    //<editor-fold defaultstate="collapsed" desc="TV Episode methods">
     /**
      * Get the primary information about a TV episode by combination of a season and episode number.
      *
@@ -464,6 +464,6 @@ public class TV extends AbstractMethod {
     public String getTvEpisodeImages(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return null;
     }
-//</editor-fold>
+    //</editor-fold>
 
 }
