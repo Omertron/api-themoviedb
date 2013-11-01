@@ -82,7 +82,7 @@ public class MovieDb extends MovieDbBasic {
     private String tagline;
     @JsonProperty("rating")
     private float userRating;
-    @JsonProperty("vote_average")
+    @JsonProperty("status")
     private String status;
     // AppendToResponse Properties
     @JsonProperty("alternative_titles")

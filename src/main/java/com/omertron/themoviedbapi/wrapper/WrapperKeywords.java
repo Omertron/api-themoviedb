@@ -31,14 +31,19 @@ import java.util.List;
 public class WrapperKeywords extends AbstractWrapperAll implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @JsonProperty("results")
     private List<Keyword> results;
 
     public List<Keyword> getResults() {
         return results;
     }
 
+    @JsonProperty("results")
     public void setResults(List<Keyword> results) {
+        this.results = results;
+    }
+
+    @JsonProperty("keywords")
+    public void setKeywords(List<Keyword> results) {
         this.results = results;
     }
 }
