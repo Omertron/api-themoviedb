@@ -46,7 +46,7 @@ public class TestLogger {
         config.append(".level = ").append(level).append(CRLF);
         config.append("java.util.logging.ConsoleHandler.level = ").append(level).append(CRLF);
         // Only works with Java 7 or later
-        config.append("java.util.logging.SimpleFormatter.format = [%1$tc %4$s] %2$s - %5$s %6$s%n").append(CRLF);
+        config.append("java.util.logging.SimpleFormatter.format = [%1$tH:%1$tM:%1$tS %4$6s] %2$s - %5$s %6$s%n").append(CRLF);
         // Exclude http logging
         config.append("sun.net.www.protocol.http.HttpURLConnection.level = OFF").append(CRLF);
 
