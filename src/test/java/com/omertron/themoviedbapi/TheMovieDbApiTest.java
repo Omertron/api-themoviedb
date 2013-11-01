@@ -84,6 +84,7 @@ public class TheMovieDbApiTest {
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApiTest.class);
     // API Key
     private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
+    // API
     private static TheMovieDbApi tmdb;
     // Test data
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
@@ -96,9 +97,9 @@ public class TheMovieDbApiTest {
     private static final String ID_KEYWORD = "1721";
     private static final int ID_BIG_BANG_THEORY = 1418;
     // Languages
-    private static final String LANGUAGE_DEFAULT = "";
-    private static final String LANGUAGE_ENGLISH = "en";
-    private static final String LANGUAGE_RUSSIAN = "ru";
+    public static final String LANGUAGE_DEFAULT = "";
+    public static final String LANGUAGE_ENGLISH = "en";
+    public static final String LANGUAGE_RUSSIAN = "ru";
     // session and account id of test users named 'apitests'
     private static final String SESSION_ID_APITESTS = "63c85deb39337e29b69d78265eb28d639cbd6f72";
     private static final int ACCOUNT_ID_APITESTS = 6065849;
@@ -996,174 +997,6 @@ public class TheMovieDbApiTest {
 
         TmdbResultsList<MovieDb> result = tmdb.getDiscover(discover);
         assertFalse("No movies discovered", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of searchTv method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testSearchTv() throws MovieDbException {
-        LOG.info("searchTv");
-
-        TmdbResultsList<TVSeriesBasic> results = tmdb.searchTv("Big Bang Theory", 0, LANGUAGE_DEFAULT);
-        assertFalse("No shows found, should be at least 1", results.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getTv method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTv() throws MovieDbException {
-        LOG.info("getTv");
-        TVSeries result = tmdb.getTv(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
-        assertEquals("Wrong title returned", "The Big Bang Theory", result.getName());
-        assertTrue("No seasons returned", result.getNumberSeasons() >= 5);
-        assertTrue("No episodes returned", result.getNumberEpisodes() > 100);
-        assertFalse("No genres returned", result.getGenres().isEmpty());
-        assertFalse("No created by", result.getCreatedBy().isEmpty());
-    }
-
-    /**
-     * Test of getTvCredits method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvCredits() throws MovieDbException {
-        LOG.info("getTvCredits");
-
-        TmdbResultsList<Person> result = tmdb.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
-
-        assertNotNull("Null results", result.getResults());
-        assertFalse("Empty results", result.getResults().isEmpty());
-        assertTrue("No credits returned", result.getResults().size() > 0);
-    }
-
-    /**
-     * Test of getTvExternalIds method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvExternalIds() throws MovieDbException {
-        LOG.info("getTvExternalIds");
-        ExternalIds result = tmdb.getTvExternalIds(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
-        assertFalse("No ids found", result.getIds().isEmpty());
-        assertTrue("TMDB Id not found", result.hasId("id"));
-        assertEquals("Wrong id returned", Integer.toString(ID_BIG_BANG_THEORY), result.getId("id"));
-        assertEquals("Wrong TVDB Id returned", "80379", result.getId("tvdb_id"));
-    }
-
-    /**
-     * Test of getTvImages method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvImages() throws MovieDbException {
-        LOG.info("getTvImages");
-        TmdbResultsList<Artwork> result = tmdb.getTvImages(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
-        assertFalse("No results found", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getTvSeason method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvSeason() throws MovieDbException {
-        LOG.info("getTvSeason");
-
-        TVSeason result = tmdb.getTvSeason(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
-        assertFalse("No episodes found for season", result.getEpisodes().isEmpty());
-        assertEquals("Wrong air date", "2007-09-24", result.getAirDate());
-        assertEquals("Wrong season name", "Season 1", result.getName());
-    }
-
-    /**
-     * Test of getTvSeasonExternalIds method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvSeasonExternalIds() throws MovieDbException {
-        LOG.info("getTvSeasonExternalIds");
-
-        ExternalIds result = tmdb.getTvSeasonExternalIds(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
-        assertFalse("No ids found", result.getIds().isEmpty());
-        assertTrue("TMDB Id not found", result.hasId("id"));
-        assertEquals("Wrong season id returned", "3738", result.getId("id"));
-        assertEquals("Wrong TVDB Id returned", "28047", result.getId("tvdb_id"));
-    }
-
-    /**
-     * Test of getTvSeasonImages method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvSeasonImages() throws MovieDbException {
-        LOG.info("getTvSeasonImages");
-        TmdbResultsList<Artwork> result = tmdb.getTvSeasonImages(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
-        assertFalse("No results found", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getTvEpisode method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvEpisode() throws MovieDbException {
-        LOG.info("getTvEpisode");
-        TVEpisode result = tmdb.getTvEpisode(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
-        assertEquals("Wrong ID", 64766, result.getId());
-        assertEquals("Wrong date", "2007-09-24", result.getAirDate());
-        assertTrue("No overview", StringUtils.isNotBlank(result.getOverview()));
-    }
-
-    /**
-     * Test of getTvEpisodeCredits method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTvEpisodeCredits() throws MovieDbException {
-        LOG.info("getTvEpisodeCredits");
-        TmdbResultsList<Person> result = tmdb.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
-        LOG.info("{}", result);
-    }
-
-    /**
-     * Test of getTvEpisodeExternalIds method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Find an episode with ids to test this on")
-    public void testGetTvEpisodeExternalIds() throws MovieDbException {
-        LOG.info("getTvEpisodeExternalIds");
-        ExternalIds result = tmdb.getTvEpisodeExternalIds(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
-        LOG.info("{}", result);
-        assertFalse("No ids found", result.getIds().isEmpty());
-        assertTrue("TMDB Id not found", result.hasId("id"));
-        assertEquals("Wrong season id returned", "3738", result.getId("id"));
-        assertEquals("Wrong TVDB Id returned", "28047", result.getId("tvdb_id"));
-    }
-
-    /**
-     * Test of getTvEpisodeImages method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    //@Test
-    public void testGetTvEpisodeImages() throws MovieDbException {
-        LOG.info("getTvEpisodeImages");
-        String result = tmdb.getTvEpisodeImages(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
     }
 
     /**
