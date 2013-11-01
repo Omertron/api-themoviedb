@@ -38,8 +38,8 @@ public class Trailer extends AbstractJsonMapping {
     private String size;
     private String source;
     private String website;    // The website of the trailer
+    private String type;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getName() {
         return name;
     }
@@ -56,6 +56,10 @@ public class Trailer extends AbstractJsonMapping {
         return website;
     }
 
+    public String getType() {
+        return type;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -70,6 +74,10 @@ public class Trailer extends AbstractJsonMapping {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
