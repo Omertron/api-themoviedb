@@ -46,7 +46,6 @@ public class TmdbConfiguration extends AbstractJsonMapping {
     @JsonProperty("logo_sizes")
     private List<String> logoSizes;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">//GEN-BEGIN:getterMethods
     public List<String> getBackdropSizes() {
         return backdropSizes;
     }
@@ -70,9 +69,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
     public String getSecureBaseUrl() {
         return secureBaseUrl;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">//GEN-BEGIN:setterMethods
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
     }
@@ -96,7 +93,6 @@ public class TmdbConfiguration extends AbstractJsonMapping {
     public void setSecureBaseUrl(String secureBaseUrl) {
         this.secureBaseUrl = secureBaseUrl;
     }
-    // </editor-fold>
 
     /**
      * Copy the data from the passed object to this one

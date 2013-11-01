@@ -47,7 +47,6 @@ public class CollectionInfo extends AbstractJsonMapping {
     @JsonProperty("parts")
     private List<Collection> parts = new ArrayList<Collection>();
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
         return backdropPath;
     }

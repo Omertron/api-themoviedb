@@ -43,7 +43,6 @@ public class PersonCrew extends AbstractJsonMapping {
     @JsonProperty("profile_path")
     private String profilePath;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getDepartment() {
         return department;
     }

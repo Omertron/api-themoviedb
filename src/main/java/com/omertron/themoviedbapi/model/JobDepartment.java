@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class JobDepartment {
+public class JobDepartment extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
     // Properties
@@ -32,7 +32,6 @@ public class JobDepartment {
     @JsonProperty("job_list")
     private List<String> jobs;
 
-    //<editor-fold defaultstate="collapsed" desc="Getters">
     public String getDepartment() {
         return department;
     }
@@ -41,7 +40,6 @@ public class JobDepartment {
         return jobs;
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Setters">
     public void setDepartment(String department) {
         this.department = department;
     }

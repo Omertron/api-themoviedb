@@ -33,7 +33,6 @@ public class TokenAuthorisation extends AbstractJsonMapping {
     @JsonProperty("success")
     private Boolean success;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getExpires() {
         return expires;
     }
@@ -45,9 +44,7 @@ public class TokenAuthorisation extends AbstractJsonMapping {
     public Boolean getSuccess() {
         return success;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setExpires(String expires) {
         this.expires = expires;
     }
@@ -59,5 +56,4 @@ public class TokenAuthorisation extends AbstractJsonMapping {
     public void setSuccess(Boolean success) {
         this.success = success;
     }
-    // </editor-fold>
 }

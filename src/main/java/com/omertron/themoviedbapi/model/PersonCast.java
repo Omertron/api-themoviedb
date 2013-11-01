@@ -45,7 +45,6 @@ public class PersonCast extends AbstractJsonMapping {
     @JsonProperty("cast_id")
     private int castId;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCharacter() {
         return character;
     }

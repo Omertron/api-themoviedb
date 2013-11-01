@@ -28,9 +28,6 @@ public class MovieList extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("description")
     private String description;
     @JsonProperty("favorite_count")
@@ -48,7 +45,6 @@ public class MovieList extends AbstractJsonMapping {
     @JsonProperty("list_type")
     private String listType;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getDescription() {
         return description;
     }
@@ -80,9 +76,7 @@ public class MovieList extends AbstractJsonMapping {
     public String getListType() {
         return listType;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setDescription(String description) {
         this.description = description;
     }
@@ -114,5 +108,4 @@ public class MovieList extends AbstractJsonMapping {
     public void setListType(String listType) {
         this.listType = listType;
     }
-    // </editor-fold>
 }

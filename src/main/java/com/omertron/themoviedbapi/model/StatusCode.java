@@ -36,7 +36,6 @@ public class StatusCode extends AbstractJsonMapping {
     @JsonProperty("status_message")
     private String statusMessage;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public int getStatusCode() {
         return statusCode;
     }

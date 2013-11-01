@@ -52,7 +52,6 @@ public class KeywordMovie extends AbstractJsonMapping {
     @JsonProperty("popularity")
     private float popularity;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -96,9 +95,7 @@ public class KeywordMovie extends AbstractJsonMapping {
     public float getPopularity() {
         return popularity;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
@@ -138,5 +135,4 @@ public class KeywordMovie extends AbstractJsonMapping {
     public void setPopularity(float popularity) {
         this.popularity = popularity;
     }
-    // </editor-fold>
 }

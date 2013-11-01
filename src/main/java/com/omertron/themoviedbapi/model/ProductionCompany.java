@@ -38,7 +38,6 @@ public class ProductionCompany extends AbstractJsonMapping {
     @JsonProperty("name")
     private String name;
 
-    //<editor-fold defaultstate="collapsed" desc="Getter methods">
     public int getId() {
         return id;
     }

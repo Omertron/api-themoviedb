@@ -30,9 +30,6 @@ public class Artwork extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("aspect_ratio")
     private float aspectRatio;
     @JsonProperty("file_path")
@@ -51,7 +48,6 @@ public class Artwork extends AbstractJsonMapping {
     private String flag;
     private ArtworkType artworkType = ArtworkType.POSTER;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public ArtworkType getArtworkType() {
         return artworkType;
     }
@@ -87,9 +83,7 @@ public class Artwork extends AbstractJsonMapping {
     public String getFlag() {
         return flag;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setArtworkType(ArtworkType artworkType) {
         this.artworkType = artworkType;
     }
@@ -125,7 +119,6 @@ public class Artwork extends AbstractJsonMapping {
     public void setFlag(String flag) {
         this.flag = flag;
     }
-    // </editor-fold>
 
     @Override
     public boolean equals(Object obj) {

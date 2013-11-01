@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -27,13 +28,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractWrapper extends AbstractJsonMapping {
+public abstract class AbstractWrapper extends AbstractJsonMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private static Logger getLogger(Class<?> aClass) {
-        return LoggerFactory.getLogger(aClass);
-    }
 
     /**
      * Get a list of the enums passed
