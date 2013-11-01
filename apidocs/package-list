@@ -1,5 +1,12 @@
 com.omertron.themoviedbapi
+com.omertron.themoviedbapi.methods
 com.omertron.themoviedbapi.model
+com.omertron.themoviedbapi.model.movie
+com.omertron.themoviedbapi.model.person
+com.omertron.themoviedbapi.model.tv
 com.omertron.themoviedbapi.results
 com.omertron.themoviedbapi.tools
 com.omertron.themoviedbapi.wrapper
+com.omertron.themoviedbapi.wrapper.movie
+com.omertron.themoviedbapi.wrapper.person
+com.omertron.themoviedbapi.wrapper.tv
