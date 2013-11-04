@@ -17,21 +17,14 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper.person;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.person.PersonMovie;
-import java.util.ArrayList;
-import java.util.List;
+package com.omertron.themoviedbapi.model.type;
 
 /**
- *
- * @author Stuart
+ * @author stuart.boston
  */
-public class WrapperCredits {
+public enum PersonType {
 
-    private final List<PersonMovie> person = new ArrayList<PersonMovie>();
-
-    @JsonProperty("cast")
-    String cast;
+    CAST, // A member of the cast
+    CREW, // A member of the crew
+    PERSON  // No specific type
 }

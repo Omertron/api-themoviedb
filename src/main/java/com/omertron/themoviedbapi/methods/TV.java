@@ -23,12 +23,14 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
-import com.omertron.themoviedbapi.model.SearchType;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.person.PersonMovie;
 import com.omertron.themoviedbapi.model.tv.TVEpisode;
 import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
 import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
+import com.omertron.themoviedbapi.model.type.SearchType;
+import com.omertron.themoviedbapi.model.type.VideoType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import org.slf4j.Logger;
@@ -150,7 +152,7 @@ public class TV extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getTvCredits(int id, String language, String[] appendToResponse) throws MovieDbException {
+    public PersonCredits getTvCredits(int id, String language, String[] appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/credits");
 
         apiUrl.addArgument(PARAM_ID, id);
@@ -165,10 +167,15 @@ public class TV extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
-            results.copyWrapper(wrapper);
-            return results;
+//            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
+//            TmdbResultsList<PersonMovie> results = new TmdbResultsList<PersonMovie>(wrapper.getAll());
+//            results.copyWrapper(wrapper);
+
+            PersonCredits pc = mapper.readValue(webpage, PersonCredits.class);
+            pc.setVideoType(VideoType.TV);
+            return pc;
+
+//            return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Credis: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -391,7 +398,7 @@ public class TV extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+    public PersonCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/credits");
 
         apiUrl.addArgument(PARAM_ID, id);
@@ -406,12 +413,15 @@ public class TV extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
-            results.copyWrapper(wrapper);
-            return results;
+//            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
+//            TmdbResultsList<PersonMovie> results = new TmdbResultsList<PersonMovie>(wrapper.getAll());
+//            results.copyWrapper(wrapper);
+//            return results;
+            PersonCredits pc = mapper.readValue(webpage, PersonCredits.class);
+            pc.setVideoType(VideoType.TV);
+            return pc;
         } catch (IOException ex) {
-            LOG.warn("Failed to get TV Credis: {}", ex.getMessage());
+            LOG.warn("Failed to get TV Episode Credis: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }

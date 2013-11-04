@@ -17,14 +17,14 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.person;
+package com.omertron.themoviedbapi.model.type;
 
 /**
- * @author stuart.boston
+ * ArtworkType enum List of the artwork types that are available
  */
-public enum PersonType {
+public enum ArtworkType {
 
-    CAST, // A member of the cast
-    CREW, // A member of the crew
-    PERSON  // No specific type
+    POSTER,     // Poster artwork
+    BACKDROP,   // Fanart/backdrop
+    PROFILE     // Person image
 }

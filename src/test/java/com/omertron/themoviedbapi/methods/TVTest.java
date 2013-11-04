@@ -25,7 +25,7 @@ import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.*;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonCredits;
 import com.omertron.themoviedbapi.model.tv.TVEpisode;
 import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
@@ -116,11 +116,10 @@ public class TVTest {
     public void testGetTvCredits() throws MovieDbException {
         LOG.info("getTvCredits");
 
-        TmdbResultsList<Person> result = tmdb.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
-        LOG.info("{}",result);
-        assertNotNull("Null results", result.getResults());
-        assertFalse("Empty results", result.getResults().isEmpty());
-        assertTrue("No credits returned", result.getResults().size() > 0);
+        PersonCredits result = tmdb.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
+        assertFalse("No cast", result.getCast().isEmpty());
+        assertFalse("No crew", result.getCrew().isEmpty());
+        assertTrue("Guest stars returned", result.getGuestStar().isEmpty());
     }
 
     /**
@@ -215,9 +214,10 @@ public class TVTest {
     @Test
     public void testGetTvEpisodeCredits() throws MovieDbException {
         LOG.info("getTvEpisodeCredits");
-        TmdbResultsList<Person> result = tmdb.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
-        LOG.info("{}", result);
-        fail("Unfinished");
+        PersonCredits result = tmdb.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
+        assertFalse("No cast", result.getCast().isEmpty());
+        assertFalse("No crew", result.getCrew().isEmpty());
+        assertTrue("Guest stars returned", result.getGuestStar().isEmpty());
     }
 
     /**

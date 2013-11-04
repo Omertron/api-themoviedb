@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.omertron.themoviedbapi.model.type.ArtworkType;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -41,6 +42,7 @@ import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.model.movie.*;
 import com.omertron.themoviedbapi.model.person.*;
 import com.omertron.themoviedbapi.model.tv.*;
+import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -542,7 +544,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<PersonMovie> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/casts");
         apiUrl.addArgument(PARAM_ID, movieId);
 
@@ -553,7 +555,7 @@ public class TheMovieDbApi {
 
         try {
             WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
+            TmdbResultsList<PersonMovie> results = new TmdbResultsList<PersonMovie>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -1175,7 +1177,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+    public PersonMovie getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON);
 
         apiUrl.addArgument(PARAM_ID, personId);
@@ -1185,7 +1187,7 @@ public class TheMovieDbApi {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, Person.class);
+            return mapper.readValue(webpage, PersonMovie.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -1202,7 +1204,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonCredit> getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<PersonCreditOld> getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
 
         apiUrl.addArgument(PARAM_ID, personId);
@@ -1213,7 +1215,7 @@ public class TheMovieDbApi {
 
         try {
             WrapperPersonCredits wrapper = mapper.readValue(webpage, WrapperPersonCredits.class);
-            TmdbResultsList<PersonCredit> results = new TmdbResultsList<PersonCredit>(wrapper.getAll());
+            TmdbResultsList<PersonCreditOld> results = new TmdbResultsList<PersonCreditOld>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -1276,7 +1278,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getPersonPopular() throws MovieDbException {
+    public TmdbResultsList<PersonMovie> getPersonPopular() throws MovieDbException {
         return getPersonPopular(0);
     }
 
@@ -1289,7 +1291,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getPersonPopular(int page) throws MovieDbException {
+    public TmdbResultsList<PersonMovie> getPersonPopular(int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/popular");
 
         if (page > 0) {
@@ -1301,7 +1303,7 @@ public class TheMovieDbApi {
 
         try {
             WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getPersonList());
+            TmdbResultsList<PersonMovie> results = new TmdbResultsList<PersonMovie>(wrapper.getPersonList());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -1316,13 +1318,13 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public Person getPersonLatest() throws MovieDbException {
+    public PersonMovie getPersonLatest() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, Person.class);
+            return mapper.readValue(webpage, PersonMovie.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest person: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -1590,7 +1592,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
+    public TmdbResultsList<PersonMovie> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "person");
         apiUrl.addArgument(PARAM_QUERY, personName);
         apiUrl.addArgument(PARAM_ADULT, includeAdult);
@@ -1604,7 +1606,7 @@ public class TheMovieDbApi {
 
         try {
             WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getResults());
+            TmdbResultsList<PersonMovie> results = new TmdbResultsList<PersonMovie>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -2140,7 +2142,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
         return tv.getTvCredits(id, language, appendToResponse);
     }
 
@@ -2233,7 +2235,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+    public PersonCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return tv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
     }
 

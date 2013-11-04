@@ -17,14 +17,18 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.type;
 
 /**
- * ArtworkType enum List of the artwork types that are available
+ * The type of the video
+ *
+ * @author Stuart
  */
-public enum ArtworkType {
+public enum VideoType {
 
-    POSTER,     // Poster artwork
-    BACKDROP,   // Fanart/backdrop
-    PROFILE     // Person image
+    MOVIE,
+    TV,
+    SERIES,
+    SEASON,
+    EPISODE;
 }

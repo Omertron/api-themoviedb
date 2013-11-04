@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.wrapper.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.person.PersonCredit;
-import com.omertron.themoviedbapi.model.person.PersonType;
+import com.omertron.themoviedbapi.model.person.PersonCreditOld;
+import com.omertron.themoviedbapi.model.type.PersonType;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,33 +33,33 @@ import java.util.List;
 public class WrapperPersonCredits extends AbstractWrapperAll {
 
     @JsonProperty("cast")
-    private List<PersonCredit> cast;
+    private List<PersonCreditOld> cast;
     @JsonProperty("crew")
-    private List<PersonCredit> crew;
+    private List<PersonCreditOld> crew;
 
-    public List<PersonCredit> getCast() {
+    public List<PersonCreditOld> getCast() {
         return cast;
     }
 
-    public void setCast(List<PersonCredit> cast) {
+    public void setCast(List<PersonCreditOld> cast) {
         this.cast = cast;
     }
 
-    public List<PersonCredit> getCrew() {
+    public List<PersonCreditOld> getCrew() {
         return crew;
     }
 
-    public void setCrew(List<PersonCredit> crew) {
+    public void setCrew(List<PersonCreditOld> crew) {
         this.crew = crew;
     }
 
-    public List<PersonCredit> getAll(PersonType... typeList) {
-        List<PersonCredit> personCredits = new ArrayList<PersonCredit>();
+    public List<PersonCreditOld> getAll(PersonType... typeList) {
+        List<PersonCreditOld> personCredits = new ArrayList<PersonCreditOld>();
         List<PersonType> types = getTypeList(PersonType.class, typeList);
 
         // Add a cast member
         if (types.contains(PersonType.CAST)) {
-            for (PersonCredit member : cast) {
+            for (PersonCreditOld member : cast) {
                 member.setPersonType(PersonType.CAST);
                 personCredits.add(member);
             }
@@ -67,7 +67,7 @@ public class WrapperPersonCredits extends AbstractWrapperAll {
 
         // Add a crew member
         if (types.contains(PersonType.CREW)) {
-            for (PersonCredit member : crew) {
+            for (PersonCreditOld member : crew) {
                 member.setPersonType(PersonType.CREW);
                 personCredits.add(member);
             }

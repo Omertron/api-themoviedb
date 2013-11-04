@@ -21,12 +21,13 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model.type.PersonType;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author stuart.boston
  */
-public class PersonCredit extends AbstractJsonMapping {
+public class PersonCreditOld extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_STRING = "";

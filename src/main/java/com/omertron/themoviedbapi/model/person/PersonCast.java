@@ -33,9 +33,7 @@ public class PersonCast extends PersonBasic {
     private String character;
     @JsonProperty("order")
     private int order;
-    @JsonProperty("cast_id")
-    private int castId;
-    @JsonProperty("credit_id")
+    // holds the castId (Movie) or the creditId (TV)
     private String creditId;
 
     public String getCharacter() {
@@ -46,10 +44,6 @@ public class PersonCast extends PersonBasic {
         return order;
     }
 
-    public int getCastId() {
-        return castId;
-    }
-
     public String getCreditId() {
         return creditId;
     }
@@ -58,34 +52,16 @@ public class PersonCast extends PersonBasic {
         this.character = StringUtils.trimToEmpty(character);
     }
 
-    /**
-     * Set the character name. Used by TV cast
-     *
-     * @param character
-     */
-    @JsonProperty("character_name")
-    public void setCharacterName(String character) {
-        setCharacter(character);
-    }
-
     public void setOrder(int order) {
         this.order = order;
     }
 
-    /**
-     * Set the sort order. Used by TV cast
-     *
-     * @param order
-     */
-    @JsonProperty("sort_order")
-    public void setSortOrder(int order) {
-        setOrder(order);
-    }
-
+    @JsonProperty("cast_id")
     public void setCastId(int castId) {
-        this.castId = castId;
+        this.creditId = Integer.toString(castId);
     }
 
+    @JsonProperty("credit_id")
     public void setCreditId(String creditId) {
         this.creditId = creditId;
     }
@@ -106,9 +82,6 @@ public class PersonCast extends PersonBasic {
             return false;
         }
         if (this.order != other.order) {
-            return false;
-        }
-        if (this.castId != other.castId) {
             return false;
         }
         return StringUtils.equals(this.creditId, other.creditId);

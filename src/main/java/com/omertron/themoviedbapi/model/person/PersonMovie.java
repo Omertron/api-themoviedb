@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model.type.PersonType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * @author stuart.boston
  */
-public class Person extends PersonBasic {
+public class PersonMovie extends PersonBasic {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,8 +47,6 @@ public class Person extends PersonBasic {
     private String job = DEFAULT_STRING;         // Crew
     private String character = DEFAULT_STRING;   // Cast
     private int order = -1;                      // Cast
-    @JsonProperty("adult")
-    private boolean adult = false;  // Person info
     @JsonProperty("also_known_as")
     private List<String> aka = new ArrayList<String>();
     @JsonProperty("biography")
@@ -125,10 +124,6 @@ public class Person extends PersonBasic {
         return personType;
     }
 
-    public boolean isAdult() {
-        return adult;
-    }
-
     public List<String> getAka() {
         return aka;
     }
@@ -181,10 +176,6 @@ public class Person extends PersonBasic {
         this.personType = personType;
     }
 
-    public void setAdult(boolean adult) {
-        this.adult = adult;
-    }
-
     public void setAka(List<String> aka) {
         this.aka = aka;
     }
@@ -228,7 +219,7 @@ public class Person extends PersonBasic {
         if (!super.equals(obj)) {
             return false;
         }
-        final Person other = (Person) obj;
+        final PersonMovie other = (PersonMovie) obj;
         if (this.personType != other.personType) {
             return false;
         }

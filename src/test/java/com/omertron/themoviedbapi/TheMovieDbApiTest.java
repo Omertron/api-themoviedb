@@ -47,7 +47,6 @@ import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Discover;
-import com.omertron.themoviedbapi.model.ExternalIds;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.model.Keyword;
@@ -63,12 +62,8 @@ import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbBasic;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import com.omertron.themoviedbapi.model.movie.MovieList;
-import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.person.PersonCredit;
-import com.omertron.themoviedbapi.model.tv.TVEpisode;
-import com.omertron.themoviedbapi.model.tv.TVSeason;
-import com.omertron.themoviedbapi.model.tv.TVSeries;
-import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
+import com.omertron.themoviedbapi.model.person.PersonMovie;
+import com.omertron.themoviedbapi.model.person.PersonCreditOld;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import org.junit.Test;
@@ -246,7 +241,7 @@ public class TheMovieDbApiTest {
     @Test
     public void testGetMovieCasts() throws MovieDbException {
         LOG.info("getMovieCasts");
-        TmdbResultsList<Person> people = tmdb.getMovieCasts(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
+        TmdbResultsList<PersonMovie> people = tmdb.getMovieCasts(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
         assertTrue("No cast information", people.getResults().size() > 0);
 
         String name1 = "Harrison Ford";
@@ -254,7 +249,7 @@ public class TheMovieDbApiTest {
         boolean foundName1 = Boolean.FALSE;
         boolean foundName2 = Boolean.FALSE;
 
-        for (Person person : people.getResults()) {
+        for (PersonMovie person : people.getResults()) {
             if (!foundName1 && person.getName().equalsIgnoreCase(name1)) {
                 foundName1 = Boolean.TRUE;
             }
@@ -403,24 +398,24 @@ public class TheMovieDbApiTest {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
         boolean includeAdult = false;
-        TmdbResultsList<Person> result = tmdb.searchPeople(personName, includeAdult, 0);
+        TmdbResultsList<PersonMovie> result = tmdb.searchPeople(personName, includeAdult, 0);
         assertTrue("Couldn't find the person", result.getResults().size() > 0);
     }
 
     /**
-     * Test of getPersonInfo method, of class TheMovieDbApi.
+     * Test of getPersonMovieInfo method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
     @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
-        Person result = tmdb.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
+        PersonMovie result = tmdb.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
         assertTrue("Wrong actor returned", result.getId() == ID_PERSON_BRUCE_WILLIS);
     }
 
     /**
-     * Test of getPersonCredits method, of class TheMovieDbApi.
+     * Test of getPersonMovieCredits method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -428,12 +423,12 @@ public class TheMovieDbApiTest {
     public void testGetPersonCredits() throws MovieDbException {
         LOG.info("getPersonCredits");
 
-        TmdbResultsList<PersonCredit> result = tmdb.getPersonCredits(ID_PERSON_BRUCE_WILLIS);
+        TmdbResultsList<PersonCreditOld> result = tmdb.getPersonCredits(ID_PERSON_BRUCE_WILLIS);
         assertTrue("No cast information", result.getResults().size() > 0);
     }
 
     /**
-     * Test of getPersonImages method, of class TheMovieDbApi.
+     * Test of getPersonMovieImages method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -702,7 +697,7 @@ public class TheMovieDbApiTest {
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
 
-        Person result = tmdb.getPersonLatest();
+        PersonMovie result = tmdb.getPersonLatest();
 
         assertNotNull("No results found", result);
         assertTrue("No results found", StringUtils.isNotBlank(result.getName()));
@@ -813,7 +808,7 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of getPersonChanges method, of class TheMovieDbApi.
+     * Test of getPersonMovieChanges method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -894,14 +889,14 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of getPersonPopular method, of class TheMovieDbApi.
+     * Test of getPersonMoviePopular method, of class TheMovieDbApi.
      */
     @Ignore("Test not required")
     public void testGetPersonPopular_0args() {
     }
 
     /**
-     * Test of getPersonPopular method, of class TheMovieDbApi.
+     * Test of getPersonMoviePopular method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -909,7 +904,7 @@ public class TheMovieDbApiTest {
     public void testGetPersonPopular_int() throws MovieDbException {
         LOG.info("getPersonPopular");
         int page = 0;
-        TmdbResultsList<Person> result = tmdb.getPersonPopular(page);
+        TmdbResultsList<PersonMovie> result = tmdb.getPersonPopular(page);
         assertFalse("No popular people", result.getResults().isEmpty());
     }
 
@@ -947,7 +942,7 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of getPersonChangesList method, of class TheMovieDbApi.
+     * Test of getPersonMovieChangesList method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
