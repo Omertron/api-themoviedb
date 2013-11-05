@@ -37,7 +37,11 @@ import org.yamj.api.common.http.CommonHttpClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
-import com.omertron.themoviedbapi.methods.TV;
+import com.omertron.themoviedbapi.methods.TmdbCollection;
+import com.omertron.themoviedbapi.methods.TmdbCompany;
+import com.omertron.themoviedbapi.methods.TmdbGenre;
+import com.omertron.themoviedbapi.methods.TmdbKeyword;
+import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.model.movie.*;
 import com.omertron.themoviedbapi.model.person.*;
@@ -66,27 +70,26 @@ import com.omertron.themoviedbapi.wrapper.person.WrapperPersonList;
 public class TheMovieDbApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
-    private static final String FAILED_KEYWORD = "Failed to get keyword: {}";
     private String apiKey;
     private CommonHttpClient httpClient;
     private TmdbConfiguration tmdbConfig;
     // API Methods
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
-    private static final String BASE_COMPANY = "company/";
-    private static final String BASE_GENRE = "genre/";
     private static final String BASE_AUTH = "authentication/";
-    private static final String BASE_COLLECTION = "collection/";
     private static final String BASE_ACCOUNT = "account/";
     private static final String BASE_SEARCH = "search/";
     private static final String BASE_LIST = "list/";
-    private static final String BASE_KEYWORD = "keyword/";
     private static final String BASE_JOB = "job/";
     private static final String BASE_DISCOVER = "discover/";
     // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
     // Sub-objects
-    private TV tv;
+    private TmdbTV tmdbTv;
+    private TmdbCollection tmdbCollection;
+    private TmdbKeyword tmdbKeyword;
+    private TmdbGenre tmdbGenre;
+    private TmdbCompany tmdbCompany;
 
     /**
      * API for The Movie Db.
@@ -109,7 +112,11 @@ public class TheMovieDbApi {
         this.apiKey = apiKey;
         this.httpClient = httpClient;
 
-        tv = new TV(apiKey, httpClient);
+        tmdbTv = new TmdbTV(apiKey, httpClient);
+        tmdbCollection = new TmdbCollection(apiKey, httpClient);
+        tmdbKeyword = new TmdbKeyword(apiKey, httpClient);
+        tmdbGenre = new TmdbGenre(apiKey, httpClient);
+        tmdbCompany = new TmdbCompany(apiKey, httpClient);
 
         ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
@@ -348,7 +355,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to get favorite movies: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -369,7 +376,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to change favorite movies: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -416,7 +423,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to modify watch list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1062,7 +1069,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to get rated movies: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1098,7 +1105,7 @@ public class TheMovieDbApi {
             int code = status.getStatusCode();
             return code == 12;
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to post movie rating: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1116,22 +1123,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION);
-        apiUrl.addArgument(PARAM_ID, collectionId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, CollectionInfo.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get collection information: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbCollection.getCollectionInfo(collectionId, language);
     }
 
     /**
@@ -1143,25 +1135,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION, "/images");
-        apiUrl.addArgument(PARAM_ID, collectionId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get collection images: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbCollection.getCollectionImages(collectionId, language);
     }
     //</editor-fold>
 
@@ -1170,6 +1144,14 @@ public class TheMovieDbApi {
      * This method is used to retrieve all of the basic person information.
      *
      * It will return the single highest rated profile image.
+     *
+     * @param personId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    /**
+     * This method is used to retrieve all of the basic person information.It will return the single highest rated profile image.
      *
      * @param personId
      * @param appendToResponse
@@ -1338,19 +1320,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COMPANY);
-
-        apiUrl.addArgument(PARAM_ID, companyId);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, Company.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get company information: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbCompany.getCompanyInfo(companyId);
     }
 
     /**
@@ -1367,30 +1337,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COMPANY, "/movies");
-
-        apiUrl.addArgument(PARAM_ID, companyId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get company movies: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbCompany.getCompanyMovies(companyId, language, page);
     }
     //</editor-fold>
 
@@ -1405,21 +1352,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/list");
-        apiUrl.addArgument(PARAM_LANGUAGE, language);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
-            TmdbResultsList<Genre> results = new TmdbResultsList<Genre>(wrapper.getGenres());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get genre list: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbGenre.getGenreList(language);
     }
 
     /**
@@ -1437,31 +1370,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/movies");
-        apiUrl.addArgument(PARAM_ID, genreId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        apiUrl.addArgument(PARAM_INCLUDE_ALL_MOVIES, includeAllMovies);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get genre movie list: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies);
     }
     //</editor-fold>
 
@@ -1513,7 +1422,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Search for TV shows by title.
+     * Search for TmdbTV shows by title.
      *
      * @param name
      * @param searchYear
@@ -1524,11 +1433,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
-        return tv.searchTv(name, searchYear, language, searchType, page);
+        return tmdbTv.searchTv(name, searchYear, language, searchType, page);
     }
 
     /**
-     * Search for TV shows by title.
+     * Search for TmdbTV shows by title.
      *
      * @param name
      * @param searchYear
@@ -1537,7 +1446,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language) throws MovieDbException {
-        return tv.searchTv(name, searchYear, language, null, 0);
+        return tmdbTv.searchTv(name, searchYear, language, null, 0);
     }
 
     /**
@@ -1789,7 +1698,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, StatusCodeList.class).getListId();
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to create list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1812,7 +1721,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to process movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1856,7 +1765,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to modify movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1879,7 +1788,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to get watch list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1903,7 +1812,7 @@ public class TheMovieDbApi {
         try {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
+            LOG.warn("Failed to delete movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
@@ -1918,19 +1827,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Keyword getKeyword(String keywordId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD);
-        apiUrl.addArgument(PARAM_ID, keywordId);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, Keyword.class);
-        } catch (IOException ex) {
-            LOG.warn(FAILED_KEYWORD, ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-
+        return tmdbKeyword.getKeyword(keywordId);
     }
 
     /**
@@ -1943,30 +1840,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDbBasic> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD, "/movies");
-        apiUrl.addArgument(PARAM_ID, keywordId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
-            TmdbResultsList<MovieDbBasic> results = new TmdbResultsList<MovieDbBasic>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get top rated movies: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-
+        return tmdbKeyword.getKeywordMovies(keywordId, language, page);
     }
     //</editor-fold>
 
@@ -2115,9 +1989,9 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="TV Methods">
+    //<editor-fold defaultstate="collapsed" desc="TmdbTV Methods">
     /**
-     * Get the primary information about a TV series by id.
+     * Get the primary information about a TmdbTV series by id.
      *
      * @param id
      * @param language
@@ -2126,11 +2000,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TVSeries getTv(int id, String language, String... appendToResponse) throws MovieDbException {
-        return tv.getTv(id, language, appendToResponse);
+        return tmdbTv.getTv(id, language, appendToResponse);
     }
 
     /**
-     * Get the cast & crew information about a TV series. <br/>
+     * Get the cast & crew information about a TmdbTV series. <br/>
      * Just like the website, this information is pulled from the LAST season of the series.
      *
      * @param id
@@ -2140,11 +2014,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonCredits getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
-        return tv.getTvCredits(id, language, appendToResponse);
+        return tmdbTv.getTvCredits(id, language, appendToResponse);
     }
 
     /**
-     * Get the external ids that we have stored for a TV series.
+     * Get the external ids that we have stored for a TmdbTV series.
      *
      * @param id
      * @param language
@@ -2152,11 +2026,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public ExternalIds getTvExternalIds(int id, String language) throws MovieDbException {
-        return tv.getTvExternalIds(id, language);
+        return tmdbTv.getTvExternalIds(id, language);
     }
 
     /**
-     * Get the images (posters and backdrops) for a TV series.
+     * Get the images (posters and backdrops) for a TmdbTV series.
      *
      * @param id
      * @param language
@@ -2164,11 +2038,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getTvImages(int id, String language) throws MovieDbException {
-        return tv.getTvImages(id, language);
+        return tmdbTv.getTvImages(id, language);
     }
 
     /**
-     * Get the primary information about a TV season by its season number.
+     * Get the primary information about a TmdbTV season by its season number.
      *
      * @param id
      * @param seasonNumber
@@ -2178,11 +2052,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TVSeason getTvSeason(int id, int seasonNumber, String language, String... appendToResponse) throws MovieDbException {
-        return tv.getTvSeason(id, seasonNumber, language, appendToResponse);
+        return tmdbTv.getTvSeason(id, seasonNumber, language, appendToResponse);
     }
 
     /**
-     * Get the external ids that we have stored for a TV season by season number.
+     * Get the external ids that we have stored for a TmdbTV season by season number.
      *
      * @param id
      * @param seasonNumber
@@ -2191,11 +2065,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public ExternalIds getTvSeasonExternalIds(int id, int seasonNumber, String language) throws MovieDbException {
-        return tv.getTvSeasonExternalIds(id, seasonNumber, language);
+        return tmdbTv.getTvSeasonExternalIds(id, seasonNumber, language);
     }
 
     /**
-     * Get the images (posters) that we have stored for a TV season by season number.
+     * Get the images (posters) that we have stored for a TmdbTV season by season number.
      *
      * @param id
      * @param seasonNumber
@@ -2204,11 +2078,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getTvSeasonImages(int id, int seasonNumber, String language) throws MovieDbException {
-        return tv.getTvSeasonImages(id, seasonNumber, language);
+        return tmdbTv.getTvSeasonImages(id, seasonNumber, language);
     }
 
     /**
-     * Get the primary information about a TV episode by combination of a season and episode number.
+     * Get the primary information about a TmdbTV episode by combination of a season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -2219,11 +2093,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TVEpisode getTvEpisode(int id, int seasonNumber, int episodeNumber, String language, String... appendToResponse) throws MovieDbException {
-        return tv.getTvEpisode(id, seasonNumber, episodeNumber, language, appendToResponse);
+        return tmdbTv.getTvEpisode(id, seasonNumber, episodeNumber, language, appendToResponse);
     }
 
     /**
-     * Get the TV episode credits by combination of season and episode number.
+     * Get the TmdbTV episode credits by combination of season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -2233,11 +2107,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
-        return tv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
+        return tmdbTv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
     }
 
     /**
-     * Get the external ids for a TV episode by combination of a season and episode number.
+     * Get the external ids for a TmdbTV episode by combination of a season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -2247,11 +2121,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public ExternalIds getTvEpisodeExternalIds(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
-        return tv.getTvEpisodeExternalIds(id, seasonNumber, episodeNumber, language);
+        return tmdbTv.getTvEpisodeExternalIds(id, seasonNumber, episodeNumber, language);
     }
 
     /**
-     * Get the images (episode stills) for a TV episode by combination of a season and episode number.
+     * Get the images (episode stills) for a TmdbTV episode by combination of a season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -2261,7 +2135,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public String getTvEpisodeImages(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
-        return tv.getTvEpisodeImages(id, seasonNumber, episodeNumber, language);
+        return tmdbTv.getTvEpisodeImages(id, seasonNumber, episodeNumber, language);
     }
     //</editor-fold>
 

@@ -45,23 +45,23 @@ import org.apache.commons.lang3.StringUtils;
 import org.yamj.api.common.http.CommonHttpClient;
 
 /**
- * Class to hold the TV methods
+ * Class to hold the TmdbTV methods
  *
  * @author stuart.boston
  */
-public class TV extends AbstractMethod {
+public class TmdbTV extends AbstractMethod {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TV.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbTV.class);
     // API URL Parameters
     private static final String BASE_SEARCH = "search/";
     private static final String BASE_TV = "tv/";
 
-    public TV(String apiKey, CommonHttpClient httpClient) {
+    public TmdbTV(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }
 
     /**
-     * Search for TV shows by title.
+     * Search for TmdbTV shows by title.
      *
      * @param name
      * @param searchYear
@@ -108,9 +108,9 @@ public class TV extends AbstractMethod {
 
     }
 
-    //<editor-fold defaultstate="collapsed" desc="TV methods">
+    //<editor-fold defaultstate="collapsed" desc="TmdbTV methods">
     /**
-     * Get the primary information about a TV series by id.
+     * Get the primary information about a TmdbTV series by id.
      *
      * @param id
      * @param language
@@ -143,7 +143,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the cast & crew information about a TV series. <br/>
+     * Get the cast & crew information about a TmdbTV series. <br/>
      * Just like the website, this information is pulled from the LAST season of the series.
      *
      * @param id
@@ -183,7 +183,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the external ids that we have stored for a TV series.
+     * Get the external ids that we have stored for a TmdbTV series.
      *
      * @param id
      * @param language
@@ -216,7 +216,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the images (posters and backdrops) for a TV series.
+     * Get the images (posters and backdrops) for a TmdbTV series.
      *
      * @param id
      * @param language
@@ -248,9 +248,9 @@ public class TV extends AbstractMethod {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="TV Season methods">
+    //<editor-fold defaultstate="collapsed" desc="TmdbTV Season methods">
     /**
-     * Get the primary information about a TV season by its season number.
+     * Get the primary information about a TmdbTV season by its season number.
      *
      * @param id
      * @param seasonNumber
@@ -284,7 +284,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the external ids that we have stored for a TV season by season number.
+     * Get the external ids that we have stored for a TmdbTV season by season number.
      *
      * @param id
      * @param seasonNumber
@@ -319,7 +319,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the images (posters) that we have stored for a TV season by season number.
+     * Get the images (posters) that we have stored for a TmdbTV season by season number.
      *
      * @param id
      * @param seasonNumber
@@ -353,9 +353,9 @@ public class TV extends AbstractMethod {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="TV Episode methods">
+    //<editor-fold defaultstate="collapsed" desc="TmdbTV Episode methods">
     /**
-     * Get the primary information about a TV episode by combination of a season and episode number.
+     * Get the primary information about a TmdbTV episode by combination of a season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -389,7 +389,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the TV episode credits by combination of season and episode number.
+     * Get the TmdbTV episode credits by combination of season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -427,7 +427,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the external ids for a TV episode by combination of a season and episode number.
+     * Get the external ids for a TmdbTV episode by combination of a season and episode number.
      *
      * @param id
      * @param seasonNumber
@@ -462,7 +462,7 @@ public class TV extends AbstractMethod {
     }
 
     /**
-     * Get the images (episode stills) for a TV episode by combination of a season and episode number.
+     * Get the images (episode stills) for a TmdbTV episode by combination of a season and episode number.
      *
      * @param id
      * @param seasonNumber
