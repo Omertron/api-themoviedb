@@ -47,18 +47,16 @@ import org.slf4j.LoggerFactory;
  *
  * @author stuart.boston
  */
-public class TVTest {
+public class TmdbTVTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TVTest.class);
-    // API Key
-    private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbTVTest.class);
     // API
     private static TheMovieDbApi tmdb;
     // IDs
     private static final int ID_BIG_BANG_THEORY = 1418;
 
-    public TVTest() {
+    public TmdbTVTest() {
     }
 
     @BeforeClass
@@ -77,18 +75,6 @@ public class TVTest {
 
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of searchTv method, of class TV.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    //@Test
-    public void testSearchTv() throws MovieDbException {
-        LOG.info("searchTv");
-        TmdbResultsList<TVSeriesBasic> results = tmdb.searchTv("Big Bang Theory", 0, LANGUAGE_DEFAULT);
-        assertFalse("No shows found, should be at least 1", results.getResults().isEmpty());
     }
 
     /**

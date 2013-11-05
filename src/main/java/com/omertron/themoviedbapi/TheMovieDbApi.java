@@ -78,7 +78,7 @@ public class TheMovieDbApi {
     // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
     // Sub-objects
-    private static TmdbTV tmdbTv = null;
+    private static TmdbTV tmdbTv;
     private static TmdbCollection tmdbCollection;
     private static TmdbKeyword tmdbKeyword;
     private static TmdbGenre tmdbGenre;
@@ -124,6 +124,7 @@ public class TheMovieDbApi {
     }
 
     //<editor-fold defaultstate="collapsed" desc="Initialize functions">
+    // TODO: These are ugly, perhaps work out how to use Generics
     private void initChanges() {
         if (tmdbChanges == null) {
             tmdbChanges = new TmdbChanges(apiKey, httpClient);
