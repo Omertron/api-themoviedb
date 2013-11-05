@@ -24,12 +24,9 @@ import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
-import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.tv.TVEpisode;
 import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
-import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
-import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.model.type.VideoType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -37,8 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
-import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
-import com.omertron.themoviedbapi.wrapper.tv.WrapperTVSeries;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
@@ -53,59 +48,10 @@ public class TmdbTV extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbTV.class);
     // API URL Parameters
-    private static final String BASE_SEARCH = "search/";
     private static final String BASE_TV = "tv/";
 
     public TmdbTV(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
-    }
-
-    /**
-     * Search for TmdbTV shows by title.
-     *
-     * @param name
-     * @param searchYear
-     * @param language
-     * @param searchType
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "tv");
-        if (StringUtils.isNotBlank(name)) {
-            apiUrl.addArgument(PARAM_QUERY, name);
-        }
-
-        if (searchYear > 0) {
-            apiUrl.addArgument(PARAM_FIRST_AIR_DATE_YEAR, Integer.toString(searchYear));
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        if (searchType != null) {
-            apiUrl.addArgument(PARAM_SEARCH_TYPE, searchType.toString());
-        }
-
-        URL url = apiUrl.buildUrl();
-
-        String webpage = requestWebPage(url);
-        try {
-            WrapperTVSeries wrapper = mapper.readValue(webpage, WrapperTVSeries.class);
-            TmdbResultsList<TVSeriesBasic> results = new TmdbResultsList<TVSeriesBasic>(wrapper.getSeries());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find TV Series: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-
     }
 
     //<editor-fold defaultstate="collapsed" desc="TmdbTV methods">

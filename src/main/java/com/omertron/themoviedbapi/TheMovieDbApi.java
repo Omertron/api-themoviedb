@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model.type.ArtworkType;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -37,10 +36,13 @@ import org.yamj.api.common.http.CommonHttpClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
+import com.omertron.themoviedbapi.methods.AbstractMethod;
 import com.omertron.themoviedbapi.methods.TmdbCollection;
 import com.omertron.themoviedbapi.methods.TmdbCompany;
 import com.omertron.themoviedbapi.methods.TmdbGenre;
 import com.omertron.themoviedbapi.methods.TmdbKeyword;
+import com.omertron.themoviedbapi.methods.TmdbPeople;
+import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.model.movie.*;
@@ -58,7 +60,6 @@ import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieDbList;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.person.WrapperCasts;
 import com.omertron.themoviedbapi.wrapper.person.WrapperPerson;
-import com.omertron.themoviedbapi.wrapper.person.WrapperPersonList;
 
 /**
  * The MovieDb API
@@ -75,7 +76,6 @@ public class TheMovieDbApi {
     private TmdbConfiguration tmdbConfig;
     // API Methods
     private static final String BASE_MOVIE = "movie/";
-    private static final String BASE_PERSON = "person/";
     private static final String BASE_AUTH = "authentication/";
     private static final String BASE_ACCOUNT = "account/";
     private static final String BASE_SEARCH = "search/";
@@ -90,6 +90,8 @@ public class TheMovieDbApi {
     private TmdbKeyword tmdbKeyword;
     private TmdbGenre tmdbGenre;
     private TmdbCompany tmdbCompany;
+    private TmdbPeople tmdbPeople;
+    private TmdbSearch tmdbSearch;
 
     /**
      * API for The Movie Db.
@@ -117,6 +119,8 @@ public class TheMovieDbApi {
         tmdbKeyword = new TmdbKeyword(apiKey, httpClient);
         tmdbGenre = new TmdbGenre(apiKey, httpClient);
         tmdbCompany = new TmdbCompany(apiKey, httpClient);
+        tmdbPeople = new TmdbPeople(apiKey, httpClient);
+        tmdbSearch = new TmdbSearch(apiKey, httpClient);
 
         ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
@@ -1141,16 +1145,6 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="People Functions">
     /**
-     * This method is used to retrieve all of the basic person information.
-     *
-     * It will return the single highest rated profile image.
-     *
-     * @param personId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    /**
      * This method is used to retrieve all of the basic person information.It will return the single highest rated profile image.
      *
      * @param personId
@@ -1159,20 +1153,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonMovieOld getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON);
-
-        apiUrl.addArgument(PARAM_ID, personId);
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, PersonMovieOld.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get movie info: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbPeople.getPersonInfo(personId, appendToResponse);
     }
 
     /**
@@ -1186,21 +1167,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonMovieCredits getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
-
-        apiUrl.addArgument(PARAM_ID, personId);
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
-            return pc;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get person credits: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbPeople.getPersonCredits(personId, appendToResponse);
     }
 
     /**
@@ -1211,22 +1178,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/images");
-
-        apiUrl.addArgument(PARAM_ID, personId);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.PROFILE));
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get person images: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbPeople.getPersonImages(personId);
     }
 
     /**
@@ -1245,8 +1197,8 @@ public class TheMovieDbApi {
      * @param endDate
      * @throws MovieDbException
      */
-    public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
-        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    public String getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        return tmdbPeople.getPersonChanges(personId, startDate, endDate);
     }
 
     /**
@@ -1258,7 +1210,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<PersonMovieOld> getPersonPopular() throws MovieDbException {
-        return getPersonPopular(0);
+        return tmdbPeople.getPersonPopular(0);
     }
 
     /**
@@ -1271,24 +1223,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<PersonMovieOld> getPersonPopular(int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/popular");
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
-            TmdbResultsList<PersonMovieOld> results = new TmdbResultsList<PersonMovieOld>(wrapper.getPersonList());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get person images: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbPeople.getPersonPopular(page);
     }
 
     /**
@@ -1298,18 +1233,9 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonMovieOld getPersonLatest() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, PersonMovieOld.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get latest person: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbPeople.getPersonLatest();
     }
-    //</editor-fold>
+        //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Company Functions">
     /**
@@ -1387,38 +1313,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "movie");
-        if (StringUtils.isNotBlank(movieName)) {
-            apiUrl.addArgument(PARAM_QUERY, movieName);
-        }
-
-        if (searchYear > 0) {
-            apiUrl.addArgument(PARAM_YEAR, Integer.toString(searchYear));
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        apiUrl.addArgument(PARAM_ADULT, Boolean.toString(includeAdult));
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
-        String webpage = requestWebPage(url);
-        try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find movie: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-
+        return tmdbSearch.searchMovie(movieName, searchYear, language, includeAdult, page);
     }
 
     /**
@@ -1433,7 +1328,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
-        return tmdbTv.searchTv(name, searchYear, language, searchType, page);
+        return tmdbSearch.searchTv(name, searchYear, language, searchType, page);
     }
 
     /**
@@ -1446,7 +1341,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language) throws MovieDbException {
-        return tmdbTv.searchTv(name, searchYear, language, null, 0);
+        return tmdbSearch.searchTv(name, searchYear, language, null, 0);
     }
 
     /**
@@ -1459,32 +1354,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collections");
-
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
-        String webpage = requestWebPage(url);
-        try {
-            WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
-            TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find collection: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbSearch.searchCollection(query, language, page);
     }
 
     /**
@@ -1499,26 +1369,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<PersonMovieOld> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "person");
-        apiUrl.addArgument(PARAM_QUERY, personName);
-        apiUrl.addArgument(PARAM_ADULT, includeAdult);
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
-            TmdbResultsList<PersonMovieOld> results = new TmdbResultsList<PersonMovieOld>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find person: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbSearch.searchPeople(personName, includeAdult, page);
     }
 
     /**
@@ -1531,32 +1382,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "list");
-
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
-        String webpage = requestWebPage(url);
-        try {
-            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
-            TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find list: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbSearch.searchList(query, language, page);
     }
 
     /**
@@ -1573,24 +1399,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "company");
-        apiUrl.addArgument(PARAM_QUERY, companyName);
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-        try {
-            WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
-            TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find company: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbSearch.searchCompanies(companyName, page);
     }
 
     /**
@@ -1602,28 +1411,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "keyword");
-
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
-        String webpage = requestWebPage(url);
-        try {
-            WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
-            TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find keyword: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbSearch.searchKeyword(query, page);
     }
     //</editor-fold>
 
