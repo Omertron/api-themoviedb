@@ -66,6 +66,8 @@ public class PersonCast extends PersonBasic {
         this.creditId = creditId;
     }
 
+
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

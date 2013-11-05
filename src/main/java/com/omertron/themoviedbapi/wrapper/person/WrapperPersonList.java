@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.person.PersonMovie;
+import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import java.util.List;
 
@@ -31,13 +31,13 @@ import java.util.List;
 public class WrapperPersonList extends AbstractWrapperAll {
 
     @JsonProperty("results")
-    private List<PersonMovie> personList;
+    private List<PersonMovieOld> personList;
 
-    public List<PersonMovie> getPersonList() {
+    public List<PersonMovieOld> getPersonList() {
         return personList;
     }
 
-    public void setPersonList(List<PersonMovie> personList) {
+    public void setPersonList(List<PersonMovieOld> personList) {
         this.personList = personList;
     }
 }

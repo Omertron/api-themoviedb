@@ -30,16 +30,14 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class PersonCredits extends AbstractJsonMapping {
+public class PersonMovieCredits extends AbstractJsonMapping {
 
     private int id;
     private VideoType videoType;
     @JsonProperty("cast")
-    private final List<PersonCast> cast = Collections.emptyList();
-    @JsonProperty("guest_stars")
-    private final List<PersonCast> guestStar = Collections.emptyList();
+    private final List<PersonMovieCast> cast = Collections.emptyList();
     @JsonProperty("crew")
-    private final List<PersonCrew> crew = Collections.emptyList();
+    private final List<PersonMovieCrew> crew = Collections.emptyList();
 
     public int getId() {
         return id;
@@ -57,28 +55,19 @@ public class PersonCredits extends AbstractJsonMapping {
         this.videoType = videoType;
     }
 
-    public List<PersonCast> getCast() {
+    public List<PersonMovieCast> getCast() {
         return cast;
     }
 
-    public List<PersonCast> getGuestStar() {
-        return guestStar;
-    }
-
-    public List<PersonCrew> getCrew() {
+    public List<PersonMovieCrew> getCrew() {
         return crew;
     }
 
-    public void addCast(PersonCast cast) {
+    public void addCast(PersonMovieCast cast) {
         this.cast.add(cast);
     }
 
-    public void addCrew(PersonCrew crew) {
+    public void addCrew(PersonMovieCrew crew) {
         this.crew.add(crew);
     }
-
-    public void addGuestStar(PersonCast guest) {
-        this.guestStar.add(guest);
-    }
-
 }

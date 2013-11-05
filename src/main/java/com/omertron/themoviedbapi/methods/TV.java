@@ -24,7 +24,7 @@ import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
-import com.omertron.themoviedbapi.model.person.PersonMovie;
+import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.tv.TVEpisode;
 import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;

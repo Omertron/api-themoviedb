@@ -217,7 +217,7 @@ public class TVTest {
         PersonCredits result = tmdb.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
         assertFalse("No cast", result.getCast().isEmpty());
         assertFalse("No crew", result.getCrew().isEmpty());
-        assertTrue("Guest stars returned", result.getGuestStar().isEmpty());
+        assertFalse("No Guest stars returned", result.getGuestStar().isEmpty());
     }
 
     /**

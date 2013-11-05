@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.person.PersonCreditOld;
+import com.omertron.themoviedbapi.model.person.PersonMovie;
 import com.omertron.themoviedbapi.model.type.PersonType;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import java.util.ArrayList;
@@ -33,42 +33,42 @@ import java.util.List;
 public class WrapperPersonCredits extends AbstractWrapperAll {
 
     @JsonProperty("cast")
-    private List<PersonCreditOld> cast;
+    private List<PersonMovie> cast;
     @JsonProperty("crew")
-    private List<PersonCreditOld> crew;
+    private List<PersonMovie> crew;
 
-    public List<PersonCreditOld> getCast() {
+    public List<PersonMovie> getCast() {
         return cast;
     }
 
-    public void setCast(List<PersonCreditOld> cast) {
+    public void setCast(List<PersonMovie> cast) {
         this.cast = cast;
     }
 
-    public List<PersonCreditOld> getCrew() {
+    public List<PersonMovie> getCrew() {
         return crew;
     }
 
-    public void setCrew(List<PersonCreditOld> crew) {
+    public void setCrew(List<PersonMovie> crew) {
         this.crew = crew;
     }
 
-    public List<PersonCreditOld> getAll(PersonType... typeList) {
-        List<PersonCreditOld> personCredits = new ArrayList<PersonCreditOld>();
+    public List<PersonMovie> getAll(PersonType... typeList) {
+        List<PersonMovie> personCredits = new ArrayList<PersonMovie>();
         List<PersonType> types = getTypeList(PersonType.class, typeList);
 
         // Add a cast member
         if (types.contains(PersonType.CAST)) {
-            for (PersonCreditOld member : cast) {
-                member.setPersonType(PersonType.CAST);
+            for (PersonMovie member : cast) {
+//                member.setPersonType(PersonType.CAST);
                 personCredits.add(member);
             }
         }
 
         // Add a crew member
         if (types.contains(PersonType.CREW)) {
-            for (PersonCreditOld member : crew) {
-                member.setPersonType(PersonType.CREW);
+            for (PersonMovie member : crew) {
+//                member.setPersonType(PersonType.CREW);
                 personCredits.add(member);
             }
         }
