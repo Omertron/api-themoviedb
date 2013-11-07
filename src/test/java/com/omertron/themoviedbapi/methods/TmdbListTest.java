@@ -17,7 +17,6 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
@@ -37,15 +36,13 @@ import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author stuart.boston
- */
 public class TmdbListTest {
+
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
     // API
     private static TheMovieDbApi tmdb;
+
     public TmdbListTest() {
     }
 
@@ -82,15 +79,16 @@ public class TmdbListTest {
 
     /**
      * Test of getUserLists method, of class TmdbList.
+     *
+     * @throws MovieDbException
      */
     @Test
-    public void testGetUserLists() throws Exception {
-        System.out.println("getUserLists");
+    public void testGetUserLists() throws MovieDbException {
+        LOG.info("getUserLists");
         String sessionId = "";
         int accountID = 0;
-        TmdbList instance = null;
         List<MovieDbList> expResult = null;
-        List<MovieDbList> result = instance.getUserLists(sessionId, accountID);
+        List<MovieDbList> result = tmdb.getUserLists(sessionId, accountID);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -100,14 +98,13 @@ public class TmdbListTest {
      * Test of createList method, of class TmdbList.
      */
     @Test
-    public void testCreateList() throws Exception {
-        System.out.println("createList");
+    public void testCreateList() throws MovieDbException {
+        LOG.info("createList");
         String sessionId = "";
         String name = "";
         String description = "";
-        TmdbList instance = null;
         String expResult = "";
-        String result = instance.createList(sessionId, name, description);
+        String result = tmdb.createList(sessionId, name, description);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -117,13 +114,12 @@ public class TmdbListTest {
      * Test of isMovieOnList method, of class TmdbList.
      */
     @Test
-    public void testIsMovieOnList() throws Exception {
-        System.out.println("isMovieOnList");
+    public void testIsMovieOnList() throws MovieDbException {
+        LOG.info("isMovieOnList");
         String listId = "";
         Integer movieId = null;
-        TmdbList instance = null;
         boolean expResult = false;
-        boolean result = instance.isMovieOnList(listId, movieId);
+        boolean result = tmdb.isMovieOnList(listId, movieId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -133,14 +129,13 @@ public class TmdbListTest {
      * Test of addMovieToList method, of class TmdbList.
      */
     @Test
-    public void testAddMovieToList() throws Exception {
-        System.out.println("addMovieToList");
+    public void testAddMovieToList() throws MovieDbException {
+        LOG.info("addMovieToList");
         String sessionId = "";
         String listId = "";
         Integer movieId = null;
-        TmdbList instance = null;
         StatusCode expResult = null;
-        StatusCode result = instance.addMovieToList(sessionId, listId, movieId);
+        StatusCode result = tmdb.addMovieToList(sessionId, listId, movieId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -150,14 +145,13 @@ public class TmdbListTest {
      * Test of removeMovieFromList method, of class TmdbList.
      */
     @Test
-    public void testRemoveMovieFromList() throws Exception {
-        System.out.println("removeMovieFromList");
+    public void testRemoveMovieFromList() throws MovieDbException {
+        LOG.info("removeMovieFromList");
         String sessionId = "";
         String listId = "";
         Integer movieId = null;
-        TmdbList instance = null;
         StatusCode expResult = null;
-        StatusCode result = instance.removeMovieFromList(sessionId, listId, movieId);
+        StatusCode result = tmdb.removeMovieFromList(sessionId, listId, movieId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -167,13 +161,12 @@ public class TmdbListTest {
      * Test of getWatchList method, of class TmdbList.
      */
     @Test
-    public void testGetWatchList() throws Exception {
-        System.out.println("getWatchList");
+    public void testGetWatchList() throws MovieDbException {
+        LOG.info("getWatchList");
         String sessionId = "";
         int accountId = 0;
-        TmdbList instance = null;
         List<MovieDb> expResult = null;
-        List<MovieDb> result = instance.getWatchList(sessionId, accountId);
+        List<MovieDb> result = tmdb.getWatchList(sessionId, accountId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -183,13 +176,12 @@ public class TmdbListTest {
      * Test of deleteMovieList method, of class TmdbList.
      */
     @Test
-    public void testDeleteMovieList() throws Exception {
-        System.out.println("deleteMovieList");
+    public void testDeleteMovieList() throws MovieDbException {
+        LOG.info("deleteMovieList");
         String sessionId = "";
         String listId = "";
-        TmdbList instance = null;
         StatusCode expResult = null;
-        StatusCode result = instance.deleteMovieList(sessionId, listId);
+        StatusCode result = tmdb.deleteMovieList(sessionId, listId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

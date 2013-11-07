@@ -38,30 +38,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.omertron.themoviedbapi.model.Account;
-import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ChangedItem;
-import com.omertron.themoviedbapi.model.Collection;
-import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Discover;
-import com.omertron.themoviedbapi.model.JobDepartment;
-import com.omertron.themoviedbapi.model.Keyword;
-import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
-import com.omertron.themoviedbapi.model.Trailer;
-import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
-import com.omertron.themoviedbapi.model.movie.MovieDbBasic;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
-import com.omertron.themoviedbapi.model.movie.MovieList;
-import com.omertron.themoviedbapi.model.person.PersonMovieOld;
-import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import org.junit.Test;
 
 /**
@@ -182,61 +166,6 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of getApiKey method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Test not required")
-    public void testGetApiKey() {
-        // Not required
-    }
-
-    /**
-     * Test of getApiBase method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Test not required")
-    public void testGetApiBase() {
-        // Not required
-    }
-
-    /**
-     * Test of getConfiguration method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Test not required")
-    public void testGetConfiguration() {
-        // Not required
-    }
-
-    /**
-     * Test of compareMovies method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testCompareMovies() {
-        // Not required
-    }
-
-    /**
-     * Test of setProxy method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testSetProxy() {
-        // Not required
-    }
-
-    /**
-     * Test of setTimeout method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testSetTimeout() {
-        // Not required
-    }
-
-
-    /**
      * Test of getAuthorisationToken method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
@@ -311,49 +240,6 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of compareMovies method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Test not required")
-    public void testCompareMovies_3args() {
-    }
-
-    /**
-     * Test of compareMovies method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Test not required")
-    public void testCompareMovies_4args() {
-    }
-
-    /**
-     * Test of getGenreMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Not required")
-    public void testGetGenreMovies_3args() throws MovieDbException {
-    }
-
-    /**
-     * Test of getGenreMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Not required")
-    public void testGetGenreMovies_4args() throws MovieDbException {
-    }
-
-    /**
-     * Test of getDiscover method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Test not required")
-    public void testGetDiscover_14args() throws MovieDbException {
-    }
-
-    /**
      * Test of getDiscover method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
@@ -368,10 +254,4 @@ public class TheMovieDbApiTest {
         assertFalse("No movies discovered", result.getResults().isEmpty());
     }
 
-    /**
-     * Test of convertToJson method, of class TheMovieDbApi.
-     */
-    @Ignore("No test needed")
-    public void testConvertToJson() {
-    }
 }

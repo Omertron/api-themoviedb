@@ -33,7 +33,6 @@ import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieList;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
-import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
 import org.junit.AfterClass;
