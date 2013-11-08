@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Artwork;
@@ -40,20 +39,20 @@ import org.slf4j.LoggerFactory;
  *
  * @author stuart.boston
  */
-public class TmdbCollectionTest {
+public class TmdbCollectionsTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbCollectionTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbCollectionsTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbCollections instance;
     private static final int ID_COLLECTION_STAR_WARS = 10;
 
-    public TmdbCollectionTest() {
+    public TmdbCollectionsTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbCollections(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -78,7 +77,7 @@ public class TmdbCollectionTest {
     public void testGetCollectionInfo() throws MovieDbException {
         LOG.info("getCollectionInfo");
         String language = "";
-        CollectionInfo result = tmdb.getCollectionInfo(ID_COLLECTION_STAR_WARS, language);
+        CollectionInfo result = instance.getCollectionInfo(ID_COLLECTION_STAR_WARS, language);
         assertFalse("No collection information", result.getParts().isEmpty());
     }
 
@@ -90,7 +89,7 @@ public class TmdbCollectionTest {
     @Test
     public void testGetCollectionImages() throws MovieDbException {
         LOG.info("getCollectionImages");
-        TmdbResultsList<Artwork> result = tmdb.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
+        TmdbResultsList<Artwork> result = instance.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
         assertFalse("No artwork found", result.getResults().isEmpty());
     }
 

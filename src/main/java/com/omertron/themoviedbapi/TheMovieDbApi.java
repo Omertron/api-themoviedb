@@ -61,8 +61,6 @@ import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
-import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.tv.WrapperTVSeries;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;

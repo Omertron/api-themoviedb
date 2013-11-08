@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Company;
@@ -45,7 +44,7 @@ public class TmdbCompaniesTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbCompaniesTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbCompanies instance;
     private static final int ID_COMPANY = 2;
 
     public TmdbCompaniesTest() {
@@ -53,7 +52,7 @@ public class TmdbCompaniesTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbCompanies(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -77,7 +76,7 @@ public class TmdbCompaniesTest {
     @Test
     public void testGetCompanyInfo() throws MovieDbException {
         LOG.info("getCompanyInfo");
-        Company company = tmdb.getCompanyInfo(ID_COMPANY);
+        Company company = instance.getCompanyInfo(ID_COMPANY);
         assertTrue("No company information found", company.getCompanyId() > 0);
         assertNotNull("No parent company found", company.getParentCompany());
     }
@@ -90,7 +89,7 @@ public class TmdbCompaniesTest {
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
         assertTrue("No company movies found", !result.getResults().isEmpty());
     }
 }

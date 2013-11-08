@@ -37,6 +37,7 @@ import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieList;
+import com.omertron.themoviedbapi.model.movie.MovieState;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
@@ -56,16 +57,16 @@ import org.slf4j.LoggerFactory;
  *
  * @author stuart.boston
  */
-public class TmdbMovieTest {
+public class TmdbMoviesTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
     private static TheMovieDbApi tmdb;
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
     private static final int ID_MOVIE_THE_AVENGERS = 24428;
 
-    public TmdbMovieTest() {
+    public TmdbMoviesTest() {
     }
 
     @BeforeClass
@@ -347,7 +348,7 @@ public class TmdbMovieTest {
      */
     @Test
     public void testGetRatedMovies() throws MovieDbException {
-        System.out.println("getRatedMovies");
+        LOG.info("getRatedMovies");
         String sessionId = "";
         int accountId = 0;
         List<MovieDb> expResult = null;
@@ -388,6 +389,55 @@ public class TmdbMovieTest {
             }
         }
         assertTrue(foundMovie);
+    }
+
+    /**
+     * Test of getMovieCredits method, of class TmdbMovies.
+     */
+    @Test
+    public void testGetMovieCredits() throws MovieDbException {
+        LOG.info("getMovieCredits");
+        int movieId = 0;
+        String[] appendToResponse = null;
+        TmdbMovies instance = null;
+        TmdbResultsList<PersonMovieOld> expResult = null;
+        TmdbResultsList<PersonMovieOld> result = instance.getMovieCredits(movieId, appendToResponse);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieStatus method, of class TmdbMovies.
+     */
+    @Test
+    public void testGetMovieStatus() throws MovieDbException {
+        LOG.info("getMovieStatus");
+        String sessionId = "";
+        int movieId = 0;
+        TmdbMovies instance = null;
+        MovieState expResult = null;
+        MovieState result = instance.getMovieStatus(sessionId, movieId);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of postMovieRating method, of class TmdbMovies.
+     */
+    @Test
+    public void testPostMovieRating() throws MovieDbException {
+        LOG.info("postMovieRating");
+        String sessionId = "";
+        Integer movieId = null;
+        Integer rating = null;
+        TmdbMovies instance = null;
+        boolean expResult = false;
+        boolean result = instance.postMovieRating(sessionId, movieId, rating);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
 }

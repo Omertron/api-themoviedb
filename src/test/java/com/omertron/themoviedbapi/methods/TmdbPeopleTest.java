@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 public class TmdbPeopleTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
     private static TheMovieDbApi tmdb;
     private static final int ID_PERSON_BRUCE_WILLIS = 62;
@@ -148,6 +148,40 @@ public class TmdbPeopleTest {
 
         assertNotNull("No results found", result);
         assertTrue("No results found", StringUtils.isNotBlank(result.getName()));
+    }
+
+    /**
+     * Test of getPersonTvCredits method, of class TmdbPeople.
+     */
+    @Test
+    public void testGetPersonTvCredits() throws MovieDbException {
+        LOG.info("getPersonTvCredits");
+        int personId = 0;
+        String language = "";
+        String[] appendToResponse = null;
+        TmdbPeople instance = null;
+        PersonMovieCredits expResult = null;
+        PersonMovieCredits result = instance.getPersonTvCredits(personId, language, appendToResponse);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getPersonCombinedCredits method, of class TmdbPeople.
+     */
+    @Test
+    public void testGetPersonCombinedCredits() throws MovieDbException {
+        LOG.info("getPersonCombinedCredits");
+        int personId = 0;
+        String language = "";
+        String[] appendToResponse = null;
+        TmdbPeople instance = null;
+        PersonMovieCredits expResult = null;
+        PersonMovieCredits result = instance.getPersonCombinedCredits(personId, language, appendToResponse);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
 }

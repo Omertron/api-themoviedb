@@ -38,11 +38,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.omertron.themoviedbapi.model.Account;
-import com.omertron.themoviedbapi.model.Discover;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
+import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -104,15 +104,6 @@ public class TheMovieDbApiTest {
         assertTrue("No poster sizes", tmdbConfig.getPosterSizes().size() > 0);
         assertTrue("No profile sizes", tmdbConfig.getProfileSizes().size() > 0);
         LOG.info(tmdbConfig.toString());
-    }
-
-    @Test
-    public void testAccount() throws MovieDbException {
-        Account account = tmdb.getAccount(SESSION_ID_APITESTS);
-
-        // Make sure properties are extracted correctly
-        assertEquals(account.getUserName(), "apitests");
-        assertEquals(account.getId(), ACCOUNT_ID_APITESTS);
     }
 
     @Ignore("Session required")
@@ -250,7 +241,7 @@ public class TheMovieDbApiTest {
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
-        TmdbResultsList<MovieDb> result = tmdb.getDiscover(discover);
+        TmdbResultsList<MovieDb> result = tmdb.getDiscoverMovie(discover);
         assertFalse("No movies discovered", result.getResults().isEmpty());
     }
 

@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public class TmdbJobsTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
     private static TheMovieDbApi tmdb;
 

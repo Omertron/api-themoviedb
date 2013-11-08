@@ -27,6 +27,7 @@ import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieDbList;
@@ -86,12 +87,12 @@ public class TmdbAccount extends AbstractMethod {
      * Get all lists of a given user
      *
      * @param sessionId
-     * @param accountID
+     * @param accountId
      * @return The lists
      * @throws MovieDbException
      */
-    public List<MovieDbList> getUserLists(String sessionId, int accountID) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountID + "/lists");
+    public List<MovieDbList> getUserLists(String sessionId, int accountId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/lists");
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
@@ -211,19 +212,21 @@ public class TmdbAccount extends AbstractMethod {
      * @param sessionId
      * @param accountId
      * @param movieId
-     * @param add
+     * @param addToWatchlist
      * @return
      * @throws MovieDbException
      */
-    public StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, boolean add) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/movie_watchlist");
+    public StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, boolean addToWatchlist) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, "/movie_watchlist");
 
+        apiUrl.addArgument(PARAM_ID, accountId);
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         HashMap<String, Object> body = new HashMap<String, Object>();
         body.put("movie_id", movieId);
-        body.put("movie_watchlist", add);
+        body.put("movie_watchlist", addToWatchlist);
         String jsonBody = convertToJson(body);
+        LOG.info("Json Body: '{}'", jsonBody);
 
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url, jsonBody);

@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ import java.io.Serializable;
  */
 public abstract class AbstractJsonMapping implements Serializable {
 
+    @JsonIgnore
     private Logger log = null;
 
     /**

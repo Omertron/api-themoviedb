@@ -40,15 +40,15 @@ import org.slf4j.LoggerFactory;
  *
  * @author stuart.boston
  */
-public class TmdbKeywordTest {
+public class TmdbKeywordsTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
     private static TheMovieDbApi tmdb;
     private static final String ID_KEYWORD = "1721";
 
-    public TmdbKeywordTest() {
+    public TmdbKeywordsTest() {
     }
 
     @BeforeClass

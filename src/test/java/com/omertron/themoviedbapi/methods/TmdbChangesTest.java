@@ -30,14 +30,14 @@ public class TmdbChangesTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbChangesTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbChanges instance;
 
     public TmdbChangesTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbChanges(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -64,7 +64,7 @@ public class TmdbChangesTest {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        TmdbResultsList<ChangedMovie> result = tmdb.getMovieChangesList(page, startDate, endDate);
+        TmdbResultsList<ChangedMovie> result = instance.getMovieChangesList(page, startDate, endDate);
         assertFalse("No movie changes.", result.getResults().isEmpty());
     }
 
@@ -79,7 +79,7 @@ public class TmdbChangesTest {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        tmdb.getPersonChangesList(page, startDate, endDate);
+        instance.getPersonChangesList(page, startDate, endDate);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

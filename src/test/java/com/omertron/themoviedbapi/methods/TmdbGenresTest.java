@@ -40,15 +40,15 @@ import org.slf4j.LoggerFactory;
  *
  * @author stuart.boston
  */
-public class TmdbGenreTest {
+public class TmdbGenresTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
     private static TheMovieDbApi tmdb;
     private static final int ID_GENRE_ACTION = 28;
 
-    public TmdbGenreTest() {
+    public TmdbGenresTest() {
     }
 
     @BeforeClass
