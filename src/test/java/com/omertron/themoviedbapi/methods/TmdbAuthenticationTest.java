@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,27 +60,27 @@ public class TmdbAuthenticationTest {
     @Test
     public void testGetAuthorisationToken() throws MovieDbException {
         LOG.info("getAuthorisationToken");
-        TokenAuthorisation expResult = null;
-        TokenAuthorisation result = instance.getAuthorisationToken();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TokenAuthorisation token = instance.getAuthorisationToken();
+        assertFalse("Token is null", token == null);
+        assertTrue("Token is not valid", token.getSuccess());
     }
 
     /**
      * Test of getSessionToken method, of class TmdbAuthentication.
      *
+     * TODO: Cannot be tested without a HTTP authorisation: <br/>
+     * http://help.themoviedb.org/kb/api/user-authentication
+     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore("Session needs to be authorised")
     public void testGetSessionToken() throws MovieDbException {
         LOG.info("getSessionToken");
-        TokenAuthorisation token = null;
-        TokenSession expResult = null;
+        TokenAuthorisation token = instance.getAuthorisationToken();
+        // Need to authorise the token here.
         TokenSession result = instance.getSessionToken(token);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertFalse("Session token is null", result == null);
+        assertTrue("Session token is not valid", result.getSuccess());
     }
 
     /**
@@ -90,11 +91,8 @@ public class TmdbAuthenticationTest {
     @Test
     public void testGetGuestSessionToken() throws MovieDbException {
         LOG.info("getGuestSessionToken");
-        TokenSession expResult = null;
         TokenSession result = instance.getGuestSessionToken();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue("Failed to get guest session", result.getSuccess());
     }
 
 }

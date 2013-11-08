@@ -92,7 +92,8 @@ public class TmdbAccount extends AbstractMethod {
      * @throws MovieDbException
      */
     public List<MovieDbList> getUserLists(String sessionId, int accountId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/lists");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, "/lists");
+        apiUrl.addArgument(PARAM_ID, accountId);
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();

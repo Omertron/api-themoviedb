@@ -106,42 +106,6 @@ public class TheMovieDbApiTest {
         LOG.info(tmdbConfig.toString());
     }
 
-    @Ignore("Session required")
-    public void testWatchList() throws MovieDbException {
-        // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-
-        // add a movie
-        tmdb.addToWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
-
-        List<MovieDb> watchList = tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertNotNull("Empty watch list returned", watchList);
-        assertEquals("Watchlist wrong size", 1, watchList.size());
-
-        // clean up again
-        tmdb.removeFromWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
-
-        Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-    }
-
-    @Ignore("Session required")
-    public void testFavorites() throws MovieDbException {
-        // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-
-        // add a movie
-        tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, true);
-
-        List<MovieDb> watchList = tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertNotNull("Empty watch list returned", watchList);
-        assertEquals("Watchlist wrong size", 1, watchList.size());
-
-        // clean up again
-        tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
-
-        Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-    }
-
     /**
      * Test of createImageUrl method, of class TheMovieDbApi.
      *
@@ -154,54 +118,6 @@ public class TheMovieDbApiTest {
         MovieDb movie = tmdb.getMovieInfo(movieId, "");
         String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());
-    }
-
-    /**
-     * Test of getAuthorisationToken method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetAuthorisationToken() throws MovieDbException {
-        LOG.info("getAuthorisationToken");
-        TokenAuthorisation result = tmdb.getAuthorisationToken();
-        assertFalse("Token is null", result == null);
-        assertTrue("Token is not valid", result.getSuccess());
-        LOG.info(result.toString());
-    }
-
-    /**
-     * Test of getSessionToken method, of class TheMovieDbApi.
-     *
-     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Session required")
-    public void testGetSessionToken() throws MovieDbException {
-        LOG.info("getSessionToken");
-        TokenAuthorisation token = tmdb.getAuthorisationToken();
-        assertFalse("Token is null", token == null);
-        assertTrue("Token is not valid", token.getSuccess());
-        LOG.info("Token: {}", token.toString());
-
-        TokenSession result = tmdb.getSessionToken(token);
-        assertFalse("Session token is null", result == null);
-        assertTrue("Session token is not valid", result.getSuccess());
-        LOG.info(result.toString());
-    }
-
-    /**
-     * Test of getGuestSessionToken method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Not ready yet")
-    public void testGetGuestSessionToken() throws MovieDbException {
-        LOG.info("getGuestSessionToken");
-        TokenSession result = tmdb.getGuestSessionToken();
-
-        assertTrue("Failed to get guest session", result.getSuccess());
     }
 
     @Ignore("Session required")

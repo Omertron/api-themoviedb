@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
+import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_ENGLISH;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * @author stuart.boston
  */
 public class TmdbDiscoverTest {
+
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbDiscoverTest.class);
     // API
@@ -55,32 +56,32 @@ public class TmdbDiscoverTest {
 
     /**
      * Test of getDiscoverMovie method, of class TmdbDiscover.
+     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetDiscoverMovie() throws MovieDbException {
         LOG.info("getDiscoverMovie");
-        Discover discover = null;
-        TmdbResultsList<MovieDb> expResult = null;
+        Discover discover = new Discover();
+        discover.year(2013).language(LANGUAGE_ENGLISH);
+
         TmdbResultsList<MovieDb> result = instance.getDiscoverMovie(discover);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertFalse("No movies discovered", result.getResults().isEmpty());
     }
 
     /**
      * Test of getDiscoverTv method, of class TmdbDiscover.
+     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetDiscoverTv() throws MovieDbException {
         LOG.info("getDiscoverTv");
-        Discover discover = null;
-        TmdbResultsList<TVSeriesBasic> expResult = null;
-        TmdbResultsList<TVSeriesBasic> result = instance.getDiscoverTv(discover);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Discover discover = new Discover();
+        discover.year(2013).language(LANGUAGE_ENGLISH);
+
+        TmdbResultsList<MovieDb> result = instance.getDiscoverMovie(discover);
+        assertFalse("No TV shows discovered", result.getResults().isEmpty());
     }
 
 }
