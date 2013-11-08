@@ -30,12 +30,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Authentication methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbAuthentication extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbAuthentication.class);
     // API URL Parameters
     private static final String BASE_AUTH = "authentication/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbAuthentication(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

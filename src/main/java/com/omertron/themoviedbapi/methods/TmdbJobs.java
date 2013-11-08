@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
 /**
+ * Class to hold the Jobs methods
  *
  * @author stuart.boston
  */
@@ -40,6 +41,12 @@ public class TmdbJobs extends AbstractMethod {
     // API URL Parameters
     private static final String BASE_JOB = "job/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbJobs(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

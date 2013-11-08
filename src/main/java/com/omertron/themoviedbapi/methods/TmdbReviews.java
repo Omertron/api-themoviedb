@@ -30,12 +30,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Reviews methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbReviews extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbReviews.class);
     // API URL Parameters
     private static final String BASE_REVIEW = "review/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbReviews(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

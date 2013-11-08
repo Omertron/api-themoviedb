@@ -40,12 +40,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Lists methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbLists extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbLists.class);
     // API URL Parameters
     private static final String BASE_LIST = "list/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbLists(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

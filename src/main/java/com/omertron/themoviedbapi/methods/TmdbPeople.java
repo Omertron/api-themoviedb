@@ -1,3 +1,22 @@
+/*
+ *      Copyright (c) 2004-2013 Stuart Boston
+ *
+ *      This file is part of TheMovieDB API.
+ *
+ *      TheMovieDB API is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      any later version.
+ *
+ *      TheMovieDB API is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
@@ -17,12 +36,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the People methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbPeople extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbPeople.class);
     // API URL Parameters
     private static final String BASE_PERSON = "person/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbPeople(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

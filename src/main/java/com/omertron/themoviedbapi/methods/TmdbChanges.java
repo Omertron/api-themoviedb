@@ -34,12 +34,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Changes methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbChanges extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbChanges.class);
     // API URL Parameters
     private static final String BASE_MOVIE = "movie/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbChanges(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

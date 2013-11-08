@@ -37,12 +37,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Genres methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbGenres extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenres.class);
     // API URL Parameters
     private static final String BASE_GENRE = "genre/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbGenres(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

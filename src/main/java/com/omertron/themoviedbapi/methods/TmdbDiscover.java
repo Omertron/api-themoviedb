@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
 /**
+ * Class to hold the Discover methods
  *
  * @author stuart.boston
  */
@@ -43,6 +44,12 @@ public class TmdbDiscover extends AbstractMethod {
     // API URL Parameters
     private static final String BASE_DISCOVER = "discover/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbDiscover(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

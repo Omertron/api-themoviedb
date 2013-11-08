@@ -35,12 +35,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Collections methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbCollections extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbCollections.class);
     // API URL Parameters
     private static final String BASE_COLLECTION = "collection/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbCollections(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

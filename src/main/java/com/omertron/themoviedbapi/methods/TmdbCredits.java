@@ -33,12 +33,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Credits methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbCredits extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbCredits.class);
     // API URL Parameters
     private static final String BASE_CREDIT = "/credit";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbCredits(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

@@ -30,12 +30,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Networks methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbNetworks extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbNetworks.class);
     // API URL Parameters
     private static final String BASE_NETWORK = "network/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbNetworks(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

@@ -52,12 +52,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Search methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbSearch extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbSearch.class);
     // API URL Parameters
     private static final String BASE_SEARCH = "search/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbSearch(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

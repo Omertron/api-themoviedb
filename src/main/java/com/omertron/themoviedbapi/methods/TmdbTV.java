@@ -40,7 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.yamj.api.common.http.CommonHttpClient;
 
 /**
- * Class to hold the TmdbTV methods
+ * Class to hold the TV methods
  *
  * @author stuart.boston
  */
@@ -50,6 +50,12 @@ public class TmdbTV extends AbstractMethod {
     // API URL Parameters
     private static final String BASE_TV = "tv/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbTV(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }

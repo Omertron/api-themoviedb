@@ -38,12 +38,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
+/**
+ * Class to hold the Account Methods
+ *
+ * @author stuart.boston
+ */
 public class TmdbAccount extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbAccount.class);
     // API URL Parameters
     private static final String BASE_ACCOUNT = "account/";
 
+    /**
+     * Constructor
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public TmdbAccount(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }
