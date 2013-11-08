@@ -7,12 +7,12 @@ import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.type.ArtworkType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.person.WrapperPersonList;
 import java.io.IOException;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
@@ -63,19 +63,21 @@ public class TmdbPeople extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the cast & crew information for the person.
-     *
-     * It will return the single highest rated poster for each movie record.
+     * Get the movie credits for a specific person id.
      *
      * @param personId
+     * @param language
      * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
+    public PersonMovieCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/movie_credits");
 
         apiUrl.addArgument(PARAM_ID, personId);
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
@@ -85,7 +87,74 @@ public class TmdbPeople extends AbstractMethod {
             PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
             return pc;
         } catch (IOException ex) {
-            LOG.warn("Failed to get person credits: {}", ex.getMessage());
+            LOG.warn("Failed to get movie credits: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     * Get the TV credits for a specific person id.
+     * <p>
+     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     * <p>
+     * This will provide details about which episode and/or season the credit is for.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieCredits getPersonTvCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/tv_credits");
+
+        apiUrl.addArgument(PARAM_ID, personId);
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+        apiUrl.appendToResponse(appendToResponse);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
+            return pc;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get TV credits: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
+     * Get the combined (movie and TV) credits for a specific person id.<p>
+     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     * <p>
+     * This will provide details about which episode and/or season the credit is for.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/combined_credits");
+
+        apiUrl.addArgument(PARAM_ID, personId);
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+        apiUrl.appendToResponse(appendToResponse);
+
+        URL url = apiUrl.buildUrl();
+        String webpage = requestWebPage(url);
+
+        try {
+            PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
+            return pc;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get combined credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }

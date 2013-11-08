@@ -17,28 +17,58 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Review;
-import java.io.Serializable;
-import java.util.List;
 
 /**
- *
- * @author stuart.boston
+ * @author Stuart
  */
-public class WrapperReviews extends AbstractWrapperAll implements Serializable {
+public class Review extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
-    @JsonProperty("results")
-    private List<Review> reviews;
 
-    public List<Review> getReviews() {
-        return reviews;
+    /*
+     * Properties
+     */
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("author")
+    private String author;
+    @JsonProperty("content")
+    private String content;
+    @JsonProperty("url")
+    private String url;
+
+    public String getId() {
+        return id;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

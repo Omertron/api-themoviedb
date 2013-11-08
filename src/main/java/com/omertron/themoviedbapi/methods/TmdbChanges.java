@@ -45,10 +45,13 @@ public class TmdbChanges extends AbstractMethod {
     }
 
     /**
-     * Get a list of movie ids that have been edited. By default we show the last 24 hours and only 100 items per page. The maximum
-     * number of days that can be returned in a single request is 14. You can then use the movie changes API to get the actual data
-     * that has been changed. Please note that the change log system to support this was changed on October 5, 2012 and will only
-     * show movies that have been edited since.
+     * Get a list of movie IDs that have been edited.
+     * <p>
+     * By default we show the last 24 hours and only 100 items per page. <br/>
+     * The maximum number of days that can be returned in a single request is 14. <br/>
+     * You can then use the movie changes API to get the actual data that has been changed. <br/>
+     * Please note that the change log system to support this was changed on October 5, 2012 and will only show movies that have
+     * been edited since.
      *
      * @param page
      * @param startDate the start date of the changes, optional
@@ -85,6 +88,21 @@ public class TmdbChanges extends AbstractMethod {
         }
     }
 
+    /**
+     * Get a list of people IDs that have been edited.
+     * <p>
+     * By default we show the last 24 hours and only 100 items per page. <br/>
+     * The maximum number of days that can be returned in a single request is 14. <br/>
+     * You can then use the person changes API to get the actual data that has been changed. <br/>
+     * Please note that the change log system to support this was changed on October 5, 2012 and will only show people that have
+     * been edited since.
+     *
+     * @param page
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
+     * @throws MovieDbException
+     */
     public String getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
         throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }

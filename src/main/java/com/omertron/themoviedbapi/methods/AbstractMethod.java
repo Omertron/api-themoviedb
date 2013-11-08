@@ -36,13 +36,29 @@ import org.yamj.api.common.http.CommonHttpClient;
  */
 public class AbstractMethod {
 
-    protected final String apiKey;
-    protected final CommonHttpClient httpClient;
+    protected String apiKey;
+    private CommonHttpClient httpClient;
     // Jackson JSON configuration
     protected static ObjectMapper mapper = new ObjectMapper();
 
     public AbstractMethod(String apiKey, CommonHttpClient httpClient) {
         this.apiKey = apiKey;
+        this.httpClient = httpClient;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public CommonHttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public void setHttpClient(CommonHttpClient httpClient) {
         this.httpClient = httpClient;
     }
 

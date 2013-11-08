@@ -20,14 +20,16 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.CollectionInfo;
-import com.omertron.themoviedbapi.model.type.ArtworkType;
+import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_INCLUDE_ALL_MOVIES;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
-import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
+import com.omertron.themoviedbapi.wrapper.WrapperGenres;
+import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
@@ -35,71 +37,81 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
-public class TmdbCollection extends AbstractMethod {
+public class TmdbGenres extends AbstractMethod {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbCollection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenres.class);
     // API URL Parameters
-    private static final String BASE_COLLECTION = "collection/";
+    private static final String BASE_GENRE = "genre/";
 
-    public TmdbCollection(String apiKey, CommonHttpClient httpClient) {
+    public TmdbGenres(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }
 
     /**
-     * This method is used to retrieve all of the basic information about a movie collection.
+     * You can use this method to retrieve the list of genres used on TMDb.
      *
-     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
+     * These IDs will correspond to those found in movie calls.
      *
-     * @param collectionId
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION);
-        apiUrl.addArgument(PARAM_ID, collectionId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
+    public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/list");
+        apiUrl.addArgument(PARAM_LANGUAGE, language);
 
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, CollectionInfo.class);
+            WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
+            TmdbResultsList<Genre> results = new TmdbResultsList<Genre>(wrapper.getGenres());
+            results.copyWrapper(wrapper);
+            return results;
         } catch (IOException ex) {
-            LOG.warn("Failed to get collection information: {}", ex.getMessage());
+            LOG.warn("Failed to get genre list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }
 
     /**
-     * Get all of the images for a particular collection by collection id.
+     * Get a list of movies per genre.
      *
-     * @param collectionId
+     * It is important to understand that only movies with more than 10 votes get listed.
+     *
+     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
+     *
+     * @param genreId
      * @param language
+     * @param page
+     * @param includeAllMovies
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION, "/images");
-        apiUrl.addArgument(PARAM_ID, collectionId);
+    public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/movies");
+        apiUrl.addArgument(PARAM_ID, genreId);
 
         if (StringUtils.isNotBlank(language)) {
             apiUrl.addArgument(PARAM_LANGUAGE, language);
         }
 
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, page);
+        }
+
+        apiUrl.addArgument(PARAM_INCLUDE_ALL_MOVIES, includeAllMovies);
+
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
+            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            LOG.warn("Failed to get collection images: {}", ex.getMessage());
+            LOG.warn("Failed to get genre movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }

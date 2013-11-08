@@ -29,7 +29,7 @@ import com.omertron.themoviedbapi.model.Language;
 import com.omertron.themoviedbapi.model.ProductionCompany;
 import com.omertron.themoviedbapi.model.ProductionCountry;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.Review;
 import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.person.PersonCast;
@@ -263,7 +263,7 @@ public class MovieDb extends MovieDbBasic {
         return lists.getMovieList();
     }
 
-    public List<Reviews> getReviews() {
+    public List<Review> getReviews() {
         return reviews.getReviews();
     }
     // </editor-fold>

@@ -1,3 +1,22 @@
+/*
+ *      Copyright (c) 2004-2013 Stuart Boston
+ *
+ *      This file is part of TheMovieDB API.
+ *
+ *      TheMovieDB API is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      any later version.
+ *
+ *      TheMovieDB API is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
@@ -90,6 +109,44 @@ public class TmdbSearch extends AbstractMethod {
     }
 
     /**
+     * Search for collections by name.
+     *
+     * @param query
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collections");
+
+        if (StringUtils.isNotBlank(query)) {
+            apiUrl.addArgument(PARAM_QUERY, query);
+        }
+
+        if (StringUtils.isNotBlank(language)) {
+            apiUrl.addArgument(PARAM_LANGUAGE, language);
+        }
+
+        if (page > 0) {
+            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
+        }
+
+        URL url = apiUrl.buildUrl();
+
+        String webpage = requestWebPage(url);
+        try {
+            WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
+            TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to find collection: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
+        }
+    }
+
+    /**
      * Search for TmdbTV shows by title.
      *
      * @param name
@@ -132,44 +189,6 @@ public class TmdbSearch extends AbstractMethod {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find TV Series: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-    }
-
-    /**
-     * Search for collections by name.
-     *
-     * @param query
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collections");
-
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
-        String webpage = requestWebPage(url);
-        try {
-            WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
-            TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to find collection: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
     }

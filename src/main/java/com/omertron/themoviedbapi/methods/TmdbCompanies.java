@@ -35,13 +35,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
-public class TmdbCompany extends AbstractMethod {
+public class TmdbCompanies extends AbstractMethod {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenre.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenres.class);
     // API URL Parameters
     private static final String BASE_COMPANY = "company/";
 
-    public TmdbCompany(String apiKey, CommonHttpClient httpClient) {
+    public TmdbCompanies(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }
 

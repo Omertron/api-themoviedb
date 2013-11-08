@@ -35,13 +35,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
-public class TmdbKeyword extends AbstractMethod {
+public class TmdbKeywords extends AbstractMethod {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbKeyword.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbKeywords.class);
     // API URL Parameters
     private static final String BASE_KEYWORD = "keyword/";
 
-    public TmdbKeyword(String apiKey, CommonHttpClient httpClient) {
+    public TmdbKeywords(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }
 

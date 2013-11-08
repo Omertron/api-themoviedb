@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not;private see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.discover;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -46,6 +46,10 @@ public class Discover {
     private static final String PARAM_CERTIFICATION_LTE = "certification.lte=";
     private static final String PARAM_WITH_COMPANIES = "with_companies=";
     private static final String PARAM_SORT_BY = "sort_by=";
+    private static final String PARAM_FIRST_AIR_DATE_YEAR = "first_air_date_year=";
+    private static final String PARAM_WITH_NETWORKS = "with_networks=";
+    private static final String PARAM_FIRST_AIR_DATE_GTE = "first_air_date.gte=";
+    private static final String PARAM_FIRST_AIR_DATE_LTE = "first_air_date.lte=";
     private static final int YEAR_MIN = 1900;
     private static final int YEAR_MAX = 2100;
 
@@ -274,5 +278,67 @@ public class Discover {
      */
     private boolean checkYear(int year) {
         return (year >= YEAR_MIN && year <= YEAR_MAX);
+    }
+
+    /**
+     * Filter the results release dates to matches that include this value.
+     * <p>
+     * Expected value is a year between 1900 & 2100.
+     *
+     * @param firstAirDateYear
+     * @return
+     */
+    public Discover firstAirDateYear(int firstAirDateYear) {
+        if (firstAirDateYear > 0) {
+            params.put(PARAM_FIRST_AIR_DATE_YEAR, String.valueOf(firstAirDateYear));
+        }
+        return this;
+    }
+
+    /**
+     * Filter TV shows to include a specific network.
+     * <p>
+     * Expected value is an integer (the id of a network).
+     * <p>
+     * They can be comma separated to indicate an 'AND' query.
+     *
+     * @param withNetworks
+     * @return
+     */
+    public Discover withNetworks(String withNetworks) {
+        if (StringUtils.isNotBlank(withNetworks)) {
+            params.put(PARAM_WITH_NETWORKS, withNetworks);
+        }
+        return this;
+    }
+
+    /**
+     * The minimum release to include.
+     * <p>
+     * Expected format is YYYY-MM-DD
+     *
+     * @param firstAirDateGte
+     * @return
+     */
+    public Discover firstAirDateGte(String firstAirDateGte) {
+        if (StringUtils.isNotBlank(firstAirDateGte)) {
+            params.put(PARAM_FIRST_AIR_DATE_GTE, firstAirDateGte);
+        }
+        return this;
+    }
+
+    /**
+     * The maximum release to include.
+     * <p>
+     * Expected format is YYYY-MM-DD
+     *
+     * @param firstAirDateLte
+     * @return
+     */
+    public Discover firstAirDateLte(String firstAirDateLte) {
+        if (StringUtils.isNotBlank(firstAirDateLte)) {
+            params.put(PARAM_FIRST_AIR_DATE_LTE, firstAirDateLte);
+        }
+        return this;
     }
 }

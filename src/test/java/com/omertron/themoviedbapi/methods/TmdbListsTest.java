@@ -36,14 +36,14 @@ import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TmdbListTest {
+public class TmdbListsTest {
 
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenreTest.class);
     // API
     private static TheMovieDbApi tmdb;
 
-    public TmdbListTest() {
+    public TmdbListsTest() {
     }
 
     @BeforeClass

@@ -19,37 +19,42 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
+import com.omertron.themoviedbapi.methods.TmdbAccount;
+import com.omertron.themoviedbapi.methods.TmdbAuthentication;
 import com.omertron.themoviedbapi.methods.TmdbChanges;
-import com.omertron.themoviedbapi.methods.TmdbCollection;
-import com.omertron.themoviedbapi.methods.TmdbCompany;
-import com.omertron.themoviedbapi.methods.TmdbGenre;
+import com.omertron.themoviedbapi.methods.TmdbCollections;
+import com.omertron.themoviedbapi.methods.TmdbCompanies;
+import com.omertron.themoviedbapi.methods.TmdbCredits;
+import com.omertron.themoviedbapi.methods.TmdbDiscover;
+import com.omertron.themoviedbapi.methods.TmdbGenres;
 import com.omertron.themoviedbapi.methods.TmdbJobs;
-import com.omertron.themoviedbapi.methods.TmdbKeyword;
-import com.omertron.themoviedbapi.methods.TmdbList;
-import com.omertron.themoviedbapi.methods.TmdbMovie;
+import com.omertron.themoviedbapi.methods.TmdbKeywords;
+import com.omertron.themoviedbapi.methods.TmdbLists;
+import com.omertron.themoviedbapi.methods.TmdbMovies;
+import com.omertron.themoviedbapi.methods.TmdbNetworks;
 import com.omertron.themoviedbapi.methods.TmdbPeople;
+import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.*;
+import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.*;
-import com.omertron.themoviedbapi.model.person.*;
-import com.omertron.themoviedbapi.model.tv.*;
+import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
+import com.omertron.themoviedbapi.model.person.PersonMovieOld;
+import com.omertron.themoviedbapi.model.tv.Network;
+import com.omertron.themoviedbapi.model.tv.TVEpisode;
+import com.omertron.themoviedbapi.model.tv.TVSeason;
+import com.omertron.themoviedbapi.model.tv.TVSeries;
+import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
@@ -57,6 +62,13 @@ import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import com.omertron.themoviedbapi.wrapper.*;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.tv.WrapperTVSeries;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpGet;
 
 /**
  * The MovieDb API
@@ -72,23 +84,27 @@ public class TheMovieDbApi {
     private CommonHttpClient httpClient;
     private TmdbConfiguration tmdbConfig;
     // API Methods
-    private static final String BASE_AUTH = "authentication/";
-    private static final String BASE_ACCOUNT = "account/";
     private static final String BASE_DISCOVER = "discover/";
     // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
-    // Sub-objects
-    private static TmdbTV tmdbTv;
-    private static TmdbCollection tmdbCollection;
-    private static TmdbKeyword tmdbKeyword;
-    private static TmdbGenre tmdbGenre;
-    private static TmdbCompany tmdbCompany;
-    private static TmdbPeople tmdbPeople;
-    private static TmdbSearch tmdbSearch;
-    private static TmdbList tmdbList;
+    // Sub-methods
+    private static TmdbAccount tmdbAccount;
+    private static TmdbAuthentication tmdbAuth;
     private static TmdbChanges tmdbChanges;
+    private static TmdbCollections tmdbCollections;
+    private static TmdbCompanies tmdbCompany;
+    private static TmdbCredits tmdbCredits;
+    private static TmdbDiscover tmdbDiscover;
+    private static TmdbGenres tmdbGenre;
     private static TmdbJobs tmdbJobs;
-    private static TmdbMovie tmdbMovie;
+    private static TmdbKeywords tmdbKeyword;
+    private static TmdbLists tmdbList;
+    private static TmdbMovies tmdbMovies;
+    private static TmdbNetworks tmdbNetworks;
+    private static TmdbPeople tmdbPeople;
+    private static TmdbReviews tmdbReviews;
+    private static TmdbSearch tmdbSearch;
+    private static TmdbTV tmdbTv;
 
     /**
      * API for The Movie Db.
@@ -111,6 +127,8 @@ public class TheMovieDbApi {
         this.apiKey = apiKey;
         this.httpClient = httpClient;
 
+        initialise(apiKey, httpClient);
+
         ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
         String webpage = requestWebPage(configUrl);
@@ -123,74 +141,31 @@ public class TheMovieDbApi {
         }
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Initialize functions">
-    // TODO: These are ugly, perhaps work out how to use Generics
-    private void initChanges() {
-        if (tmdbChanges == null) {
-            tmdbChanges = new TmdbChanges(apiKey, httpClient);
-        }
+    /**
+     * Initialise the sub-classes once the API key and http client are known
+     *
+     * @param apiKey
+     * @param httpClient
+     */
+    private void initialise(String apiKey, CommonHttpClient httpClient) {
+        tmdbAccount = new TmdbAccount(apiKey, httpClient);
+        tmdbAuth = new TmdbAuthentication(apiKey, httpClient);
+        tmdbChanges = new TmdbChanges(apiKey, httpClient);
+        tmdbCollections = new TmdbCollections(apiKey, httpClient);
+        tmdbCompany = new TmdbCompanies(apiKey, httpClient);
+        tmdbCredits = new TmdbCredits(apiKey, httpClient);
+        tmdbDiscover = new TmdbDiscover(apiKey, httpClient);
+        tmdbGenre = new TmdbGenres(apiKey, httpClient);
+        tmdbJobs = new TmdbJobs(apiKey, httpClient);
+        tmdbKeyword = new TmdbKeywords(apiKey, httpClient);
+        tmdbList = new TmdbLists(apiKey, httpClient);
+        tmdbMovies = new TmdbMovies(apiKey, httpClient);
+        tmdbNetworks = new TmdbNetworks(apiKey, httpClient);
+        tmdbPeople = new TmdbPeople(apiKey, httpClient);
+        tmdbReviews = new TmdbReviews(apiKey, httpClient);
+        tmdbSearch = new TmdbSearch(apiKey, httpClient);
+        tmdbTv = new TmdbTV(apiKey, httpClient);
     }
-
-    private void initTv() {
-        if (tmdbTv == null) {
-            tmdbTv = new TmdbTV(apiKey, httpClient);
-        }
-    }
-
-    private void initCollection() {
-        if (tmdbCollection == null) {
-            tmdbCollection = new TmdbCollection(apiKey, httpClient);
-        }
-    }
-
-    private void initKeyword() {
-        if (tmdbKeyword == null) {
-            tmdbKeyword = new TmdbKeyword(apiKey, httpClient);
-        }
-    }
-
-    private void initGenre() {
-        if (tmdbGenre == null) {
-            tmdbGenre = new TmdbGenre(apiKey, httpClient);
-        }
-    }
-
-    private void initCompany() {
-        if (tmdbCompany == null) {
-            tmdbCompany = new TmdbCompany(apiKey, httpClient);
-        }
-    }
-
-    private void initPeople() {
-        if (tmdbPeople == null) {
-            tmdbPeople = new TmdbPeople(apiKey, httpClient);
-        }
-    }
-
-    private void initSearch() {
-        if (tmdbSearch == null) {
-            tmdbSearch = new TmdbSearch(apiKey, httpClient);
-        }
-    }
-
-    private void initList() {
-        if (tmdbList == null) {
-            tmdbList = new TmdbList(apiKey, httpClient);
-        }
-    }
-
-    private void initJobs() {
-        if (tmdbJobs == null) {
-            tmdbJobs = new TmdbJobs(apiKey, httpClient);
-        }
-    }
-
-    private void initMovie() {
-        if (tmdbMovie == null) {
-            tmdbMovie = new TmdbMovie(apiKey, httpClient);
-        }
-    }
-    //</editor-fold>
 
     /**
      * Compare the MovieDB object with a title & year
@@ -299,6 +274,107 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Account Functions">
+    /**
+     * Get the basic information for an account. You will need to have a valid session id.
+     *
+     * @param sessionId
+     * @return
+     * @throws MovieDbException
+     */
+    public Account getAccount(String sessionId) throws MovieDbException {
+        return tmdbAccount.getAccount(sessionId);
+    }
+
+    /**
+     * Get all lists of a given user
+     *
+     * @param sessionId
+     * @param accountID
+     * @return The lists
+     * @throws MovieDbException
+     */
+    public List<MovieDbList> getUserLists(String sessionId, int accountID) throws MovieDbException {
+        return tmdbAccount.getUserLists(sessionId, accountID);
+    }
+
+    /**
+     * Get the list of favorite movies for an account.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getFavoriteMovies(sessionId, accountId);
+    }
+
+    /**
+     * Add or remove a movie to an accounts favorite list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param movieId
+     * @param isFavorite
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer movieId, boolean isFavorite) throws MovieDbException {
+        return tmdbAccount.changeFavoriteStatus(sessionId, accountId, movieId, isFavorite);
+    }
+
+    /**
+     * Get the list of rated movies (and associated rating) for an account.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getRatedMovies(sessionId, accountId);
+    }
+
+    /**
+     * Get the list of movies on an accounts watchlist.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return The watchlist of the user
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getWatchList(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getWatchList(sessionId, accountId);
+    }
+
+    /**
+     * Add a movie to an accounts watch list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param movieId
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode addToWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
+        return tmdbAccount.modifyWatchList(sessionId, accountId, movieId, true);
+    }
+
+    /**
+     * Remove a movie from an accounts watch list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param movieId
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode removeFromWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
+        return tmdbAccount.modifyWatchList(sessionId, accountId, movieId, false);
+    }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Authentication Functions">
     /**
      * This method is used to generate a valid request token for user based authentication.
@@ -313,17 +389,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "token/new");
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, TokenAuthorisation.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Authorisation Token: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, webpage, ex);
-        }
+        return tmdbAuth.getAuthorisationToken();
     }
 
     /**
@@ -336,23 +402,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "session/new");
-
-        if (!token.getSuccess()) {
-            LOG.warn("Authorisation token was not successful!");
-            throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, "Authorisation token was not successful!");
-        }
-
-        apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, TokenSession.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbAuth.getSessionToken(token);
     }
 
     /**
@@ -371,437 +421,51 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenSession getGuestSessionToken() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "guest_session/new");
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, TokenSession.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbAuth.getGuestSessionToken();
     }
+     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Changes Functions">
     /**
-     * Get the basic information for an account. You will need to have a valid session id.
+     * Get a list of movie IDs that have been edited.
+     * <p>
+     * By default we show the last 24 hours and only 100 items per page. <br/>
+     * The maximum number of days that can be returned in a single request is 14. <br/>
+     * You can then use the movie changes API to get the actual data that has been changed. <br/>
+     * Please note that the change log system to support this was changed on October 5, 2012 and will only show movies that have
+     * been edited since.
      *
-     * @param sessionId
-     * @return
-     * @throws MovieDbException
-     */
-    public Account getAccount(String sessionId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT.replace("/", ""));
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, Account.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-    }
-
-    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/favorite_movies");
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
-
-        try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get favorite movies: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-    }
-
-    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer movieId, boolean isFavorite) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/favorite");
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("movie_id", movieId);
-        body.put("favorite", isFavorite);
-        String jsonBody = convertToJson(body);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
-
-        try {
-            return mapper.readValue(webpage, StatusCode.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to change favorite movies: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-    }
-
-    /**
-     * Add a movie to an account's watch list.
-     *
-     * @param sessionId
-     * @param accountId
-     * @param movieId
-     * @return
-     * @throws MovieDbException
-     */
-    public StatusCode addToWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
-        return modifyWatchList(sessionId, accountId, movieId, true);
-    }
-
-    /**
-     * Remove a movie from an account's watch list.
-     *
-     * @param sessionId
-     * @param accountId
-     * @param movieId
-     * @return
-     * @throws MovieDbException
-     */
-    public StatusCode removeFromWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
-        return modifyWatchList(sessionId, accountId, movieId, false);
-    }
-
-    private StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, boolean add) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/movie_watchlist");
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("movie_id", movieId);
-        body.put("movie_watchlist", add);
-        String jsonBody = convertToJson(body);
-
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
-
-        try {
-            return mapper.readValue(webpage, StatusCode.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to modify watch list: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Movie Functions">
-    /**
-     * This method is used to retrieve all of the basic movie information.
-     *
-     * It will return the single highest rated poster and backdrop.
-     *
-     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
-     *
-     * @param movieId
-     * @param language
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieInfo(movieId, language, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the basic movie information.
-     *
-     * It will return the single highest rated poster and backdrop.
-     *
-     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
-     *
-     * @param imdbId
-     * @param language
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieInfoImdb(imdbId, language, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
-     *
-     * @param movieId
-     * @param country
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieAlternativeTitles(movieId, country, appendToResponse);
-    }
-
-    /**
-     * Get the cast information for a specific movie id.
-     *
-     * TODO: Add a function to enrich the data with the people methods
-     *
-     * @param movieId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<PersonMovieOld> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieCasts(movieId, appendToResponse);
-    }
-
-    /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
-     *
-     * @param movieId
-     * @param language
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieImages(movieId, language, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
-     *
-     * Currently, only English keywords exist.
-     *
-     * @param movieId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieKeywords(movieId, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
-     *
-     * @param movieId
-     * @param language
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieReleaseInfo(movieId, language, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the trailers for a particular movie.
-     *
-     * Supported sites are YouTube and QuickTime.
-     *
-     * @param movieId
-     * @param language
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Trailer> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieTrailers(movieId, language, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
-     *
-     * @param movieId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieTranslations(movieId, appendToResponse);
-    }
-
-    /**
-     * The similar movies method will let you retrieve the similar movies for a particular movie.
-     *
-     * This data is created dynamically but with the help of users votes on TMDb.
-     *
-     * The data is much better with movies that have more keywords
-     *
-     * @param movieId
-     * @param language
      * @param page
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getSimilarMovies(movieId, language, page, appendToResponse);
-    }
-
-    public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getReviews(movieId, language, page, appendToResponse);
-    }
-
-    /**
-     * Get the lists that the movie belongs to
-     *
-     * @param movieId
-     * @param language
-     * @param page
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieList> getMovieLists(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieLists(movieId, language, page, appendToResponse);
-    }
-
-    /**
-     * Get the changes for a specific movie id.
-     *
-     * Changes are grouped by key, and ordered by date in descending order.
-     *
-     * By default, only the last 24 hours of changes are returned.
-     *
-     * The maximum number of days that can be returned in a single request is 14.
-     *
-     * The language is present on fields that are translatable.
-     *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
-     *
-     * @param movieId
      * @param startDate the start date of the changes, optional
      * @param endDate the end date of the changes, optional
-     * @return
+     * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getMovieChanges(movieId, startDate, endDate);
+    public TmdbResultsList<ChangedMovie> getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getMovieChangesList(page, startDate, endDate);
     }
 
     /**
-     * This method is used to retrieve the newest movie that was added to TMDb.
+     * Get a list of people IDs that have been edited.
+     * <p>
+     * By default we show the last 24 hours and only 100 items per page. <br/>
+     * The maximum number of days that can be returned in a single request is 14. <br/>
+     * You can then use the person changes API to get the actual data that has been changed. <br/>
+     * Please note that the change log system to support this was changed on October 5, 2012 and will only show people that have
+     * been edited since.
      *
-     * @return
-     * @throws MovieDbException
-     */
-    public MovieDb getLatestMovie() throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getLatestMovie();
-    }
-
-    /**
-     * Get the list of upcoming movies.
-     *
-     * This list refreshes every day.
-     *
-     * The maximum number of items this list will include is 100.
-     *
-     * @param language
      * @param page
-     * @return
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getUpcoming(language, page);
-    }
-
-    /**
-     * This method is used to retrieve the movies currently in theatres.
-     *
-     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getNowPlayingMovies(language, page);
-    }
-
-    /**
-     * This method is used to retrieve the daily movie popularity list.
-     *
-     * This list is updated daily. The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getPopularMovieList(language, page);
-    }
-
-    /**
-     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
-     *
-     * The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getTopRatedMovies(language, page);
-    }
-
-    /**
-     * Get the list of rated movies (and associated rating) for an account.
-     *
-     * @param sessionId
-     * @param accountId
-     * @return
-     * @throws MovieDbException
-     */
-    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.getRatedMovies(sessionId, accountId);
-    }
-
-    /**
-     * This method lets users rate a movie.
-     *
-     * A valid session id is required.
-     *
-     * @param sessionId
-     * @param movieId
-     * @param rating
-     * @return
-     * @throws MovieDbException
-     */
-    public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
-        initMovie();
-        return tmdbMovie.postMovieRating(sessionId, movieId, rating);
+    public String getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getPersonChangesList(page, startDate, endDate);
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Collection Functions">
+    //<editor-fold defaultstate="collapsed" desc="Collections Functions">
     /**
      * This method is used to retrieve all of the basic information about a movie collection.
      *
@@ -813,8 +477,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-        initCollection();
-        return tmdbCollection.getCollectionInfo(collectionId, language);
+        return tmdbCollections.getCollectionInfo(collectionId, language);
     }
 
     /**
@@ -826,114 +489,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
-        initCollection();
-        return tmdbCollection.getCollectionImages(collectionId, language);
+        return tmdbCollections.getCollectionImages(collectionId, language);
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="People Functions">
-    /**
-     * This method is used to retrieve all of the basic person information.It will return the single highest rated profile image.
-     *
-     * @param personId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public PersonMovieOld getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonInfo(personId, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the cast & crew information for the person.
-     *
-     * It will return the single highest rated poster for each movie record.
-     *
-     * @param personId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public PersonMovieCredits getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonCredits(personId, appendToResponse);
-    }
-
-    /**
-     * This method is used to retrieve all of the profile images for a person.
-     *
-     * @param personId
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonImages(personId);
-    }
-
-    /**
-     * Get the changes for a specific person id.
-     *
-     * Changes are grouped by key, and ordered by date in descending order.
-     *
-     * By default, only the last 24 hours of changes are returned.
-     *
-     * The maximum number of days that can be returned in a single request is 14.
-     *
-     * The language is present on fields that are translatable.
-     *
-     * @param personId
-     * @param startDate
-     * @param endDate
-     * @return
-     * @throws MovieDbException
-     */
-    public String getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonChanges(personId, startDate, endDate);
-    }
-
-    /**
-     * Get the list of popular people on The Movie Database.
-     *
-     * This list refreshes every day.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<PersonMovieOld> getPersonPopular() throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonPopular(0);
-    }
-
-    /**
-     * Get the list of popular people on The Movie Database.
-     *
-     * This list refreshes every day.
-     *
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<PersonMovieOld> getPersonPopular(int page) throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonPopular(page);
-    }
-
-    /**
-     * Get the latest person id.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public PersonMovieOld getPersonLatest() throws MovieDbException {
-        initPeople();
-        return tmdbPeople.getPersonLatest();
-    }
-        //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Company Functions">
+    //<editor-fold defaultstate="collapsed" desc="Companies Functions">
     /**
      * This method is used to retrieve the basic information about a production company on TMDb.
      *
@@ -942,7 +502,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
-        initCompany();
         return tmdbCompany.getCompanyInfo(companyId);
     }
 
@@ -960,346 +519,35 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
-        initCompany();
         return tmdbCompany.getCompanyMovies(companyId, language, page);
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Genre Functions">
+    //<editor-fold defaultstate="collapsed" desc="Credit Functions">
     /**
-     * You can use this method to retrieve the list of genres used on TMDb.
+     * Get the detailed information about a particular credit record.
+     * <p>
+     * This is currently only supported with the new credit model found in TV. <br/>
+     * These IDs can be found from any TV credit response as well as the TV_credits and combined_credits methods for people. <br/>
+     * The episodes object returns a list of episodes and are generally going to be guest stars. <br/>
+     * The season array will return a list of season numbers. <br/>
+     * Season credits are credits that were marked with the "add to every season" option in the editing interface and are assumed to
+     * be "season regulars".
      *
-     * These IDs will correspond to those found in movie calls.
-     *
+     * @param creditId
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
-        initGenre();
-        return tmdbGenre.getGenreList(language);
-    }
-
-    /**
-     * Get a list of movies per genre.
-     *
-     * It is important to understand that only movies with more than 10 votes get listed.
-     *
-     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
-     *
-     * @param genreId
-     * @param language
-     * @param page
-     * @param includeAllMovies
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
-        initGenre();
-        return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies);
+    public PersonCredits getCreditInfo(String creditId, String language) throws MovieDbException {
+        return tmdbCredits.getCreditInfo(creditId, language);
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Search Functions">
-    /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
-     *
-     * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
-     * @param language The language to include. Can be blank/null.
-     * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first page)
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchMovie(movieName, searchYear, language, includeAdult, page);
-    }
-
-    /**
-     * Search for TmdbTV shows by title.
-     *
-     * @param name
-     * @param searchYear
-     * @param language
-     * @param searchType
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchTv(name, searchYear, language, searchType, page);
-    }
-
-    /**
-     * Search for TmdbTV shows by title.
-     *
-     * @param name
-     * @param searchYear
-     * @param language
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchTv(name, searchYear, language, null, 0);
-    }
-
-    /**
-     * Search for collections by name.
-     *
-     * @param query
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchCollection(query, language, page);
-    }
-
-    /**
-     * This is a good starting point to start finding people on TMDb.
-     *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
-     *
-     * @param personName
-     * @param includeAdult
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<PersonMovieOld> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchPeople(personName, includeAdult, page);
-    }
-
-    /**
-     * Search for lists by name and description.
-     *
-     * @param query
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchList(query, language, page);
-    }
-
-    /**
-     * Search Companies.
-     *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
-     * on movie calls.
-     *
-     * http://help.themoviedb.org/kb/api/search-companies
-     *
-     * @param companyName
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchCompanies(companyName, page);
-    }
-
-    /**
-     * Search for keywords by name
-     *
-     * @param query
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
-        initSearch();
-        return tmdbSearch.searchKeyword(query, page);
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="List Functions">
-    /**
-     * Get a list by its ID
-     *
-     * @param listId
-     * @return The list and its items
-     * @throws MovieDbException
-     */
-    public MovieDbList getList(String listId) throws MovieDbException {
-        initList();
-        return tmdbList.getList(listId);
-    }
-
-    /**
-     * Get all lists of a given user
-     *
-     * @param sessionId
-     * @param accountID
-     * @return The lists
-     * @throws MovieDbException
-     */
-    public List<MovieDbList> getUserLists(String sessionId, int accountID) throws MovieDbException {
-        initList();
-        return tmdbList.getUserLists(sessionId, accountID);
-    }
-
-    /**
-     * This method lets users create a new list. A valid session id is required.
-     *
-     * @param sessionId
-     * @param name
-     * @param description
-     * @return The list id
-     * @throws MovieDbException
-     */
-    public String createList(String sessionId, String name, String description) throws MovieDbException {
-        initList();
-        return tmdbList.createList(sessionId, name, description);
-    }
-
-    /**
-     * Check to see if a movie ID is already added to a list.
-     *
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
-        initList();
-        return tmdbList.isMovieOnList(listId, movieId);
-    }
-
-    /**
-     * This method lets users add new movies to a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        initList();
-        return tmdbList.addMovieToList(sessionId, listId, movieId);
-    }
-
-    /**
-     * This method lets users remove movies from a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        initList();
-        return tmdbList.removeMovieFromList(sessionId, listId, movieId);
-    }
-
-    /**
-     * Get the list of movies on an accounts watchlist.
-     *
-     * @param sessionId
-     * @param accountId
-     * @return The watchlist of the user
-     * @throws MovieDbException
-     */
-    public List<MovieDb> getWatchList(String sessionId, int accountId) throws MovieDbException {
-        initList();
-        return tmdbList.getWatchList(sessionId, accountId);
-    }
-
-    /**
-     * This method lets users delete a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @return
-     * @throws MovieDbException
-     */
-    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
-        initList();
-        return tmdbList.deleteMovieList(sessionId, listId);
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
-    /**
-     * Get the basic information for a specific keyword id.
-     *
-     * @param keywordId
-     * @return
-     * @throws MovieDbException
-     */
-    public Keyword getKeyword(String keywordId) throws MovieDbException {
-        initKeyword();
-        return tmdbKeyword.getKeyword(keywordId);
-    }
-
-    /**
-     * Get the list of movies for a particular keyword by id.
-     *
-     * @param keywordId
-     * @param language
-     * @param page
-     * @return List of movies with the keyword
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDbBasic> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
-        initKeyword();
-        return tmdbKeyword.getKeywordMovies(keywordId, language, page);
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Changes Functions">
-    /**
-     * Get a list of movie ids that have been edited. By default we show the last 24 hours and only 100 items per page. The maximum
-     * number of days that can be returned in a single request is 14. You can then use the movie changes API to get the actual data
-     * that has been changed. Please note that the change log system to support this was changed on October 5, 2012 and will only
-     * show movies that have been edited since.
-     *
-     * @param page
-     * @param startDate the start date of the changes, optional
-     * @param endDate the end date of the changes, optional
-     * @return List of changed movie
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<ChangedMovie> getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        initChanges();
-        return tmdbChanges.getMovieChangesList(page, startDate, endDate);
-    }
-
-    public String getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        initChanges();
-        return tmdbChanges.getPersonChangesList(page, startDate, endDate);
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Jobs">
-    /**
-     * Get a list of valid jobs.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
-        initJobs();
-        return tmdbJobs.getJobs();
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Discover">
+    //<editor-fold defaultstate="collapsed" desc="Discover Functions">
     /**
      * Discover movies by different types of data like average rating, number of votes, genres and certifications.
-     *
+     * <p>
      * You can alternatively create a "discover" object and pass it to this method to cut out the requirement for all of these
      * parameters
      *
@@ -1325,7 +573,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getDiscover(int page, String language, String sortBy, boolean includeAdult, int year,
+    public TmdbResultsList<MovieDb> getDiscoverMovie(int page, String language, String sortBy, boolean includeAdult, int year,
             int primaryReleaseYear, int voteCountGte, float voteAverageGte, String withGenres, String releaseDateGte,
             String releaseDateLte, String certificationCountry, String certificationLte, String withCompanies) throws MovieDbException {
 
@@ -1345,7 +593,7 @@ public class TheMovieDbApi {
                 .certificationLte(certificationLte)
                 .withCompanies(withCompanies);
 
-        return getDiscover(discover);
+        return tmdbDiscover.getDiscoverMovie(discover);
     }
 
     /**
@@ -1355,27 +603,785 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getDiscover(Discover discover) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_DISCOVER, "/movie");
+    public TmdbResultsList<MovieDb> getDiscoverMovie(Discover discover) throws MovieDbException {
+        return tmdbDiscover.getDiscoverMovie(discover);
+    }
 
-        apiUrl.setArguments(discover.getParams());
+    /**
+     * Discover TV shows by different types of data like average rating, number of votes, genres, the network they aired on and air
+     * dates.
+     * <p>
+     * You can alternatively create a "discover" object and pass it to this method to cut out the requirement for all of these
+     * parameters.
+     *
+     * @param page Minimum value is 1, expected value is an integer.
+     * @param language ISO 639-1 code.
+     * @param sortBy Available options are vote_average.desc, vote_average.asc, release_date.desc, release_date.asc,
+     * popularity.desc, popularity.asc
+     * @param firstAirDateYear Filter the results release dates to matches that include this value. Expected value is a year
+     * @param voteCountGte Only include movies that are equal to, or have a vote count higher than this value
+     * @param voteAverageGte Only include movies that are equal to, or have a higher average rating than this value
+     * @param withGenres Only include movies with the specified genres. Expected value is an integer (the id of a genre). Multiple
+     * values can be specified. Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'.
+     * @param withNetworks Filter TV shows to include a specific network. Expected value is an integer (the id of a network). They
+     * can be comma separated to indicate an 'AND' query.
+     * @param firstAirDateGte The minimum release to include. Expected format is YYYY-MM-DD.
+     * @param firstAirDateLte The maximum release to include. Expected format is YYYY-MM-DD.
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<TVSeriesBasic> getDiscoverTv(int page, String language, String sortBy, int firstAirDateYear, int voteCountGte,
+            float voteAverageGte, String withGenres, String withNetworks, String firstAirDateGte, String firstAirDateLte) throws MovieDbException {
 
-        URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        Discover discover = new Discover();
+        discover.page(page)
+                .language(language)
+                .sortBy(sortBy)
+                .firstAirDateYear(firstAirDateYear)
+                .voteCountGte(voteCountGte)
+                .voteAverageGte(voteAverageGte)
+                .withGenres(withGenres)
+                .withNetworks(withNetworks)
+                .firstAirDateGte(firstAirDateGte)
+                .firstAirDateLte(firstAirDateLte);
 
-        try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get discover list: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
-        }
+        return tmdbDiscover.getDiscoverTv(discover);
+    }
+
+    /**
+     * Discover TV shows by different types of data like average rating, number of votes, genres, the network they aired on and air
+     * dates.
+     *
+     * @param discover A discover object containing the search criteria required
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<TVSeriesBasic> getDiscoverTv(Discover discover) throws MovieDbException {
+        return tmdbDiscover.getDiscoverTv(discover);
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="TV Methods">
+    //<editor-fold defaultstate="collapsed" desc="Genres Functions">
+    /**
+     * You can use this method to retrieve the list of genres used on TMDb.
+     *
+     * These IDs will correspond to those found in movie calls.
+     *
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
+        return tmdbGenre.getGenreList(language);
+    }
+
+    /**
+     * Get a list of movies per genre.
+     *
+     * It is important to understand that only movies with more than 10 votes get listed.
+     *
+     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
+     *
+     * @param genreId
+     * @param language
+     * @param page
+     * @param includeAllMovies
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
+        return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Jobs Functions">
+    /**
+     * Get a list of valid jobs.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
+        return tmdbJobs.getJobs();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Keywords Functions">
+    /**
+     * Get the basic information for a specific keyword id.
+     *
+     * @param keywordId
+     * @return
+     * @throws MovieDbException
+     */
+    public Keyword getKeyword(String keywordId) throws MovieDbException {
+        return tmdbKeyword.getKeyword(keywordId);
+    }
+
+    /**
+     * Get the list of movies for a particular keyword by id.
+     *
+     * @param keywordId
+     * @param language
+     * @param page
+     * @return List of movies with the keyword
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDbBasic> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
+        return tmdbKeyword.getKeywordMovies(keywordId, language, page);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Lists Functions">
+    /**
+     * Get a list by its ID
+     *
+     * @param listId
+     * @return The list and its items
+     * @throws MovieDbException
+     */
+    public MovieDbList getList(String listId) throws MovieDbException {
+        return tmdbList.getList(listId);
+    }
+
+    /**
+     * This method lets users create a new list. A valid session id is required.
+     *
+     * @param sessionId
+     * @param name
+     * @param description
+     * @return The list id
+     * @throws MovieDbException
+     */
+    public String createList(String sessionId, String name, String description) throws MovieDbException {
+        return tmdbList.createList(sessionId, name, description);
+    }
+
+    /**
+     * Check to see if a movie ID is already added to a list.
+     *
+     * @param listId
+     * @param movieId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
+        return tmdbList.isMovieOnList(listId, movieId);
+    }
+
+    /**
+     * This method lets users add new movies to a list that they created. A valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param movieId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
+        return tmdbList.addMovieToList(sessionId, listId, movieId);
+    }
+
+    /**
+     * This method lets users remove movies from a list that they created. A valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param movieId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
+        return tmdbList.removeMovieFromList(sessionId, listId, movieId);
+    }
+
+    /**
+     * This method lets users delete a list that they created. A valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
+        return tmdbList.deleteMovieList(sessionId, listId);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Movies Functions">
+    /**
+     * This method is used to retrieve all of the basic movie information.
+     *
+     * It will return the single highest rated poster and backdrop.
+     *
+     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     *
+     * @param movieId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieInfo(movieId, language, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve all of the basic movie information.
+     *
+     * It will return the single highest rated poster and backdrop.
+     *
+     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     *
+     * @param imdbId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieInfoImdb(imdbId, language, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     *
+     * @param movieId
+     * @param country
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieAlternativeTitles(movieId, country, appendToResponse);
+    }
+
+    /**
+     * Get the cast and crew information for a specific movie id.
+     *
+     * TODO: Add a function to enrich the data with the people methods
+     *
+     * @param movieId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<PersonMovieOld> getMovieCredits(int movieId, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieCredits(movieId, appendToResponse);
+    }
+
+    /**
+     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     *
+     * @param movieId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieImages(movieId, language, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve all of the keywords that have been added to a particular movie.
+     *
+     * Currently, only English keywords exist.
+     *
+     * @param movieId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieKeywords(movieId, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     *
+     * @param movieId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieReleaseInfo(movieId, language, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve all of the trailers for a particular movie.
+     *
+     * Supported sites are YouTube and QuickTime.
+     *
+     * @param movieId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Trailer> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieTrailers(movieId, language, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve a list of the available translations for a specific movie.
+     *
+     * @param movieId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieTranslations(movieId, appendToResponse);
+    }
+
+    /**
+     * The similar movies method will let you retrieve the similar movies for a particular movie.
+     *
+     * This data is created dynamically but with the help of users votes on TMDb.
+     *
+     * The data is much better with movies that have more keywords
+     *
+     * @param movieId
+     * @param language
+     * @param page
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getSimilarMovies(movieId, language, page, appendToResponse);
+    }
+
+    /**
+     * Get the reviews for a particular movie id.
+     *
+     * @param movieId
+     * @param language
+     * @param page
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Review> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getReviews(movieId, language, page, appendToResponse);
+    }
+
+    /**
+     * Get the lists that the movie belongs to
+     *
+     * @param movieId
+     * @param language
+     * @param page
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieList> getMovieLists(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+        return tmdbMovies.getMovieLists(movieId, language, page, appendToResponse);
+    }
+
+    /**
+     * Get the changes for a specific movie id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
+     *
+     * @param movieId
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
+        return tmdbMovies.getMovieChanges(movieId, startDate, endDate);
+    }
+
+    /**
+     * This method is used to retrieve the newest movie that was added to TMDb.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public MovieDb getLatestMovie() throws MovieDbException {
+        return tmdbMovies.getLatestMovie();
+    }
+
+    /**
+     * Get the list of upcoming movies.
+     *
+     * This list refreshes every day.
+     *
+     * The maximum number of items this list will include is 100.
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
+        return tmdbMovies.getUpcoming(language, page);
+    }
+
+    /**
+     * This method is used to retrieve the movies currently in theatres.
+     *
+     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
+        return tmdbMovies.getNowPlayingMovies(language, page);
+    }
+
+    /**
+     * This method is used to retrieve the daily movie popularity list.
+     *
+     * This list is updated daily. The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
+        return tmdbMovies.getPopularMovieList(language, page);
+    }
+
+    /**
+     * This method lets users get the status of whether or not the movie has been rated or added to their favourite or watch
+     * lists.<br/>
+     *
+     * A valid session id is required.
+     *
+     * @param sessionId
+     * @param movieId
+     * @return
+     * @throws MovieDbException
+     */
+    public MovieState getMovieStatus(String sessionId, int movieId) throws MovieDbException {
+        return tmdbMovies.getMovieStatus(sessionId, movieId);
+    }
+
+    /**
+     * This method lets users rate a movie.
+     *
+     * A valid session id is required.
+     *
+     * @param sessionId
+     * @param movieId
+     * @param rating
+     * @return
+     * @throws MovieDbException
+     */
+    public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
+        return tmdbMovies.postMovieRating(sessionId, movieId, rating);
+    }
+
+    /**
+     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
+     *
+     * The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
+        return tmdbMovies.getTopRatedMovies(language, page);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Networks Functions">
+    /**
+     * This method is used to retrieve the basic information about a TV network.
+     * <p>
+     * You can use this ID to search for TV shows with the discover method.
+     *
+     * @param networkId
+     * @return
+     * @throws MovieDbException
+     */
+    public Network getNetworkInfo(int networkId) throws MovieDbException {
+        return tmdbNetworks.getNetworkInfo(networkId);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="People Functions">
+    /**
+     * This method is used to retrieve all of the basic person information.It will return the single highest rated profile image.
+     *
+     * @param personId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieOld getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonInfo(personId, appendToResponse);
+    }
+
+    /**
+     * Get the movie credits for a specific person id.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonMovieCredits(personId, language, appendToResponse);
+    }
+
+    /**
+     * Get the TV credits for a specific person id.
+     * <p>
+     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     * <p>
+     * This will provide details about which episode and/or season the credit is for.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieCredits getPersonTvCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonTvCredits(personId, language, appendToResponse);
+    }
+
+    /**
+     * Get the combined (movie and TV) credits for a specific person id.<p>
+     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     * <p>
+     * This will provide details about which episode and/or season the credit is for.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonCombinedCredits(personId, language, appendToResponse);
+    }
+
+    /**
+     * This method is used to retrieve all of the profile images for a person.
+     *
+     * @param personId
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
+        return tmdbPeople.getPersonImages(personId);
+    }
+
+    /**
+     * Get the changes for a specific person id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * @param personId
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws MovieDbException
+     */
+    public String getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        return tmdbPeople.getPersonChanges(personId, startDate, endDate);
+    }
+
+    /**
+     * Get the list of popular people on The Movie Database.
+     *
+     * This list refreshes every day.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<PersonMovieOld> getPersonPopular() throws MovieDbException {
+        return tmdbPeople.getPersonPopular(0);
+    }
+
+    /**
+     * Get the list of popular people on The Movie Database.
+     *
+     * This list refreshes every day.
+     *
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<PersonMovieOld> getPersonPopular(int page) throws MovieDbException {
+        return tmdbPeople.getPersonPopular(page);
+    }
+
+    /**
+     * Get the latest person id.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonMovieOld getPersonLatest() throws MovieDbException {
+        return tmdbPeople.getPersonLatest();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Review Functions">
+    /**
+     * Get the full details of a review by ID.
+     *
+     * @param reviewId
+     * @return
+     * @throws MovieDbException
+     */
+    public Review getReview(String reviewId) throws MovieDbException {
+        return tmdbReviews.getReview(reviewId);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Search Functions">
+    /**
+     * Search Movies This is a good starting point to start finding movies on TMDb.
+     *
+     * @param movieName
+     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
+     * @param language The language to include. Can be blank/null.
+     * @param includeAdult true or false to include adult titles in the search
+     * @param page The page of results to return. 0 to get the default (first page)
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
+        return tmdbSearch.searchMovie(movieName, searchYear, language, includeAdult, page);
+    }
+
+    /**
+     * Search for TmdbTV shows by title.
+     *
+     * @param name
+     * @param searchYear
+     * @param language
+     * @param searchType
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language, SearchType searchType, int page) throws MovieDbException {
+        return tmdbSearch.searchTv(name, searchYear, language, searchType, page);
+    }
+
+    /**
+     * Search for TmdbTV shows by title.
+     *
+     * @param name
+     * @param searchYear
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<TVSeriesBasic> searchTv(String name, int searchYear, String language) throws MovieDbException {
+        return tmdbSearch.searchTv(name, searchYear, language, null, 0);
+    }
+
+    /**
+     * Search for collections by name.
+     *
+     * @param query
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
+        return tmdbSearch.searchCollection(query, language, page);
+    }
+
+    /**
+     * This is a good starting point to start finding people on TMDb.
+     *
+     * The idea is to be a quick and light method so you can iterate through people quickly.
+     *
+     * @param personName
+     * @param includeAdult
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<PersonMovieOld> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
+        return tmdbSearch.searchPeople(personName, includeAdult, page);
+    }
+
+    /**
+     * Search for lists by name and description.
+     *
+     * @param query
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
+        return tmdbSearch.searchList(query, language, page);
+    }
+
+    /**
+     * Search Companies.
+     *
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
+     * on movie calls.
+     *
+     * http://help.themoviedb.org/kb/api/search-companies
+     *
+     * @param companyName
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
+        return tmdbSearch.searchCompanies(companyName, page);
+    }
+
+    /**
+     * Search for keywords by name
+     *
+     * @param query
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
+        return tmdbSearch.searchKeyword(query, page);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="TV Functions">
     /**
      * Get the primary information about a TmdbTV series by id.
      *
@@ -1386,7 +1392,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TVSeries getTv(int id, String language, String... appendToResponse) throws MovieDbException {
-        initTv();
         return tmdbTv.getTv(id, language, appendToResponse);
     }
 
@@ -1401,7 +1406,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonCredits getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvCredits(id, language, appendToResponse);
     }
 
@@ -1414,7 +1418,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public ExternalIds getTvExternalIds(int id, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvExternalIds(id, language);
     }
 
@@ -1427,7 +1430,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getTvImages(int id, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvImages(id, language);
     }
 
@@ -1442,7 +1444,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TVSeason getTvSeason(int id, int seasonNumber, String language, String... appendToResponse) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvSeason(id, seasonNumber, language, appendToResponse);
     }
 
@@ -1456,7 +1457,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public ExternalIds getTvSeasonExternalIds(int id, int seasonNumber, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvSeasonExternalIds(id, seasonNumber, language);
     }
 
@@ -1470,7 +1470,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getTvSeasonImages(int id, int seasonNumber, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvSeasonImages(id, seasonNumber, language);
     }
 
@@ -1486,7 +1485,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TVEpisode getTvEpisode(int id, int seasonNumber, int episodeNumber, String language, String... appendToResponse) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvEpisode(id, seasonNumber, episodeNumber, language, appendToResponse);
     }
 
@@ -1501,7 +1499,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public PersonCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
     }
 
@@ -1516,7 +1513,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public ExternalIds getTvEpisodeExternalIds(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvEpisodeExternalIds(id, seasonNumber, episodeNumber, language);
     }
 
@@ -1531,7 +1527,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public String getTvEpisodeImages(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
-        initTv();
         return tmdbTv.getTvEpisodeImages(id, seasonNumber, episodeNumber, language);
     }
     //</editor-fold>
@@ -1551,7 +1546,6 @@ public class TheMovieDbApi {
         }
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Web download methods">
     private String requestWebPage(URL url) throws MovieDbException {
         return requestWebPage(url, null, Boolean.FALSE);
     }
@@ -1628,5 +1622,5 @@ public class TheMovieDbApi {
         WebBrowser.setWebTimeoutConnect(connect);
         WebBrowser.setWebTimeoutRead(read);
     }
-    //</editor-fold>
+
 }

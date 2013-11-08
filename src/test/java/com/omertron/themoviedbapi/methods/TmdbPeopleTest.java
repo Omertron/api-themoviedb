@@ -89,10 +89,10 @@ public class TmdbPeopleTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetPersonCredits() throws MovieDbException {
+    public void testGetPersonMovieCredits() throws MovieDbException {
         LOG.info("getPersonCredits");
 
-        PersonMovieCredits result = tmdb.getPersonCredits(ID_PERSON_BRUCE_WILLIS);
+        PersonMovieCredits result = tmdb.getPersonMovieCredits(ID_PERSON_BRUCE_WILLIS, "");
         assertFalse("No cast information", result.getCast().isEmpty());
     }
 

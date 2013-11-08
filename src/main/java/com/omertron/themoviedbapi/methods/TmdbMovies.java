@@ -27,12 +27,13 @@ import com.omertron.themoviedbapi.model.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.Review;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieList;
+import com.omertron.themoviedbapi.model.movie.MovieState;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
@@ -66,16 +67,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
-public class TmdbMovie extends AbstractMethod {
+public class TmdbMovies extends AbstractMethod {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbMovie.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TmdbMovies.class);
     // API URL Parameters
     private static final String BASE_MOVIE = "movie/";
-    private static final String BASE_ACCOUNT = "account/";
 
-    public TmdbMovie(String apiKey, CommonHttpClient httpClient) {
+    public TmdbMovies(String apiKey, CommonHttpClient httpClient) {
         super(apiKey, httpClient);
     }
+
     /**
      * This method is used to retrieve all of the basic movie information.
      *
@@ -187,7 +188,7 @@ public class TmdbMovie extends AbstractMethod {
     }
 
     /**
-     * Get the cast information for a specific movie id.
+     * Get the cast and crew information for a specific movie id.
      *
      * TODO: Add a function to enrich the data with the people methods
      *
@@ -196,8 +197,8 @@ public class TmdbMovie extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonMovieOld> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/casts");
+    public TmdbResultsList<PersonMovieOld> getMovieCredits(int movieId, String... appendToResponse) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/credits");
         apiUrl.addArgument(PARAM_ID, movieId);
 
         apiUrl.appendToResponse(appendToResponse);
@@ -414,7 +415,17 @@ public class TmdbMovie extends AbstractMethod {
         }
     }
 
-    public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+    /**
+     * Get the reviews for a particular movie id.
+     *
+     * @param movieId
+     * @param language
+     * @param page
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Review> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/reviews");
         apiUrl.addArgument(PARAM_ID, movieId);
 
@@ -433,7 +444,7 @@ public class TmdbMovie extends AbstractMethod {
 
         try {
             WrapperReviews wrapper = mapper.readValue(webpage, WrapperReviews.class);
-            TmdbResultsList<Reviews> results = new TmdbResultsList<Reviews>(wrapper.getReviews());
+            TmdbResultsList<Review> results = new TmdbResultsList<Review>(wrapper.getReviews());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -698,26 +709,32 @@ public class TmdbMovie extends AbstractMethod {
     }
 
     /**
-     * Get the list of rated movies (and associated rating) for an account.
+     * This method lets users get the status of whether or not the movie has been rated or added to their favourite or watch
+     * lists.<br/>
+     *
+     * A valid session id is required.
      *
      * @param sessionId
-     * @param accountId
+     * @param movieId
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/rated_movies");
+    public MovieState getMovieStatus(String sessionId, int movieId) throws MovieDbException {
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/account_states");
+
+        apiUrl.addArgument(PARAM_ID, movieId);
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+            return mapper.readValue(webpage, MovieState.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get rated movies: {}", ex.getMessage());
+            LOG.warn("Failed to get account states: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
         }
+
     }
 
     /**
@@ -732,8 +749,9 @@ public class TmdbMovie extends AbstractMethod {
      * @throws MovieDbException
      */
     public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, movieId + "/rating");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/rating");
 
+        apiUrl.addArgument(PARAM_ID, movieId);
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         if (rating < 0 || rating > 10) {
@@ -741,13 +759,13 @@ public class TmdbMovie extends AbstractMethod {
         }
 
         String jsonBody = convertToJson(Collections.singletonMap("value", rating));
-        LOG.info("Body: {}", jsonBody);
+        LOG.trace("Body: {}", jsonBody);
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url, jsonBody);
 
         try {
             StatusCode status = mapper.readValue(webpage, StatusCode.class);
-            LOG.info("Status: {}", status);
+            LOG.trace("Status: {}", status);
             int code = status.getStatusCode();
             return code == 12;
         } catch (IOException ex) {

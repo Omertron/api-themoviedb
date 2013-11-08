@@ -17,58 +17,56 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author Stuart
+ * The state of the movie for the user's account
+ *
+ * @author stuart.boston
  */
-public class Reviews extends AbstractJsonMapping {
+public class MovieState {
 
-    private static final long serialVersionUID = 1L;
-
-    /*
-     * Properties
-     */
     @JsonProperty("id")
-    private String id;
-    @JsonProperty("author")
-    private String author;
-    @JsonProperty("content")
-    private String content;
-    @JsonProperty("url")
-    private String url;
+    private int id;
+    @JsonProperty("favorite")
+    private boolean favorite;
+    @JsonProperty("rated")
+    private boolean rated;
+    @JsonProperty("watchlist")
+    private boolean watchlist;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public boolean isFavorite() {
+        return favorite;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public boolean isRated() {
+        return rated;
     }
+
+    public void setRated(boolean rated) {
+        this.rated = rated;
+    }
+
+    public boolean isWatchlist() {
+        return watchlist;
+    }
+
+    public void setWatchlist(boolean watchlist) {
+        this.watchlist = watchlist;
+    }
+
 }

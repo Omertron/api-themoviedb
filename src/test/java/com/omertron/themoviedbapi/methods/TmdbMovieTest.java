@@ -32,7 +32,7 @@ import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.Review;
 import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
@@ -129,14 +129,14 @@ public class TmdbMovieTest {
     }
 
     /**
-     * Test of getMovieCasts method, of class TheMovieDbApi.
+     * Test of getMovieCredits method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
     @Test
     public void testGetMovieCasts() throws MovieDbException {
         LOG.info("getMovieCasts");
-        TmdbResultsList<PersonMovieOld> people = tmdb.getMovieCasts(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
+        TmdbResultsList<PersonMovieOld> people = tmdb.getMovieCredits(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
         assertTrue("No cast information", people.getResults().size() > 0);
 
         String name1 = "Harrison Ford";
@@ -231,7 +231,7 @@ public class TmdbMovieTest {
     }
 
     /**
-     * Test of getReviews method, of class TheMovieDbApi.
+     * Test of getReview method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -239,7 +239,7 @@ public class TmdbMovieTest {
     public void testGetReviews() throws MovieDbException {
         LOG.info("getReviews");
         int page = 0;
-        TmdbResultsList<Reviews> result = tmdb.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
+        TmdbResultsList<Review> result = tmdb.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
 
         assertFalse("No reviews found", result.getResults().isEmpty());
     }
@@ -342,15 +342,16 @@ public class TmdbMovieTest {
 
     /**
      * Test of getRatedMovies method, of class TmdbMovie.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetRatedMovies() throws Exception {
+    public void testGetRatedMovies() throws MovieDbException {
         System.out.println("getRatedMovies");
         String sessionId = "";
         int accountId = 0;
-        TmdbMovie instance = null;
         List<MovieDb> expResult = null;
-        List<MovieDb> result = instance.getRatedMovies(sessionId, accountId);
+        List<MovieDb> result = tmdb.getRatedMovies(sessionId, accountId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
