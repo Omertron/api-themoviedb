@@ -20,32 +20,24 @@
 package com.omertron.themoviedbapi;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
-import com.omertron.themoviedbapi.model.TokenAuthorisation;
-import com.omertron.themoviedbapi.model.TokenSession;
-import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.Test;
 
 /**
@@ -145,20 +137,4 @@ public class TheMovieDbApiTest {
         StatusCode statusCode = tmdb.deleteMovieList(SESSION_ID_APITESTS, listId);
         assertEquals(statusCode.getStatusCode(), 13);
     }
-
-    /**
-     * Test of getDiscover method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetDiscover_Discover() throws MovieDbException {
-        LOG.info("getDiscover");
-        Discover discover = new Discover();
-        discover.year(2013).language(LANGUAGE_ENGLISH);
-
-        TmdbResultsList<MovieDb> result = tmdb.getDiscoverMovie(discover);
-        assertFalse("No movies discovered", result.getResults().isEmpty());
-    }
-
 }

@@ -8,7 +8,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
 import org.junit.After;
@@ -58,7 +57,7 @@ public class TmdbCreditsTest {
     @Test
     public void testGetCreditInfo() throws MovieDbException {
         LOG.info("getCreditInfo");
-        String creditId = "";
+        String creditId = "525346f619c29579400d4145";
         String language = "";
         PersonCredits expResult = null;
         PersonCredits result = instance.getCreditInfo(creditId, language);

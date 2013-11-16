@@ -22,7 +22,6 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.mapper;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
-import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
@@ -42,7 +41,7 @@ public class TmdbCredits extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbCredits.class);
     // API URL Parameters
-    private static final String BASE_CREDIT = "/credit";
+    private static final String BASE_CREDIT = "credit/";
 
     /**
      * Constructor
@@ -70,7 +69,7 @@ public class TmdbCredits extends AbstractMethod {
      * @throws MovieDbException
      */
     public PersonCredits getCreditInfo(String creditId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_CREDIT, "/movie_credits");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_CREDIT);
 
         apiUrl.addArgument(PARAM_ID, creditId);
         if (StringUtils.isNotBlank(language)) {
@@ -81,8 +80,7 @@ public class TmdbCredits extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonCredits pc = mapper.readValue(webpage, PersonCredits.class);
-            return pc;
+            return mapper.readValue(webpage, PersonCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get credit info: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

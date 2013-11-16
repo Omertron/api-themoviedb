@@ -66,7 +66,7 @@ public class TmdbAccountTest {
     public void testGetAccount() throws MovieDbException {
         LOG.info("getAccount");
         Account result = instance.getAccount(SESSION_ID_APITESTS);
-        assertEquals("Wrong account returned", ACCOUNT_ID_APITESTS, result);
+        assertEquals("Wrong account returned", ACCOUNT_ID_APITESTS, result.getId());
     }
 
     /**
