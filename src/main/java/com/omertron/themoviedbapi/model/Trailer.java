@@ -37,7 +37,8 @@ public class Trailer extends AbstractJsonMapping {
     private String name;
     private String size;
     private String source;
-    private String website;    // The website of the trailer
+    // The website of the trailer
+    private String website;
     private String type;
 
     public String getName() {

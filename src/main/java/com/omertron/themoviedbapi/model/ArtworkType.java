@@ -24,7 +24,10 @@ package com.omertron.themoviedbapi.model;
  */
 public enum ArtworkType {
 
-    POSTER,     // Poster artwork
-    BACKDROP,   // Fanart/backdrop
-    PROFILE     // Person image
+    // Poster artwork
+    POSTER,
+    // Fanart/backdrop
+    BACKDROP,
+    // Person image
+    PROFILE
 }

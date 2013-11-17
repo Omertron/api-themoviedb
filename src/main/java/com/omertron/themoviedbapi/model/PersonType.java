@@ -24,7 +24,10 @@ package com.omertron.themoviedbapi.model;
  */
 public enum PersonType {
 
-    CAST, // A member of the cast
-    CREW, // A member of the crew
-    PERSON  // No specific type
+    // A member of the cast
+    CAST,
+    // A member of the crew
+    CREW,
+    // No specific type
+    PERSON
 }

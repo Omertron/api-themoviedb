@@ -48,12 +48,17 @@ public class Person extends AbstractJsonMapping {
     @JsonProperty("profile_path")
     private String profilePath = DEFAULT_STRING;
     private PersonType personType = PersonType.PERSON;
-    private String department = DEFAULT_STRING;  // Crew
-    private String job = DEFAULT_STRING;         // Crew
-    private String character = DEFAULT_STRING;   // Cast
-    private int order = -1;                      // Cast
+    // Crew
+    private String department = DEFAULT_STRING;
+    // Crew
+    private String job = DEFAULT_STRING;
+    // Cast
+    private String character = DEFAULT_STRING;
+    // Cast
+    private int order = -1;
     @JsonProperty("adult")
-    private boolean adult = false;  // Person info
+    // Person info
+    private boolean adult = false;
     @JsonProperty("also_known_as")
     private List<String> aka = new ArrayList<String>();
     @JsonProperty("biography")
