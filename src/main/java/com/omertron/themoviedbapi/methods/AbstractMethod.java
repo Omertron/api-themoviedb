@@ -46,7 +46,7 @@ public class AbstractMethod {
     /**
      * Jackson JSON configuration
      */
-    protected final static ObjectMapper MAPPER = new ObjectMapper();
+    protected static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
      * Default constructor for the methods

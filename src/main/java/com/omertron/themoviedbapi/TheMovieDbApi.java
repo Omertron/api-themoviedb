@@ -19,11 +19,7 @@
  */
 package com.omertron.themoviedbapi;
 
-import java.net.URL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
-import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
 import com.omertron.themoviedbapi.methods.TmdbChanges;
@@ -57,7 +53,6 @@ import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.WebBrowser;
-import java.net.MalformedURLException;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -70,7 +65,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class TheMovieDbApi {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
     private CommonHttpClient httpClient;
     private Configuration config = null;
     // Sub-methods
@@ -112,9 +106,7 @@ public class TheMovieDbApi {
      */
     public TheMovieDbApi(String apiKey, CommonHttpClient httpClient) throws MovieDbException {
         this.httpClient = httpClient;
-
         initialise(apiKey, httpClient);
-
     }
 
     /**
