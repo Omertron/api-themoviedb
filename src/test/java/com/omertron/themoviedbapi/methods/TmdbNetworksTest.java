@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
@@ -25,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author stuart.boston
  */
 public class TmdbNetworksTest {
+
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbAuthenticationTest.class);
     // API
@@ -53,17 +53,14 @@ public class TmdbNetworksTest {
 
     /**
      * Test of getNetworkInfo method, of class TmdbNetworks.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetNetworkInfo() throws MovieDbException {
         LOG.info("getNetworkInfo");
-        int networkId = 0;
-        TmdbNetworks instance = null;
-        Network expResult = null;
-        Network result = instance.getNetworkInfo(networkId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Network result = tmdb.getNetworkInfo(1);
+        assertEquals("Wrong network returned", "Fuji Television", result.getName());
     }
 
 }
