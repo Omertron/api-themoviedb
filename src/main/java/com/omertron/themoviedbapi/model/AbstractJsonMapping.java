@@ -43,7 +43,7 @@ public abstract class AbstractJsonMapping implements Serializable {
      *
      * @return
      */
-    private Logger getLogger() {
+    protected Logger getLogger() {
         if (log == null) {
             log = LoggerFactory.getLogger(this.getClass());
         }
