@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.ACCOUNT_ID_APITESTS;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
@@ -62,7 +61,7 @@ public class TmdbMoviesTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbMovies instance;
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
     private static final int ID_MOVIE_THE_AVENGERS = 24428;
 
@@ -71,7 +70,7 @@ public class TmdbMoviesTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbMovies(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -95,7 +94,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieInfo() throws MovieDbException {
         LOG.info("getMovieInfo");
-        MovieDb result = tmdb.getMovieInfo(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
+        MovieDb result = instance.getMovieInfo(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
         assertEquals("Incorrect movie information", "Blade Runner", result.getOriginalTitle());
     }
 
@@ -107,7 +106,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieInfoImdb() throws MovieDbException {
         LOG.info("getMovieInfoImdb");
-        MovieDb result = tmdb.getMovieInfoImdb("tt0076759", "en-US");
+        MovieDb result = instance.getMovieInfoImdb("tt0076759", "en-US");
         assertTrue("Error getting the movie from IMDB ID", result.getId() == 11);
     }
 
@@ -120,11 +119,11 @@ public class TmdbMoviesTest {
     public void testGetMovieAlternativeTitles() throws MovieDbException {
         LOG.info("getMovieAlternativeTitles");
         String country = "";
-        TmdbResultsList<AlternativeTitle> result = tmdb.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country, "casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
+        TmdbResultsList<AlternativeTitle> result = instance.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country, "casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
         assertTrue("No alternative titles found", result.getResults().size() > 0);
 
         country = "US";
-        result = tmdb.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country);
+        result = instance.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country);
         assertTrue("No alternative titles found", result.getResults().size() > 0);
 
     }
@@ -137,7 +136,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieCasts() throws MovieDbException {
         LOG.info("getMovieCasts");
-        TmdbResultsList<PersonMovieOld> people = tmdb.getMovieCredits(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
+        TmdbResultsList<PersonMovieOld> people = instance.getMovieCredits(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
         assertTrue("No cast information", people.getResults().size() > 0);
 
         String name1 = "Harrison Ford";
@@ -167,7 +166,7 @@ public class TmdbMoviesTest {
     public void testGetMovieImages() throws MovieDbException {
         LOG.info("getMovieImages");
         String language = "";
-        TmdbResultsList<Artwork> result = tmdb.getMovieImages(ID_MOVIE_BLADE_RUNNER, language);
+        TmdbResultsList<Artwork> result = instance.getMovieImages(ID_MOVIE_BLADE_RUNNER, language);
         assertFalse("No artwork found", result.getResults().isEmpty());
     }
 
@@ -179,7 +178,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieKeywords() throws MovieDbException {
         LOG.info("getMovieKeywords");
-        TmdbResultsList<Keyword> result = tmdb.getMovieKeywords(ID_MOVIE_BLADE_RUNNER);
+        TmdbResultsList<Keyword> result = instance.getMovieKeywords(ID_MOVIE_BLADE_RUNNER);
         assertFalse("No keywords found", result.getResults().isEmpty());
     }
 
@@ -191,7 +190,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieReleaseInfo() throws MovieDbException {
         LOG.info("getMovieReleaseInfo");
-        TmdbResultsList<ReleaseInfo> result = tmdb.getMovieReleaseInfo(ID_MOVIE_BLADE_RUNNER, "");
+        TmdbResultsList<ReleaseInfo> result = instance.getMovieReleaseInfo(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Release information missing", result.getResults().isEmpty());
     }
 
@@ -203,7 +202,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieTrailers() throws MovieDbException {
         LOG.info("getMovieTrailers");
-        TmdbResultsList<Trailer> result = tmdb.getMovieTrailers(ID_MOVIE_BLADE_RUNNER, "");
+        TmdbResultsList<Trailer> result = instance.getMovieTrailers(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Movie trailers missing", result.getResults().isEmpty());
     }
 
@@ -215,7 +214,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieTranslations() throws MovieDbException {
         LOG.info("getMovieTranslations");
-        TmdbResultsList<Translation> result = tmdb.getMovieTranslations(ID_MOVIE_BLADE_RUNNER);
+        TmdbResultsList<Translation> result = instance.getMovieTranslations(ID_MOVIE_BLADE_RUNNER);
         assertFalse("No translations found", result.getResults().isEmpty());
     }
 
@@ -227,7 +226,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetSimilarMovies() throws MovieDbException {
         LOG.info("getSimilarMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, LANGUAGE_DEFAULT, 0);
         assertTrue("No similar movies found", !result.getResults().isEmpty());
     }
 
@@ -240,7 +239,7 @@ public class TmdbMoviesTest {
     public void testGetReviews() throws MovieDbException {
         LOG.info("getReviews");
         int page = 0;
-        TmdbResultsList<Review> result = tmdb.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
+        TmdbResultsList<Review> result = instance.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
 
         assertFalse("No reviews found", result.getResults().isEmpty());
     }
@@ -253,7 +252,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieLists() throws MovieDbException {
         LOG.info("getMovieLists");
-        TmdbResultsList<MovieList> result = tmdb.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
+        TmdbResultsList<MovieList> result = instance.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
         assertNotNull("No results found", result);
         assertTrue("No results found", result.getResults().size() > 0);
     }
@@ -271,9 +270,9 @@ public class TmdbMoviesTest {
         String endDate = null;
 
         // Get some popular movies
-        TmdbResultsList<MovieDb> movieList = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> movieList = instance.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         for (MovieDb movie : movieList.getResults()) {
-            TmdbResultsMap<String, List<ChangedItem>> result = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
+            TmdbResultsMap<String, List<ChangedItem>> result = instance.getMovieChanges(movie.getId(), startDate, endDate);
             LOG.info("{} has {} changes.", movie.getTitle(), result.getResults().size());
             assertTrue("No changes found", result.getResults().size() > 0);
             break;
@@ -288,7 +287,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetLatestMovie() throws MovieDbException {
         LOG.info("getLatestMovie");
-        MovieDb result = tmdb.getLatestMovie();
+        MovieDb result = instance.getLatestMovie();
         assertTrue("No latest movie found", result != null);
         assertTrue("No latest movie found", result.getId() > 0);
     }
@@ -301,7 +300,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetUpcoming() throws MovieDbException {
         LOG.info("getUpcoming");
-        TmdbResultsList<MovieDb> result = tmdb.getUpcoming(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getUpcoming(LANGUAGE_DEFAULT, 0);
         assertTrue("No upcoming movies found", !result.getResults().isEmpty());
     }
 
@@ -313,7 +312,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
         LOG.info("getNowPlayingMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getNowPlayingMovies(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(LANGUAGE_DEFAULT, 0);
         assertTrue("No now playing movies found", !result.getResults().isEmpty());
     }
 
@@ -325,7 +324,7 @@ public class TmdbMoviesTest {
     @Test
     public void testGetPopularMovieList() throws MovieDbException {
         LOG.info("getPopularMovieList");
-        TmdbResultsList<MovieDb> result = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         assertTrue("No popular movies found", !result.getResults().isEmpty());
     }
 
@@ -337,25 +336,8 @@ public class TmdbMoviesTest {
     @Test
     public void testGetTopRatedMovies() throws MovieDbException {
         LOG.info("getTopRatedMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getTopRatedMovies(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(LANGUAGE_DEFAULT, 0);
         assertTrue("No top rated movies found", !result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getRatedMovies method, of class TmdbMovie.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetRatedMovies() throws MovieDbException {
-        LOG.info("getRatedMovies");
-        String sessionId = "";
-        int accountId = 0;
-        List<MovieDb> expResult = null;
-        List<MovieDb> result = tmdb.getRatedMovies(sessionId, accountId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -371,13 +353,14 @@ public class TmdbMoviesTest {
         Integer movieID = 68724;
         Integer rating = new Random().nextInt(10) + 1;
 
-        boolean wasPosted = tmdb.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
+        boolean wasPosted = instance.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
 
         assertNotNull(wasPosted);
         assertTrue(wasPosted);
 
         // get all rated movies
-        List<MovieDb> ratedMovies = tmdb.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        TmdbAccount account = new TmdbAccount(API_KEY, null);
+        List<MovieDb> ratedMovies = account.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
         assertTrue(ratedMovies.size() > 0);
 
         // make sure that we find the movie and it is rated correctly
@@ -393,13 +376,14 @@ public class TmdbMoviesTest {
 
     /**
      * Test of getMovieCredits method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetMovieCredits() throws MovieDbException {
         LOG.info("getMovieCredits");
         int movieId = 0;
         String[] appendToResponse = null;
-        TmdbMovies instance = null;
         TmdbResultsList<PersonMovieOld> expResult = null;
         TmdbResultsList<PersonMovieOld> result = instance.getMovieCredits(movieId, appendToResponse);
         assertEquals(expResult, result);
@@ -409,13 +393,14 @@ public class TmdbMoviesTest {
 
     /**
      * Test of getMovieStatus method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetMovieStatus() throws MovieDbException {
         LOG.info("getMovieStatus");
         String sessionId = "";
         int movieId = 0;
-        TmdbMovies instance = null;
         MovieState expResult = null;
         MovieState result = instance.getMovieStatus(sessionId, movieId);
         assertEquals(expResult, result);
@@ -425,6 +410,8 @@ public class TmdbMoviesTest {
 
     /**
      * Test of postMovieRating method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testPostMovieRating() throws MovieDbException {
@@ -432,7 +419,6 @@ public class TmdbMoviesTest {
         String sessionId = "";
         Integer movieId = null;
         Integer rating = null;
-        TmdbMovies instance = null;
         boolean expResult = false;
         boolean result = instance.postMovieRating(sessionId, movieId, rating);
         assertEquals(expResult, result);

@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.Review;
 import org.junit.After;
@@ -25,17 +23,18 @@ import org.slf4j.LoggerFactory;
  * @author stuart.boston
  */
 public class TmdbReviewsTest {
+
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbAuthenticationTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbReviews instance;
 
     public TmdbReviewsTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbReviews(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -53,12 +52,12 @@ public class TmdbReviewsTest {
 
     /**
      * Test of getReview method, of class TmdbReviews.
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetReview() throws MovieDbException {
         LOG.info("getReview");
         String reviewId = "";
-        TmdbReviews instance = null;
         Review expResult = null;
         Review result = instance.getReview(reviewId);
         assertEquals(expResult, result);

@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.*;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
@@ -51,7 +50,7 @@ public class TmdbTVTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbTVTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbTV instance;
     // IDs
     private static final int ID_BIG_BANG_THEORY = 1418;
 
@@ -60,7 +59,7 @@ public class TmdbTVTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbTV(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -84,7 +83,7 @@ public class TmdbTVTest {
     //@Test
     public void testGetTv() throws MovieDbException {
         LOG.info("getTv");
-        TVSeries result = tmdb.getTv(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
+        TVSeries result = instance.getTv(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT, null);
         assertEquals("Wrong title returned", "The Big Bang Theory", result.getName());
         assertTrue("No seasons returned", result.getNumberSeasons() >= 5);
         assertTrue("No episodes returned", result.getNumberEpisodes() > 100);
@@ -101,7 +100,7 @@ public class TmdbTVTest {
     public void testGetTvCredits() throws MovieDbException {
         LOG.info("getTvCredits");
 
-        TVCredits result = tmdb.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
+        TVCredits result = instance.getTvCredits(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT, null);
         assertFalse("No cast", result.getCast().isEmpty());
         assertFalse("No crew", result.getCrew().isEmpty());
         assertTrue("Guest stars returned", result.getGuestStar().isEmpty());
@@ -115,7 +114,7 @@ public class TmdbTVTest {
     //@Test
     public void testGetTvExternalIds() throws MovieDbException {
         LOG.info("getTvExternalIds");
-        ExternalIds result = tmdb.getTvExternalIds(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
+        ExternalIds result = instance.getTvExternalIds(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
         assertFalse("No ids found", result.getIds().isEmpty());
         assertTrue("TMDB Id not found", result.hasId("id"));
         assertEquals("Wrong id returned", Integer.toString(ID_BIG_BANG_THEORY), result.getId("id"));
@@ -130,7 +129,7 @@ public class TmdbTVTest {
     //@Test
     public void testGetTvImages() throws MovieDbException {
         LOG.info("getTvImages");
-        TmdbResultsList<Artwork> result = tmdb.getTvImages(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
+        TmdbResultsList<Artwork> result = instance.getTvImages(ID_BIG_BANG_THEORY, LANGUAGE_DEFAULT);
         assertFalse("No results found", result.getResults().isEmpty());
     }
 
@@ -143,7 +142,7 @@ public class TmdbTVTest {
     public void testGetTvSeason() throws MovieDbException {
         LOG.info("getTvSeason");
 
-        TVSeason result = tmdb.getTvSeason(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
+        TVSeason result = instance.getTvSeason(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT, null);
         assertFalse("No episodes found for season", result.getEpisodes().isEmpty());
         assertEquals("Wrong air date", "2007-09-24", result.getAirDate());
         assertEquals("Wrong season name", "Season 1", result.getName());
@@ -158,7 +157,7 @@ public class TmdbTVTest {
     public void testGetTvSeasonExternalIds() throws MovieDbException {
         LOG.info("getTvSeasonExternalIds");
 
-        ExternalIds result = tmdb.getTvSeasonExternalIds(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
+        ExternalIds result = instance.getTvSeasonExternalIds(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
         assertFalse("No ids found", result.getIds().isEmpty());
         assertTrue("TMDB Id not found", result.hasId("id"));
         assertEquals("Wrong season id returned", "3738", result.getId("id"));
@@ -173,7 +172,7 @@ public class TmdbTVTest {
     //@Test
     public void testGetTvSeasonImages() throws MovieDbException {
         LOG.info("getTvSeasonImages");
-        TmdbResultsList<Artwork> result = tmdb.getTvSeasonImages(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
+        TmdbResultsList<Artwork> result = instance.getTvSeasonImages(ID_BIG_BANG_THEORY, 1, LANGUAGE_DEFAULT);
         assertFalse("No results found", result.getResults().isEmpty());
     }
 
@@ -185,7 +184,7 @@ public class TmdbTVTest {
     //@Test
     public void testGetTvEpisode() throws MovieDbException {
         LOG.info("getTvEpisode");
-        TVEpisode result = tmdb.getTvEpisode(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
+        TVEpisode result = instance.getTvEpisode(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT, null);
         assertEquals("Wrong ID", 64766, result.getId());
         assertEquals("Wrong date", "2007-09-24", result.getAirDate());
         assertTrue("No overview", StringUtils.isNotBlank(result.getOverview()));
@@ -199,7 +198,7 @@ public class TmdbTVTest {
     @Test
     public void testGetTvEpisodeCredits() throws MovieDbException {
         LOG.info("getTvEpisodeCredits");
-        TVCredits result = tmdb.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
+        TVCredits result = instance.getTvEpisodeCredits(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
         assertFalse("No cast", result.getCast().isEmpty());
         assertFalse("No crew", result.getCrew().isEmpty());
         assertFalse("No Guest stars returned", result.getGuestStar().isEmpty());
@@ -213,7 +212,7 @@ public class TmdbTVTest {
     @Ignore("Find an episode with ids to test this on")
     public void testGetTvEpisodeExternalIds() throws MovieDbException {
         LOG.info("getTvEpisodeExternalIds");
-        ExternalIds result = tmdb.getTvEpisodeExternalIds(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
+        ExternalIds result = instance.getTvEpisodeExternalIds(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
         LOG.info("{}", result);
         assertFalse("No ids found", result.getIds().isEmpty());
         assertTrue("TMDB Id not found", result.hasId("id"));
@@ -229,7 +228,7 @@ public class TmdbTVTest {
     //@Test
     public void testGetTvEpisodeImages() throws MovieDbException {
         LOG.info("getTvEpisodeImages");
-        String result = tmdb.getTvEpisodeImages(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
+        String result = instance.getTvEpisodeImages(ID_BIG_BANG_THEORY, 1, 1, LANGUAGE_DEFAULT);
         LOG.info("{}", result);
         fail("Unfinished");
     }

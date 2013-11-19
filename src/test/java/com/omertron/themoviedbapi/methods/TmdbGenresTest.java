@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Genre;
@@ -45,7 +44,7 @@ public class TmdbGenresTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbGenres instance;
     private static final int ID_GENRE_ACTION = 28;
 
     public TmdbGenresTest() {
@@ -53,7 +52,7 @@ public class TmdbGenresTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbGenres(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -77,7 +76,7 @@ public class TmdbGenresTest {
     @Test
     public void testGetGenreList() throws MovieDbException {
         LOG.info("getGenreList");
-        TmdbResultsList<Genre> result = tmdb.getGenreList(LANGUAGE_DEFAULT);
+        TmdbResultsList<Genre> result = instance.getGenreList(LANGUAGE_DEFAULT);
         assertTrue("No genres found", !result.getResults().isEmpty());
     }
 
@@ -89,7 +88,7 @@ public class TmdbGenresTest {
     @Test
     public void testGetGenreMovies() throws MovieDbException {
         LOG.info("getGenreMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0, Boolean.TRUE);
+        TmdbResultsList<MovieDb> result = instance.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0, Boolean.TRUE);
         assertTrue("No genre movies found", !result.getResults().isEmpty());
     }
 

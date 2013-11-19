@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Keyword;
@@ -45,7 +44,7 @@ public class TmdbKeywordsTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbKeywords tmdb;
     private static final String ID_KEYWORD = "1721";
 
     public TmdbKeywordsTest() {
@@ -53,7 +52,7 @@ public class TmdbKeywordsTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        tmdb = new TmdbKeywords(API_KEY, null);
         TestLogger.Configure();
     }
 

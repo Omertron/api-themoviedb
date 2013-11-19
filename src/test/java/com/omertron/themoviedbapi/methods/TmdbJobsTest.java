@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -43,14 +42,14 @@ public class TmdbJobsTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbJobs tmdb;
 
     public TmdbJobsTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        tmdb = new TmdbJobs(API_KEY, null);
         TestLogger.Configure();
     }
 

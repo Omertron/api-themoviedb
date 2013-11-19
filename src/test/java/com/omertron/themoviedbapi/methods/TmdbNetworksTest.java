@@ -7,7 +7,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.tv.Network;
 import org.junit.After;
@@ -28,14 +27,14 @@ public class TmdbNetworksTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbAuthenticationTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbNetworks instance;
 
     public TmdbNetworksTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbNetworks(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -59,7 +58,7 @@ public class TmdbNetworksTest {
     @Test
     public void testGetNetworkInfo() throws MovieDbException {
         LOG.info("getNetworkInfo");
-        Network result = tmdb.getNetworkInfo(1);
+        Network result = instance.getNetworkInfo(1);
         assertEquals("Wrong network returned", "Fuji Television", result.getName());
     }
 

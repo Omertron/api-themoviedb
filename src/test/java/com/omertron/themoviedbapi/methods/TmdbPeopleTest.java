@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
@@ -47,7 +46,7 @@ public class TmdbPeopleTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
-    private static TheMovieDbApi tmdb;
+    private static TmdbPeople instance;
     private static final int ID_PERSON_BRUCE_WILLIS = 62;
 
     public TmdbPeopleTest() {
@@ -55,7 +54,7 @@ public class TmdbPeopleTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        tmdb = new TheMovieDbApi(API_KEY);
+        instance = new TmdbPeople(API_KEY, null);
         TestLogger.Configure();
     }
 
@@ -79,21 +78,8 @@ public class TmdbPeopleTest {
     @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
-        PersonMovieOld result = tmdb.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
+        PersonMovieOld result = instance.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
         assertTrue("Wrong actor returned", result.getId() == ID_PERSON_BRUCE_WILLIS);
-    }
-
-    /**
-     * Test of getPersonMovieOldCredits method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetPersonMovieCredits() throws MovieDbException {
-        LOG.info("getPersonCredits");
-
-        PersonMovieCredits result = tmdb.getPersonMovieCredits(ID_PERSON_BRUCE_WILLIS, "");
-        assertFalse("No cast information", result.getCast().isEmpty());
     }
 
     /**
@@ -105,7 +91,7 @@ public class TmdbPeopleTest {
     public void testGetPersonImages() throws MovieDbException {
         LOG.info("getPersonImages");
 
-        TmdbResultsList<Artwork> result = tmdb.getPersonImages(ID_PERSON_BRUCE_WILLIS);
+        TmdbResultsList<Artwork> result = instance.getPersonImages(ID_PERSON_BRUCE_WILLIS);
         assertTrue("No cast information", result.getResults().size() > 0);
     }
 
@@ -119,7 +105,7 @@ public class TmdbPeopleTest {
         LOG.info("getPersonChanges");
         String startDate = "";
         String endDate = "";
-        tmdb.getPersonChanges(ID_PERSON_BRUCE_WILLIS, startDate, endDate);
+        instance.getPersonChanges(ID_PERSON_BRUCE_WILLIS, startDate, endDate);
     }
 
     /**
@@ -131,7 +117,7 @@ public class TmdbPeopleTest {
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         int page = 0;
-        TmdbResultsList<PersonMovieOld> result = tmdb.getPersonPopular(page);
+        TmdbResultsList<PersonMovieOld> result = instance.getPersonPopular(page);
         assertFalse("No popular people", result.getResults().isEmpty());
     }
 
@@ -144,22 +130,36 @@ public class TmdbPeopleTest {
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
 
-        PersonMovieOld result = tmdb.getPersonLatest();
+        PersonMovieOld result = instance.getPersonLatest();
 
         assertNotNull("No results found", result);
         assertTrue("No results found", StringUtils.isNotBlank(result.getName()));
     }
 
     /**
+     * Test of getPersonMovieOldCredits method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
+     */
+    @Test
+    public void testGetPersonMovieCredits() throws MovieDbException {
+        LOG.info("getPersonMovieCredits");
+
+        PersonMovieCredits result = instance.getPersonMovieCredits(ID_PERSON_BRUCE_WILLIS, "");
+        assertFalse("No cast information", result.getCast().isEmpty());
+    }
+
+    /**
      * Test of getPersonTvCredits method, of class TmdbPeople.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetPersonTvCredits() throws MovieDbException {
         LOG.info("getPersonTvCredits");
-        int personId = 0;
+        int personId = 1;
         String language = "";
         String[] appendToResponse = null;
-        TmdbPeople instance = null;
         PersonMovieCredits expResult = null;
         PersonMovieCredits result = instance.getPersonTvCredits(personId, language, appendToResponse);
         assertEquals(expResult, result);
@@ -169,14 +169,15 @@ public class TmdbPeopleTest {
 
     /**
      * Test of getPersonCombinedCredits method, of class TmdbPeople.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetPersonCombinedCredits() throws MovieDbException {
         LOG.info("getPersonCombinedCredits");
-        int personId = 0;
+        int personId = 1;
         String language = "";
         String[] appendToResponse = null;
-        TmdbPeople instance = null;
         PersonMovieCredits expResult = null;
         PersonMovieCredits result = instance.getPersonCombinedCredits(personId, language, appendToResponse);
         assertEquals(expResult, result);

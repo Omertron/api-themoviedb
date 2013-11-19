@@ -110,7 +110,7 @@ public class TmdbAccountTest {
         status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
         LOG.info("Remove status: {}", status);
 
-        assertTrue("Favorite list was not empty",instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
+        assertTrue("Favorite list was not empty", instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
     }
 
     /**
@@ -174,5 +174,4 @@ public class TmdbAccountTest {
     @Ignore("Tested as part of testGetWatchList")
     public void testModifyWatchList() throws MovieDbException {
     }
-
 }
