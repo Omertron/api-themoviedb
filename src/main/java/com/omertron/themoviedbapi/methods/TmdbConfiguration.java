@@ -38,7 +38,7 @@ public class TmdbConfiguration extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbConfiguration.class);
     // API URL Parameters
-    private static final String BASE_CONFIG = "configuration/";
+    private static final String BASE_CONFIG = "configuration";
 
     /**
      * Constructor
