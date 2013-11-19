@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import static com.omertron.themoviedbapi.TheMovieDbApi.convertToJson;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.mapper;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.StatusCode;

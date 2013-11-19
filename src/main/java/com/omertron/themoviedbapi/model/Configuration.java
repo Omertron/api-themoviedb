@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @author stuart.boston
  */
-public class TmdbConfiguration extends AbstractJsonMapping {
+public class Configuration extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
     /*
@@ -99,7 +99,7 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      *
      * @param config
      */
-    public void clone(TmdbConfiguration config) {
+    public void clone(Configuration config) {
         backdropSizes = config.getBackdropSizes();
         baseUrl = config.getBaseUrl();
         posterSizes = config.getPosterSizes();

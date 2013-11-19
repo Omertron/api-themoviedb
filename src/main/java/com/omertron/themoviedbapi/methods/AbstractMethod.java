@@ -19,12 +19,14 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.tools.WebBrowser;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.yamj.api.common.http.CommonHttpClient;
@@ -36,40 +38,95 @@ import org.yamj.api.common.http.CommonHttpClient;
  */
 public class AbstractMethod {
 
+    /**
+     * The API key to be used
+     */
     protected String apiKey;
     private CommonHttpClient httpClient;
-    // Jackson JSON configuration
+    /**
+     * Jackson JSON configuration
+     */
     protected static ObjectMapper mapper = new ObjectMapper();
 
+    /**
+     * Default constructor for the methods
+     *
+     * @param apiKey
+     * @param httpClient
+     */
     public AbstractMethod(String apiKey, CommonHttpClient httpClient) {
         this.apiKey = apiKey;
         this.httpClient = httpClient;
     }
 
+    /**
+     * Get the API Key
+     *
+     * @return
+     */
     public String getApiKey() {
         return apiKey;
     }
 
+    /**
+     * Set the API Key
+     *
+     * @param apiKey
+     */
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
 
+    /**
+     * Get the HttpClient
+     *
+     * @return
+     */
     public CommonHttpClient getHttpClient() {
         return httpClient;
     }
 
+    /**
+     * Set the HttpClient
+     *
+     * @param httpClient
+     */
     public void setHttpClient(CommonHttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
+    /**
+     * Get a string version of the requested web page at the URL
+     *
+     * @param url
+     * @return
+     * @throws MovieDbException
+     */
     protected String requestWebPage(URL url) throws MovieDbException {
         return requestWebPage(url, null, Boolean.FALSE);
     }
 
+    /**
+     * Get a string version of the requested web page at the URL using the passed JSON body
+     *
+     * @param url
+     * @param jsonBody
+     * @return
+     * @throws MovieDbException
+     */
     protected String requestWebPage(URL url, String jsonBody) throws MovieDbException {
         return requestWebPage(url, jsonBody, Boolean.FALSE);
     }
 
+    /**
+     * Get a string version of the requested web page at the URL using the passed JSON body and requesting a delete
+     *
+     * @param url
+     * @param jsonBody
+     * @param isDeleteRequest
+     * @return
+     * @throws MovieDbException
+     */
     protected String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
         String webpage;
         // use HTTP client implementation
@@ -101,6 +158,21 @@ public class AbstractMethod {
             }
         }
         return webpage;
+    }
+
+    /**
+     * Use Jackson to convert Map to JSON string.
+     *
+     * @param map
+     * @return
+     * @throws MovieDbException
+     */
+    protected static String convertToJson(Map<String, ?> map) throws MovieDbException {
+        try {
+            return mapper.writeValueAsString(map);
+        } catch (JsonProcessingException jpe) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
+        }
     }
 
 }

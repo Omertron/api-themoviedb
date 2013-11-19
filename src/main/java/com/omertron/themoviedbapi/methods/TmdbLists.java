@@ -20,21 +20,17 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import static com.omertron.themoviedbapi.TheMovieDbApi.convertToJson;
 import com.omertron.themoviedbapi.model.ListItemStatus;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.StatusCodeList;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
-import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

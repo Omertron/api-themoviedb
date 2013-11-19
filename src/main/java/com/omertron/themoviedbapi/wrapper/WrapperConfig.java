@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.TmdbConfiguration;
+import com.omertron.themoviedbapi.model.Configuration;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,15 +31,15 @@ import java.util.List;
 public class WrapperConfig extends AbstractWrapper {
 
     @JsonProperty("images")
-    private TmdbConfiguration tmdbConfiguration;
+    private Configuration tmdbConfiguration;
     @JsonProperty("change_keys")
     private List<String> changeKeys = Collections.EMPTY_LIST;
 
-    public TmdbConfiguration getTmdbConfiguration() {
+    public Configuration getTmdbConfiguration() {
         return tmdbConfiguration;
     }
 
-    public void setTmdbConfiguration(TmdbConfiguration tmdbConfiguration) {
+    public void setTmdbConfiguration(Configuration tmdbConfiguration) {
         this.tmdbConfiguration = tmdbConfiguration;
     }
 

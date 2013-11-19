@@ -21,9 +21,6 @@ package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.person.PersonCrew;
-import java.util.List;
 
 /**
  * TV Series information<br/>

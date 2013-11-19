@@ -19,19 +19,17 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
 import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
 import com.omertron.themoviedbapi.methods.TmdbChanges;
 import com.omertron.themoviedbapi.methods.TmdbCollections;
 import com.omertron.themoviedbapi.methods.TmdbCompanies;
+import com.omertron.themoviedbapi.methods.TmdbConfiguration;
 import com.omertron.themoviedbapi.methods.TmdbCredits;
 import com.omertron.themoviedbapi.methods.TmdbDiscover;
 import com.omertron.themoviedbapi.methods.TmdbGenres;
@@ -58,15 +56,10 @@ import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
-import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.WebBrowser;
-import com.omertron.themoviedbapi.wrapper.*;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
 
 /**
  * The MovieDb API
@@ -78,19 +71,15 @@ import org.apache.http.client.methods.HttpGet;
 public class TheMovieDbApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
-    private String apiKey;
     private CommonHttpClient httpClient;
-    private TmdbConfiguration tmdbConfig;
-    // API Methods
-    private static final String BASE_DISCOVER = "discover/";
-    // Jackson JSON configuration
-    private static ObjectMapper mapper = new ObjectMapper();
+    private Configuration config = null;
     // Sub-methods
     private static TmdbAccount tmdbAccount;
     private static TmdbAuthentication tmdbAuth;
     private static TmdbChanges tmdbChanges;
     private static TmdbCollections tmdbCollections;
     private static TmdbCompanies tmdbCompany;
+    private static TmdbConfiguration tmdbConfiguration;
     private static TmdbCredits tmdbCredits;
     private static TmdbDiscover tmdbDiscover;
     private static TmdbGenres tmdbGenre;
@@ -122,21 +111,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TheMovieDbApi(String apiKey, CommonHttpClient httpClient) throws MovieDbException {
-        this.apiKey = apiKey;
         this.httpClient = httpClient;
 
         initialise(apiKey, httpClient);
 
-        ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
-        URL configUrl = apiUrl.buildUrl();
-        String webpage = requestWebPage(configUrl);
-
-        try {
-            WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
-            tmdbConfig = wc.getTmdbConfiguration();
-        } catch (IOException ex) {
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", ex);
-        }
     }
 
     /**
@@ -151,6 +129,7 @@ public class TheMovieDbApi {
         tmdbChanges = new TmdbChanges(apiKey, httpClient);
         tmdbCollections = new TmdbCollections(apiKey, httpClient);
         tmdbCompany = new TmdbCompanies(apiKey, httpClient);
+        tmdbConfiguration = new TmdbConfiguration(apiKey, httpClient);
         tmdbCredits = new TmdbCredits(apiKey, httpClient);
         tmdbDiscover = new TmdbDiscover(apiKey, httpClient);
         tmdbGenre = new TmdbGenres(apiKey, httpClient);
@@ -242,9 +221,13 @@ public class TheMovieDbApi {
      * Get the configuration information
      *
      * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public TmdbConfiguration getConfiguration() {
-        return tmdbConfig;
+    public Configuration getConfiguration() throws MovieDbException {
+        if (config == null) {
+            config = tmdbConfiguration.getConfig();
+        }
+        return config;
     }
 
     /**
@@ -256,11 +239,15 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
-        if (!tmdbConfig.isValidSize(requiredSize)) {
+        if (config == null) {
+            getConfiguration();
+        }
+
+        if (!config.isValidSize(requiredSize)) {
             throw new MovieDbException(MovieDbExceptionType.INVALID_IMAGE, requiredSize);
         }
 
-        StringBuilder sb = new StringBuilder(tmdbConfig.getBaseUrl());
+        StringBuilder sb = new StringBuilder(config.getBaseUrl());
         sb.append(requiredSize);
         sb.append(imagePath);
         try {
@@ -1528,62 +1515,6 @@ public class TheMovieDbApi {
         return tmdbTv.getTvEpisodeImages(id, seasonNumber, episodeNumber, language);
     }
     //</editor-fold>
-
-    /**
-     * Use Jackson to convert Map to JSON string.
-     *
-     * @param map
-     * @return
-     * @throws MovieDbException
-     */
-    public static String convertToJson(Map<String, ?> map) throws MovieDbException {
-        try {
-            return mapper.writeValueAsString(map);
-        } catch (JsonProcessingException jpe) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
-        }
-    }
-
-    private String requestWebPage(URL url) throws MovieDbException {
-        return requestWebPage(url, null, Boolean.FALSE);
-    }
-
-    private String requestWebPage(URL url, String jsonBody) throws MovieDbException {
-        return requestWebPage(url, jsonBody, Boolean.FALSE);
-    }
-
-    private String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
-        String webpage;
-        // use HTTP client implementation
-        if (httpClient == null) {
-            // use web browser
-            webpage = WebBrowser.request(url, jsonBody, isDeleteRequest);
-        } else {
-            try {
-                HttpGet httpGet = new HttpGet(url.toURI());
-                httpGet.addHeader("accept", "application/json");
-
-                if (StringUtils.isNotBlank(jsonBody)) {
-                    // TODO: Add the json body to the request
-                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
-                }
-
-                if (isDeleteRequest) {
-                    //TODO: Handle delete request
-                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
-                }
-
-                webpage = httpClient.requestContent(httpGet);
-            } catch (URISyntaxException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
-            } catch (IOException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
-            } catch (RuntimeException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
-            }
-        }
-        return webpage;
-    }
 
     /**
      * Set the proxy information

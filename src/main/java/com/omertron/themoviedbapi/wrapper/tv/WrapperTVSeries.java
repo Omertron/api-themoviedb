@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.wrapper.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
 import java.io.Serializable;

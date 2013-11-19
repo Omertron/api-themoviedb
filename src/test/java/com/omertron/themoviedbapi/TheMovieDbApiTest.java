@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.omertron.themoviedbapi.model.StatusCode;
-import com.omertron.themoviedbapi.model.TmdbConfiguration;
+import com.omertron.themoviedbapi.model.Configuration;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import org.junit.Test;
@@ -84,12 +84,14 @@ public class TheMovieDbApiTest {
 
     /**
      * Test of getConfiguration method, of class TheMovieDbApi.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testConfiguration() {
+    public void testConfiguration() throws MovieDbException {
         LOG.info("Test Configuration");
 
-        TmdbConfiguration tmdbConfig = tmdb.getConfiguration();
+        Configuration tmdbConfig = tmdb.getConfiguration();
         assertNotNull("Configuration failed", tmdbConfig);
         assertTrue("No base URL", StringUtils.isNotBlank(tmdbConfig.getBaseUrl()));
         assertTrue("No backdrop sizes", tmdbConfig.getBackdropSizes().size() > 0);
