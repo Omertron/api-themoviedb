@@ -21,30 +21,28 @@ package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model.person.PersonCast;
+import com.omertron.themoviedbapi.model.person.PersonCrew;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Media for the PersonCredits
+ * List of Credits for TV
  *
  * @author stuart.boston
  */
-public class Media extends AbstractJsonMapping {
+public class TVCredits extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
     private int id;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("original_name")
-    private String originalName;
-    @JsonProperty("character")
-    private String character;
-    @JsonProperty("episodes")
-    private List<TVEpisodeBasic> episodes = Collections.emptyList();
-    @JsonProperty("seasons")
-    private List<TVSeasonBasic> seasons = Collections.emptyList();
+    @JsonProperty("cast")
+    private List<PersonCast> cast = Collections.emptyList();
+    @JsonProperty("crew")
+    private List<PersonCrew> crew = Collections.emptyList();
+    @JsonProperty("guest_stars")
+    private List<PersonCast> guestStar = Collections.emptyList();
 
     public int getId() {
         return id;
@@ -54,44 +52,27 @@ public class Media extends AbstractJsonMapping {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public List<PersonCast> getCast() {
+        return cast;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCast(List<PersonCast> cast) {
+        this.cast = cast;
     }
 
-    public String getOriginalName() {
-        return originalName;
+    public List<PersonCrew> getCrew() {
+        return crew;
     }
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setCrew(List<PersonCrew> crew) {
+        this.crew = crew;
     }
 
-    public String getCharacter() {
-        return character;
+    public List<PersonCast> getGuestStar() {
+        return guestStar;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public void setGuestStar(List<PersonCast> guestStar) {
+        this.guestStar = guestStar;
     }
-
-    public List<TVEpisodeBasic> getEpisodes() {
-        return episodes;
-    }
-
-    public void setEpisodes(List<TVEpisodeBasic> episodes) {
-        this.episodes = episodes;
-    }
-
-    public List<TVSeasonBasic> getSeasons() {
-        return seasons;
-    }
-
-    public void setSeasons(List<TVSeasonBasic> seasons) {
-        this.seasons = seasons;
-    }
-
 }

@@ -45,6 +45,7 @@ import com.omertron.themoviedbapi.model.person.PersonCredits;
 import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.tv.Network;
+import com.omertron.themoviedbapi.model.tv.TVCredits;
 import com.omertron.themoviedbapi.model.tv.TVEpisode;
 import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
@@ -1354,7 +1355,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
+    public TVCredits getTvCredits(int id, String language, String... appendToResponse) throws MovieDbException {
         return tmdbTv.getTvCredits(id, language, appendToResponse);
     }
 
@@ -1447,7 +1448,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+    public TVCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return tmdbTv.getTvEpisodeCredits(id, seasonNumber, episodeNumber, language);
     }
 

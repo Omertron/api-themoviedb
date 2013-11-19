@@ -23,11 +23,10 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
-import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.tv.TVCredits;
 import com.omertron.themoviedbapi.model.tv.TVEpisode;
 import com.omertron.themoviedbapi.model.tv.TVSeason;
 import com.omertron.themoviedbapi.model.tv.TVSeries;
-import com.omertron.themoviedbapi.model.type.VideoType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import org.slf4j.Logger;
@@ -103,7 +102,7 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getTvCredits(int id, String language, String[] appendToResponse) throws MovieDbException {
+    public TVCredits getTvCredits(int id, String language, String[] appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/credits");
 
         apiUrl.addArgument(PARAM_ID, id);
@@ -118,9 +117,7 @@ public class TmdbTV extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonCredits pc = MAPPER.readValue(webpage, PersonCredits.class);
-            pc.setVideoType(VideoType.TV);
-            return pc;
+            return MAPPER.readValue(webpage, TVCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Credis: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -339,7 +336,7 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+    public TVCredits getTvEpisodeCredits(int id, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_TV, "/credits");
 
         apiUrl.addArgument(PARAM_ID, id);
@@ -354,9 +351,7 @@ public class TmdbTV extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonCredits pc = MAPPER.readValue(webpage, PersonCredits.class);
-            pc.setVideoType(VideoType.TV);
-            return pc;
+            return MAPPER.readValue(webpage, TVCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Episode Credis: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
