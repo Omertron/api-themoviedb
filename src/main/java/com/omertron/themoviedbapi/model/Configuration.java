@@ -224,16 +224,6 @@ public class Configuration extends AbstractJsonMapping {
     }
 
     /**
-     * Check to see if the size is valid for any of the artwork types
-     *
-     * @param sizeToCheck
-     * @return
-     */
-    public boolean isValidSize(String sizeToCheck) {
-        return isValidSize(null, sizeToCheck);
-    }
-
-    /**
      * Check to see if the size is valid for the artwork type
      *
      * @param artworkType
@@ -257,10 +247,7 @@ public class Configuration extends AbstractJsonMapping {
                 valid = isValidProfileSize(sizeToCheck);
                 break;
             default:
-                valid = isValidPosterSize(sizeToCheck)
-                        || isValidBackdropSize(sizeToCheck)
-                        || isValidProfileSize(sizeToCheck)
-                        || isValidLogoSize(sizeToCheck);
+                valid = Boolean.FALSE;
         }
         return valid;
     }
