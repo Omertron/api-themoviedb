@@ -85,8 +85,7 @@ public class TmdbTV extends AbstractMethod {
 
         String webpage = requestWebPage(url);
         try {
-            TVSeries series = MAPPER.readValue(webpage, TVSeries.class);
-            return series;
+            return MAPPER.readValue(webpage, TVSeries.class);
         } catch (IOException ex) {
             LOG.warn("Failed to find series: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -153,8 +152,7 @@ public class TmdbTV extends AbstractMethod {
         }
 
         try {
-            ExternalIds results = MAPPER.readValue(webpage, ExternalIds.class);
-            return results;
+            return MAPPER.readValue(webpage, ExternalIds.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV External IDs: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -221,8 +219,7 @@ public class TmdbTV extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            TVSeason result = MAPPER.readValue(webpage, TVSeason.class);
-            return result;
+            return MAPPER.readValue(webpage, TVSeason.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Season: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -256,8 +253,7 @@ public class TmdbTV extends AbstractMethod {
         }
 
         try {
-            ExternalIds results = MAPPER.readValue(webpage, ExternalIds.class);
-            return results;
+            return MAPPER.readValue(webpage, ExternalIds.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Season External IDs: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -326,8 +322,7 @@ public class TmdbTV extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            TVEpisode result = MAPPER.readValue(webpage, TVEpisode.class);
-            return result;
+            return MAPPER.readValue(webpage, TVEpisode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Episode: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -395,8 +390,7 @@ public class TmdbTV extends AbstractMethod {
         LOG.info(webpage);
 
         try {
-            ExternalIds results = MAPPER.readValue(webpage, ExternalIds.class);
-            return results;
+            return MAPPER.readValue(webpage, ExternalIds.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV Episode External IDs: {}", ex.getMessage());
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

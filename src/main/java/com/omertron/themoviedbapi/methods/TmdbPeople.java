@@ -114,8 +114,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonMovieCredits pc = MAPPER.readValue(webpage, PersonMovieCredits.class);
-            return pc;
+            return MAPPER.readValue(webpage, PersonMovieCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -148,8 +147,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonMovieCredits pc = MAPPER.readValue(webpage, PersonMovieCredits.class);
-            return pc;
+            return MAPPER.readValue(webpage, PersonMovieCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -181,8 +179,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonMovieCredits pc = MAPPER.readValue(webpage, PersonMovieCredits.class);
-            return pc;
+            return MAPPER.readValue(webpage, PersonMovieCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get combined credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
