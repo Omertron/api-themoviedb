@@ -229,34 +229,6 @@ public class TheMovieDbApi {
         }
         return config;
     }
-
-    /**
-     * Generate the full image URL from the size and image path
-     *
-     * @param imagePath
-     * @param requiredSize
-     * @return
-     * @throws MovieDbException
-     */
-    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
-        if (config == null) {
-            getConfiguration();
-        }
-
-        if (!config.isValidSize(requiredSize)) {
-            throw new MovieDbException(MovieDbExceptionType.INVALID_IMAGE, requiredSize);
-        }
-
-        StringBuilder sb = new StringBuilder(config.getBaseUrl());
-        sb.append(requiredSize);
-        sb.append(imagePath);
-        try {
-            return (new URL(sb.toString()));
-        } catch (MalformedURLException ex) {
-            LOG.warn("Failed to create image URL: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbExceptionType.INVALID_URL, sb.toString(), ex);
-        }
-    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Account Functions">

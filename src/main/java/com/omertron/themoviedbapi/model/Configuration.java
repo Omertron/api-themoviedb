@@ -20,6 +20,10 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.type.ArtworkType;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -46,50 +50,110 @@ public class Configuration extends AbstractJsonMapping {
     @JsonProperty("logo_sizes")
     private List<String> logoSizes;
 
+    /**
+     * Get all backdrop sizes
+     *
+     * @return
+     */
     public List<String> getBackdropSizes() {
         return backdropSizes;
     }
 
+    /**
+     * get the base URL
+     *
+     * @return
+     */
     public String getBaseUrl() {
         return baseUrl;
     }
 
+    /**
+     * Get all poster sizes
+     *
+     * @return
+     */
     public List<String> getPosterSizes() {
         return posterSizes;
     }
 
+    /**
+     * Get all profile sizes
+     *
+     * @return
+     */
     public List<String> getProfileSizes() {
         return profileSizes;
     }
 
+    /**
+     * Get all logo sizes
+     *
+     * @return
+     */
     public List<String> getLogoSizes() {
         return logoSizes;
     }
 
+    /**
+     * Get the secure base URL
+     *
+     * @return
+     */
     public String getSecureBaseUrl() {
         return secureBaseUrl;
     }
 
+    /**
+     * Set the backdrop sizes
+     *
+     * @param backdropSizes
+     */
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
     }
 
+    /**
+     * Set the base URL
+     *
+     * @param baseUrl
+     */
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
+    /**
+     * Set the poster sizes
+     *
+     * @param posterSizes
+     */
     public void setPosterSizes(List<String> posterSizes) {
         this.posterSizes = posterSizes;
     }
 
+    /**
+     * Set the profile sizes
+     *
+     * @param profileSizes
+     */
     public void setProfileSizes(List<String> profileSizes) {
         this.profileSizes = profileSizes;
     }
 
+    /**
+     * Set the logo sizes
+     *
+     * @param logoSizes
+     */
     public void setLogoSizes(List<String> logoSizes) {
         this.logoSizes = logoSizes;
     }
 
+    /**
+     * Set the secure base URL
+     *
+     * @param secureBaseUrl
+     */
     public void setSecureBaseUrl(String secureBaseUrl) {
         this.secureBaseUrl = secureBaseUrl;
     }
@@ -160,15 +224,69 @@ public class Configuration extends AbstractJsonMapping {
     }
 
     /**
-     * Check to see if the size is valid for any of the images types
+     * Check to see if the size is valid for any of the artwork types
      *
      * @param sizeToCheck
      * @return
      */
     public boolean isValidSize(String sizeToCheck) {
-        return (isValidPosterSize(sizeToCheck)
-                || isValidBackdropSize(sizeToCheck)
-                || isValidProfileSize(sizeToCheck)
-                || isValidLogoSize(sizeToCheck));
+        return isValidSize(null, sizeToCheck);
+    }
+
+    /**
+     * Check to see if the size is valid for the artwork type
+     *
+     * @param artworkType
+     * @param sizeToCheck
+     * @return
+     */
+    public boolean isValidSize(ArtworkType artworkType, String sizeToCheck) {
+        boolean valid;
+
+        switch (artworkType) {
+            case BACKDROP:
+                valid = isValidBackdropSize(sizeToCheck);
+                break;
+            case LOGO:
+                valid = isValidLogoSize(sizeToCheck);
+                break;
+            case POSTER:
+                valid = isValidPosterSize(sizeToCheck);
+                break;
+            case PROFILE:
+                valid = isValidProfileSize(sizeToCheck);
+                break;
+            default:
+                valid = isValidPosterSize(sizeToCheck)
+                        || isValidBackdropSize(sizeToCheck)
+                        || isValidProfileSize(sizeToCheck)
+                        || isValidLogoSize(sizeToCheck);
+        }
+        return valid;
+    }
+
+    /**
+     * Generate the full image URL from the size and image path
+     *
+     * @param imagePath
+     * @param artworkType
+     * @param requiredSize
+     * @return
+     * @throws MovieDbException
+     */
+    public URL createImageUrl(String imagePath, ArtworkType artworkType, String requiredSize) throws MovieDbException {
+        if (!isValidSize(artworkType, requiredSize)) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_IMAGE, requiredSize);
+        }
+
+        StringBuilder sb = new StringBuilder(getBaseUrl());
+        sb.append(requiredSize);
+        sb.append(imagePath);
+        try {
+            return (new URL(sb.toString()));
+        } catch (MalformedURLException ex) {
+            getLogger().warn("Failed to create image URL: {}", ex.getMessage());
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, sb.toString(), ex);
+        }
     }
 }

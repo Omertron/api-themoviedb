@@ -9,6 +9,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.Configuration;
+import com.omertron.themoviedbapi.model.type.ArtworkType;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -69,6 +70,20 @@ public class TmdbConfigurationTest {
         assertFalse("No profile sizes", result.getProfileSizes().isEmpty());
         assertTrue("No base url", StringUtils.isNotBlank(result.getBaseUrl()));
         assertTrue("No secure base url", StringUtils.isNotBlank(result.getSecureBaseUrl()));
+    }
+
+    /**
+     * Test of createImageUrl method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
+     */
+    @Test
+    public void testCreateImageUrl() throws MovieDbException {
+        LOG.info("createImageUrl");
+        Configuration config = instance.getConfig();
+
+        String result = config.createImageUrl("http://mediaplayersite.com/image.jpg", ArtworkType.POSTER, "original").toString();
+        assertTrue("Error compiling image URL", !result.isEmpty());
     }
 
 }

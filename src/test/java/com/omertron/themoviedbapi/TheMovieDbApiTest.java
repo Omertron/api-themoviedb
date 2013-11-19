@@ -100,20 +100,6 @@ public class TheMovieDbApiTest {
         LOG.info(tmdbConfig.toString());
     }
 
-    /**
-     * Test of createImageUrl method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testCreateImageUrl() throws MovieDbException {
-        LOG.info("createImageUrl");
-        int movieId = 78;
-        MovieDb movie = tmdb.getMovieInfo(movieId, "");
-        String result = tmdb.createImageUrl(movie.getPosterPath(), "original").toString();
-        assertTrue("Error compiling image URL", !result.isEmpty());
-    }
-
     @Ignore("Session required")
     public void testMovieLists() throws MovieDbException {
         Integer movieID = 68724;

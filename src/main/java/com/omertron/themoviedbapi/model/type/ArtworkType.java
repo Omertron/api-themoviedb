@@ -29,15 +29,15 @@ public enum ArtworkType {
      */
     POSTER,
     /**
-     * Fanart/backdrop
+     * Fanart/backdrop artwork
      */
     BACKDROP,
     /**
-     * Person image
+     * Person artwork
      */
     PROFILE,
     /**
-     * Logo image
+     * Logo artwork
      */
     LOGO;
 }

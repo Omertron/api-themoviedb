@@ -37,8 +37,15 @@ import org.yamj.api.common.http.CommonHttpClient;
 public class TmdbConfiguration extends AbstractMethod {
 
     private static final Logger LOG = LoggerFactory.getLogger(TmdbConfiguration.class);
-    // API URL Parameters
+    /**
+     * API URL for configuration
+     */
     private static final String BASE_CONFIG = "configuration";
+    /**
+     * Cache the configuration in memory<br/>
+     * It rarely changes, so this should be safe.
+     */
+    private static Configuration config = null;
 
     /**
      * Constructor
@@ -51,26 +58,27 @@ public class TmdbConfiguration extends AbstractMethod {
     }
 
     /**
-     * Get the configuration
+     * Get the configuration<br/>
+     * If the configuration has been previously retrieved, use that instead
      *
      * @return
      * @throws MovieDbException
      */
     public Configuration getConfig() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_CONFIG);
-        URL configUrl = apiUrl.buildUrl();
-        String webpage = requestWebPage(configUrl);
+        if (config == null) {
+            ApiUrl apiUrl = new ApiUrl(apiKey, BASE_CONFIG);
+            URL configUrl = apiUrl.buildUrl();
+            String webpage = requestWebPage(configUrl);
 
-        Configuration tmdbConfig = null;
-        try {
-            WrapperConfig wc = MAPPER.readValue(webpage, WrapperConfig.class);
-            tmdbConfig = wc.getTmdbConfiguration();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get configuration: {}", ex.getMessage());
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", ex);
+            try {
+                WrapperConfig wc = MAPPER.readValue(webpage, WrapperConfig.class);
+                config = wc.getTmdbConfiguration();
+            } catch (IOException ex) {
+                LOG.warn("Failed to get configuration: {}", ex.getMessage());
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", ex);
+            }
         }
-
-        return tmdbConfig;
+        return config;
     }
 
 }
