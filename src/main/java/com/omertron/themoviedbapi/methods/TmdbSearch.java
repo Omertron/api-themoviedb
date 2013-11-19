@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import static com.omertron.themoviedbapi.methods.AbstractMethod.mapper;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Keyword;
@@ -108,7 +108,7 @@ public class TmdbSearch extends AbstractMethod {
 
         String webpage = requestWebPage(url);
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -147,7 +147,7 @@ public class TmdbSearch extends AbstractMethod {
 
         String webpage = requestWebPage(url);
         try {
-            WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
+            WrapperCollection wrapper = MAPPER.readValue(webpage, WrapperCollection.class);
             TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -194,7 +194,7 @@ public class TmdbSearch extends AbstractMethod {
 
         String webpage = requestWebPage(url);
         try {
-            WrapperTVSeries wrapper = mapper.readValue(webpage, WrapperTVSeries.class);
+            WrapperTVSeries wrapper = MAPPER.readValue(webpage, WrapperTVSeries.class);
             TmdbResultsList<TVSeriesBasic> results = new TmdbResultsList<TVSeriesBasic>(wrapper.getSeries());
             results.copyWrapper(wrapper);
             return results;
@@ -228,7 +228,7 @@ public class TmdbSearch extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
+            WrapperPerson wrapper = MAPPER.readValue(webpage, WrapperPerson.class);
             TmdbResultsList<PersonMovieOld> results = new TmdbResultsList<PersonMovieOld>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -266,7 +266,7 @@ public class TmdbSearch extends AbstractMethod {
 
         String webpage = requestWebPage(url);
         try {
-            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            WrapperMovieList wrapper = MAPPER.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
             results.copyWrapper(wrapper);
             return results;
@@ -300,7 +300,7 @@ public class TmdbSearch extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
+            WrapperCompany wrapper = MAPPER.readValue(webpage, WrapperCompany.class);
             TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -333,7 +333,7 @@ public class TmdbSearch extends AbstractMethod {
 
         String webpage = requestWebPage(url);
         try {
-            WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
+            WrapperKeywords wrapper = MAPPER.readValue(webpage, WrapperKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;

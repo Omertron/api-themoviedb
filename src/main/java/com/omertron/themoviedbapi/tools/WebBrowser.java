@@ -51,10 +51,23 @@ public final class WebBrowser {
     private static String proxyUsername = null;
     private static String proxyPassword = null;
     private static String proxyEncodedPassword = null;
-    private static int webTimeoutConnect = 25000;   // 25 second timeout
-    private static int webTimeoutRead = 90000;      // 90 second timeout
 
-    // Hide the constructor
+    /**
+     * Connection Timeout<br/>
+     * Default to 25 seconds
+     */
+    private static int webTimeoutConnect = 25000;
+    /**
+     * Read Timeout<br/>
+     * Default to 90 seconds
+     */
+    private static int webTimeoutRead = 90000;
+
+    /**
+     * Utility class cannot be instantiated
+     *
+     * Hide the constructor
+     */
     protected WebBrowser() {
         // prevents calls from subclass
         throw new UnsupportedOperationException();
@@ -71,14 +84,13 @@ public final class WebBrowser {
         }
     }
 
-    public static String request(String url) throws MovieDbException {
-        try {
-            return request(new URL(url));
-        } catch (MalformedURLException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, ex);
-        }
-    }
-
+    /**
+     * Open a URL connection
+     *
+     * @param url
+     * @return
+     * @throws MovieDbException
+     */
     public static URLConnection openProxiedConnection(URL url) throws MovieDbException {
         try {
             if (proxyHost != null) {
@@ -99,14 +111,53 @@ public final class WebBrowser {
         }
     }
 
+    /**
+     * Request the web page at a URL
+     *
+     * @param url
+     * @return
+     * @throws MovieDbException
+     */
+    public static String request(String url) throws MovieDbException {
+        try {
+            return request(new URL(url));
+        } catch (MalformedURLException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, ex);
+        }
+    }
+
+    /**
+     * Request the web page at a URL
+     *
+     * @param url
+     * @return
+     * @throws MovieDbException
+     */
     public static String request(URL url) throws MovieDbException {
         return request(url, null, Boolean.FALSE);
     }
 
+    /**
+     * Request the web page at a URL
+     *
+     * @param url
+     * @param jsonBody
+     * @return
+     * @throws MovieDbException
+     */
     public static String request(URL url, String jsonBody) throws MovieDbException {
         return request(url, jsonBody, Boolean.FALSE);
     }
 
+    /**
+     * Request the web page at a URL
+     *
+     * @param url
+     * @param jsonBody
+     * @param isDeleteRequest
+     * @return
+     * @throws MovieDbException
+     */
     public static String request(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
 
         StringWriter content = null;
@@ -130,7 +181,7 @@ public final class WebBrowser {
 
                 if (StringUtils.isNotBlank(jsonBody)) {
                     cnx.setDoOutput(true);
-                    wr = new OutputStreamWriter(cnx.getOutputStream());
+                    wr = new OutputStreamWriter(cnx.getOutputStream(), getCharset(cnx));
                     wr.write(jsonBody);
                 }
 
@@ -245,6 +296,12 @@ public final class WebBrowser {
         }
     }
 
+    /**
+     * Get the charset for the connection
+     *
+     * @param cnx
+     * @return
+     */
     private static Charset getCharset(URLConnection cnx) {
         Charset charset = null;
         // content type will be string like "text/html; charset=UTF-8" or "text/html"
@@ -268,55 +325,114 @@ public final class WebBrowser {
         return charset;
     }
 
+    /**
+     * Get Proxy Host
+     *
+     * @return
+     */
     public static String getProxyHost() {
         return proxyHost;
     }
 
+    /**
+     * Set Proxy Host
+     *
+     * @param myProxyHost
+     */
     public static void setProxyHost(String myProxyHost) {
         WebBrowser.proxyHost = myProxyHost;
     }
 
+    /**
+     * Get Proxy Port
+     *
+     * @return
+     */
     public static String getProxyPort() {
         return proxyPort;
     }
 
+    /**
+     * Set Proxy Port
+     *
+     * @param myProxyPort
+     */
     public static void setProxyPort(String myProxyPort) {
         WebBrowser.proxyPort = myProxyPort;
     }
 
+    /**
+     * Get Proxy Username
+     *
+     * @return
+     */
     public static String getProxyUsername() {
         return proxyUsername;
     }
 
+    /**
+     * Set Proxy Username
+     *
+     * @param myProxyUsername
+     */
     public static void setProxyUsername(String myProxyUsername) {
         WebBrowser.proxyUsername = myProxyUsername;
     }
 
+    /**
+     * Get Proxy Password
+     *
+     * @return
+     */
     public static String getProxyPassword() {
         return proxyPassword;
     }
 
+    /**
+     * Set Proxy Password
+     *
+     * @param myProxyPassword
+     */
     public static void setProxyPassword(String myProxyPassword) {
         WebBrowser.proxyPassword = myProxyPassword;
 
         if (proxyUsername != null) {
-            proxyEncodedPassword = proxyUsername + ":" + proxyPassword;
-            proxyEncodedPassword = "Basic " + new String(Base64.encodeBase64((proxyUsername + ":" + proxyPassword).getBytes()));
+            proxyEncodedPassword = "Basic " + new String(Base64.encodeBase64((proxyUsername + ":" + proxyPassword).getBytes(Charset.defaultCharset())));
         }
     }
 
+    /**
+     * Get Connect Timeout
+     *
+     * @return
+     */
     public static int getWebTimeoutConnect() {
         return webTimeoutConnect;
     }
 
+    /**
+     * Get Read Timeout
+     *
+     * @return
+     */
     public static int getWebTimeoutRead() {
         return webTimeoutRead;
     }
 
+    /**
+     * Set Connect Timeout
+     *
+     * @param webTimeoutConnect
+     */
     public static void setWebTimeoutConnect(int webTimeoutConnect) {
         WebBrowser.webTimeoutConnect = webTimeoutConnect;
     }
 
+    /**
+     * Set Read Timeout
+     *
+     * @param webTimeoutRead
+     */
     public static void setWebTimeoutRead(int webTimeoutRead) {
         WebBrowser.webTimeoutRead = webTimeoutRead;
     }

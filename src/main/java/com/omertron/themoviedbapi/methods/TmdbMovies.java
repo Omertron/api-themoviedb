@@ -112,7 +112,7 @@ public class TmdbMovies extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            MovieDb movie = mapper.readValue(webpage, MovieDb.class);
+            MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
                 LOG.warn("No movie foind for ID '{}'", movieId);
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.MOVIE_ID_NOT_FOUND, "No movie foind for ID: " + movieId);
@@ -151,7 +151,7 @@ public class TmdbMovies extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            MovieDb movie = mapper.readValue(webpage, MovieDb.class);
+            MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
                 LOG.warn("No movie foind for IMDB ID: '{}'", imdbId);
                 throw new MovieDbException(MovieDbException.MovieDbExceptionType.MOVIE_ID_NOT_FOUND, "No movie foind for IMDB ID: " + imdbId);
@@ -185,7 +185,7 @@ public class TmdbMovies extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
+            WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
             TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
             results.copyWrapper(wrapper);
             return results;
@@ -215,7 +215,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperCasts wrapper = mapper.readValue(webpage, WrapperCasts.class);
+            WrapperCasts wrapper = MAPPER.readValue(webpage, WrapperCasts.class);
             TmdbResultsList<PersonMovieOld> results = new TmdbResultsList<PersonMovieOld>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -248,7 +248,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -278,7 +278,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
+            WrapperKeywords wrapper = MAPPER.readValue(webpage, WrapperKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -308,7 +308,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperReleaseInfo wrapper = mapper.readValue(webpage, WrapperReleaseInfo.class);
+            WrapperReleaseInfo wrapper = MAPPER.readValue(webpage, WrapperReleaseInfo.class);
             TmdbResultsList<ReleaseInfo> results = new TmdbResultsList<ReleaseInfo>(wrapper.getCountries());
             results.copyWrapper(wrapper);
             return results;
@@ -343,7 +343,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperTrailers wrapper = mapper.readValue(webpage, WrapperTrailers.class);
+            WrapperTrailers wrapper = MAPPER.readValue(webpage, WrapperTrailers.class);
             TmdbResultsList<Trailer> results = new TmdbResultsList<Trailer>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -371,7 +371,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperTranslations wrapper = mapper.readValue(webpage, WrapperTranslations.class);
+            WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
             TmdbResultsList<Translation> results = new TmdbResultsList<Translation>(wrapper.getTranslations());
             results.copyWrapper(wrapper);
             return results;
@@ -413,7 +413,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -451,7 +451,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperReviews wrapper = mapper.readValue(webpage, WrapperReviews.class);
+            WrapperReviews wrapper = MAPPER.readValue(webpage, WrapperReviews.class);
             TmdbResultsList<Review> results = new TmdbResultsList<Review>(wrapper.getReviews());
             results.copyWrapper(wrapper);
             return results;
@@ -489,7 +489,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            WrapperMovieList wrapper = MAPPER.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
             results.copyWrapper(wrapper);
             return results;
@@ -533,7 +533,7 @@ public class TmdbMovies extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
+            WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
 
             Map<String, List<ChangedItem>> results = new HashMap<String, List<ChangedItem>>();
             for (ChangeKeyItem changeItem : wrapper.getChangedItems()) {
@@ -560,7 +560,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, MovieDb.class);
+            return MAPPER.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest movie: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -594,7 +594,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -632,7 +632,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -669,7 +669,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -706,7 +706,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -737,7 +737,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, MovieState.class);
+            return MAPPER.readValue(webpage, MovieState.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get account states: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -772,7 +772,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            StatusCode status = mapper.readValue(webpage, StatusCode.class);
+            StatusCode status = MAPPER.readValue(webpage, StatusCode.class);
             LOG.trace("Status: {}", status);
             int code = status.getStatusCode();
             return code == 12;

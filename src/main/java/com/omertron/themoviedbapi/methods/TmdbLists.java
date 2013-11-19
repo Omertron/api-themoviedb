@@ -72,7 +72,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, MovieDbList.class);
+            return MAPPER.readValue(webpage, MovieDbList.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -95,7 +95,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
+            return MAPPER.readValue(webpage, ListItemStatus.class).isItemPresent();
         } catch (IOException ex) {
             LOG.warn("Failed to process movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -125,7 +125,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, StatusCodeList.class).getListId();
+            return MAPPER.readValue(webpage, StatusCodeList.class).getListId();
         } catch (IOException ex) {
             LOG.warn("Failed to create list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -169,7 +169,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class);
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to modify movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -193,7 +193,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = requestWebPage(url, null, true);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class);
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to delete movie list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

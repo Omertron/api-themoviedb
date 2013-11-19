@@ -64,7 +64,7 @@ public class TmdbJobs extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperJobList wrapper = mapper.readValue(webpage, WrapperJobList.class);
+            WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
             TmdbResultsList<JobDepartment> results = new TmdbResultsList<JobDepartment>(wrapper.getJobs());
             results.copyWrapper(wrapper);
             return results;

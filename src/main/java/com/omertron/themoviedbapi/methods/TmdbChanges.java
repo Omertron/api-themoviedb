@@ -88,7 +88,7 @@ public class TmdbChanges extends AbstractMethod {
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
         try {
-            WrapperMovieChanges wrapper = mapper.readValue(webpage, WrapperMovieChanges.class);
+            WrapperMovieChanges wrapper = MAPPER.readValue(webpage, WrapperMovieChanges.class);
 
             TmdbResultsList<ChangedMovie> results = new TmdbResultsList<ChangedMovie>(wrapper.getResults());
             results.copyWrapper(wrapper);

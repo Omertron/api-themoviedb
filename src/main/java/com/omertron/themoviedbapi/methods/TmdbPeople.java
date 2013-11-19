@@ -85,7 +85,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, PersonMovieOld.class);
+            return MAPPER.readValue(webpage, PersonMovieOld.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -114,7 +114,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
+            PersonMovieCredits pc = MAPPER.readValue(webpage, PersonMovieCredits.class);
             return pc;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie credits: {}", ex.getMessage());
@@ -148,7 +148,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
+            PersonMovieCredits pc = MAPPER.readValue(webpage, PersonMovieCredits.class);
             return pc;
         } catch (IOException ex) {
             LOG.warn("Failed to get TV credits: {}", ex.getMessage());
@@ -181,7 +181,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            PersonMovieCredits pc = mapper.readValue(webpage, PersonMovieCredits.class);
+            PersonMovieCredits pc = MAPPER.readValue(webpage, PersonMovieCredits.class);
             return pc;
         } catch (IOException ex) {
             LOG.warn("Failed to get combined credits: {}", ex.getMessage());
@@ -205,7 +205,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.PROFILE));
             results.copyWrapper(wrapper);
             return results;
@@ -256,7 +256,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
+            WrapperPersonList wrapper = MAPPER.readValue(webpage, WrapperPersonList.class);
             TmdbResultsList<PersonMovieOld> results = new TmdbResultsList<PersonMovieOld>(wrapper.getPersonList());
             results.copyWrapper(wrapper);
             return results;
@@ -278,7 +278,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, PersonMovieOld.class);
+            return MAPPER.readValue(webpage, PersonMovieOld.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest person: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

@@ -72,7 +72,7 @@ public class TmdbCompanies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, Company.class);
+            return MAPPER.readValue(webpage, Company.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get company information: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -109,7 +109,7 @@ public class TmdbCompanies extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
+            WrapperCompanyMovies wrapper = MAPPER.readValue(webpage, WrapperCompanyMovies.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;

@@ -63,9 +63,10 @@ public class TmdbConfiguration extends AbstractMethod {
 
         Configuration tmdbConfig = null;
         try {
-            WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
+            WrapperConfig wc = MAPPER.readValue(webpage, WrapperConfig.class);
             tmdbConfig = wc.getTmdbConfiguration();
         } catch (IOException ex) {
+            LOG.warn("Failed to get configuration: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", ex);
         }
 

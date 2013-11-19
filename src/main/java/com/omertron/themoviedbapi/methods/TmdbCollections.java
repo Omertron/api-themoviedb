@@ -78,7 +78,7 @@ public class TmdbCollections extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, CollectionInfo.class);
+            return MAPPER.readValue(webpage, CollectionInfo.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get collection information: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -105,7 +105,7 @@ public class TmdbCollections extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
             results.copyWrapper(wrapper);
             return results;

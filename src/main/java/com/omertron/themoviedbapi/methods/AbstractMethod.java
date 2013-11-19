@@ -46,7 +46,7 @@ public class AbstractMethod {
     /**
      * Jackson JSON configuration
      */
-    protected static ObjectMapper mapper = new ObjectMapper();
+    protected final static ObjectMapper MAPPER = new ObjectMapper();
 
     /**
      * Default constructor for the methods
@@ -169,7 +169,7 @@ public class AbstractMethod {
      */
     protected static String convertToJson(Map<String, ?> map) throws MovieDbException {
         try {
-            return mapper.writeValueAsString(map);
+            return MAPPER.writeValueAsString(map);
         } catch (JsonProcessingException jpe) {
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", jpe);
         }

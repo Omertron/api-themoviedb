@@ -70,7 +70,7 @@ public class TmdbAuthentication extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, TokenAuthorisation.class
+            return MAPPER.readValue(webpage, TokenAuthorisation.class
             );
         } catch (IOException ex) {
             LOG.warn("Failed to get Authorisation Token: {}", ex.getMessage());
@@ -100,7 +100,7 @@ public class TmdbAuthentication extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, TokenSession.class
+            return MAPPER.readValue(webpage, TokenSession.class
             );
         } catch (IOException ex) {
             LOG.warn("Failed to get Session Token: {}", ex.getMessage());
@@ -130,7 +130,7 @@ public class TmdbAuthentication extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, TokenSession.class
+            return MAPPER.readValue(webpage, TokenSession.class
             );
         } catch (IOException ex) {
             LOG.warn("Failed to get Session Token: {}", ex.getMessage());

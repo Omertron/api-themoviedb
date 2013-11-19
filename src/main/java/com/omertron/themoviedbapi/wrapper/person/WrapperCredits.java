@@ -33,5 +33,7 @@ public class WrapperCredits {
     private final List<PersonMovieOld> person = new ArrayList<PersonMovieOld>();
 
     @JsonProperty("cast")
-    String cast;
+    private String cast;
+
+    
 }

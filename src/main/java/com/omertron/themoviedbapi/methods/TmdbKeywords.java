@@ -71,7 +71,7 @@ public class TmdbKeywords extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, Keyword.class);
+            return MAPPER.readValue(webpage, Keyword.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get keyword: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -104,7 +104,7 @@ public class TmdbKeywords extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
+            WrapperKeywordMovies wrapper = MAPPER.readValue(webpage, WrapperKeywordMovies.class);
             TmdbResultsList<MovieDbBasic> results = new TmdbResultsList<MovieDbBasic>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;

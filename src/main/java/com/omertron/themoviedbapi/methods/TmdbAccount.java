@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import static com.omertron.themoviedbapi.methods.AbstractMethod.mapper;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
@@ -75,7 +75,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, Account.class);
+            return MAPPER.readValue(webpage, Account.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get Session Token: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -99,7 +99,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, WrapperMovieDbList.class).getLists();
+            return MAPPER.readValue(webpage, WrapperMovieDbList.class).getLists();
         } catch (IOException ex) {
             LOG.warn("Failed to get lists: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -122,7 +122,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get favorite movies: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -153,7 +153,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class);
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to change favorite movies: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -176,7 +176,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get rated movies: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -199,7 +199,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
+            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get watch list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -232,7 +232,7 @@ public class TmdbAccount extends AbstractMethod {
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class);
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to modify watch list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

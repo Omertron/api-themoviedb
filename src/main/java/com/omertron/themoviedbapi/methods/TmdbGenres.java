@@ -75,7 +75,7 @@ public class TmdbGenres extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
+            WrapperGenres wrapper = MAPPER.readValue(webpage, WrapperGenres.class);
             TmdbResultsList<Genre> results = new TmdbResultsList<Genre>(wrapper.getGenres());
             results.copyWrapper(wrapper);
             return results;
@@ -117,7 +117,7 @@ public class TmdbGenres extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;

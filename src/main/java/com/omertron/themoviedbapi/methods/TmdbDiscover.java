@@ -70,7 +70,7 @@ public class TmdbDiscover extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
 
             results.copyWrapper(wrapper);
@@ -98,7 +98,7 @@ public class TmdbDiscover extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            WrapperTVSeries wrapper = mapper.readValue(webpage, WrapperTVSeries.class);
+            WrapperTVSeries wrapper = MAPPER.readValue(webpage, WrapperTVSeries.class);
             TmdbResultsList<TVSeriesBasic> results = new TmdbResultsList<TVSeriesBasic>(wrapper.getSeries());
 
             results.copyWrapper(wrapper);

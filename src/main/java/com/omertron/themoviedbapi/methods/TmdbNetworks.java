@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import static com.omertron.themoviedbapi.methods.AbstractMethod.mapper;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.tv.Network;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
@@ -69,7 +69,7 @@ public class TmdbNetworks extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return mapper.readValue(webpage, Network.class);
+            return MAPPER.readValue(webpage, Network.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get network information: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
