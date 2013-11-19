@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
@@ -24,6 +23,7 @@ import org.slf4j.LoggerFactory;
  * @author stuart.boston
  */
 public class TmdbCreditsTest {
+
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TmdbCreditsTest.class);
     // API
@@ -52,6 +52,7 @@ public class TmdbCreditsTest {
 
     /**
      * Test of getCreditInfo method, of class TmdbCredits.
+     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
@@ -59,11 +60,10 @@ public class TmdbCreditsTest {
         LOG.info("getCreditInfo");
         String creditId = "525346f619c29579400d4145";
         String language = "";
-        PersonCredits expResult = null;
         PersonCredits result = instance.getCreditInfo(creditId, language);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals("Wrong name", "Sean Bean", result.getPerson().getName());
+        assertEquals("Wrong job", "Actor", result.getJob());
+        assertFalse("No seasons", result.getMedia().getSeasons().isEmpty());
     }
 
 }

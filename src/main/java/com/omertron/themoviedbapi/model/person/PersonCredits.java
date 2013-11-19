@@ -21,9 +21,7 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.type.VideoType;
-import java.util.Collections;
-import java.util.List;
+import com.omertron.themoviedbapi.model.tv.Media;
 
 /**
  * Cast & Crew credits for a person
@@ -32,53 +30,75 @@ import java.util.List;
  */
 public class PersonCredits extends AbstractJsonMapping {
 
-    private int id;
-    private VideoType videoType;
-    @JsonProperty("cast")
-    private final List<PersonCast> cast = Collections.emptyList();
-    @JsonProperty("guest_stars")
-    private final List<PersonCast> guestStar = Collections.emptyList();
-    @JsonProperty("crew")
-    private final List<PersonCrew> crew = Collections.emptyList();
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("credit_type")
+    private String creditType;
+    @JsonProperty("department")
+    private String department;
+    @JsonProperty("job")
+    private String job;
+    @JsonProperty("media_type")
+    private String mediaType;
+    @JsonProperty("person")
+    private PersonBasic person;
+    @JsonProperty("media")
+    private Media media;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public VideoType getVideoType() {
-        return videoType;
+    public String getCreditType() {
+        return creditType;
     }
 
-    public void setVideoType(VideoType videoType) {
-        this.videoType = videoType;
+    public void setCreditType(String creditType) {
+        this.creditType = creditType;
     }
 
-    public List<PersonCast> getCast() {
-        return cast;
+    public String getDepartment() {
+        return department;
     }
 
-    public List<PersonCast> getGuestStar() {
-        return guestStar;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
-    public List<PersonCrew> getCrew() {
-        return crew;
+    public String getJob() {
+        return job;
     }
 
-    public void addCast(PersonCast cast) {
-        this.cast.add(cast);
+    public void setJob(String job) {
+        this.job = job;
     }
 
-    public void addCrew(PersonCrew crew) {
-        this.crew.add(crew);
+    public String getMediaType() {
+        return mediaType;
     }
 
-    public void addGuestStar(PersonCast guest) {
-        this.guestStar.add(guest);
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
+    public PersonBasic getPerson() {
+        return person;
+    }
+
+    public void setPerson(PersonBasic person) {
+        this.person = person;
+    }
+
+    public Media getMedia() {
+        return media;
+    }
+
+    public void setMedia(Media media) {
+        this.media = media;
     }
 
 }
