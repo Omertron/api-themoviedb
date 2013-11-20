@@ -27,7 +27,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.util.EntityUtils;
 import org.yamj.api.common.http.CommonHttpClient;
 
 /**
@@ -150,6 +158,28 @@ public class AbstractMethod {
         } catch (RuntimeException ex) {
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
         }
+        return webpage;
+    }
+
+    protected String postWebPage(URL url, String jsonBody) throws MovieDbException {
+        String webpage = null;
+
+        try {
+            HttpPost httpPost = new HttpPost(url.toURI());
+            httpPost.addHeader("Content-Type", "application/json");
+            httpPost.addHeader("Accept", "application/json");
+            httpPost.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
+
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity entity = response.getEntity();
+            // Copy the content into the string and close the response
+            webpage = EntityUtils.toString(entity);
+        } catch (URISyntaxException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+        } catch (IOException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+        }
+
         return webpage;
     }
 

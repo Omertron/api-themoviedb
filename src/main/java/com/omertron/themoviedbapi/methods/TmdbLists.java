@@ -119,10 +119,10 @@ public class TmdbLists extends AbstractMethod {
         body.put("description", StringUtils.trimToEmpty(description));
 
         String jsonBody = convertToJson(body);
-        LOG.info("JSON Body: " + jsonBody);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+//        String webpage = requestWebPage(url, jsonBody);
+        String webpage = postWebPage(url, jsonBody);
 
         try {
             return MAPPER.readValue(webpage, StatusCodeList.class);

@@ -58,6 +58,7 @@ public class TheMovieDbApiTest {
     public static final String LANGUAGE_RUSSIAN = "ru";
     // session and account id of test users named 'apitests'
     public static final String SESSION_ID_APITESTS = "63c85deb39337e29b69d78265eb28d639cbd6f72";
+//    public static final String SESSION_ID_APITESTS = "4a2557ab55aaa4a51dc183f0aed08bea304deda0";
     public static final int ACCOUNT_ID_APITESTS = 6065849;
 
     public TheMovieDbApiTest() throws MovieDbException {

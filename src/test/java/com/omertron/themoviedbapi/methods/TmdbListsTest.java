@@ -33,6 +33,7 @@ import org.junit.BeforeClass;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,7 @@ public class TmdbListsTest {
      *
      * @throws MovieDbException
      */
-    @Ignore("Not working")
+    @Test
     public void test2GetList() throws MovieDbException {
         LOG.info("getList");
         String listId = "509ec17b19c2950a0600050d";
