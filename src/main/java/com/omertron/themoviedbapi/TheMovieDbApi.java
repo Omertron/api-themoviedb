@@ -704,7 +704,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public String createList(String sessionId, String name, String description) throws MovieDbException {
-        return tmdbList.createList(sessionId, name, description);
+        StatusCodeList scl = tmdbList.createList(sessionId, name, description);
+        if (scl != null) {
+            return scl.getListId();
+        } else {
+            return null;
+        }
     }
 
     /**

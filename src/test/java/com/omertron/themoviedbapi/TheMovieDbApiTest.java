@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.Configuration;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import org.junit.Test;
 

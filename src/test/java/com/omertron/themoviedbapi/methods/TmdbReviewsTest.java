@@ -9,12 +9,13 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.Review;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,17 +53,17 @@ public class TmdbReviewsTest {
 
     /**
      * Test of getReview method, of class TmdbReviews.
+     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetReview() throws MovieDbException {
         LOG.info("getReview");
-        String reviewId = "";
-        Review expResult = null;
+        String reviewId = "5013bc76760ee372cb00253e";
         Review result = instance.getReview(reviewId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        LOG.info(result.toString());
+        assertTrue("No Author", StringUtils.isNotBlank(result.getAuthor()));
+        assertTrue("No Content", StringUtils.isNotBlank(result.getContent()));
     }
 
 }

@@ -111,7 +111,7 @@ public class TmdbLists extends AbstractMethod {
      * @return The list id
      * @throws MovieDbException
      */
-    public String createList(String sessionId, String name, String description) throws MovieDbException {
+    public StatusCodeList createList(String sessionId, String name, String description) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST.replace("/", ""));
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
@@ -120,12 +120,13 @@ public class TmdbLists extends AbstractMethod {
         body.put("description", StringUtils.trimToEmpty(description));
 
         String jsonBody = convertToJson(body);
+        LOG.info("JSON Body: " + jsonBody);
 
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url, jsonBody);
 
         try {
-            return MAPPER.readValue(webpage, StatusCodeList.class).getListId();
+            return MAPPER.readValue(webpage, StatusCodeList.class);
         } catch (IOException ex) {
             LOG.warn("Failed to create list: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
