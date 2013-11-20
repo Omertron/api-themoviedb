@@ -54,6 +54,8 @@ public class MovieDbList extends AbstractJsonMapping {
     private String statusCode;
     @JsonProperty("status_message")
     private String statusMessage;
+    @JsonProperty("list_type")
+    private String listType;
 
     public String getId() {
         return id;
@@ -141,5 +143,13 @@ public class MovieDbList extends AbstractJsonMapping {
 
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
+    }
+
+    public String getListType() {
+        return listType;
+    }
+
+    public void setListType(String listType) {
+        this.listType = listType;
     }
 }
