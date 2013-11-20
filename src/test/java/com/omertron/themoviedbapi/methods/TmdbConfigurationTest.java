@@ -20,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -38,7 +39,7 @@ public class TmdbConfigurationTest {
 
     @BeforeClass
     public static void setUpClass() {
-        instance = new TmdbConfiguration(API_KEY, null);
+        instance = new TmdbConfiguration(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
     }
 

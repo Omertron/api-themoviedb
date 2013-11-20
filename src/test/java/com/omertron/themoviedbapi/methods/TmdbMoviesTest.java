@@ -51,6 +51,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -70,7 +71,7 @@ public class TmdbMoviesTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbMovies(API_KEY, null);
+        instance = new TmdbMovies(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
     }
 
@@ -359,7 +360,7 @@ public class TmdbMoviesTest {
         assertTrue(wasPosted);
 
         // get all rated movies
-        TmdbAccount account = new TmdbAccount(API_KEY, null);
+        TmdbAccount account = new TmdbAccount(API_KEY, new DefaultPoolingHttpClient());
         List<MovieDb> ratedMovies = account.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
         assertTrue(ratedMovies.size() > 0);
 

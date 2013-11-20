@@ -7,7 +7,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.TheMovieDbApi;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import com.omertron.themoviedbapi.model.ChangedMovie;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -20,6 +19,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -37,7 +37,7 @@ public class TmdbChangesTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbChanges(API_KEY, null);
+        instance = new TmdbChanges(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
     }
 

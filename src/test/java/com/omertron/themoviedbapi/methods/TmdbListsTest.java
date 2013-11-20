@@ -36,6 +36,7 @@ import org.junit.Ignore;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TmdbListsTest {
@@ -50,7 +51,7 @@ public class TmdbListsTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbLists(API_KEY, null);
+        instance = new TmdbLists(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
     }
 

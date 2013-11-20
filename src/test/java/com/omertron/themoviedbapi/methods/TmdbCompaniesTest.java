@@ -34,6 +34,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -52,7 +53,7 @@ public class TmdbCompaniesTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbCompanies(API_KEY, null);
+        instance = new TmdbCompanies(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
     }
 

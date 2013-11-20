@@ -39,6 +39,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  * Test for the TV Method
@@ -59,7 +60,7 @@ public class TmdbTVTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbTV(API_KEY, null);
+        instance = new TmdbTV(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
     }
 
