@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.tools;
+package com.omertron.themoviedbapi.methods;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;

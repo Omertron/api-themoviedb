@@ -21,10 +21,9 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_LANGUAGE;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;

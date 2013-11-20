@@ -20,12 +20,11 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_END_DATE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_PAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_START_DATE;
 import com.omertron.themoviedbapi.model.ChangedMovie;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_END_DATE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_START_DATE;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieChanges;
 import java.io.IOException;
 import java.net.URL;

@@ -19,12 +19,14 @@
  */
 package com.omertron.themoviedbapi.model.discover;
 
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ADULT;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_LANGUAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_PAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_YEAR;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 
 /**
  * Generate a discover object for use in the MovieDbApi

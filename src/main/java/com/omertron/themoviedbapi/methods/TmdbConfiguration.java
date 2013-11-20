@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Configuration;
-import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.wrapper.WrapperConfig;
 import java.io.IOException;
 import java.net.URL;

@@ -22,7 +22,6 @@ package com.omertron.themoviedbapi.methods;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.tools.WebBrowser;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -129,33 +128,27 @@ public class AbstractMethod {
      */
     protected String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
         String webpage;
-        // use HTTP client implementation
-        if (httpClient == null) {
-            // use web browser
-            webpage = WebBrowser.request(url, jsonBody, isDeleteRequest);
-        } else {
-            try {
-                HttpGet httpGet = new HttpGet(url.toURI());
-                httpGet.addHeader("accept", "application/json");
+        try {
+            HttpGet httpGet = new HttpGet(url.toURI());
+            httpGet.addHeader("accept", "application/json");
 
-                if (StringUtils.isNotBlank(jsonBody)) {
-                    // TODO: Add the json body to the request
-                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
-                }
-
-                if (isDeleteRequest) {
-                    //TODO: Handle delete request
-                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
-                }
-
-                webpage = httpClient.requestContent(httpGet);
-            } catch (URISyntaxException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
-            } catch (IOException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
-            } catch (RuntimeException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
+            if (StringUtils.isNotBlank(jsonBody)) {
+                // TODO: Add the json body to the request
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
             }
+
+            if (isDeleteRequest) {
+                //TODO: Handle delete request
+                throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request");
+            }
+
+            webpage = httpClient.requestContent(httpGet);
+        } catch (URISyntaxException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+        } catch (IOException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+        } catch (RuntimeException ex) {
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", ex);
         }
         return webpage;
     }

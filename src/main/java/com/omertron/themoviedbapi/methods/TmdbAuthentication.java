@@ -20,10 +20,9 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_TOKEN;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_TOKEN;
 import java.io.IOException;
 import java.net.URL;
 import org.slf4j.Logger;

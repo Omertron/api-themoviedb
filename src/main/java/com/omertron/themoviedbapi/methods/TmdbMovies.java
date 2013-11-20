@@ -20,6 +20,13 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_COUNTRY;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_END_DATE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_LANGUAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_PAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_SESSION;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_START_DATE;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ChangeKeyItem;
@@ -36,14 +43,6 @@ import com.omertron.themoviedbapi.model.movie.MovieState;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_COUNTRY;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_END_DATE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_START_DATE;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;

@@ -21,9 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
 import com.omertron.themoviedbapi.model.Review;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
 import java.io.IOException;
 import java.net.URL;
 import org.slf4j.Logger;

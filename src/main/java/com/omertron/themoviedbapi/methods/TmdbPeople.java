@@ -20,13 +20,14 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_LANGUAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_PAGE;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.type.ArtworkType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.person.WrapperPersonList;
 import java.io.IOException;

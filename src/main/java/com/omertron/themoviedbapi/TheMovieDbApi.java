@@ -53,9 +53,9 @@ import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.model.type.SearchType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
-import com.omertron.themoviedbapi.tools.WebBrowser;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  * The MovieDb API
@@ -95,7 +95,8 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TheMovieDbApi(String apiKey) throws MovieDbException {
-        this(apiKey, null);
+        // Use a default pooling client if one is not provided
+        this(apiKey, new DefaultPoolingHttpClient());
     }
 
     /**
@@ -1495,15 +1496,7 @@ public class TheMovieDbApi {
      * @param password
      */
     public void setProxy(String host, String port, String username, String password) {
-        // should be set in HTTP client already
-        if (httpClient != null) {
-            return;
-        }
-
-        WebBrowser.setProxyHost(host);
-        WebBrowser.setProxyPort(port);
-        WebBrowser.setProxyUsername(username);
-        WebBrowser.setProxyPassword(password);
+        httpClient.setProxy(host, Integer.parseInt(port), username, password);
     }
 
     /**
@@ -1513,13 +1506,7 @@ public class TheMovieDbApi {
      * @param read
      */
     public void setTimeout(int connect, int read) {
-        // should be set in HTTP client already
-        if (httpClient != null) {
-            return;
-        }
-
-        WebBrowser.setWebTimeoutConnect(connect);
-        WebBrowser.setWebTimeoutRead(read);
+        httpClient.setTimeouts(connect, read);
     }
 
 }

@@ -21,13 +21,12 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_SESSION;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovieDbList;
 import java.io.IOException;

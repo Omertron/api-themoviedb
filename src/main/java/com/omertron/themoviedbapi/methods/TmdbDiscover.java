@@ -24,7 +24,6 @@ import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.tv.WrapperTVSeries;
 import java.io.IOException;

@@ -22,7 +22,6 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.JobDepartment;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.wrapper.WrapperJobList;
 import java.io.IOException;
 import java.net.URL;

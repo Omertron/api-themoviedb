@@ -20,14 +20,13 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_INCLUDE_ALL_MOVIES;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_LANGUAGE;
+import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_PAGE;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_INCLUDE_ALL_MOVIES;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
 import com.omertron.themoviedbapi.wrapper.WrapperGenres;
 import com.omertron.themoviedbapi.wrapper.movie.WrapperMovie;
 import java.io.IOException;
