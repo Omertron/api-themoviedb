@@ -20,13 +20,14 @@
 package com.omertron.themoviedbapi.model.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
  * The state of the movie for the user's account
  *
  * @author stuart.boston
  */
-public class MovieState {
+public class MovieState extends AbstractJsonMapping {
 
     @JsonProperty("id")
     private int id;

@@ -241,7 +241,6 @@ public class TmdbMoviesTest {
         LOG.info("getReviews");
         int page = 0;
         TmdbResultsList<Review> result = instance.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
-
         assertFalse("No reviews found", result.getResults().isEmpty());
     }
 
@@ -348,7 +347,7 @@ public class TmdbMoviesTest {
      *
      * @throws MovieDbException
      */
-    @Ignore("Session required")
+    @Test
     public void testMovieRating() throws MovieDbException {
         LOG.info("postMovieRating");
         Integer movieID = 68724;
@@ -380,16 +379,11 @@ public class TmdbMoviesTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Ignore("Not working")
+    @Test
     public void testGetMovieCredits() throws MovieDbException {
         LOG.info("getMovieCredits");
-        int movieId = 0;
-        String[] appendToResponse = null;
-        TmdbResultsList<PersonMovieOld> expResult = null;
-        TmdbResultsList<PersonMovieOld> result = instance.getMovieCredits(movieId, appendToResponse);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<PersonMovieOld> result = instance.getMovieCredits(ID_MOVIE_BLADE_RUNNER, "");
+        assertFalse("No credits returned", result.getResults().isEmpty());
     }
 
     /**
@@ -397,16 +391,14 @@ public class TmdbMoviesTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Ignore("Not working")
+    @Test
     public void testGetMovieStatus() throws MovieDbException {
         LOG.info("getMovieStatus");
-        String sessionId = "";
-        int movieId = 0;
-        MovieState expResult = null;
-        MovieState result = instance.getMovieStatus(sessionId, movieId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        MovieState result = instance.getMovieStatus(SESSION_ID_APITESTS, ID_MOVIE_BLADE_RUNNER);
+        assertNotNull("No state returned", result);
+        assertFalse("Movie is favourited", result.isFavorite());
+        assertFalse("Movie is rated", result.isRated());
+        assertFalse("Movie is watch listed", result.isWatchlist());
     }
 
     /**
@@ -414,17 +406,12 @@ public class TmdbMoviesTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Ignore("Not working")
+    @Test
     public void testPostMovieRating() throws MovieDbException {
         LOG.info("postMovieRating");
-        String sessionId = "";
-        Integer movieId = null;
-        Integer rating = null;
-        boolean expResult = false;
-        boolean result = instance.postMovieRating(sessionId, movieId, rating);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Integer rating = 10;
+        boolean result = instance.postMovieRating(SESSION_ID_APITESTS, ID_MOVIE_BLADE_RUNNER, rating);
+        assertEquals("Failed to set rating", true, result);
     }
 
 }

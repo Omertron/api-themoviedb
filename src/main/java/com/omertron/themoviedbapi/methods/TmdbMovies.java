@@ -66,7 +66,8 @@ import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.CommonHttpClient;
 
 /**
- *Class to hold the Movies methods
+ * Class to hold the Movies methods
+ *
  * @author stuart.boston
  */
 public class TmdbMovies extends AbstractMethod {
@@ -76,7 +77,8 @@ public class TmdbMovies extends AbstractMethod {
     private static final String BASE_MOVIE = "movie/";
 
     /**
-     *Constructor
+     * Constructor
+     *
      * @param apiKey
      * @param httpClient
      */
@@ -761,19 +763,25 @@ public class TmdbMovies extends AbstractMethod {
         apiUrl.addArgument(PARAM_ID, movieId);
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
-        if (rating < 0 || rating > 10) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Rating out of range");
+        int tmpRating;
+        if (rating < 0) {
+            tmpRating = 0;
+            LOG.debug("Rating set to '{}' from '{}'", tmpRating, rating);
+        } else if (rating > 10) {
+            tmpRating = 10;
+            LOG.debug("Rating set to '{}' from '{}'", tmpRating, rating);
+        } else {
+            tmpRating = rating.intValue();
         }
 
-        String jsonBody = convertToJson(Collections.singletonMap("value", rating));
+        String jsonBody = convertToJson(Collections.singletonMap("value", tmpRating));
         URL url = apiUrl.buildUrl();
         String webpage = postWebPage(url, jsonBody);
 
         try {
             StatusCode status = MAPPER.readValue(webpage, StatusCode.class);
             LOG.trace("Status: {}", status);
-            int code = status.getStatusCode();
-            return code == 12;
+            return (status.getStatusCode() == 1 || status.getStatusCode() == 12);
         } catch (IOException ex) {
             LOG.warn("Failed to post movie rating: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
