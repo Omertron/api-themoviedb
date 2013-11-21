@@ -79,7 +79,7 @@ public class TmdbAccountTest {
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         List<MovieDbList> result = instance.getUserLists(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertNotNull("Null returned", result);
+        assertNotNull("Null list returned", result);
     }
 
     /**
@@ -87,7 +87,7 @@ public class TmdbAccountTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Ignore("Adding favourite fails")
+    @Test
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
 
@@ -104,13 +104,15 @@ public class TmdbAccountTest {
         LOG.info("Get favorite list");
         favList = instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
         assertNotNull("Empty favorite list returned", favList);
-        assertEquals("Favorite list wrong size", 1, favList.size());
+        assertFalse("Favorite list empty", favList.isEmpty());
 
         // clean up again
-        LOG.info("Remove movie from list");
-        status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
-        LOG.info("Remove status: {}", status);
-
+        LOG.info("Remove movie(s) from list");
+        for (MovieDb movie : favList) {
+            LOG.info("Removing movie {}-'{}'", movie.getId(), movie.getTitle());
+            status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, movie.getId(), false);
+            LOG.info("Remove status: {}", status);
+        }
         assertTrue("Favorite list was not empty", instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
     }
 
@@ -140,7 +142,7 @@ public class TmdbAccountTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Ignore("Adding watchlist fails")
+    @Test
     public void testGetWatchList() throws MovieDbException {
         LOG.info("getWatchList");
 
@@ -159,10 +161,13 @@ public class TmdbAccountTest {
         assertNotNull("Empty watch list returned", watchList);
         assertEquals("Watchlist wrong size", 1, watchList.size());
 
-        LOG.info("Remove movie from list");
+        LOG.info("Removing movie(s) from list");
         // clean up again
-        status = instance.modifyWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
-        LOG.info("Remove status: {}", status);
+        for (MovieDb movie : watchList) {
+            LOG.info("Removing movie {}-'{}'", movie.getId(), movie.getTitle());
+            status = instance.modifyWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, movie.getId(), false);
+            LOG.info("Remove status: {}", status);
+        }
 
         assertTrue(instance.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
     }

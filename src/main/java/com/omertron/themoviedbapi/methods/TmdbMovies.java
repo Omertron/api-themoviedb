@@ -766,9 +766,8 @@ public class TmdbMovies extends AbstractMethod {
         }
 
         String jsonBody = convertToJson(Collections.singletonMap("value", rating));
-        LOG.trace("Body: {}", jsonBody);
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = postWebPage(url, jsonBody);
 
         try {
             StatusCode status = MAPPER.readValue(webpage, StatusCode.class);

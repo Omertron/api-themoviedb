@@ -166,7 +166,7 @@ public class TmdbLists extends AbstractMethod {
         String jsonBody = convertToJson(Collections.singletonMap("media_id", movieId + ""));
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = postWebPage(url, jsonBody);
 
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
@@ -190,7 +190,7 @@ public class TmdbLists extends AbstractMethod {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, null, true);
+        String webpage = requestWebPage(url, true);
 
         try {
             return MAPPER.readValue(webpage, StatusCode.class);

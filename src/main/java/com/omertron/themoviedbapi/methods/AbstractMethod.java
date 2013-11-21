@@ -26,15 +26,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.yamj.api.common.http.CommonHttpClient;
 
@@ -110,40 +107,22 @@ public class AbstractMethod {
      * @throws MovieDbException
      */
     protected String requestWebPage(URL url) throws MovieDbException {
-        return requestWebPage(url, null, Boolean.FALSE);
-    }
-
-    /**
-     * Get a string version of the requested web page at the URL using the passed JSON body
-     *
-     * @param url
-     * @param jsonBody
-     * @return
-     * @throws MovieDbException
-     */
-    protected String requestWebPage(URL url, String jsonBody) throws MovieDbException {
-        return requestWebPage(url, jsonBody, Boolean.FALSE);
+        return requestWebPage(url, Boolean.FALSE);
     }
 
     /**
      * Get a string version of the requested web page at the URL using the passed JSON body and requesting a delete
      *
      * @param url
-     * @param jsonBody
      * @param isDeleteRequest
      * @return
      * @throws MovieDbException
      */
-    protected String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
+    protected String requestWebPage(URL url, boolean isDeleteRequest) throws MovieDbException {
         String webpage;
         try {
             HttpGet httpGet = new HttpGet(url.toURI());
             httpGet.addHeader("accept", "application/json");
-
-            if (StringUtils.isNotBlank(jsonBody)) {
-                // TODO: Add the json body to the request
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request");
-            }
 
             if (isDeleteRequest) {
                 //TODO: Handle delete request
@@ -161,6 +140,14 @@ public class AbstractMethod {
         return webpage;
     }
 
+    /**
+     * Make a post request to get information from a web page using the URL and JSON body
+     *
+     * @param url
+     * @param jsonBody
+     * @return
+     * @throws MovieDbException
+     */
     protected String postWebPage(URL url, String jsonBody) throws MovieDbException {
         String webpage = null;
 

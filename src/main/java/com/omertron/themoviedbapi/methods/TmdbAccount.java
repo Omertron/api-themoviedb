@@ -149,7 +149,8 @@ public class TmdbAccount extends AbstractMethod {
         String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+//        String webpage = requestWebPage(url, jsonBody);
+        String webpage = postWebPage(url, jsonBody);
 
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
@@ -225,10 +226,9 @@ public class TmdbAccount extends AbstractMethod {
         body.put("movie_id", movieId);
         body.put("movie_watchlist", addToWatchlist);
         String jsonBody = convertToJson(body);
-        LOG.info("Json Body: '{}'", jsonBody);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = postWebPage(url, jsonBody);
 
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
