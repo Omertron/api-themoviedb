@@ -47,4 +47,13 @@ public final class TmdbResultsList<T> extends TmdbResults {
     public void setResults(List<T> results) {
         this.results = results;
     }
+
+    @Override
+    public int getTotalResults() {
+        if (super.getTotalResults() == 0) {
+            return results.size();
+        } else {
+            return super.getTotalResults();
+        }
+    }
 }

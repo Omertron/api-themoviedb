@@ -44,4 +44,13 @@ public final class TmdbResultsMap<K, V> extends TmdbResults {
     public void setResults(Map<K, V> results) {
         this.results = results;
     }
+
+    @Override
+    public int getTotalResults() {
+        if (super.getTotalResults() == 0) {
+            return results.size();
+        } else {
+            return super.getTotalResults();
+        }
+    }
 }
