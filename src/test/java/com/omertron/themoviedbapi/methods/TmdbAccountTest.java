@@ -36,6 +36,8 @@ public class TmdbAccountTest {
     private static final Logger LOG = LoggerFactory.getLogger(TmdbAccountTest.class);
     // API
     private static TmdbAccount instance;
+    // Constants
+    private static final int ID_MOVIE_FIGHT_CLUB = 550;
 
     public TmdbAccountTest() {
     }
@@ -98,7 +100,7 @@ public class TmdbAccountTest {
 
         LOG.info("Add movie to list");
         // add a movie
-        StatusCode status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, true);
+        StatusCode status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, ID_MOVIE_FIGHT_CLUB, true);
         LOG.info("Add Status: {}", status);
 
         LOG.info("Get favorite list");
@@ -153,7 +155,7 @@ public class TmdbAccountTest {
 
         LOG.info("Add movie to list");
         // add a movie
-        StatusCode status = instance.modifyWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, true);
+        StatusCode status = instance.modifyWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, ID_MOVIE_FIGHT_CLUB, true);
         LOG.info("Add Status: {}", status);
 
         LOG.info("Get watch list");
