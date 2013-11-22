@@ -394,10 +394,18 @@ public class TmdbMoviesTest {
     @Test
     public void testGetMovieStatus() throws MovieDbException {
         LOG.info("getMovieStatus");
+        // This movie should be rated
         MovieState result = instance.getMovieStatus(SESSION_ID_APITESTS, ID_MOVIE_BLADE_RUNNER);
         assertNotNull("No state returned", result);
         assertFalse("Movie is favourited", result.isFavorite());
-        assertFalse("Movie is rated", result.isRated());
+        assertFalse("Movie is not rated", result.getRating() < 0);
+        assertFalse("Movie is watch listed", result.isWatchlist());
+
+        // This movie should not be rated
+        result = instance.getMovieStatus(SESSION_ID_APITESTS, ID_MOVIE_THE_AVENGERS);
+        assertNotNull("No state returned", result);
+        assertFalse("Movie is favourited", result.isFavorite());
+        assertFalse("Movie is rated", result.getRating() > -1);
         assertFalse("Movie is watch listed", result.isWatchlist());
     }
 

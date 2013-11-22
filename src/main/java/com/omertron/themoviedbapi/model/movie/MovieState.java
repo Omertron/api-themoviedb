@@ -19,23 +19,20 @@
  */
 package com.omertron.themoviedbapi.model.movie;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
  * The state of the movie for the user's account
  *
+ * Uses a custom deserializer 
+ *
  * @author stuart.boston
  */
 public class MovieState extends AbstractJsonMapping {
 
-    @JsonProperty("id")
     private int id;
-    @JsonProperty("favorite")
     private boolean favorite;
-    @JsonProperty("rated")
-    private boolean rated;
-    @JsonProperty("watchlist")
+    private int rating;
     private boolean watchlist;
 
     public int getId() {
@@ -54,20 +51,20 @@ public class MovieState extends AbstractJsonMapping {
         this.favorite = favorite;
     }
 
-    public boolean isRated() {
-        return rated;
-    }
-
-    public void setRated(boolean rated) {
-        this.rated = rated;
-    }
-
     public boolean isWatchlist() {
         return watchlist;
     }
 
     public void setWatchlist(boolean watchlist) {
         this.watchlist = watchlist;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
 }

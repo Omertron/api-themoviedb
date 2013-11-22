@@ -161,7 +161,7 @@ public class TmdbAccountTest {
         LOG.info("Get watch list");
         watchList = instance.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
         assertNotNull("Empty watch list returned", watchList);
-        assertEquals("Watchlist wrong size", 1, watchList.size());
+        assertFalse("Watchlist list empty", watchList.isEmpty());
 
         LOG.info("Removing movie(s) from list");
         // clean up again

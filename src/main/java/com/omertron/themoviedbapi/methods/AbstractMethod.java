@@ -20,8 +20,12 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.movie.MovieState;
+import com.omertron.themoviedbapi.model.movie.MovieStateDeserializer;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -61,6 +65,12 @@ public class AbstractMethod {
     public AbstractMethod(String apiKey, CommonHttpClient httpClient) {
         this.apiKey = apiKey;
         this.httpClient = httpClient;
+
+        // Register the special deserializer for the MovieState
+        MovieStateDeserializer deserializer = new MovieStateDeserializer();
+        SimpleModule module = new SimpleModule("PolymorphicInfoDeserializerModule", new Version(1, 0, 0, "", "", ""));
+        module.addDeserializer(MovieState.class, deserializer);
+        MAPPER.registerModule(module);
     }
 
     /**
