@@ -47,16 +47,17 @@ public class TestLogger {
         config.append("java.util.logging.ConsoleHandler.level = ").append(level).append(CRLF);
         // Only works with Java 7 or later
         config.append("java.util.logging.SimpleFormatter.format = [%1$tH:%1$tM:%1$tS %4$6s] %2$s - %5$s %6$s%n").append(CRLF);
-        // Exclude http logging
+        // Exclude logging messages
+        // Note: This does not work for apache
         config.append("org.apache.http.level = SEVERE").append(CRLF);
-        config.append("org.apache.http.wire.level = SEVERE").append(CRLF);
-        config.append("org.apache.http.impl.conn.level = SEVERE").append(CRLF);
-        config.append("org.apache.http.impl.client.level=SEVERE").append(CRLF);
-        config.append("org.apache.http.client.level = SEVERE").append(CRLF);
-        
+
         InputStream ins = new ByteArrayInputStream(config.toString().getBytes());
         try {
             LogManager.getLogManager().readConfiguration(ins);
+            // Exclude http logging
+            System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+            System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "warn");
+
         } catch (IOException ex) {
             LOG.warn("Failed to configure log manager due to an IO problem", ex);
             return Boolean.FALSE;
