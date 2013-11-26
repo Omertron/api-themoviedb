@@ -257,16 +257,18 @@ public class ApiUrl {
      * @param appendToResponse
      */
     public void appendToResponse(String[] appendToResponse) {
-        if (appendToResponse.length > 0) {
+        if (appendToResponse != null && appendToResponse.length > 0) {
             StringBuilder sb = new StringBuilder();
             boolean first = Boolean.TRUE;
             for (String append : appendToResponse) {
-                if (first) {
-                    first = Boolean.FALSE;
-                } else {
-                    sb.append(",");
+                if (StringUtils.isNotBlank(append)) {
+                    if (first) {
+                        first = Boolean.FALSE;
+                    } else {
+                        sb.append(",");
+                    }
+                    sb.append(append);
                 }
-                sb.append(append);
             }
             addArgument(APPEND_TO_RESPONSE, sb.toString());
         }
