@@ -1495,18 +1495,18 @@ public class TheMovieDbApi {
      * @param username
      * @param password
      */
-    public void setProxy(String host, String port, String username, String password) {
-        httpClient.setProxy(host, Integer.parseInt(port), username, password);
+    public void setProxy(String host, int port, String username, String password) {
+        httpClient.setProxy(host, port, username, password);
     }
 
     /**
-     * Set the connection and read time out values
+     * Set the web browser timeout settings
      *
-     * @param connect
-     * @param read
+     * @param webTimeoutConnect
+     * @param webTimeoutRead
      */
-    public void setTimeout(int connect, int read) {
-        httpClient.setTimeouts(connect, read);
+    public void setTimeout(int webTimeoutConnect, int webTimeoutRead) {
+        httpClient.setTimeouts(webTimeoutConnect, webTimeoutRead);
     }
 
 }
