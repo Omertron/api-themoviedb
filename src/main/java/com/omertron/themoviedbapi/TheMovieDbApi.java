@@ -163,7 +163,7 @@ public class TheMovieDbApi {
      * @param username
      * @param password
      */
-    public void setProxy(String host, String port, String username, String password) {
+    public void setProxy(String host, int port, String username, String password) {
         // should be set in HTTP client already
         if (httpClient != null) {
             return;

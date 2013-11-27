@@ -47,7 +47,7 @@ public final class WebBrowser {
     private static final Map<String, String> BROWSER_PROPERTIES = new HashMap<String, String>();
     private static final Map<String, Map<String, String>> COOKIES = new HashMap<String, Map<String, String>>();
     private static String proxyHost = null;
-    private static String proxyPort = null;
+    private static int proxyPort = 0;
     private static String proxyUsername = null;
     private static String proxyPassword = null;
     private static String proxyEncodedPassword = null;
@@ -278,11 +278,11 @@ public final class WebBrowser {
         WebBrowser.proxyHost = myProxyHost;
     }
 
-    public static String getProxyPort() {
+    public static int getProxyPort() {
         return proxyPort;
     }
 
-    public static void setProxyPort(String myProxyPort) {
+    public static void setProxyPort(int myProxyPort) {
         WebBrowser.proxyPort = myProxyPort;
     }
 
