@@ -22,18 +22,23 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
+import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
-import com.omertron.themoviedbapi.model.person.PersonMovieOld;
+import com.omertron.themoviedbapi.model.person.NewPersonCredits;
+import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.DefaultPoolingHttpClient;
@@ -48,7 +53,9 @@ public class TmdbPeopleTest {
     private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
     // API
     private static TmdbPeople instance;
-    private static final int ID_PERSON_BRUCE_WILLIS = 62;
+    private static final int ID_BRUCE_WILLIS = 62;
+    private static final int ID_SEAN_BEAN = 48;
+    private static final int ID_DICK_WOLF = 117443;
 
     public TmdbPeopleTest() {
     }
@@ -76,11 +83,11 @@ public class TmdbPeopleTest {
      *
      * @throws MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
-        PersonMovieOld result = instance.getPersonInfo(ID_PERSON_BRUCE_WILLIS);
-        assertTrue("Wrong actor returned", result.getId() == ID_PERSON_BRUCE_WILLIS);
+        Person result = instance.getPersonInfo(ID_BRUCE_WILLIS);
+        assertTrue("Wrong actor returned", result.getId() == ID_BRUCE_WILLIS);
     }
 
     /**
@@ -92,7 +99,7 @@ public class TmdbPeopleTest {
     public void testGetPersonImages() throws MovieDbException {
         LOG.info("getPersonImages");
 
-        TmdbResultsList<Artwork> result = instance.getPersonImages(ID_PERSON_BRUCE_WILLIS);
+        TmdbResultsList<Artwork> result = instance.getPersonImages(ID_BRUCE_WILLIS);
         assertTrue("No cast information", result.getResults().size() > 0);
     }
 
@@ -106,7 +113,7 @@ public class TmdbPeopleTest {
         LOG.info("getPersonChanges");
         String startDate = "";
         String endDate = "";
-        instance.getPersonChanges(ID_PERSON_BRUCE_WILLIS, startDate, endDate);
+        instance.getPersonChanges(ID_BRUCE_WILLIS, startDate, endDate);
     }
 
     /**
@@ -114,11 +121,11 @@ public class TmdbPeopleTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         int page = 0;
-        TmdbResultsList<PersonMovieOld> result = instance.getPersonPopular(page);
+        TmdbResultsList<PersonBasic> result = instance.getPersonPopular(page);
         assertFalse("No popular people", result.getResults().isEmpty());
     }
 
@@ -127,11 +134,11 @@ public class TmdbPeopleTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
 
-        PersonMovieOld result = instance.getPersonLatest();
+        Person result = instance.getPersonLatest();
 
         assertNotNull("No results found", result);
         assertTrue("No results found", StringUtils.isNotBlank(result.getName()));
@@ -142,12 +149,14 @@ public class TmdbPeopleTest {
      *
      * @throws MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonMovieCredits() throws MovieDbException {
         LOG.info("getPersonMovieCredits");
 
-        PersonMovieCredits result = instance.getPersonMovieCredits(ID_PERSON_BRUCE_WILLIS, "");
-        assertFalse("No cast information", result.getCast().isEmpty());
+        NewPersonCredits result = instance.getPersonMovieCredits(ID_BRUCE_WILLIS, LANGUAGE_DEFAULT);
+        assertEquals("Invalid ID", ID_BRUCE_WILLIS, result.getId());
+        assertFalse("No cast information returned", result.getCast().isEmpty());
+        assertFalse("No crew information returned", result.getCrew().isEmpty());
     }
 
     /**
@@ -155,17 +164,14 @@ public class TmdbPeopleTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonTvCredits() throws MovieDbException {
         LOG.info("getPersonTvCredits");
-        int personId = 1;
-        String language = "";
-        String[] appendToResponse = null;
-        PersonMovieCredits expResult = null;
-        PersonMovieCredits result = instance.getPersonTvCredits(personId, language, appendToResponse);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        NewPersonCredits result = instance.getPersonTvCredits(ID_DICK_WOLF, LANGUAGE_DEFAULT);
+        assertEquals("Invalid ID", ID_DICK_WOLF, result.getId());
+        assertFalse("No cast information returned", result.getCast().isEmpty());
+        assertFalse("No crew information returned", result.getCrew().isEmpty());
     }
 
     /**
@@ -173,17 +179,16 @@ public class TmdbPeopleTest {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonCombinedCredits() throws MovieDbException {
         LOG.info("getPersonCombinedCredits");
-        int personId = 1;
-        String language = "";
-        String[] appendToResponse = null;
-        PersonMovieCredits expResult = null;
-        PersonMovieCredits result = instance.getPersonCombinedCredits(personId, language, appendToResponse);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        NewPersonCredits result = instance.getPersonCombinedCredits(ID_SEAN_BEAN, LANGUAGE_DEFAULT);
+        assertEquals("Invalid ID", ID_SEAN_BEAN, result.getId());
+        assertFalse("No cast information returned", result.getCast().isEmpty());
+        assertFalse("No crew information returned", result.getCrew().isEmpty());
+
+        LOG.info("{}", result.toString());
     }
 
 }

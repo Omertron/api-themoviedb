@@ -24,8 +24,9 @@ import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_ID;
 import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_LANGUAGE;
 import static com.omertron.themoviedbapi.methods.ApiUrl.PARAM_PAGE;
 import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
-import com.omertron.themoviedbapi.model.person.PersonMovieOld;
+import com.omertron.themoviedbapi.model.person.NewPersonCredits;
+import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonBasic;
 import com.omertron.themoviedbapi.model.type.ArtworkType;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
@@ -76,7 +77,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieOld getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON);
 
         apiUrl.addArgument(PARAM_ID, personId);
@@ -86,7 +87,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonMovieOld.class);
+            return MAPPER.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -102,7 +103,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public NewPersonCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/movie_credits");
 
         apiUrl.addArgument(PARAM_ID, personId);
@@ -115,7 +116,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonMovieCredits.class);
+            return MAPPER.readValue(webpage, NewPersonCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -135,7 +136,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonTvCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public NewPersonCredits getPersonTvCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/tv_credits");
 
         apiUrl.addArgument(PARAM_ID, personId);
@@ -148,7 +149,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonMovieCredits.class);
+            return MAPPER.readValue(webpage, NewPersonCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get TV credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -167,7 +168,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public NewPersonCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/combined_credits");
 
         apiUrl.addArgument(PARAM_ID, personId);
@@ -180,7 +181,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = requestWebPage(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonMovieCredits.class);
+            return MAPPER.readValue(webpage, NewPersonCredits.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get combined credits: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);
@@ -239,11 +240,11 @@ public class TmdbPeople extends AbstractMethod {
      *
      * This list refreshes every day.
      *
-     * @param page
+     * @param page Use 0 (zero) to specify no page
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonMovieOld> getPersonPopular(int page) throws MovieDbException {
+    public TmdbResultsList<PersonBasic> getPersonPopular(int page) throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/popular");
 
         if (page > 0) {
@@ -255,7 +256,7 @@ public class TmdbPeople extends AbstractMethod {
 
         try {
             WrapperPersonList wrapper = MAPPER.readValue(webpage, WrapperPersonList.class);
-            TmdbResultsList<PersonMovieOld> results = new TmdbResultsList<PersonMovieOld>(wrapper.getPersonList());
+            TmdbResultsList<PersonBasic> results = new TmdbResultsList<PersonBasic>(wrapper.getPersonList());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -270,13 +271,13 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieOld getPersonLatest() throws MovieDbException {
+    public Person getPersonLatest() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
         URL url = apiUrl.buildUrl();
         String webpage = requestWebPage(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonMovieOld.class);
+            return MAPPER.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest person: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, webpage, ex);

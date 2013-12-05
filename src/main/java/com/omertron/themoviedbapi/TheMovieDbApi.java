@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import org.yamj.api.common.http.CommonHttpClient;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
 import com.omertron.themoviedbapi.methods.TmdbChanges;
@@ -38,11 +37,37 @@ import com.omertron.themoviedbapi.methods.TmdbPeople;
 import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
-import com.omertron.themoviedbapi.model.*;
+import com.omertron.themoviedbapi.model.Account;
+import com.omertron.themoviedbapi.model.AlternativeTitle;
+import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.ChangedItem;
+import com.omertron.themoviedbapi.model.ChangedMovie;
+import com.omertron.themoviedbapi.model.Collection;
+import com.omertron.themoviedbapi.model.CollectionInfo;
+import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model.Configuration;
+import com.omertron.themoviedbapi.model.ExternalIds;
+import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.JobDepartment;
+import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.ReleaseInfo;
+import com.omertron.themoviedbapi.model.Review;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.StatusCodeList;
+import com.omertron.themoviedbapi.model.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.TokenSession;
+import com.omertron.themoviedbapi.model.Trailer;
+import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.discover.Discover;
-import com.omertron.themoviedbapi.model.movie.*;
+import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieDbBasic;
+import com.omertron.themoviedbapi.model.movie.MovieDbList;
+import com.omertron.themoviedbapi.model.movie.MovieList;
+import com.omertron.themoviedbapi.model.movie.MovieState;
+import com.omertron.themoviedbapi.model.person.NewPersonCredits;
+import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonBasic;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
-import com.omertron.themoviedbapi.model.person.PersonMovieCredits;
 import com.omertron.themoviedbapi.model.person.PersonMovieOld;
 import com.omertron.themoviedbapi.model.tv.Network;
 import com.omertron.themoviedbapi.model.tv.TVCredits;
@@ -55,6 +80,7 @@ import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.yamj.api.common.http.CommonHttpClient;
 import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
@@ -1091,7 +1117,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieOld getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonInfo(personId, appendToResponse);
     }
 
@@ -1104,7 +1130,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public NewPersonCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonMovieCredits(personId, language, appendToResponse);
     }
 
@@ -1121,7 +1147,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonTvCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public NewPersonCredits getPersonTvCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonTvCredits(personId, language, appendToResponse);
     }
 
@@ -1137,7 +1163,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public NewPersonCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonCombinedCredits(personId, language, appendToResponse);
     }
 
@@ -1181,7 +1207,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonMovieOld> getPersonPopular() throws MovieDbException {
+    public TmdbResultsList<PersonBasic> getPersonPopular() throws MovieDbException {
         return tmdbPeople.getPersonPopular(0);
     }
 
@@ -1194,7 +1220,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonMovieOld> getPersonPopular(int page) throws MovieDbException {
+    public TmdbResultsList<PersonBasic> getPersonPopular(int page) throws MovieDbException {
         return tmdbPeople.getPersonPopular(page);
     }
 
@@ -1204,7 +1230,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonMovieOld getPersonLatest() throws MovieDbException {
+    public Person getPersonLatest() throws MovieDbException {
         return tmdbPeople.getPersonLatest();
     }
     //</editor-fold>

@@ -24,7 +24,7 @@ package com.omertron.themoviedbapi.model.type;
  *
  * @author Stuart
  */
-public enum VideoType {
+public enum MediaType {
 
     MOVIE,
     TV,

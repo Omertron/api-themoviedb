@@ -43,8 +43,6 @@ public class Person extends PersonBasic {
     private String imdbId;
     @JsonProperty("place_of_birth")
     private String birthplace;
-    @JsonProperty("popularity")
-    private float popularity;
 
     public List<String> getAka() {
         return aka;
@@ -74,10 +72,6 @@ public class Person extends PersonBasic {
         return birthplace;
     }
 
-    public float getPopularity() {
-        return popularity;
-    }
-
     public void setBiography(String biography) {
         this.biography = biography;
     }
@@ -102,7 +96,4 @@ public class Person extends PersonBasic {
         this.birthplace = birthplace;
     }
 
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
-    }
 }

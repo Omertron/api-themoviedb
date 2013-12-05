@@ -40,6 +40,8 @@ public class PersonBasic extends AbstractJsonMapping implements Serializable {
     private String profilePath;
     @JsonProperty("adult")
     private Boolean adult;
+    @JsonProperty("popularity")
+    private float popularity = 0F;
 
     public int getId() {
         return id;
@@ -62,6 +64,10 @@ public class PersonBasic extends AbstractJsonMapping implements Serializable {
         return adult;
     }
 
+    public float getPopularity() {
+        return popularity;
+    }
+
     public void setAdult(Boolean adult) {
         this.adult = adult;
     }
@@ -76,6 +82,10 @@ public class PersonBasic extends AbstractJsonMapping implements Serializable {
 
     public void setProfilePath(String profilePath) {
         this.profilePath = profilePath;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
     }
 
     @Override

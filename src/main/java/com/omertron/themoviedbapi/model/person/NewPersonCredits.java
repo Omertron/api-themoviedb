@@ -21,23 +21,23 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.type.MediaType;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Cast & Crew credits for a person
+ * Cast & Crew crews for a person
  *
  * @author Stuart
  */
-public class PersonMovieCredits extends AbstractJsonMapping {
+public class NewPersonCredits extends AbstractJsonMapping {
 
     private int id;
-    private MediaType videoType;
     @JsonProperty("cast")
-    private final List<PersonMovieCast> cast = Collections.emptyList();
+    private final List<NewCast> cast = Collections.emptyList();
     @JsonProperty("crew")
-    private final List<PersonMovieCrew> crew = Collections.emptyList();
+    private final List<NewCrew> crew = Collections.emptyList();
 
     public int getId() {
         return id;
@@ -47,27 +47,28 @@ public class PersonMovieCredits extends AbstractJsonMapping {
         this.id = id;
     }
 
-    public MediaType getVideoType() {
-        return videoType;
-    }
-
-    public void setVideoType(MediaType videoType) {
-        this.videoType = videoType;
-    }
-
-    public List<PersonMovieCast> getCast() {
+    public List<NewCast> getCast() {
         return cast;
     }
 
-    public List<PersonMovieCrew> getCrew() {
+    public List<NewCrew> getCrew() {
         return crew;
     }
 
-    public void addCast(PersonMovieCast cast) {
+    public void addCast(NewCast cast) {
         this.cast.add(cast);
     }
 
-    public void addCrew(PersonMovieCrew crew) {
+    public void addCrew(NewCrew crew) {
         this.crew.add(crew);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("crew", crew.size()).
+                append("cast", cast.size()).
+                toString();
     }
 }
