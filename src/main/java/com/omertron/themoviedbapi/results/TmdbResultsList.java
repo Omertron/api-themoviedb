@@ -28,7 +28,7 @@ import java.util.List;
  * @author Stuart
  * @param <T>
  */
-public final class TmdbResultsList<T> extends TmdbResults {
+public final class TmdbResultsList<T> extends AbstractResults {
 
     private List<T> results;
 

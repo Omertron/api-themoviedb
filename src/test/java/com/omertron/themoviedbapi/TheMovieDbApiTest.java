@@ -890,7 +890,6 @@ public class TheMovieDbApiTest {
     /**
      * Test of getPersonPopular method, of class TheMovieDbApi.
      *
-     * @throws MovieDbException
      */
     @Ignore("Not required")
     public void testGetPersonPopular_0args() {

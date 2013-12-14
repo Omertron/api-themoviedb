@@ -489,7 +489,7 @@ public class TheMovieDbApi {
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
-        HashMap<String, Object> body = new HashMap<String, Object>();
+        Map<String, Object> body = new HashMap<String, Object>();
         body.put("movie_id", movieId);
         body.put("favorite", isFavorite);
         String jsonBody = convertToJson(body);
@@ -536,7 +536,7 @@ public class TheMovieDbApi {
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
-        HashMap<String, Object> body = new HashMap<String, Object>();
+        Map<String, Object> body = new HashMap<String, Object>();
         body.put("movie_id", movieId);
         body.put("movie_watchlist", add);
         String jsonBody = convertToJson(body);
@@ -1655,7 +1655,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collections");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collection");
 
         if (StringUtils.isNotBlank(query)) {
             apiUrl.addArgument(PARAM_QUERY, query);
@@ -1882,7 +1882,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, "list");
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
-        HashMap<String, String> body = new HashMap<String, String>();
+        Map<String, String> body = new HashMap<String, String>();
         body.put("name", StringUtils.trimToEmpty(name));
         body.put("description", StringUtils.trimToEmpty(description));
 

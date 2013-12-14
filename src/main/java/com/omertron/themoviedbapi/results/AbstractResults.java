@@ -30,7 +30,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Stuart
  */
-public abstract class TmdbResults {
+public abstract class AbstractResults {
 
     private int id = 0;
     private int page = 0;

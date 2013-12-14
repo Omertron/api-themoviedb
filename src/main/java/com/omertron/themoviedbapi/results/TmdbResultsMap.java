@@ -29,7 +29,7 @@ import java.util.Map;
  * @param <K>
  * @param <V>
  */
-public final class TmdbResultsMap<K, V> extends TmdbResults {
+public final class TmdbResultsMap<K, V> extends AbstractResults {
 
     private Map<K, V> results;
 
