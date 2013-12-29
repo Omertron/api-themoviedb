@@ -273,37 +273,62 @@ public class TheMovieDbApi {
      * @param title The title of the movie to compare
      * @param year The year of the movie to compare
      * @param maxDistance The Levenshtein Distance between the two titles. 0 = exact match
+     * @param caseSensitive true if the comparison is to be case sensitive
      * @return True if there is a match, False otherwise.
      */
-    public static boolean compareMovies(MovieDb moviedb, String title, String year, int maxDistance) {
+    public static boolean compareMovies(MovieDb moviedb, String title, String year, int maxDistance, boolean caseSensitive) {
         if ((moviedb == null) || (StringUtils.isBlank(title))) {
             return Boolean.FALSE;
+        }
+
+        String cmpTitle, cmpOtherTitle, cmpOriginalTitle;
+        if (caseSensitive) {
+            cmpTitle = title;
+            cmpOtherTitle = moviedb.getOriginalTitle();
+            cmpOriginalTitle = moviedb.getTitle();
+        } else {
+            cmpTitle = title.toLowerCase();
+            cmpOtherTitle = moviedb.getTitle().toLowerCase();
+            cmpOriginalTitle = moviedb.getOriginalTitle().toLowerCase();
         }
 
         if (isValidYear(year) && isValidYear(moviedb.getReleaseDate())) {
             // Compare with year
             String movieYear = moviedb.getReleaseDate().substring(0, 4);
             if (movieYear.equals(year)) {
-                if (compareDistance(moviedb.getOriginalTitle(), title, maxDistance)) {
+                if (compareDistance(cmpOriginalTitle, cmpTitle, maxDistance)) {
                     return Boolean.TRUE;
                 }
 
-                if (compareDistance(moviedb.getTitle(), title, maxDistance)) {
+                if (compareDistance(cmpOtherTitle, cmpTitle, maxDistance)) {
                     return Boolean.TRUE;
                 }
             }
         }
 
         // Compare without year
-        if (compareDistance(moviedb.getOriginalTitle(), title, maxDistance)) {
+        if (compareDistance(cmpOriginalTitle, cmpTitle, maxDistance)) {
             return Boolean.TRUE;
         }
 
-        if (compareDistance(moviedb.getTitle(), title, maxDistance)) {
+        if (compareDistance(cmpOtherTitle, cmpTitle, maxDistance)) {
             return Boolean.TRUE;
         }
 
         return Boolean.FALSE;
+    }
+
+    /**
+     * Compare the MovieDB object with a title & year, case sensitive
+     *
+     * @param moviedb
+     * @param title
+     * @param year
+     * @param maxDistance
+     * @return
+     */
+    public static boolean compareMovies(MovieDb moviedb, String title, String year, int maxDistance) {
+        return compareMovies(moviedb, title, year, maxDistance, true);
     }
 
     /**
