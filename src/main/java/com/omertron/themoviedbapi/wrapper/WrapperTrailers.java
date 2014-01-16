@@ -54,7 +54,7 @@ public class WrapperTrailers extends AbstractWrapperId implements Serializable {
     }
 
     /**
-     * Get a combined list of the trailers with their source website
+     * Get a combined list of the trailers with their source
      *
      * @return
      */
@@ -62,14 +62,19 @@ public class WrapperTrailers extends AbstractWrapperId implements Serializable {
         List<Trailer> trailers = new ArrayList<Trailer>();
 
         // Add the trailer to the return list along with it's source
-        for (Trailer trailer : quicktime) {
-            trailer.setWebsite(Trailer.WEBSITE_QUICKTIME);
-            trailers.add(trailer);
+        if (quicktime != null) {
+            for (Trailer trailer : quicktime) {
+                trailer.setWebsite(Trailer.WEBSITE_QUICKTIME);
+                trailers.add(trailer);
+            }
         }
+
         // Add the trailer to the return list along with it's source
-        for (Trailer trailer : youtube) {
-            trailer.setWebsite(Trailer.WEBSITE_YOUTUBE);
-            trailers.add(trailer);
+        if (youtube != null) {
+            for (Trailer trailer : youtube) {
+                trailer.setWebsite(Trailer.WEBSITE_YOUTUBE);
+                trailers.add(trailer);
+            }
         }
 
         return trailers;
