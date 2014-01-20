@@ -49,6 +49,8 @@ public class Configuration extends AbstractJsonMapping {
     private List<String> profileSizes;
     @JsonProperty("logo_sizes")
     private List<String> logoSizes;
+    @JsonProperty("still_sizes")
+    private List<String> stillSizes;
 
     /**
      * Get all backdrop sizes
@@ -105,6 +107,15 @@ public class Configuration extends AbstractJsonMapping {
     }
 
     /**
+     * Get the still sizes
+     *
+     * @return
+     */
+    public List<String> getStillSizes() {
+        return stillSizes;
+    }
+
+    /**
      * Set the backdrop sizes
      *
      * @param backdropSizes
@@ -156,6 +167,15 @@ public class Configuration extends AbstractJsonMapping {
      */
     public void setSecureBaseUrl(String secureBaseUrl) {
         this.secureBaseUrl = secureBaseUrl;
+    }
+
+    /**
+     * Set the still sizes
+     *
+     * @param stillSizes
+     */
+    public void setStillSizes(List<String> stillSizes) {
+        this.stillSizes = stillSizes;
     }
 
     /**
