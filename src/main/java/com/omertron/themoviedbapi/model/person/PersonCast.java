@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2004-2013 Stuart Boston
+ *      Copyright (c) 2004-2014 Stuart Boston
  *
  *      This file is part of TheMovieDB API.
  *
