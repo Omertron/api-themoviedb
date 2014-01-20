@@ -128,7 +128,7 @@ public class TmdbSearch extends AbstractMethod {
      * @throws MovieDbException
      */
     public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collections");
+        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collection");
 
         if (StringUtils.isNotBlank(query)) {
             apiUrl.addArgument(PARAM_QUERY, query);
