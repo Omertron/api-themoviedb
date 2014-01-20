@@ -19,7 +19,10 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model.StatusCode;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +32,22 @@ import java.util.List;
 public abstract class AbstractWrapper extends AbstractJsonMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @JsonIgnore
+    private final StatusCode status = new StatusCode();
+
+    @JsonSetter("status_code")
+    public void setStatusCode(int statusCode) {
+        this.status.setStatusCode(statusCode);
+    }
+
+    @JsonSetter("status_message")
+    public void setStatusMessage(String statusMessage) {
+        this.status.setStatusMessage(statusMessage);
+    }
+
+    public StatusCode getStatus() {
+        return status;
+    }
 
     /**
      * Get a list of the enums passed

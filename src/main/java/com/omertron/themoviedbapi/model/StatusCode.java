@@ -32,9 +32,9 @@ public class StatusCode extends AbstractJsonMapping {
      * Properties
      */
     @JsonProperty("status_code")
-    private int statusCode;
+    private int statusCode = 0;
     @JsonProperty("status_message")
-    private String statusMessage;
+    private String statusMessage = "";
 
     public int getStatusCode() {
         return statusCode;
