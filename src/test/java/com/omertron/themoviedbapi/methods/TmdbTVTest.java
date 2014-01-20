@@ -21,7 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.*;
+import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
+import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ExternalIds;
 import com.omertron.themoviedbapi.model.tv.TVCredits;
@@ -32,11 +33,14 @@ import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.DefaultPoolingHttpClient;
@@ -60,8 +64,8 @@ public class TmdbTVTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbTV(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
+        instance = new TmdbTV(API_KEY, new DefaultPoolingHttpClient());
     }
 
     @AfterClass

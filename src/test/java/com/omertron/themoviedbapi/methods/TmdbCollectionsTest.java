@@ -28,10 +28,10 @@ import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.DefaultPoolingHttpClient;
@@ -53,8 +53,8 @@ public class TmdbCollectionsTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbCollections(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
+        instance = new TmdbCollections(API_KEY, new DefaultPoolingHttpClient());
     }
 
     @AfterClass

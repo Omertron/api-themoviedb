@@ -50,8 +50,8 @@ public class TmdbCreditsTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbCredits(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
+        instance = new TmdbCredits(API_KEY, new DefaultPoolingHttpClient());
     }
 
     @AfterClass

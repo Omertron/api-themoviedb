@@ -57,7 +57,6 @@ public class TestLogger {
             // Exclude http logging
             System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
             System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "warn");
-
         } catch (IOException ex) {
             LOG.warn("Failed to configure log manager due to an IO problem", ex);
             return Boolean.FALSE;

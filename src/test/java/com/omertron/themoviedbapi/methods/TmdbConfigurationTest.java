@@ -53,8 +53,8 @@ public class TmdbConfigurationTest {
 
     @BeforeClass
     public static void setUpClass() {
-        instance = new TmdbConfiguration(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
+        instance = new TmdbConfiguration(API_KEY, new DefaultPoolingHttpClient());
     }
 
     @AfterClass

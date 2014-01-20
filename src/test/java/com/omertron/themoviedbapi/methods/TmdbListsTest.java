@@ -28,9 +28,11 @@ import com.omertron.themoviedbapi.model.StatusCodeList;
 import com.omertron.themoviedbapi.model.movie.MovieDbList;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -52,8 +54,8 @@ public class TmdbListsTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbLists(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
+        instance = new TmdbLists(API_KEY, new DefaultPoolingHttpClient());
     }
 
     @AfterClass

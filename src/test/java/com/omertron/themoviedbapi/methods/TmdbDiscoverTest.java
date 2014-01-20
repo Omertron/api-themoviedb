@@ -52,8 +52,8 @@ public class TmdbDiscoverTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        instance = new TmdbDiscover(API_KEY, new DefaultPoolingHttpClient());
         TestLogger.Configure();
+        instance = new TmdbDiscover(API_KEY, new DefaultPoolingHttpClient());
     }
 
     @AfterClass
