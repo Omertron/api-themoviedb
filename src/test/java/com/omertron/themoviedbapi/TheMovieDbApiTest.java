@@ -102,8 +102,8 @@ public class TheMovieDbApiTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        tmdb = new TheMovieDbApi(API_KEY);
         TestLogger.Configure();
+        tmdb = new TheMovieDbApi(API_KEY);
     }
 
     @AfterClass

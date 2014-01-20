@@ -45,6 +45,8 @@ public class TmdbConfiguration extends AbstractJsonMapping {
     private List<String> profileSizes;
     @JsonProperty("logo_sizes")
     private List<String> logoSizes;
+    @JsonProperty("still_sizes")
+    private List<String> stillSizes;
 
     public List<String> getBackdropSizes() {
         return backdropSizes;
@@ -70,6 +72,10 @@ public class TmdbConfiguration extends AbstractJsonMapping {
         return secureBaseUrl;
     }
 
+    public List<String> getStillSizes() {
+        return stillSizes;
+    }
+
     public void setBackdropSizes(List<String> backdropSizes) {
         this.backdropSizes = backdropSizes;
     }
@@ -92,6 +98,10 @@ public class TmdbConfiguration extends AbstractJsonMapping {
 
     public void setSecureBaseUrl(String secureBaseUrl) {
         this.secureBaseUrl = secureBaseUrl;
+    }
+
+    public void setStillSizes(List<String> stillSizes) {
+        this.stillSizes = stillSizes;
     }
 
     /**
