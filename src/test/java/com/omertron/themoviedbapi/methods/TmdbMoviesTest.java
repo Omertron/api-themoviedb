@@ -44,11 +44,14 @@ import java.util.List;
 import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.DefaultPoolingHttpClient;
@@ -354,9 +357,14 @@ public class TmdbMoviesTest {
         Integer rating = new Random().nextInt(10) + 1;
 
         boolean wasPosted = instance.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
+        assertTrue("Failed to post rating", wasPosted);
 
-        assertNotNull(wasPosted);
-        assertTrue(wasPosted);
+        try {
+            // Make sure that we pause long enough for the record to by updated
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+            // Ignore the exception and move on
+        }
 
         // get all rated movies
         TmdbAccount account = new TmdbAccount(API_KEY, new DefaultPoolingHttpClient());
@@ -367,11 +375,12 @@ public class TmdbMoviesTest {
         boolean foundMovie = false;
         for (MovieDb movie : ratedMovies) {
             if (movie.getId() == movieID) {
-                assertEquals(movie.getUserRating(), (float) rating, 0);
+                assertEquals("Incorrect rating", movie.getUserRating(), (float) rating, 0);
                 foundMovie = true;
+                break;
             }
         }
-        assertTrue(foundMovie);
+        assertTrue("Movie not found!", foundMovie);
     }
 
     /**
