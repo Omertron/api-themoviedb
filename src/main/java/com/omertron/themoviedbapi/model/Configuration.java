@@ -24,15 +24,21 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.type.ArtworkType;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * Configuration information about The MovieDB
+ *
+ * Contains the sizes of the various images as well as the base URL for these images.
+ *
  * @author stuart.boston
  */
 public class Configuration extends AbstractJsonMapping {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
     private static final long serialVersionUID = 1L;
     /*
      * Properties
@@ -184,11 +190,13 @@ public class Configuration extends AbstractJsonMapping {
      * @param config
      */
     public void clone(Configuration config) {
-        backdropSizes = config.getBackdropSizes();
         baseUrl = config.getBaseUrl();
+        secureBaseUrl = config.getSecureBaseUrl();
+        backdropSizes = config.getBackdropSizes();
         posterSizes = config.getPosterSizes();
         profileSizes = config.getProfileSizes();
         logoSizes = config.getLogoSizes();
+        stillSizes = config.getStillSizes();
     }
 
     /**
@@ -292,7 +300,7 @@ public class Configuration extends AbstractJsonMapping {
         try {
             return (new URL(sb.toString()));
         } catch (MalformedURLException ex) {
-            getLogger().warn("Failed to create image URL: {}", ex.getMessage());
+            LOG.warn("Failed to create image URL: {}", ex.getMessage());
             throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, sb.toString(), ex);
         }
     }
