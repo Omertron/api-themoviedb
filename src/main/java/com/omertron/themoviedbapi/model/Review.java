@@ -20,6 +20,8 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.model.type.MediaType;
 
 /**
  * @author Stuart
@@ -39,6 +41,13 @@ public class Review extends AbstractJsonMapping {
     private String content;
     @JsonProperty("url")
     private String url;
+    @JsonProperty("iso_639_1")
+    private String language;
+    @JsonProperty("media_id")
+    private int mediaId;
+    @JsonProperty("media_title")
+    private String mediaTitle;
+    private MediaType mediaType;
 
     public String getId() {
         return id;
@@ -56,6 +65,22 @@ public class Review extends AbstractJsonMapping {
         return url;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public int getMediaId() {
+        return mediaId;
+    }
+
+    public String getMediaTitle() {
+        return mediaTitle;
+    }
+
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -70,5 +95,22 @@ public class Review extends AbstractJsonMapping {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setMediaId(int mediaId) {
+        this.mediaId = mediaId;
+    }
+
+    public void setMediaTitle(String mediaTitle) {
+        this.mediaTitle = mediaTitle;
+    }
+
+    @JsonSetter("media_type")
+    public void setMediaType(String mediaType) {
+        this.mediaType = MediaType.valueOf(mediaType.toUpperCase());
     }
 }

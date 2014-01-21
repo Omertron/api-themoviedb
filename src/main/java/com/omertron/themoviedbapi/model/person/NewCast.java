@@ -140,4 +140,8 @@ public class NewCast extends AbstractJsonMapping {
         return adult;
     }
 
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
 }

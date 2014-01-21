@@ -20,8 +20,10 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.tv.Media;
+import com.omertron.themoviedbapi.model.type.MediaType;
 
 /**
  * Cast & Crew credits for a person
@@ -38,8 +40,7 @@ public class PersonCredits extends AbstractJsonMapping {
     private String department;
     @JsonProperty("job")
     private String job;
-    @JsonProperty("media_type")
-    private String mediaType;
+    private MediaType mediaType;
     @JsonProperty("person")
     private PersonBasic person;
     @JsonProperty("media")
@@ -77,12 +78,13 @@ public class PersonCredits extends AbstractJsonMapping {
         this.job = job;
     }
 
-    public String getMediaType() {
+    public MediaType getMediaType() {
         return mediaType;
     }
 
+    @JsonSetter("media_type")
     public void setMediaType(String mediaType) {
-        this.mediaType = mediaType;
+        this.mediaType = MediaType.valueOf(mediaType.toUpperCase());
     }
 
     public PersonBasic getPerson() {
