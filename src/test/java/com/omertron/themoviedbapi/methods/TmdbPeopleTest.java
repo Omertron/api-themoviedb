@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.TestLogger;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.API_KEY;
 import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.person.NewCast;
 import com.omertron.themoviedbapi.model.person.NewPersonCredits;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonBasic;
@@ -83,11 +84,19 @@ public class TmdbPeopleTest {
      *
      * @throws MovieDbException
      */
-    //@Test
+//    @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
         Person result = instance.getPersonInfo(ID_BRUCE_WILLIS);
         assertTrue("Wrong actor returned", result.getId() == ID_BRUCE_WILLIS);
+        assertTrue("Missing bio", StringUtils.isNotBlank(result.getBiography()));
+        assertTrue("Missing birthday", StringUtils.isNotBlank(result.getBirthday()));
+        assertTrue("Missing homepage", StringUtils.isNotBlank(result.getHomepage()));
+        assertTrue("Missing IMDB", StringUtils.isNotBlank(result.getImdbId()));
+        assertTrue("Missing name", StringUtils.isNotBlank(result.getName()));
+        assertTrue("Missing birth place", StringUtils.isNotBlank(result.getBirthplace()));
+        assertTrue("Missing artwork", StringUtils.isNotBlank(result.getProfilePath()));
+        assertTrue("Missing bio", result.getPopularity() > 0F);
     }
 
     /**
@@ -95,12 +104,16 @@ public class TmdbPeopleTest {
      *
      * @throws MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonImages() throws MovieDbException {
         LOG.info("getPersonImages");
 
         TmdbResultsList<Artwork> result = instance.getPersonImages(ID_BRUCE_WILLIS);
         assertTrue("No cast information", result.getResults().size() > 0);
+        for (Artwork artwork : result.getResults()) {
+            assertTrue("Artwork is blank", StringUtils.isNotBlank(artwork.getFilePath()));
+        }
+
     }
 
     /**
@@ -127,6 +140,9 @@ public class TmdbPeopleTest {
         int page = 0;
         TmdbResultsList<PersonBasic> result = instance.getPersonPopular(page);
         assertFalse("No popular people", result.getResults().isEmpty());
+        for (PersonBasic person : result.getResults()) {
+            assertTrue("Missing name", StringUtils.isNotBlank(person.getName()));
+        }
     }
 
     /**
@@ -149,13 +165,17 @@ public class TmdbPeopleTest {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testGetPersonMovieCredits() throws MovieDbException {
         LOG.info("getPersonMovieCredits");
 
         NewPersonCredits result = instance.getPersonMovieCredits(ID_BRUCE_WILLIS, LANGUAGE_DEFAULT);
         assertEquals("Invalid ID", ID_BRUCE_WILLIS, result.getId());
         assertFalse("No cast information returned", result.getCast().isEmpty());
+        for(NewCast person:result.getCast()) {
+            LOG.info(person.toString());
+        }
+
         assertFalse("No crew information returned", result.getCrew().isEmpty());
     }
 
