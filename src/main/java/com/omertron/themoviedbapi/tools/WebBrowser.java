@@ -20,11 +20,11 @@
 package com.omertron.themoviedbapi.tools;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,7 +36,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Web browser with simple cookies support
@@ -121,6 +124,11 @@ public final class WebBrowser {
             OutputStreamWriter wr = null;
             try {
                 cnx = (HttpURLConnection) openProxiedConnection(url);
+
+                // If we get a null connection, then throw an exception
+                if (cnx == null) {
+                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, "No HTTP connection could be made.");
+                }
 
                 if (isDeleteRequest) {
                     cnx.setDoOutput(true);
