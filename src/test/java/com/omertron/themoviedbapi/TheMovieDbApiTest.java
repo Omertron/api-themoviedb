@@ -78,7 +78,7 @@ public class TheMovieDbApiTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApiTest.class);
     // API Key
-    private static final String API_KEY = "5a1a77e2eba8984804586122754f969f";
+    private static final String API_KEY = "INSERT_YOUR_KEY_HERE";
     private static TheMovieDbApi tmdb;
     // Test data
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
@@ -94,7 +94,7 @@ public class TheMovieDbApiTest {
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String LANGUAGE_RUSSIAN = "ru";
     // session and account id of test users named 'apitests'
-    private static final String SESSION_ID_APITESTS = "63c85deb39337e29b69d78265eb28d639cbd6f72";
+    private static final String SESSION_ID_APITESTS = "INSERT_YOUR_SESSION_ID_HERE";
     private static final int ACCOUNT_ID_APITESTS = 6065849;
 
     public TheMovieDbApiTest() throws MovieDbException {
