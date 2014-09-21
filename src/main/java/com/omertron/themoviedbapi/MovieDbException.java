@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi;
 
+import java.net.URL;
+
 public class MovieDbException extends Exception {
 
     private static final long serialVersionUID = 1L;
@@ -64,18 +66,35 @@ public class MovieDbException extends Exception {
 
     private final MovieDbExceptionType exceptionType;
     private final String response;
+    private final String url;
 
-    public MovieDbException(final MovieDbExceptionType exceptionType, final String response) {
+    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final String url) {
         super();
         this.exceptionType = exceptionType;
         this.response = response;
+        this.url = url;
     }
+    
+    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final URL url) {
+      super();
+      this.exceptionType = exceptionType;
+      this.response = response;
+      this.url = url.toExternalForm();
+  }
 
-    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final Throwable cause) {
+    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final String url, final Throwable cause) {
         super(cause);
         this.exceptionType = exceptionType;
         this.response = response;
+        this.url = url;
     }
+    
+    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final URL url, final Throwable cause) {
+      super(cause);
+      this.exceptionType = exceptionType;
+      this.response = response;
+      this.url = url.toExternalForm();
+  }
 
     public MovieDbExceptionType getExceptionType() {
         return exceptionType;
@@ -83,5 +102,9 @@ public class MovieDbException extends Exception {
 
     public String getResponse() {
         return response;
+    }
+    
+    public String getUrl(){
+      return url;
     }
 }
