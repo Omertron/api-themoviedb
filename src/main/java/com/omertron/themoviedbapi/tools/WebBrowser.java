@@ -80,7 +80,7 @@ public final class WebBrowser {
         try {
             return request(new URL(url));
         } catch (MalformedURLException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, ex);
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, url, ex);
         }
     }
 
@@ -100,7 +100,7 @@ public final class WebBrowser {
 
             return cnx;
         } catch (IOException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, ex);
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, url, ex);
         }
     }
 
@@ -127,7 +127,7 @@ public final class WebBrowser {
 
                 // If we get a null connection, then throw an exception
                 if (cnx == null) {
-                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, "No HTTP connection could be made.");
+                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, "No HTTP connection could be made.", url);
                 }
 
                 if (isDeleteRequest) {
@@ -173,7 +173,7 @@ public final class WebBrowser {
             }
             return content.toString();
         } catch (IOException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, ex);
+            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, url, ex);
         } finally {
             if (content != null) {
                 try {
