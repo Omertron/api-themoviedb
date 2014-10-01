@@ -40,6 +40,8 @@ public class PersonCredit extends AbstractJsonMapping {
     private String movieOriginalTitle = DEFAULT_STRING;
     @JsonProperty("poster_path")
     private String posterPath = DEFAULT_STRING;
+    @JsonProperty("backdrop_path")
+    private String backdropPath = DEFAULT_STRING;
     @JsonProperty("release_date")
     private String releaseDate = DEFAULT_STRING;
     @JsonProperty("title")
@@ -50,7 +52,17 @@ public class PersonCredit extends AbstractJsonMapping {
     private String job = DEFAULT_STRING;
     @JsonProperty("adult")
     private String adult = DEFAULT_STRING;
+    @JsonProperty("credit_id")
+    private String creditId = DEFAULT_STRING;
     private PersonType personType = PersonType.PERSON;
+    @JsonProperty("popularity")
+    private float popularity;
+    @JsonProperty("vote_average")
+    private float voteAverage;
+    @JsonProperty("vote_count")
+    private int voteCount;
+    @JsonProperty("media_type")
+    private String mediaType;
 
     public String getCharacter() {
         return character;
@@ -92,6 +104,10 @@ public class PersonCredit extends AbstractJsonMapping {
         return adult;
     }
 
+    public String getCreditId() {
+        return creditId;
+    }
+
     public void setCharacter(String character) {
         this.character = StringUtils.trimToEmpty(character);
     }
@@ -130,5 +146,49 @@ public class PersonCredit extends AbstractJsonMapping {
 
     public void setAdult(String adult) {
         this.adult = StringUtils.trimToEmpty(adult);
+    }
+
+    public void setCreditId(String creditId) {
+        this.creditId = creditId;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public float getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(float voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 }

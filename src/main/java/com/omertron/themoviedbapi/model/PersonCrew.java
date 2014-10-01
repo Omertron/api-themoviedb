@@ -42,6 +42,8 @@ public class PersonCrew extends AbstractJsonMapping {
     private String name;
     @JsonProperty("profile_path")
     private String profilePath;
+    @JsonProperty("credit_id")
+    private String creditId;
 
     public String getDepartment() {
         return department;
@@ -61,6 +63,14 @@ public class PersonCrew extends AbstractJsonMapping {
 
     public String getProfilePath() {
         return profilePath;
+    }
+
+    public String getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(String creditId) {
+        this.creditId = creditId;
     }
 
     public void setDepartment(String department) {

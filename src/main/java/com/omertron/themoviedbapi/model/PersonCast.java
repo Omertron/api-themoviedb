@@ -44,6 +44,8 @@ public class PersonCast extends AbstractJsonMapping {
     private String profilePath;
     @JsonProperty("cast_id")
     private int castId;
+    @JsonProperty("credit_id")
+    private String creditId;
 
     public String getCharacter() {
         return character;
@@ -91,6 +93,14 @@ public class PersonCast extends AbstractJsonMapping {
 
     public void setCastId(int castId) {
         this.castId = castId;
+    }
+
+    public String getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(String creditId) {
+        this.creditId = creditId;
     }
 
     @Override

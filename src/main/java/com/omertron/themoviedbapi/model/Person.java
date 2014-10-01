@@ -75,6 +75,8 @@ public class Person extends AbstractJsonMapping {
     private String imdbId = DEFAULT_STRING;
     @JsonProperty("popularity")
     private float popularity = 0.0f;
+    @JsonProperty("known_for")
+    private List<PersonCredit> knownFor;
 
     /**
      * Add a crew member
@@ -250,6 +252,14 @@ public class Person extends AbstractJsonMapping {
 
     public void setPopularity(float popularity) {
         this.popularity = popularity;
+    }
+
+    public List<PersonCredit> getKnownFor() {
+        return knownFor;
+    }
+
+    public void setKnownFor(List<PersonCredit> knownFor) {
+        this.knownFor = knownFor;
     }
 
     @Override
