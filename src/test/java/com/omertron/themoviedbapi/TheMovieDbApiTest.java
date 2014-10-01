@@ -83,8 +83,8 @@ public class TheMovieDbApiTest {
     // API Key
     private static final String PROP_FIlENAME = "testing.properties";
     private static String API_KEY;
-    private static String SESSION_ID_APITESTS;
     private static int ACCOUNT_ID_APITESTS;
+    private static String SESSION_ID_APITESTS;
     private static TheMovieDbApi tmdb;
     // Test data
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
@@ -115,8 +115,8 @@ public class TheMovieDbApiTest {
             TestLogger.loadProperties(props, f);
 
             API_KEY = props.getProperty("API_Key");
-            SESSION_ID_APITESTS = props.getProperty("Account_ID");
-            ACCOUNT_ID_APITESTS = NumberUtils.toInt(props.getProperty("Session_ID"), 0);
+            ACCOUNT_ID_APITESTS = NumberUtils.toInt(props.getProperty("Account_ID"), 0);
+            SESSION_ID_APITESTS = props.getProperty("Session_ID");
         } else {
             LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
 
@@ -161,11 +161,12 @@ public class TheMovieDbApiTest {
 
     @Test
     public void testAccount() throws MovieDbException {
+        LOG.info("Using Session ID '{}' for test", SESSION_ID_APITESTS);
         Account account = tmdb.getAccount(SESSION_ID_APITESTS);
 
         // Make sure properties are extracted correctly
-        assertEquals(account.getUserName(), "apitests");
-        assertEquals(account.getId(), ACCOUNT_ID_APITESTS);
+        assertEquals("apitests", account.getUserName());
+        assertEquals(ACCOUNT_ID_APITESTS, account.getId());
     }
 
     @Ignore("Session required")
