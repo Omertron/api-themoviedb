@@ -67,6 +67,9 @@ import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
+import java.io.File;
+import java.util.Properties;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Test cases for TheMovieDbApi API
@@ -78,7 +81,10 @@ public class TheMovieDbApiTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApiTest.class);
     // API Key
-    private static final String API_KEY = "INSERT_YOUR_KEY_HERE";
+    private static final String PROP_FIlENAME = "testing.properties";
+    private static String API_KEY;
+    private static String SESSION_ID_APITESTS;
+    private static int ACCOUNT_ID_APITESTS;
     private static TheMovieDbApi tmdb;
     // Test data
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
@@ -94,8 +100,6 @@ public class TheMovieDbApiTest {
     private static final String LANGUAGE_ENGLISH = "en";
     private static final String LANGUAGE_RUSSIAN = "ru";
     // session and account id of test users named 'apitests'
-    private static final String SESSION_ID_APITESTS = "INSERT_YOUR_SESSION_ID_HERE";
-    private static final int ACCOUNT_ID_APITESTS = 6065849;
 
     public TheMovieDbApiTest() throws MovieDbException {
     }
@@ -104,6 +108,28 @@ public class TheMovieDbApiTest {
     public static void setUpClass() throws Exception {
         TestLogger.Configure();
         tmdb = new TheMovieDbApi(API_KEY);
+
+        Properties props = new Properties();
+        File f = new File(PROP_FIlENAME);
+        if (f.exists()) {
+            LOG.info("Loading properties from '{}'", PROP_FIlENAME);
+            TestLogger.loadProperties(props, f);
+
+            API_KEY = props.getProperty("API_Key");
+            SESSION_ID_APITESTS = props.getProperty("Account_ID");
+            ACCOUNT_ID_APITESTS = NumberUtils.toInt(props.getProperty("Session_ID"), 0);
+
+        } else {
+            LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
+
+            props.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
+            props.setProperty("Account_ID", "ACCOUNT ID FOR SESSION TESTS");
+            props.setProperty("Session_ID", "INSERT_YOUR_SESSION_ID_HERE");
+
+            TestLogger.saveProperties(props, f, "Properties file for tests");
+            fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
+        }
+
     }
 
     @AfterClass

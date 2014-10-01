@@ -20,9 +20,17 @@
 package com.omertron.themoviedbapi;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,5 +76,69 @@ public class TestLogger {
      */
     public static boolean Configure() {
         return Configure("ALL");
+    }
+
+    /**
+     * Test if a filename exists
+     *
+     * @param filename
+     * @return
+     */
+    public static boolean fileExists(String filename) {
+        return (new File(filename)).exists();
+    }
+
+    /**
+     * Load properties from a file
+     *
+     * @param props
+     * @param f
+     */
+    public static void loadProperties(Properties props, File f) {
+        InputStream is = null;
+        try {
+            is = new FileInputStream(f);
+        } catch (Exception ex) {
+            LOG.warn("Failed to load properties file", ex);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                    LOG.warn("Failed to close properties file", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Save properties to a file
+     *
+     * @param props
+     * @param propertyFile
+     * @param headerText
+     */
+    public static void saveProperties(Properties props, File propertyFile, String headerText) {
+        OutputStream out = null;
+
+        try {
+            out = new FileOutputStream(propertyFile);
+            if (StringUtils.isNotBlank(headerText)) {
+                props.store(out, headerText);
+            }
+        } catch (FileNotFoundException ex) {
+            LOG.warn("Failed to find properties file", ex);
+        } catch (IOException ex) {
+            LOG.warn("Failed to read properties file", ex);
+        } finally {
+            if (out != null) {
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException ex) {
+                    LOG.warn("Failed to close properties file", ex);
+                }
+            }
+        }
     }
 }
