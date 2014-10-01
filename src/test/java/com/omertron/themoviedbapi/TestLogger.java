@@ -98,6 +98,7 @@ public class TestLogger {
         InputStream is = null;
         try {
             is = new FileInputStream(f);
+            props.load(is);
         } catch (Exception ex) {
             LOG.warn("Failed to load properties file", ex);
         } finally {

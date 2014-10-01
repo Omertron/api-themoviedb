@@ -107,7 +107,6 @@ public class TheMovieDbApiTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         TestLogger.Configure();
-        tmdb = new TheMovieDbApi(API_KEY);
 
         Properties props = new Properties();
         File f = new File(PROP_FIlENAME);
@@ -118,7 +117,6 @@ public class TheMovieDbApiTest {
             API_KEY = props.getProperty("API_Key");
             SESSION_ID_APITESTS = props.getProperty("Account_ID");
             ACCOUNT_ID_APITESTS = NumberUtils.toInt(props.getProperty("Session_ID"), 0);
-
         } else {
             LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
 
@@ -130,6 +128,7 @@ public class TheMovieDbApiTest {
             fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
         }
 
+        tmdb = new TheMovieDbApi(API_KEY);
     }
 
     @AfterClass
