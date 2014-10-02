@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.LogManager;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -79,25 +78,15 @@ public class TestLogger {
     }
 
     /**
-     * Test if a filename exists
-     *
-     * @param filename
-     * @return
-     */
-    public static boolean fileExists(String filename) {
-        return (new File(filename)).exists();
-    }
-
-    /**
      * Load properties from a file
      *
      * @param props
-     * @param f
+     * @param propertyFile
      */
-    public static void loadProperties(Properties props, File f) {
+    public static void loadProperties(Properties props, File propertyFile) {
         InputStream is = null;
         try {
-            is = new FileInputStream(f);
+            is = new FileInputStream(propertyFile);
             props.load(is);
         } catch (Exception ex) {
             LOG.warn("Failed to load properties file", ex);
