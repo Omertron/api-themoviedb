@@ -71,8 +71,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <distribution.format>zip</distribution.format>
-        <version.jackson>2.3.2</version.jackson>
-        <version.slf4j>1.7.6</version.slf4j>
+        <version.jackson>2.4.3</version.jackson>
+        <version.slf4j>1.7.7</version.slf4j>
     </properties>
 
     <dependencies>
