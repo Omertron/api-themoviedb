@@ -348,7 +348,7 @@ public class TheMovieDbApi {
      * @param year
      */
     private static boolean isValidYear(String year) {
-        return (StringUtils.isNotBlank(year) && !year.equals("UNKNOWN"));
+        return (StringUtils.isNotBlank(year) && !"UNKNOWN".equals(year));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Configuration Functions">
