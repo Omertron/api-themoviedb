@@ -73,8 +73,12 @@ public abstract class AbstractResults {
     }
     //</editor-fold>
 
+    /**
+     * This wrapper does not have anything to copy.
+     *
+     * @param wrapper
+     */
     public void copyWrapper(AbstractWrapper wrapper) {
-        // These results have nothing to copy, so this is just a placeholder
     }
 
     /**

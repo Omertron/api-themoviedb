@@ -1455,6 +1455,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        LOG.trace("getPersonChanges: id: {}, start: {}, end: {}", personId, startDate, endDate);
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
 
@@ -2189,6 +2190,7 @@ public class TheMovieDbApi {
     }
 
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
+        LOG.trace("getPersonChangesList: page: {}, start: {}, end: {}", page, startDate, endDate);
         throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
     //</editor-fold>
