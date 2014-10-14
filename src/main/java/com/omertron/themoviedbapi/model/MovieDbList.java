@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class MovieDbList extends AbstractJsonMapping {
     @JsonProperty("favorite_count")
     private int favoriteCount;
     @JsonProperty("items")
-    private List<MovieDb> items = Collections.EMPTY_LIST;
+    private List<MovieDb> items = Collections.emptyList();
     @JsonProperty("item_count")
     private int itemCount;
     @JsonProperty("iso_639_1")

@@ -36,11 +36,11 @@ public class WrapperImages extends AbstractWrapperAll implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("backdrops")
-    private List<Artwork> backdrops = Collections.EMPTY_LIST;
+    private List<Artwork> backdrops = Collections.emptyList();
     @JsonProperty("posters")
-    private List<Artwork> posters = Collections.EMPTY_LIST;
+    private List<Artwork> posters = Collections.emptyList();
     @JsonProperty("profiles")
-    private List<Artwork> profiles = Collections.EMPTY_LIST;
+    private List<Artwork> profiles = Collections.emptyList();
 
     public List<Artwork> getBackdrops() {
         return backdrops;

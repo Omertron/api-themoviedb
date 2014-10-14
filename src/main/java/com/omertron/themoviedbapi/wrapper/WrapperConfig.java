@@ -33,7 +33,7 @@ public class WrapperConfig extends AbstractWrapper {
     @JsonProperty("images")
     private TmdbConfiguration tmdbConfiguration;
     @JsonProperty("change_keys")
-    private List<String> changeKeys = Collections.EMPTY_LIST;
+    private List<String> changeKeys = Collections.emptyList();
 
     public TmdbConfiguration getTmdbConfiguration() {
         return tmdbConfiguration;
