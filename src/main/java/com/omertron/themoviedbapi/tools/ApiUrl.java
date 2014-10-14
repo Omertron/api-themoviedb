@@ -137,7 +137,7 @@ public class ApiUrl {
             try {
                 urlString.append(URLEncoder.encode(query, "UTF-8"));
             } catch (UnsupportedEncodingException ex) {
-                LOG.trace("Unable to encode query: '{}' trying raw.", query);
+                LOG.trace("Unable to encode query: '{}' trying raw.", query, ex);
                 // If we can't encode it, try it raw
                 urlString.append(query);
             }
