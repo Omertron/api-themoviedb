@@ -20,8 +20,16 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.wrapper.*;
-
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
+import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.wrapper.WrapperReviews;
+import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import java.util.List;
 
 /**
@@ -399,7 +407,7 @@ public class MovieDb extends AbstractJsonMapping {
         if (this.id != other.id) {
             return false;
         }
-        if ((this.imdbID == null) ? (other.imdbID != null) : !this.imdbID.equals(other.imdbID)) {
+        if (this.imdbID == null ? other.imdbID != null : !this.imdbID.equals(other.imdbID)) {
             return false;
         }
         if (this.runtime != other.runtime) {

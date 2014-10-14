@@ -110,16 +110,16 @@ public class Collection extends AbstractJsonMapping {
             return false;
         }
         final Collection other = (Collection) obj;
-        if ((this.backdropPath == null) ? (other.backdropPath != null) : !this.backdropPath.equals(other.backdropPath)) {
+        if (this.backdropPath == null ? other.backdropPath != null : !this.backdropPath.equals(other.backdropPath)) {
             return false;
         }
         if (this.id != other.id) {
             return false;
         }
-        if ((this.title == null) ? (other.title != null) : !this.title.equals(other.title)) {
+        if (this.title == null ? other.title != null : !this.title.equals(other.title)) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
         return true;

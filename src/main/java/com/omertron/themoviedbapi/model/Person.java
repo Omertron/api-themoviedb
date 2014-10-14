@@ -20,10 +20,9 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author stuart.boston
@@ -274,22 +273,22 @@ public class Person extends AbstractJsonMapping {
         if (this.id != other.id) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
-        if ((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath)) {
+        if (this.profilePath == null ? other.profilePath != null : !this.profilePath.equals(other.profilePath)) {
             return false;
         }
         if (this.personType != other.personType) {
             return false;
         }
-        if ((this.department == null) ? (other.department != null) : !this.department.equals(other.department)) {
+        if (this.department == null ? other.department != null : !this.department.equals(other.department)) {
             return false;
         }
-        if ((this.job == null) ? (other.job != null) : !this.job.equals(other.job)) {
+        if (this.job == null ? other.job != null : !this.job.equals(other.job)) {
             return false;
         }
-        if ((this.character == null) ? (other.character != null) : !this.character.equals(other.character)) {
+        if (this.character == null ? other.character != null : !this.character.equals(other.character)) {
             return false;
         }
         return true;

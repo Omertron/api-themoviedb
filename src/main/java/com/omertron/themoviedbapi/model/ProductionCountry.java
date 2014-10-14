@@ -63,10 +63,10 @@ public class ProductionCountry extends AbstractJsonMapping {
             return false;
         }
         final ProductionCountry other = (ProductionCountry) obj;
-        if ((this.isoCode == null) ? (other.isoCode != null) : !this.isoCode.equals(other.isoCode)) {
+        if (this.isoCode == null ? other.isoCode != null : !this.isoCode.equals(other.isoCode)) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
         return true;

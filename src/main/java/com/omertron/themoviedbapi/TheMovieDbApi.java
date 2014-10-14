@@ -339,7 +339,7 @@ public class TheMovieDbApi {
      * @param distance
      */
     private static boolean compareDistance(String title1, String title2, int distance) {
-        return (StringUtils.getLevenshteinDistance(title1, title2) <= distance);
+        return StringUtils.getLevenshteinDistance(title1, title2) <= distance;
     }
 
     /**
@@ -348,7 +348,7 @@ public class TheMovieDbApi {
      * @param year
      */
     private static boolean isValidYear(String year) {
-        return (StringUtils.isNotBlank(year) && !"UNKNOWN".equals(year));
+        return StringUtils.isNotBlank(year) && !"UNKNOWN".equals(year);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Configuration Functions">
@@ -378,7 +378,7 @@ public class TheMovieDbApi {
         sb.append(requiredSize);
         sb.append(imagePath);
         try {
-            return (new URL(sb.toString()));
+            return new URL(sb.toString());
         } catch (MalformedURLException ex) {
             LOG.warn("Failed to create image URL: {}", ex.getMessage(), ex);
             throw new MovieDbException(MovieDbExceptionType.INVALID_URL, sb.toString(), "", ex);

@@ -71,13 +71,13 @@ public class ReleaseInfo extends AbstractJsonMapping {
             return false;
         }
         final ReleaseInfo other = (ReleaseInfo) obj;
-        if ((this.country == null) ? (other.country != null) : !this.country.equals(other.country)) {
+        if (this.country == null ? other.country != null : !this.country.equals(other.country)) {
             return false;
         }
-        if ((this.certification == null) ? (other.certification != null) : !this.certification.equals(other.certification)) {
+        if (this.certification == null ? other.certification != null : !this.certification.equals(other.certification)) {
             return false;
         }
-        if ((this.releaseDate == null) ? (other.releaseDate != null) : !this.releaseDate.equals(other.releaseDate)) {
+        if (this.releaseDate == null ? other.releaseDate != null : !this.releaseDate.equals(other.releaseDate)) {
             return false;
         }
         return true;

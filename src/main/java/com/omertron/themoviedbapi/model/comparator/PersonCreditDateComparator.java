@@ -76,7 +76,7 @@ public class PersonCreditDateComparator implements Comparator<PersonCredit>, Ser
 
         int year1 = extractYear(pc1.getReleaseDate());
         int year2 = extractYear(pc2.getReleaseDate());
-        return ascending ? (year1 - year2) : (year2 - year1);
+        return ascending ? year1 - year2 : year2 - year1;
     }
 
     /**
@@ -89,7 +89,7 @@ public class PersonCreditDateComparator implements Comparator<PersonCredit>, Ser
         int year = 0;
         Matcher m = YEAR_PATTERN.matcher(date);
         if (m.find()) {
-            year = Integer.valueOf(m.group(1)).intValue();
+            year = Integer.parseInt(m.group(1));
         }
 
         // Give up and return 0

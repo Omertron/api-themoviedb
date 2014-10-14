@@ -90,13 +90,13 @@ public class Trailer extends AbstractJsonMapping {
             return false;
         }
         final Trailer other = (Trailer) obj;
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
-        if ((this.size == null) ? (other.size != null) : !this.size.equals(other.size)) {
+        if (this.size == null ? other.size != null : !this.size.equals(other.size)) {
             return false;
         }
-        if ((this.source == null) ? (other.source != null) : !this.source.equals(other.source)) {
+        if (this.source == null ? other.source != null : !this.source.equals(other.source)) {
             return false;
         }
         return true;

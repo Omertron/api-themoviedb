@@ -19,12 +19,13 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import org.apache.commons.lang3.StringUtils;
-
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ADULT;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
+import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_YEAR;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.omertron.themoviedbapi.tools.ApiUrl.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Generate a discover object for use in the MovieDbApi
@@ -273,6 +274,6 @@ public class Discover {
      * @return
      */
     private boolean checkYear(int year) {
-        return (year >= YEAR_MIN && year <= YEAR_MAX);
+        return year >= YEAR_MIN && year <= YEAR_MAX;
     }
 }

@@ -65,7 +65,7 @@ public class Genre extends AbstractJsonMapping {
         if (this.id != other.id) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
         return true;

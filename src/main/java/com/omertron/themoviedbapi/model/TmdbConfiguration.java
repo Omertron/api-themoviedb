@@ -20,9 +20,8 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author stuart.boston
@@ -176,9 +175,9 @@ public class TmdbConfiguration extends AbstractJsonMapping {
      * @return
      */
     public boolean isValidSize(String sizeToCheck) {
-        return (isValidPosterSize(sizeToCheck)
+        return isValidPosterSize(sizeToCheck)
                 || isValidBackdropSize(sizeToCheck)
                 || isValidProfileSize(sizeToCheck)
-                || isValidLogoSize(sizeToCheck));
+                || isValidLogoSize(sizeToCheck);
     }
 }

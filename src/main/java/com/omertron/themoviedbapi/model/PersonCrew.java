@@ -105,13 +105,13 @@ public class PersonCrew extends AbstractJsonMapping {
         if (this.id != other.id) {
             return false;
         }
-        if ((this.department == null) ? (other.department != null) : !this.department.equals(other.department)) {
+        if (this.department == null ? other.department != null : !this.department.equals(other.department)) {
             return false;
         }
-        if ((this.job == null) ? (other.job != null) : !this.job.equals(other.job)) {
+        if (this.job == null ? other.job != null : !this.job.equals(other.job)) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
         return true;

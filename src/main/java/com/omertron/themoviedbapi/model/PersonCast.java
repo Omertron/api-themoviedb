@@ -115,16 +115,16 @@ public class PersonCast extends AbstractJsonMapping {
         if (this.id != other.id) {
             return false;
         }
-        if ((this.character == null) ? (other.character != null) : !this.character.equals(other.character)) {
+        if (this.character == null ? other.character != null : !this.character.equals(other.character)) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
         if (this.order != other.order) {
             return false;
         }
-        if ((this.profilePath == null) ? (other.profilePath != null) : !this.profilePath.equals(other.profilePath)) {
+        if (this.profilePath == null ? other.profilePath != null : !this.profilePath.equals(other.profilePath)) {
             return false;
         }
         return true;

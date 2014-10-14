@@ -73,13 +73,13 @@ public class Translation extends AbstractJsonMapping {
             return false;
         }
         final Translation other = (Translation) obj;
-        if ((this.englishName == null) ? (other.englishName != null) : !this.englishName.equals(other.englishName)) {
+        if (this.englishName == null ? other.englishName != null : !this.englishName.equals(other.englishName)) {
             return false;
         }
-        if ((this.isoCode == null) ? (other.isoCode != null) : !this.isoCode.equals(other.isoCode)) {
+        if (this.isoCode == null ? other.isoCode != null : !this.isoCode.equals(other.isoCode)) {
             return false;
         }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
             return false;
         }
         return true;

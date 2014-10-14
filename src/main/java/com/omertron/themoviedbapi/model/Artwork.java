@@ -142,13 +142,13 @@ public class Artwork extends AbstractJsonMapping {
         if (Float.floatToIntBits(this.aspectRatio) != Float.floatToIntBits(other.aspectRatio)) {
             return false;
         }
-        if ((this.filePath == null) ? (other.filePath != null) : !this.filePath.equals(other.filePath)) {
+        if (this.filePath == null ? other.filePath != null : !this.filePath.equals(other.filePath)) {
             return false;
         }
         if (this.height != other.height) {
             return false;
         }
-        if ((this.language == null) ? (other.language != null) : !this.language.equals(other.language)) {
+        if (this.language == null ? other.language != null : !this.language.equals(other.language)) {
             return false;
         }
         if (this.width != other.width) {

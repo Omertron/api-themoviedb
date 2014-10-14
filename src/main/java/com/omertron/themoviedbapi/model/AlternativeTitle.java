@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 /**
@@ -67,10 +66,10 @@ public class AlternativeTitle implements Serializable {
             return false;
         }
         final AlternativeTitle other = (AlternativeTitle) obj;
-        if ((this.country == null) ? (other.country != null) : !this.country.equals(other.country)) {
+        if (this.country == null ? other.country != null : !this.country.equals(other.country)) {
             return false;
         }
-        if ((this.title == null) ? (other.title != null) : !this.title.equals(other.title)) {
+        if (this.title == null ? other.title != null : !this.title.equals(other.title)) {
             return false;
         }
         return true;
