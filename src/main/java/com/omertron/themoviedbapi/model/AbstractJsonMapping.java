@@ -20,12 +20,11 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.Serializable;
 
 /**
  * Abstract class to handle any unknown properties by outputting a log message
@@ -34,19 +33,7 @@ import java.io.Serializable;
  */
 public abstract class AbstractJsonMapping implements Serializable {
 
-    private Logger log = null;
-
-    /**
-     * Return the current logger.
-     *
-     * @return
-     */
-    private Logger getLogger() {
-        if (log == null) {
-            log = LoggerFactory.getLogger(this.getClass());
-        }
-        return log;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractJsonMapping.class);
 
     /**
      * Handle unknown properties and print a message
@@ -60,7 +47,7 @@ public abstract class AbstractJsonMapping implements Serializable {
         unknown.append(": Unknown property='").append(key);
         unknown.append("' value='").append(value).append("'");
 
-        getLogger().trace(unknown.toString());
+        LOG.trace(unknown.toString());
     }
 
     @Override
