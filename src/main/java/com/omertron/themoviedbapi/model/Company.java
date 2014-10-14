@@ -104,7 +104,7 @@ public class Company extends AbstractJsonMapping {
 
     public void setParentCompany(int id, String name, String logoPath) {
         Company parent = new Company();
-        parent.setCompanyId(companyId);
+        parent.setCompanyId(id);
         parent.setName(name);
         parent.setLogoPath(logoPath);
         this.parentCompany = parent;
