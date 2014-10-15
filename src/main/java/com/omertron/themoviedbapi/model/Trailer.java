@@ -19,6 +19,9 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * @author Stuart
  */
@@ -83,32 +86,25 @@ public class Trailer extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof Trailer) {
+            final Trailer other = (Trailer) obj;
+            return new EqualsBuilder()
+                    .append(name, other.name)
+                    .append(size, other.size)
+                    .append(source, other.source)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Trailer other = (Trailer) obj;
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        if (this.size == null ? other.size != null : !this.size.equals(other.size)) {
-            return false;
-        }
-        if (this.source == null ? other.source != null : !this.source.equals(other.source)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 61 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 61 * hash + (this.size != null ? this.size.hashCode() : 0);
-        hash = 61 * hash + (this.source != null ? this.source.hashCode() : 0);
-        hash = 61 * hash + (this.website != null ? this.website.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(name)
+                .append(size)
+                .append(source)
+                .append(website)
+                .toHashCode();
     }
 }

@@ -6,6 +6,8 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  *
@@ -40,25 +42,23 @@ public class AbstractIdName extends AbstractJsonMapping {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(final Object obj) {
+        if (obj instanceof AbstractIdName) {
+            final AbstractIdName other = (AbstractIdName) obj;
+            return new EqualsBuilder()
+                    .append(name, other.name)
+                    .append(id, other.id)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final AbstractIdName other = (AbstractIdName) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return !(this.name == null ? other.name != null : !this.name.equals(other.name));
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + this.id;
-        hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(id)
+                .append(name)
+                .toHashCode();
     }
 }

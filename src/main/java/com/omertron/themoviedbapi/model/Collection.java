@@ -22,6 +22,8 @@ package com.omertron.themoviedbapi.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author stuart.boston
@@ -103,37 +105,28 @@ public class Collection extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof Collection) {
+            final Collection other = (Collection) obj;
+            return new EqualsBuilder()
+                    .append(id, other.id)
+                    .append(name, other.name)
+                    .append(title, other.title)
+                    .append(backdropPath, other.backdropPath)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Collection other = (Collection) obj;
-        if (this.backdropPath == null ? other.backdropPath != null : !this.backdropPath.equals(other.backdropPath)) {
-            return false;
-        }
-        if (this.id != other.id) {
-            return false;
-        }
-        if (this.title == null ? other.title != null : !this.title.equals(other.title)) {
-            return false;
-        }
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 19 * hash + (this.backdropPath != null ? this.backdropPath.hashCode() : 0);
-        hash = 19 * hash + this.id;
-        hash = 19 * hash + (this.title != null ? this.title.hashCode() : 0);
-        hash = 19 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 19 * hash + (this.posterPath != null ? this.posterPath.hashCode() : 0);
-        hash = 19 * hash + (this.releaseDate != null ? this.releaseDate.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(id)
+                .append(backdropPath)
+                .append(title)
+                .append(name)
+                .append(posterPath)
+                .append(releaseDate)
+                .toHashCode();
     }
 }

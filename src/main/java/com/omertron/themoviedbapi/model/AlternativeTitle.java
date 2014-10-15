@@ -21,6 +21,8 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author Stuart
@@ -59,27 +61,22 @@ public class AlternativeTitle implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof AlternativeTitle) {
+            final AlternativeTitle other = (AlternativeTitle) obj;
+            return new EqualsBuilder()
+                    .append(country, other.country)
+                    .append(title, other.title)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final AlternativeTitle other = (AlternativeTitle) obj;
-        if (this.country == null ? other.country != null : !this.country.equals(other.country)) {
-            return false;
-        }
-        if (this.title == null ? other.title != null : !this.title.equals(other.title)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + (this.country != null ? this.country.hashCode() : 0);
-        hash = 89 * hash + (this.title != null ? this.title.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(country)
+                .append(title)
+                .toHashCode();
     }
 }

@@ -20,6 +20,8 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -66,32 +68,25 @@ public class Translation extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof Translation) {
+            final Translation other = (Translation) obj;
+            return new EqualsBuilder()
+                    .append(name, other.name)
+                    .append(englishName, other.englishName)
+                    .append(isoCode, other.isoCode)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Translation other = (Translation) obj;
-        if (this.englishName == null ? other.englishName != null : !this.englishName.equals(other.englishName)) {
-            return false;
-        }
-        if (this.isoCode == null ? other.isoCode != null : !this.isoCode.equals(other.isoCode)) {
-            return false;
-        }
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + (this.englishName != null ? this.englishName.hashCode() : 0);
-        hash = 29 * hash + (this.isoCode != null ? this.isoCode.hashCode() : 0);
-        hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(englishName)
+                .append(isoCode)
+                .append(name)
+                .toHashCode();
     }
 
     @Override

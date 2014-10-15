@@ -20,6 +20,8 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author Stuart
@@ -64,31 +66,24 @@ public class ReleaseInfo extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof ReleaseInfo) {
+            final ReleaseInfo other = (ReleaseInfo) obj;
+            return new EqualsBuilder()
+                    .append(country, other.country)
+                    .append(certification, other.certification)
+                    .append(releaseDate, other.releaseDate)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ReleaseInfo other = (ReleaseInfo) obj;
-        if (this.country == null ? other.country != null : !this.country.equals(other.country)) {
-            return false;
-        }
-        if (this.certification == null ? other.certification != null : !this.certification.equals(other.certification)) {
-            return false;
-        }
-        if (this.releaseDate == null ? other.releaseDate != null : !this.releaseDate.equals(other.releaseDate)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + (this.country != null ? this.country.hashCode() : 0);
-        hash = 89 * hash + (this.certification != null ? this.certification.hashCode() : 0);
-        hash = 89 * hash + (this.releaseDate != null ? this.releaseDate.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(country)
+                .append(certification)
+                .append(releaseDate)
+                .toHashCode();
     }
 }

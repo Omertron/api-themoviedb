@@ -20,6 +20,8 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * The artwork type information
@@ -132,43 +134,30 @@ public class Artwork extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof Artwork) {
+            final Artwork other = (Artwork) obj;
+            return new EqualsBuilder()
+                    .append(aspectRatio, other.aspectRatio)
+                    .append(filePath, other.filePath)
+                    .append(language, other.language)
+                    .append(height, other.height)
+                    .append(width, other.width)
+                    .append(artworkType, other.artworkType)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Artwork other = (Artwork) obj;
-        if (Float.floatToIntBits(this.aspectRatio) != Float.floatToIntBits(other.aspectRatio)) {
-            return false;
-        }
-        if (this.filePath == null ? other.filePath != null : !this.filePath.equals(other.filePath)) {
-            return false;
-        }
-        if (this.height != other.height) {
-            return false;
-        }
-        if (this.language == null ? other.language != null : !this.language.equals(other.language)) {
-            return false;
-        }
-        if (this.width != other.width) {
-            return false;
-        }
-        if (this.artworkType != other.artworkType) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Float.floatToIntBits(this.aspectRatio);
-        hash = 71 * hash + (this.filePath != null ? this.filePath.hashCode() : 0);
-        hash = 71 * hash + this.height;
-        hash = 71 * hash + (this.language != null ? this.language.hashCode() : 0);
-        hash = 71 * hash + this.width;
-        hash = 71 * hash + (this.artworkType != null ? this.artworkType.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(aspectRatio)
+                .append(filePath)
+                .append(height)
+                .append(width)
+                .append(language)
+                .append(artworkType)
+                .toHashCode();
     }
 }

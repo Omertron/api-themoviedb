@@ -21,6 +21,8 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author Stuart
@@ -105,39 +107,28 @@ public class PersonCast extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof PersonCast) {
+            final PersonCast other = (PersonCast) obj;
+            return new EqualsBuilder()
+                    .append(id, other.id)
+                    .append(name, other.name)
+                    .append(character, other.character)
+                    .append(order, other.order)
+                    .append(profilePath, other.profilePath)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PersonCast other = (PersonCast) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (this.character == null ? other.character != null : !this.character.equals(other.character)) {
-            return false;
-        }
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        if (this.order != other.order) {
-            return false;
-        }
-        if (this.profilePath == null ? other.profilePath != null : !this.profilePath.equals(other.profilePath)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + this.id;
-        hash = 41 * hash + (this.character != null ? this.character.hashCode() : 0);
-        hash = 41 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 41 * hash + this.order;
-        hash = 41 * hash + (this.profilePath != null ? this.profilePath.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(id)
+                .append(character)
+                .append(name)
+                .append(order)
+                .append(profilePath)
+                .toHashCode();
     }
 }

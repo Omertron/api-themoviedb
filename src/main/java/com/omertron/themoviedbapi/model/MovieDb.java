@@ -31,6 +31,8 @@ import com.omertron.themoviedbapi.wrapper.WrapperReviews;
 import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import java.util.List;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Movie Bean
@@ -397,32 +399,25 @@ public class MovieDb extends AbstractJsonMapping {
     //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof MovieDb) {
+            final MovieDb other = (MovieDb) obj;
+            return new EqualsBuilder()
+                    .append(id, other.id)
+                    .append(imdbID, other.imdbID)
+                    .append(runtime, other.runtime)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final MovieDb other = (MovieDb) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (this.imdbID == null ? other.imdbID != null : !this.imdbID.equals(other.imdbID)) {
-            return false;
-        }
-        if (this.runtime != other.runtime) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + this.id;
-        hash = 89 * hash + (this.imdbID != null ? this.imdbID.hashCode() : 0);
-        hash = 89 * hash + this.runtime;
-        return hash;
+        return new HashCodeBuilder()
+                .append(id)
+                .append(imdbID)
+                .append(runtime)
+                .toHashCode();
     }
     // </editor-fold>
 }

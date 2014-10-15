@@ -23,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author stuart.boston
@@ -263,47 +265,32 @@ public class Person extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof Person) {
+            final Person other = (Person) obj;
+            return new EqualsBuilder()
+                    .append(id, other.id)
+                    .append(name, other.name)
+                    .append(profilePath, other.profilePath)
+                    .append(personType, other.personType)
+                    .append(department, other.department)
+                    .append(job, other.job)
+                    .append(character, other.character)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Person other = (Person) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        if (this.profilePath == null ? other.profilePath != null : !this.profilePath.equals(other.profilePath)) {
-            return false;
-        }
-        if (this.personType != other.personType) {
-            return false;
-        }
-        if (this.department == null ? other.department != null : !this.department.equals(other.department)) {
-            return false;
-        }
-        if (this.job == null ? other.job != null : !this.job.equals(other.job)) {
-            return false;
-        }
-        if (this.character == null ? other.character != null : !this.character.equals(other.character)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + this.id;
-        hash = 37 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 37 * hash + (this.profilePath != null ? this.profilePath.hashCode() : 0);
-        hash = 37 * hash + (this.personType != null ? this.personType.hashCode() : 0);
-        hash = 37 * hash + (this.department != null ? this.department.hashCode() : 0);
-        hash = 37 * hash + (this.job != null ? this.job.hashCode() : 0);
-        hash = 37 * hash + (this.character != null ? this.character.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(id)
+                .append(name)
+                .append(profilePath)
+                .append(personType)
+                .append(department)
+                .append(job)
+                .append(character)
+                .toHashCode();
     }
 }

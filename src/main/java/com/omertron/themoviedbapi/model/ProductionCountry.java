@@ -21,6 +21,8 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author stuart.boston
@@ -56,27 +58,22 @@ public class ProductionCountry extends AbstractJsonMapping {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj instanceof ProductionCountry) {
+            final ProductionCountry other = (ProductionCountry) obj;
+            return new EqualsBuilder()
+                    .append(name, other.name)
+                    .append(isoCode, other.isoCode)
+                    .isEquals();
+        } else {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ProductionCountry other = (ProductionCountry) obj;
-        if (this.isoCode == null ? other.isoCode != null : !this.isoCode.equals(other.isoCode)) {
-            return false;
-        }
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + (this.isoCode != null ? this.isoCode.hashCode() : 0);
-        hash = 47 * hash + (this.name != null ? this.name.hashCode() : 0);
-        return hash;
+        return new HashCodeBuilder()
+                .append(isoCode)
+                .append(name)
+                .toHashCode();
     }
 }
