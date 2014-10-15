@@ -139,6 +139,9 @@ public class TheMovieDbApi {
     private static ObjectMapper mapper = new ObjectMapper();
     // Constants
     private static final String MOVIE_ID = "movie_id";
+    private static final int YEAR_LENGTH = 4;
+    private static final int RATING_MAX = 10;
+    private static final int POST_SUCCESS_STATUS_CODE = 12;
 
     /**
      * API for The Movie Db.
@@ -300,7 +303,7 @@ public class TheMovieDbApi {
 
         if (isValidYear(year) && isValidYear(moviedb.getReleaseDate())) {
             // Compare with year
-            String movieYear = moviedb.getReleaseDate().substring(0, 4);
+            String movieYear = moviedb.getReleaseDate().substring(0, YEAR_LENGTH);
             if (movieYear.equals(year)) {
                 if (compareDistance(cmpOriginalTitle, cmpTitle, maxDistance)) {
                     return Boolean.TRUE;
@@ -1268,7 +1271,7 @@ public class TheMovieDbApi {
 
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
-        if (rating < 0 || rating > 10) {
+        if (rating < 0 || rating > RATING_MAX) {
             throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Rating out of range", apiUrl.buildUrl());
         }
 
@@ -1281,7 +1284,7 @@ public class TheMovieDbApi {
             StatusCode status = mapper.readValue(webpage, StatusCode.class);
             LOG.info("Status: {}", status);
             int code = status.getStatusCode();
-            return code == 12;
+            return code == POST_SUCCESS_STATUS_CODE;
         } catch (IOException ex) {
             LOG.warn("Failed to post movie rating: {}", ex.getMessage(), ex);
             throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
