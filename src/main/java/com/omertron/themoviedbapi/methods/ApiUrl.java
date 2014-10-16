@@ -81,6 +81,7 @@ public class ApiUrl {
     public static final String PARAM_END_DATE = "end_date=";
     public static final String PARAM_FIRST_AIR_DATE_YEAR = "first_air_date_year";
     public static final String PARAM_SEARCH_TYPE = "search_type";
+    public static final String PARAM_EXTERNAL_SOURCE = "external_source=";
     private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">

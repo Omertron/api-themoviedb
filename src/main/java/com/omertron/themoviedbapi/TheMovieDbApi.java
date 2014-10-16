@@ -21,12 +21,14 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
+import com.omertron.themoviedbapi.methods.TmdbCertifications;
 import com.omertron.themoviedbapi.methods.TmdbChanges;
 import com.omertron.themoviedbapi.methods.TmdbCollections;
 import com.omertron.themoviedbapi.methods.TmdbCompanies;
 import com.omertron.themoviedbapi.methods.TmdbConfiguration;
 import com.omertron.themoviedbapi.methods.TmdbCredits;
 import com.omertron.themoviedbapi.methods.TmdbDiscover;
+import com.omertron.themoviedbapi.methods.TmdbFind;
 import com.omertron.themoviedbapi.methods.TmdbGenres;
 import com.omertron.themoviedbapi.methods.TmdbJobs;
 import com.omertron.themoviedbapi.methods.TmdbKeywords;
@@ -40,6 +42,7 @@ import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.Certification;
 import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.ChangedMovie;
 import com.omertron.themoviedbapi.model.Collection;
@@ -97,12 +100,14 @@ public class TheMovieDbApi {
     // Sub-methods
     private static TmdbAccount tmdbAccount;
     private static TmdbAuthentication tmdbAuth;
+    private static TmdbCertifications tmdbCertifications;
     private static TmdbChanges tmdbChanges;
     private static TmdbCollections tmdbCollections;
     private static TmdbCompanies tmdbCompany;
     private static TmdbConfiguration tmdbConfiguration;
     private static TmdbCredits tmdbCredits;
     private static TmdbDiscover tmdbDiscover;
+    private static TmdbFind tmdbFind;
     private static TmdbGenres tmdbGenre;
     private static TmdbJobs tmdbJobs;
     private static TmdbKeywords tmdbKeyword;
@@ -146,12 +151,14 @@ public class TheMovieDbApi {
     private void initialise(String apiKey, CommonHttpClient httpClient) {
         tmdbAccount = new TmdbAccount(apiKey, httpClient);
         tmdbAuth = new TmdbAuthentication(apiKey, httpClient);
+        tmdbCertifications = new TmdbCertifications(apiKey, httpClient);
         tmdbChanges = new TmdbChanges(apiKey, httpClient);
         tmdbCollections = new TmdbCollections(apiKey, httpClient);
         tmdbCompany = new TmdbCompanies(apiKey, httpClient);
         tmdbConfiguration = new TmdbConfiguration(apiKey, httpClient);
         tmdbCredits = new TmdbCredits(apiKey, httpClient);
         tmdbDiscover = new TmdbDiscover(apiKey, httpClient);
+        tmdbFind = new TmdbFind(apiKey,httpClient);
         tmdbGenre = new TmdbGenres(apiKey, httpClient);
         tmdbJobs = new TmdbJobs(apiKey, httpClient);
         tmdbKeyword = new TmdbKeywords(apiKey, httpClient);
@@ -401,6 +408,30 @@ public class TheMovieDbApi {
         return tmdbAuth.getGuestSessionToken();
     }
      //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Certification Functions">
+    /**
+     * You can use this method to retrieve the list of movie certification used 
+     * on TMDb.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsMap<String, List<Certification>> getMovieCertificationList() throws MovieDbException {
+        return tmdbCertifications.getMoviesCertification();
+    }
+
+    /**
+     * You can use this method to retrieve the list of TV certification used 
+     * on TMDb.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsMap<String, List<Certification>> getTvCertificationList() throws MovieDbException {
+        return tmdbCertifications.getTvCertification();
+    }
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Changes Functions">
     /**
@@ -637,7 +668,48 @@ public class TheMovieDbApi {
         return tmdbDiscover.getDiscoverTv(discover);
     }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Find Functions">
+    /**
+     * You can use this method to retrieve the list of movie using external ids.
+     *
+     * @param externalId the external id of the movie.
+     * @param externalSource one of {@link TmdbFind.ExternalSource}.
+     * @param language the language
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> findMoviesFromExternalId(String externalId, TmdbFind.ExternalSource externalSource, String language) throws MovieDbException {
+        return tmdbFind.find(externalId, externalSource, language).getMovieResults();
+    }
 
+    /**
+     * You can use this method to retrieve the list of tv series using external ids.
+     *
+     * @param externalId the external id of the movie.
+     * @param externalSource one of {@link TmdbFind.ExternalSource}.
+     * @param language the language
+     * @return
+     * @throws MovieDbException
+     */
+    public List<TVSeries> findTvSeriesFromExternalId(String externalId, TmdbFind.ExternalSource externalSource, String language) throws MovieDbException {
+        return tmdbFind.find(externalId, externalSource, language).getTvResults();
+    }
+    
+    /**
+     * You can use this method to retrieve the list of persons using external ids.
+     *
+     * @param externalId the external id of the movie.
+     * @param externalSource one of {@link TmdbFind.ExternalSource}.
+     * @param language the language
+     * @return
+     * @throws MovieDbException
+     */
+    public List<Person> findPersonsFromExternalId(String externalId, TmdbFind.ExternalSource externalSource, String language) throws MovieDbException {
+        return tmdbFind.find(externalId, externalSource, language).getPersonResults();
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Genres Functions">
     /**
      * You can use this method to retrieve the list of genres used on TMDb.
