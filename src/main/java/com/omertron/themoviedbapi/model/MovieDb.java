@@ -93,7 +93,7 @@ public class MovieDb extends AbstractJsonMapping {
     private WrapperMovieKeywords keywords;
     @JsonProperty("releases")
     private WrapperReleaseInfo releases;
-    @JsonProperty("trailers")
+    @JsonProperty("videos")
     private WrapperTrailers trailers;
     @JsonProperty("translations")
     private WrapperTranslations translations;
