@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -37,12 +38,20 @@ public class Trailer extends AbstractJsonMapping {
     /*
      * Properties
      */
+    private String id;
     private String name;
     private String size;
-    private String source;
+    private String key;
     // The website of the trailer
-    private String website;
+    private String site;
     private String type;
+
+    @JsonProperty("iso_639_1")
+    private String language;
+
+    public String getId() {
+            return id;
+    }
 
     public String getName() {
         return name;
@@ -52,16 +61,24 @@ public class Trailer extends AbstractJsonMapping {
         return size;
     }
 
-    public String getSource() {
-        return source;
+    public String getKey() {
+        return key;
     }
 
-    public String getWebsite() {
-        return website;
+    public String getSite() {
+        return site;
     }
 
     public String getType() {
         return type;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -72,16 +89,20 @@ public class Trailer extends AbstractJsonMapping {
         this.size = size;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setWebsite(String website) {
-        this.website = website;
+    public void setSite(String site) {
+        this.site = site;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override
@@ -89,9 +110,11 @@ public class Trailer extends AbstractJsonMapping {
         if (obj instanceof Trailer) {
             final Trailer other = (Trailer) obj;
             return new EqualsBuilder()
+                    .append(id, other.id)
                     .append(name, other.name)
                     .append(size, other.size)
-                    .append(source, other.source)
+                    .append(key, other.key)
+                    .append(language, other.language)
                     .isEquals();
         } else {
             return false;
@@ -101,10 +124,12 @@ public class Trailer extends AbstractJsonMapping {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(id)
                 .append(name)
                 .append(size)
-                .append(source)
-                .append(website)
+                .append(key)
+                .append(site)
+                .append(language)
                 .toHashCode();
     }
 }

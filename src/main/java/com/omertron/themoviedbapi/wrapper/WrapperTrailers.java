@@ -21,8 +21,8 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Trailer;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,51 +32,15 @@ import java.util.List;
 public class WrapperTrailers extends AbstractWrapperId implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @JsonProperty("quicktime")
-    private List<Trailer> quicktime;
-    @JsonProperty("youtube")
-    private List<Trailer> youtube;
+    @JsonProperty("results")
+    private List<Trailer> trailers;
 
-    public List<Trailer> getQuicktime() {
-        return quicktime;
-    }
-
-    public List<Trailer> getYoutube() {
-        return youtube;
-    }
-
-    public void setQuicktime(List<Trailer> quicktime) {
-        this.quicktime = quicktime;
-    }
-
-    public void setYoutube(List<Trailer> youtube) {
-        this.youtube = youtube;
-    }
-
-    /**
-     * Get a combined list of the trailers with their source
-     *
-     * @return
-     */
-    public List<Trailer> getAll() {
-        List<Trailer> trailers = new ArrayList<Trailer>();
-
-        // Add the trailer to the return list along with it's source
-        if (quicktime != null) {
-            for (Trailer trailer : quicktime) {
-                trailer.setWebsite(Trailer.WEBSITE_QUICKTIME);
-                trailers.add(trailer);
-            }
-        }
-
-        // Add the trailer to the return list along with it's source
-        if (youtube != null) {
-            for (Trailer trailer : youtube) {
-                trailer.setWebsite(Trailer.WEBSITE_YOUTUBE);
-                trailers.add(trailer);
-            }
-        }
-
+    public List<Trailer> getTrailers() {
         return trailers;
     }
+
+    public void setTrailers(List<Trailer> trailers) {
+        this.trailers = trailers;
+    }
+
 }

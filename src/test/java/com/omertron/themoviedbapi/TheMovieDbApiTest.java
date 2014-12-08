@@ -19,57 +19,21 @@
  */
 package com.omertron.themoviedbapi;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-import java.util.Random;
-
+import com.omertron.themoviedbapi.model.*;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.omertron.themoviedbapi.model.Account;
-import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ChangedItem;
-import com.omertron.themoviedbapi.model.ChangedMovie;
-import com.omertron.themoviedbapi.model.Collection;
-import com.omertron.themoviedbapi.model.CollectionInfo;
-import com.omertron.themoviedbapi.model.Company;
-import com.omertron.themoviedbapi.model.Discover;
-import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.JobDepartment;
-import com.omertron.themoviedbapi.model.Keyword;
-import com.omertron.themoviedbapi.model.KeywordMovie;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.MovieDbList;
-import com.omertron.themoviedbapi.model.MovieList;
-import com.omertron.themoviedbapi.model.Person;
-import com.omertron.themoviedbapi.model.PersonCredit;
-import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
-import com.omertron.themoviedbapi.model.StatusCode;
-import com.omertron.themoviedbapi.model.TmdbConfiguration;
-import com.omertron.themoviedbapi.model.TokenAuthorisation;
-import com.omertron.themoviedbapi.model.TokenSession;
-import com.omertron.themoviedbapi.model.Trailer;
-import com.omertron.themoviedbapi.model.Translation;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import java.io.File;
+import java.util.List;
 import java.util.Properties;
-import org.apache.commons.lang3.math.NumberUtils;
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 /**
  * Test cases for TheMovieDbApi API

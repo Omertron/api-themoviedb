@@ -20,19 +20,11 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
-import com.omertron.themoviedbapi.wrapper.WrapperImages;
-import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
-import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
-import com.omertron.themoviedbapi.wrapper.WrapperReviews;
-import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
-import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
-import java.util.List;
+import com.omertron.themoviedbapi.wrapper.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.List;
 
 /**
  * Movie Bean
@@ -101,7 +93,7 @@ public class MovieDb extends AbstractJsonMapping {
     private WrapperMovieKeywords keywords;
     @JsonProperty("releases")
     private WrapperReleaseInfo releases;
-    @JsonProperty("trailers")
+    @JsonProperty("videos")
     private WrapperTrailers trailers;
     @JsonProperty("translations")
     private WrapperTranslations translations;
@@ -334,7 +326,7 @@ public class MovieDb extends AbstractJsonMapping {
     }
 
     public List<Trailer> getTrailers() {
-        return trailers.getAll();
+        return trailers.getTrailers();
     }
 
     public List<Translation> getTranslations() {
