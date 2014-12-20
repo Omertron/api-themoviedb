@@ -103,6 +103,8 @@ public class MovieDb extends AbstractJsonMapping {
     private WrapperReviews reviews;
     @JsonProperty("lists")
     private WrapperMovieList lists;
+    @JsonProperty("video")
+    private Boolean video = null;
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
@@ -199,6 +201,10 @@ public class MovieDb extends AbstractJsonMapping {
 
     public float getUserRating() {
         return userRating;
+    }
+
+    public Boolean getVideo() {
+        return video;
     }
     // </editor-fold>
 
@@ -298,8 +304,12 @@ public class MovieDb extends AbstractJsonMapping {
     public void setUserRating(float userRating) {
         this.userRating = userRating;
     }
-    // </editor-fold>
 
+    public void setVideo(Boolean video) {
+        this.video = video;
+    }
+    // </editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
     public List<AlternativeTitle> getAlternativeTitles() {
         return alternativeTitles.getTitles();
