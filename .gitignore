@@ -1,10 +1,12 @@
 *.class
-
 # Package Files #
 *.jar
 *.war
 *.ear
-
 /target/
 /nbactions.xml
 testing.properties
+.settings
+.classpath
+.project
+.DS_Store
