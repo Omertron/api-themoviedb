@@ -39,7 +39,6 @@ import org.yamj.api.common.http.DigestedResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omertron.themoviedbapi.MovieDbException.MovieDbExceptionType;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
@@ -98,12 +97,12 @@ import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
 import com.omertron.themoviedbapi.wrapper.WrapperReviews;
 import com.omertron.themoviedbapi.wrapper.WrapperTrailers;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * The MovieDb API
  * <p>
- * This is for version 3 of the API as specified here:
- * http://help.themoviedb.org/kb/api/about-3
+ * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -165,7 +164,7 @@ public class TheMovieDbApi {
             WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
             tmdbConfig = wc.getTmdbConfiguration();
         } catch (IOException ex) {
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, "Failed to read configuration", configUrl, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to read configuration", configUrl, ex);
         }
     }
 
@@ -199,32 +198,32 @@ public class TheMovieDbApi {
 
                 if (StringUtils.isNotBlank(jsonBody)) {
                     // TODO: Add the json body to the request
-                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request", url);
+                    throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request", url);
                 }
 
                 if (isDeleteRequest) {
                     //TODO: Handle delete request
-                    throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request", url);
+                    throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request", url);
                 }
 
                 final DigestedResponse response = httpClient.requestContent(httpGet);
                 if (response.getStatusCode() >= 300) {
 
                     if (response.getStatusCode() >= 500) {
-                        throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, response.getContent(), url, null);
+                        throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), url, null);
                     }
 
-                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_404_ERROR, response.getContent(), url, null);
+                    throw new MovieDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), url, null);
                 }
 
                 webpage = response.getContent();
 
             } catch (URISyntaxException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, url, ex);
+                throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
             } catch (IOException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, url, ex);
+                throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
             } catch (RuntimeException ex) {
-                throw new MovieDbException(MovieDbException.MovieDbExceptionType.HTTP_503_ERROR, "Service Unavailable", url, ex);
+                throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, "Service Unavailable", url, ex);
             }
         }
         return webpage;
@@ -284,8 +283,7 @@ public class TheMovieDbApi {
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
      * @param year The year of the movie to compare
-     * @param maxDistance The Levenshtein Distance between the two titles. 0 =
-     * exact match
+     * @param maxDistance The Levenshtein Distance between the two titles. 0 = exact match
      * @param caseSensitive true if the comparison is to be case sensitive
      * @return True if there is a match, False otherwise.
      */
@@ -384,7 +382,7 @@ public class TheMovieDbApi {
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
         if (!tmdbConfig.isValidSize(requiredSize)) {
-            throw new MovieDbException(MovieDbExceptionType.INVALID_IMAGE, requiredSize, "");
+            throw new MovieDbException(ApiExceptionType.INVALID_IMAGE, requiredSize, "");
         }
 
         StringBuilder sb = new StringBuilder(tmdbConfig.getBaseUrl());
@@ -394,23 +392,20 @@ public class TheMovieDbApi {
             return new URL(sb.toString());
         } catch (MalformedURLException ex) {
             LOG.warn("Failed to create image URL: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.INVALID_URL, sb.toString(), "", ex);
+            throw new MovieDbException(ApiExceptionType.INVALID_URL, sb.toString(), "", ex);
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Authentication Functions">
     /**
-     * This method is used to generate a valid request token for user based
-     * authentication.
+     * This method is used to generate a valid request token for user based authentication.
      *
      * A request token is required in order to request a session id.
      *
-     * You can generate any number of request tokens but they will expire after
-     * 60 minutes.
+     * You can generate any number of request tokens but they will expire after 60 minutes.
      *
-     * As soon as a valid session id has been created the token will be
-     * destroyed.
+     * As soon as a valid session id has been created the token will be destroyed.
      *
      * @return
      * @throws MovieDbException
@@ -425,13 +420,12 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, TokenAuthorisation.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get Authorisation Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to generate a session id for user based
-     * authentication.
+     * This method is used to generate a session id for user based authentication.
      *
      * A session id is required in order to use any of the write methods.
      *
@@ -444,7 +438,7 @@ public class TheMovieDbApi {
 
         if (!token.getSuccess()) {
             LOG.warn("Session token was not successful!");
-            throw new MovieDbException(MovieDbExceptionType.AUTHORISATION_FAILURE, "Authorisation token was not successful!", apiUrl.buildUrl());
+            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!", apiUrl.buildUrl());
         }
 
         apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
@@ -455,25 +449,21 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, TokenSession.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
      * This method is used to generate a guest session id.
      *
-     * A guest session can be used to rate movies without having a registered
-     * TMDb user account.
+     * A guest session can be used to rate movies without having a registered TMDb user account.
      *
-     * You should only generate a single guest session per user (or device) as
-     * you will be able to attach the ratings to a TMDb user account in the
-     * future.
+     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
+     * account in the future.
      *
-     * There are also IP limits in place so you should always make sure it's the
-     * end user doing the guest session actions.
+     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
      *
-     * If a guest session is not used for the first time within 24 hours, it
-     * will be automatically discarded.
+     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
      *
      * @return
      * @throws MovieDbException
@@ -488,13 +478,12 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, TokenSession.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get Guest Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * Get the basic information for an account. You will need to have a valid
-     * session id.
+     * Get the basic information for an account. You will need to have a valid session id.
      *
      * @param sessionId
      * @return
@@ -512,7 +501,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, Account.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get Account: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -527,7 +516,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get favorite movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -548,7 +537,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get favorite status: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -595,7 +584,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to modify watch list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
@@ -606,8 +595,7 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no
-     * movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param movieId
      * @param language
@@ -632,12 +620,12 @@ public class TheMovieDbApi {
             MovieDb movie = mapper.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
                 LOG.warn("No movie found for ID '{}'", movieId);
-                throw new MovieDbException(MovieDbExceptionType.MOVIE_ID_NOT_FOUND, "No movie found for ID: " + movieId, url);
+                throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for ID: " + movieId, url);
             }
             return movie;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -646,8 +634,7 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * MovieDbExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no
-     * movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param imdbId
      * @param language
@@ -672,18 +659,17 @@ public class TheMovieDbApi {
             MovieDb movie = mapper.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
                 LOG.warn("No movie found for IMDB ID: '{}'", imdbId);
-                throw new MovieDbException(MovieDbExceptionType.MOVIE_ID_NOT_FOUND, "No movie found for IMDB ID: " + imdbId, url);
+                throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for IMDB ID: " + imdbId, url);
             }
             return movie;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie info: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, "Failed to get movie info", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info", url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for
-     * a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for a particular movie.
      *
      * @param movieId
      * @param country
@@ -710,7 +696,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie alternative titles: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -740,13 +726,12 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie casts: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the
-     * images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -774,13 +759,12 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie images: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added
-     * to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -805,13 +789,12 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie keywords: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data
-     * we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -836,13 +819,12 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie release information: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular
-     * movie.
+     * This method is used to retrieve all of the trailers for a particular movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -872,13 +854,12 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie trailers: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for
-     * a specific movie.
+     * This method is used to retrieve a list of the available translations for a specific movie.
      *
      * @param movieId
      * @param appendToResponse
@@ -901,16 +882,14 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie tranlations: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a
-     * particular movie.
+     * The similar movies method will let you retrieve the similar movies for a particular movie.
      *
-     * This data is created dynamically but with the help of users votes on
-     * TMDb.
+     * This data is created dynamically but with the help of users votes on TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -945,7 +924,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get similar movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -973,7 +952,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get reviews: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1011,7 +990,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie lists: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1022,13 +1001,11 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is
-     * 14.
+     * The maximum number of days that can be returned in a single request is 14.
      *
      * The language is present on fields that are translatable.
      *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item
-     * changing type in the ChangeItem
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
      *
      * @param movieId
      * @param startDate the start date of the changes, optional
@@ -1061,7 +1038,7 @@ public class TheMovieDbApi {
             return new TmdbResultsMap<String, List<ChangedItem>>(results);
         } catch (IOException ex) {
             LOG.warn("Failed to get movie changes: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
 
     }
@@ -1081,7 +1058,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest movie: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1118,7 +1095,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get upcoming movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
 
     }
@@ -1126,8 +1103,7 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default
-     * response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
      *
      * TODO: Implement more than 20 movies
      *
@@ -1157,7 +1133,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get now playing movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1194,13 +1170,12 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get popular movie list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10
-     * votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
      *
      * The default response will return 20 movies.
      *
@@ -1232,7 +1207,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get top rated movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1255,7 +1230,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get rated movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1276,7 +1251,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         if (rating < 0 || rating > RATING_MAX) {
-            throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Rating out of range", apiUrl.buildUrl());
+            throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Rating out of range", apiUrl.buildUrl());
         }
 
         String jsonBody = convertToJson(Collections.singletonMap("value", rating));
@@ -1291,18 +1266,16 @@ public class TheMovieDbApi {
             return code == POST_SUCCESS_STATUS_CODE;
         } catch (IOException ex) {
             LOG.warn("Failed to post movie rating: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Collection Functions">
     /**
-     * This method is used to retrieve all of the basic information about a
-     * movie collection.
+     * This method is used to retrieve all of the basic information about a movie collection.
      *
-     * You can get the ID needed for this method by making a getMovieInfo
-     * request for the belongs_to_collection.
+     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
      *
      * @param collectionId
      * @param language
@@ -1324,7 +1297,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, CollectionInfo.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get collection information: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1354,7 +1327,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get collection images: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
@@ -1383,13 +1356,12 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get person info: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method is used to retrieve all of the cast & crew information for
-     * the person.
+     * This method is used to retrieve all of the cast & crew information for the person.
      *
      * It will return the single highest rated poster for each movie record.
      *
@@ -1414,7 +1386,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get person credits: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1440,7 +1412,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get person images: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1451,8 +1423,7 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is
-     * 14.
+     * The maximum number of days that can be returned in a single request is 14.
      *
      * The language is present on fields that are translatable.
      *
@@ -1463,7 +1434,7 @@ public class TheMovieDbApi {
      */
     public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
         LOG.trace("getPersonChanges: id: {}, start: {}, end: {}", personId, startDate, endDate);
-        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
 
     /**
@@ -1504,7 +1475,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get popular person: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1523,15 +1494,14 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest person: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Company Functions">
     /**
-     * This method is used to retrieve the basic information about a production
-     * company on TMDb.
+     * This method is used to retrieve the basic information about a production company on TMDb.
      *
      * @param companyId
      * @return
@@ -1549,15 +1519,14 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, Company.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get company information: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
      * This method is used to retrieve the movies associated with a company.
      *
-     * These movies are returned in order of most recently released to oldest.
-     * The default response will return 20 movies per page.
+     * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
      *
      * TODO: Implement more than 20 movies
      *
@@ -1590,7 +1559,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get company movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
@@ -1619,18 +1588,16 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get genre list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
      * Get a list of movies per genre.
      *
-     * It is important to understand that only movies with more than 10 votes
-     * get listed.
+     * It is important to understand that only movies with more than 10 votes get listed.
      *
-     * This prevents movies from 1 10/10 rating from being listed first and for
-     * the first 5 pages.
+     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
      *
      * @param genreId
      * @param language
@@ -1663,23 +1630,20 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get genre movie list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Search Functions">
     /**
-     * Search Movies This is a good starting point to start finding movies on
-     * TMDb.
+     * Search Movies This is a good starting point to start finding movies on TMDb.
      *
      * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will
-     * get all years
+     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
      * @param language The language to include. Can be blank/null.
      * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first
-     * page)
+     * @param page The page of results to return. 0 to get the default (first page)
      * @return
      * @throws MovieDbException
      */
@@ -1713,7 +1677,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find movie: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
 
     }
@@ -1752,15 +1716,14 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find collection: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
      * This is a good starting point to start finding people on TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through
-     * people quickly.
+     * The idea is to be a quick and light method so you can iterate through people quickly.
      *
      * @param personName
      * @param includeAdult
@@ -1787,7 +1750,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find person: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1825,15 +1788,15 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part
-     * of TMDb. The company IDs will map to those returned on movie calls.
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
+     * on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
@@ -1859,7 +1822,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find company: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1892,7 +1855,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to find keyword: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
@@ -1916,7 +1879,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, MovieDbList.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1939,7 +1902,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, WrapperMovieDbList.class).getLists();
         } catch (IOException ex) {
             LOG.warn("Failed to get user list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1969,7 +1932,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, MovieDbListStatus.class).getListId();
         } catch (IOException ex) {
             LOG.warn("Failed to create list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -1992,13 +1955,12 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
         } catch (IOException ex) {
             LOG.warn("Failed to get item status: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method lets users add new movies to a list that they created. A
-     * valid session id is required.
+     * This method lets users add new movies to a list that they created. A valid session id is required.
      *
      * @param sessionId
      * @param listId
@@ -2011,8 +1973,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method lets users remove movies from a list that they created. A
-     * valid session id is required.
+     * This method lets users remove movies from a list that they created. A valid session id is required.
      *
      * @param sessionId
      * @param listId
@@ -2038,7 +1999,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to remove movie from list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
@@ -2061,13 +2022,12 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
             LOG.warn("Failed to get watch list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     /**
-     * This method lets users delete a list that they created. A valid session
-     * id is required.
+     * This method lets users delete a list that they created. A valid session id is required.
      *
      * @param sessionId
      * @param listId
@@ -2086,7 +2046,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to delete movie list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
@@ -2110,7 +2070,7 @@ public class TheMovieDbApi {
             return mapper.readValue(webpage, Keyword.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get keyword: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
 
     }
@@ -2146,7 +2106,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get keyword movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
 
     }
@@ -2154,12 +2114,10 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Changes Functions">
     /**
-     * Get a list of movie ids that have been edited. By default we show the
-     * last 24 hours and only 100 items per page. The maximum number of days
-     * that can be returned in a single request is 14. You can then use the
-     * movie changes API to get the actual data that has been changed. Please
-     * note that the change log system to support this was changed on October 5,
-     * 2012 and will only show movies that have been edited since.
+     * Get a list of movie ids that have been edited. By default we show the last 24 hours and only 100 items per page. The maximum
+     * number of days that can be returned in a single request is 14. You can then use the movie changes API to get the actual data
+     * that has been changed. Please note that the change log system to support this was changed on October 5, 2012 and will only
+     * show movies that have been edited since.
      *
      * @param page
      * @param startDate the start date of the changes, optional
@@ -2192,13 +2150,13 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get movie changes: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
 
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
         LOG.trace("getPersonChangesList: page: {}, start: {}, end: {}", page, startDate, endDate);
-        throw new MovieDbException(MovieDbExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
     //</editor-fold>
 
@@ -2216,49 +2174,37 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get job list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Discover">
     /**
-     * Discover movies by different types of data like average rating, number of
-     * votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
      *
-     * You can alternatively create a "discover" object and pass it to this
-     * method to cut out the requirement for all of these parameters
+     * You can alternatively create a "discover" object and pass it to this method to cut out the requirement for all of these
+     * parameters
      *
      * @param page Minimum value is 1
      * @param language ISO 639-1 code.
-     * @param sortBy Available options are vote_average.desc, vote_average.asc,
-     * release_date.desc, release_date.asc, popularity.desc, popularity.asc
+     * @param sortBy Available options are vote_average.desc, vote_average.asc, release_date.desc, release_date.asc,
+     * popularity.desc, popularity.asc
      * @param includeAdult Toggle the inclusion of adult titles
-     * @param year Filter the results release dates to matches that include this
-     * value
-     * @param primaryReleaseYear Filter the results so that only the primary
-     * release date year has this value
-     * @param voteCountGte Only include movies that are equal to, or have a vote
-     * count higher than this value
-     * @param voteAverageGte Only include movies that are equal to, or have a
-     * higher average rating than this value
-     * @param withGenres Only include movies with the specified genres. Expected
-     * value is an integer (the id of a genre). Multiple values can be
-     * specified. Comma separated indicates an 'AND' query, while a pipe (|)
-     * separated value indicates an 'OR'.
-     * @param releaseDateGte The minimum release to include. Expected format is
-     * YYYY-MM-DD
-     * @param releaseDateLte The maximum release to include. Expected format is
-     * YYYY-MM-DD
-     * @param certificationCountry Only include movies with certifications for a
-     * specific country. When this value is specified, 'certificationLte' is
-     * required. A ISO 3166-1 is expected.
-     * @param certificationLte Only include movies with this certification and
-     * lower. Expected value is a valid certification for the specified
-     * 'certificationCountry'.
-     * @param withCompanies Filter movies to include a specific company.
-     * Expected value is an integer (the id of a company). They can be comma
-     * separated to indicate an 'AND' query.
+     * @param year Filter the results release dates to matches that include this value
+     * @param primaryReleaseYear Filter the results so that only the primary release date year has this value
+     * @param voteCountGte Only include movies that are equal to, or have a vote count higher than this value
+     * @param voteAverageGte Only include movies that are equal to, or have a higher average rating than this value
+     * @param withGenres Only include movies with the specified genres. Expected value is an integer (the id of a genre). Multiple
+     * values can be specified. Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'.
+     * @param releaseDateGte The minimum release to include. Expected format is YYYY-MM-DD
+     * @param releaseDateLte The maximum release to include. Expected format is YYYY-MM-DD
+     * @param certificationCountry Only include movies with certifications for a specific country. When this value is specified,
+     * 'certificationLte' is required. A ISO 3166-1 is expected.
+     * @param certificationLte Only include movies with this certification and lower. Expected value is a valid certification for
+     * the specified 'certificationCountry'.
+     * @param withCompanies Filter movies to include a specific company. Expected value is an integer (the id of a company). They
+     * can be comma separated to indicate an 'AND' query.
      * @return
      * @throws MovieDbException
      */
@@ -2286,8 +2232,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Discover movies by different types of data like average rating, number of
-     * votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
      *
      * @param discover A discover object containing the search criteria required
      * @return
@@ -2308,7 +2253,7 @@ public class TheMovieDbApi {
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get discover list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(MovieDbExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
     //</editor-fold>
@@ -2324,7 +2269,7 @@ public class TheMovieDbApi {
         try {
             return mapper.writeValueAsString(map);
         } catch (JsonProcessingException jpe) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.MAPPING_FAILED, "JSON conversion failed", "", jpe);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "JSON conversion failed", "", jpe);
         }
     }
 }

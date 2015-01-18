@@ -20,91 +20,44 @@
 package com.omertron.themoviedbapi;
 
 import java.net.URL;
+import org.yamj.api.common.exception.ApiException;
+import org.yamj.api.common.exception.ApiExceptionType;
 
-public class MovieDbException extends Exception {
+public class MovieDbException extends ApiException {
 
-    private static final long serialVersionUID = 1L;
-
-    public enum MovieDbExceptionType {
-        /*
-         * Unknown error occured
-         */
-        UNKNOWN_CAUSE,
-        /*
-         * URL is invalid
-         */
-        INVALID_URL,
-        /*
-         * Page not found
-         */
-        HTTP_404_ERROR,
-        /*
-         * The movie id was not found
-         */
-        MOVIE_ID_NOT_FOUND,
-        /*
-         * Mapping failed from target to internal onbjects
-         */
-        MAPPING_FAILED,
-        /*
-         * Error connecting to the service
-         */
-        CONNECTION_ERROR,
-        /*
-         * Image was invalid
-         */
-        INVALID_IMAGE,
-        /*
-         * Autorisation rejected
-         */
-        AUTHORISATION_FAILURE,
-        /*
-         * Service Unavailable, usually temporary
-         */
-        HTTP_503_ERROR;
+    public MovieDbException(ApiExceptionType exceptionType, String response) {
+        super(exceptionType, response);
     }
 
-    private final MovieDbExceptionType exceptionType;
-    private final String response;
-    private final String url;
-
-    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final String url) {
-        super();
-        this.exceptionType = exceptionType;
-        this.response = response;
-        this.url = url;
-    }
-    
-    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final URL url) {
-      super();
-      this.exceptionType = exceptionType;
-      this.response = response;
-      this.url = url.toExternalForm();
-  }
-
-    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final String url, final Throwable cause) {
-        super(cause);
-        this.exceptionType = exceptionType;
-        this.response = response;
-        this.url = url;
-    }
-    
-    public MovieDbException(final MovieDbExceptionType exceptionType, final String response, final URL url, final Throwable cause) {
-      super(cause);
-      this.exceptionType = exceptionType;
-      this.response = response;
-      this.url = url.toExternalForm();
-  }
-
-    public MovieDbExceptionType getExceptionType() {
-        return exceptionType;
+    public MovieDbException(ApiExceptionType exceptionType, String response, URL url) {
+        super(exceptionType, response, url);
     }
 
-    public String getResponse() {
-        return response;
+    public MovieDbException(ApiExceptionType exceptionType, String response, int responseCode, URL url) {
+        super(exceptionType, response, responseCode, url);
     }
-    
-    public String getUrl(){
-      return url;
+
+    public MovieDbException(ApiExceptionType exceptionType, String response, String url) {
+        super(exceptionType, response, url);
+    }
+
+    public MovieDbException(ApiExceptionType exceptionType, String response, int responseCode, String url) {
+        super(exceptionType, response, responseCode, url);
+    }
+
+    public MovieDbException(ApiExceptionType exceptionType, String response, URL url, Throwable cause) {
+        super(exceptionType, response, url, cause);
+    }
+
+    public MovieDbException(ApiExceptionType exceptionType, String response, int responseCode, URL url, Throwable cause) {
+        super(exceptionType, response, responseCode, url, cause);
+    }
+
+    public MovieDbException(ApiExceptionType exceptionType, String response, String url, Throwable cause) {
+        super(exceptionType, response, url, cause);
+    }
+
+    public MovieDbException(ApiExceptionType exceptionType, String response, int responseCode, String url, Throwable cause) {
+        super(exceptionType, response, responseCode, url, cause);
     }
 }

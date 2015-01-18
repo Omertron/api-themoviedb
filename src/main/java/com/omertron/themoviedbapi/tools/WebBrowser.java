@@ -38,8 +38,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Web browser with simple cookies support
@@ -70,9 +72,9 @@ public final class WebBrowser {
      */
     private static void populateBrowserProperties() {
         if (BROWSER_PROPERTIES.isEmpty()) {
-            BROWSER_PROPERTIES.put("User-Agent", "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
+            BROWSER_PROPERTIES.put(HTTP.USER_AGENT, "Mozilla/5.25 Netscape/5.0 (Windows; I; Win95)");
             BROWSER_PROPERTIES.put("Accept", "application/json");
-            BROWSER_PROPERTIES.put("Content-type", "application/json");
+            BROWSER_PROPERTIES.put(HTTP.CONTENT_TYPE, "application/json");
         }
     }
 
@@ -80,7 +82,7 @@ public final class WebBrowser {
         try {
             return request(new URL(url));
         } catch (MalformedURLException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, url, ex);
+            throw new MovieDbException(ApiExceptionType.INVALID_URL, null, url, ex);
         }
     }
 
@@ -100,7 +102,7 @@ public final class WebBrowser {
 
             return cnx;
         } catch (IOException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.INVALID_URL, null, url, ex);
+            throw new MovieDbException(ApiExceptionType.INVALID_URL, null, url, ex);
         }
     }
 
@@ -127,12 +129,12 @@ public final class WebBrowser {
 
                 // If we get a null connection, then throw an exception
                 if (cnx == null) {
-                    throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, "No HTTP connection could be made.", url);
+                    throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, "No HTTP connection could be made.", url);
                 }
 
                 if (isDeleteRequest) {
                     cnx.setDoOutput(true);
-                    cnx.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    cnx.setRequestProperty(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
                     cnx.setRequestMethod("DELETE");
                 }
 
@@ -173,7 +175,7 @@ public final class WebBrowser {
             }
             return content.toString();
         } catch (IOException ex) {
-            throw new MovieDbException(MovieDbException.MovieDbExceptionType.CONNECTION_ERROR, null, url, ex);
+            throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
         } finally {
             if (content != null) {
                 try {
