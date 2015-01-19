@@ -134,6 +134,8 @@ public class TheMovieDbApi {
     private static final int YEAR_LENGTH = 4;
     private static final int RATING_MAX = 10;
     private static final int POST_SUCCESS_STATUS_CODE = 12;
+    private static final int HTTP_STATUS_300 = 300;
+    private static final int HTTP_STATUS_500 = 500;
 
     /**
      * API for The Movie Db.
@@ -207,13 +209,11 @@ public class TheMovieDbApi {
                 }
 
                 final DigestedResponse response = httpClient.requestContent(httpGet);
-                if (response.getStatusCode() >= 300) {
 
-                    if (response.getStatusCode() >= 500) {
-                        throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), url, null);
-                    }
-
-                    throw new MovieDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), url, null);
+                if (response.getStatusCode() >= HTTP_STATUS_500) {
+                    throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url, null);
+                } else if (response.getStatusCode() >= HTTP_STATUS_300) {
+                    throw new MovieDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), response.getStatusCode(), url, null);
                 }
 
                 webpage = response.getContent();
