@@ -181,7 +181,7 @@ public final class WebBrowser {
                 try {
                     content.close();
                 } catch (IOException ex) {
-                    LOG.debug("Failed to close connection: " + ex.getMessage());
+                    LOG.debug("Failed to close connection: {}", ex.getMessage());
                 }
             }
         }
