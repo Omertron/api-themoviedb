@@ -384,33 +384,6 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of getApiKey method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testGetApiKey() {
-        // Not required
-    }
-
-    /**
-     * Test of getApiBase method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testGetApiBase() {
-        // Not required
-    }
-
-    /**
-     * Test of getConfiguration method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testGetConfiguration() {
-        // Not required
-    }
-
-    /**
      * Test of searchPeople method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
@@ -473,33 +446,6 @@ public class TheMovieDbApiTest {
         MovieDb result = tmdb.getLatestMovie();
         assertTrue("No latest movie found", result != null);
         assertTrue("No latest movie found", result.getId() > 0);
-    }
-
-    /**
-     * Test of compareMovies method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testCompareMovies() {
-        // Not required
-    }
-
-    /**
-     * Test of setProxy method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testSetProxy() {
-        // Not required
-    }
-
-    /**
-     * Test of setTimeout method, of class TheMovieDbApi.
-     *
-     */
-    @Test
-    public void testSetTimeout() {
-        // Not required
     }
 
     /**

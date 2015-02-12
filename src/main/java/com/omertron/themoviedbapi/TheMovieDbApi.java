@@ -176,15 +176,6 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get the API key that is to be used
-     *
-     * @return
-     */
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    /**
      * Compare the MovieDB object with a title & year
      *
      * @param moviedb The moviedb object to compare too
