@@ -70,6 +70,8 @@ public class MovieDb extends AbstractJsonMapping {
     private long revenue;
     @JsonProperty("runtime")
     private int runtime;
+    @JsonProperty("original_language")
+    private String originalLanguage;
     @JsonProperty("spoken_languages")
     private List<Language> spokenLanguages;
     @JsonProperty("tagline")
@@ -93,8 +95,8 @@ public class MovieDb extends AbstractJsonMapping {
     private WrapperMovieKeywords keywords;
     @JsonProperty("releases")
     private WrapperReleaseInfo releases;
-    @JsonProperty("videos")
-    private WrapperTrailers trailers;
+    @JsonProperty("trailers")
+    private WrapperVideos trailers;
     @JsonProperty("translations")
     private WrapperTranslations translations;
     @JsonProperty("similar_movies")
@@ -206,6 +208,10 @@ public class MovieDb extends AbstractJsonMapping {
     public Boolean getVideo() {
         return video;
     }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
@@ -308,8 +314,12 @@ public class MovieDb extends AbstractJsonMapping {
     public void setVideo(Boolean video) {
         this.video = video;
     }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
     // </editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
     public List<AlternativeTitle> getAlternativeTitles() {
         return alternativeTitles.getTitles();
@@ -335,7 +345,7 @@ public class MovieDb extends AbstractJsonMapping {
         return releases.getCountries();
     }
 
-    public List<Trailer> getTrailers() {
+    public List<Video> getTrailers() {
         return trailers.getTrailers();
     }
 
@@ -377,7 +387,7 @@ public class MovieDb extends AbstractJsonMapping {
         this.releases = releases;
     }
 
-    public void setTrailers(WrapperTrailers trailers) {
+    public void setTrailers(WrapperVideos trailers) {
         this.trailers = trailers;
     }
 

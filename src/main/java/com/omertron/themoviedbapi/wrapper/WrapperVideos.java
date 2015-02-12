@@ -1,0 +1,87 @@
+/*
+ *      Copyright (c) 2004-2015 Stuart Boston
+ *
+ *      This file is part of TheMovieDB API.
+ *
+ *      TheMovieDB API is free software: you can redistribute it and/or modify
+ *      it under the terms of the GNU General Public License as published by
+ *      the Free Software Foundation, either version 3 of the License, or
+ *      any later version.
+ *
+ *      TheMovieDB API is distributed in the hope that it will be useful,
+ *      but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *      GNU General Public License for more details.
+ *
+ *      You should have received a copy of the GNU General Public License
+ *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+package com.omertron.themoviedbapi.wrapper;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.model.Trailer;
+import com.omertron.themoviedbapi.model.Video;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Stuart
+ */
+public class WrapperVideos extends AbstractWrapperId implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private List<Video> videos = null;
+
+    public List<Video> getTrailers() {
+        return videos;
+    }
+
+    @JsonSetter("results")
+    public void setTrailers(List<Video> trailers) {
+        this.videos = trailers;
+    }
+
+    @JsonSetter("quicktime")
+    public void setQuickTime(List<Trailer> trailers) {
+        if (trailers == null) {
+            this.videos = new ArrayList<Video>();
+        }
+
+        for (Trailer t : trailers) {
+            System.out.println(t.toString());
+            System.out.println(convertTrailer(t, "quicktime"));
+        }
+    }
+
+    @JsonSetter("youtube")
+    public void setYouTube(List<Trailer> trailers) {
+        if (trailers == null) {
+            this.videos = new ArrayList<Video>();
+        }
+
+        for (Trailer t : trailers) {
+            System.out.println(t.toString());
+            Video v = convertTrailer(t, "youtube");
+            System.out.println(v.toString());
+            videos.add(v);
+        }
+    }
+
+    private Video convertTrailer(final Trailer trailer, final String site) {
+        Video video = new Video();
+
+        video.setId("");
+        video.setLanguage("");
+        video.setSize("");
+        video.setName(trailer.getName());
+        video.setKey(trailer.getSource());
+        video.setType(trailer.getType());
+        video.setSite(site);
+
+        return video;
+    }
+}
