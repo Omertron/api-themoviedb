@@ -66,7 +66,7 @@ import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_START_DATE;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_TOKEN;
 import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_YEAR;
-import com.omertron.themoviedbapi.tools.WebBrowser;
+import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperCollection;
@@ -93,21 +93,16 @@ import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
-import org.yamj.api.common.http.DigestedResponse;
-import org.yamj.api.common.http.DigestedResponseReader;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
 
 /**
@@ -122,10 +117,8 @@ public class TheMovieDbApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
     private String apiKey;
-    private CloseableHttpClient httpClient;
     private TmdbConfiguration tmdbConfig;
-    private static final String DEFAULT_CHARSET = "UTF-8";
-    private final Charset charset = Charset.forName(DEFAULT_CHARSET);
+    private HttpTools httpTools;
     // API Methods
     private static final String BASE_MOVIE = "movie/";
     private static final String BASE_PERSON = "person/";
@@ -148,8 +141,6 @@ public class TheMovieDbApi {
     private static final int YEAR_LENGTH = 4;
     private static final int RATING_MAX = 10;
     private static final int POST_SUCCESS_STATUS_CODE = 12;
-    private static final int HTTP_STATUS_300 = 300;
-    private static final int HTTP_STATUS_500 = 500;
 
     /**
      * API for The Movie Db.
@@ -170,11 +161,11 @@ public class TheMovieDbApi {
      */
     public TheMovieDbApi(String apiKey, CloseableHttpClient httpClient) throws MovieDbException {
         this.apiKey = apiKey;
-        this.httpClient = httpClient;
+        this.httpTools = new HttpTools(httpClient);
 
         ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
         URL configUrl = apiUrl.buildUrl();
-        String webpage = requestWebPage(configUrl);
+        String webpage = httpTools.getRequest(configUrl);
 
         try {
             WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
@@ -191,56 +182,6 @@ public class TheMovieDbApi {
      */
     public String getApiKey() {
         return apiKey;
-    }
-
-    private String requestWebPage(URL url) throws MovieDbException {
-        return requestWebPage(url, null, Boolean.FALSE);
-    }
-
-    private String requestWebPage(URL url, String jsonBody) throws MovieDbException {
-        return requestWebPage(url, jsonBody, Boolean.FALSE);
-    }
-
-    private String requestWebPage(URL url, String jsonBody, boolean isDeleteRequest) throws MovieDbException {
-        String webpage;
-        // use HTTP client implementation
-        if (httpClient == null) {
-            // use web browser
-            webpage = WebBrowser.request(url, jsonBody, isDeleteRequest);
-        } else {
-            try {
-                HttpGet httpGet = new HttpGet(url.toURI());
-                httpGet.addHeader("accept", "application/json");
-
-                if (StringUtils.isNotBlank(jsonBody)) {
-                    // TODO: Add the json body to the request
-                    throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Unable to proces JSON request", url);
-                }
-
-                if (isDeleteRequest) {
-                    //TODO: Handle delete request
-                    throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Unable to proces delete request", url);
-                }
-
-                final DigestedResponse response = DigestedResponseReader.requestContent(httpClient, httpGet, charset);
-
-                if (response.getStatusCode() >= HTTP_STATUS_500) {
-                    throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url, null);
-                } else if (response.getStatusCode() >= HTTP_STATUS_300) {
-                    throw new MovieDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), response.getStatusCode(), url, null);
-                }
-
-                webpage = response.getContent();
-
-            } catch (URISyntaxException ex) {
-                throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
-            } catch (IOException ex) {
-                throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
-            } catch (RuntimeException ex) {
-                throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, "Service Unavailable", url, ex);
-            }
-        }
-        return webpage;
     }
 
     /**
@@ -396,7 +337,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "token/new");
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, TokenAuthorisation.class);
@@ -426,7 +367,7 @@ public class TheMovieDbApi {
 
         apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, TokenSession.class);
@@ -459,7 +400,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "guest_session/new");
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, TokenSession.class);
@@ -483,7 +424,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, Account.class);
@@ -498,7 +439,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
@@ -519,7 +460,7 @@ public class TheMovieDbApi {
         String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -566,7 +507,7 @@ public class TheMovieDbApi {
         String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -604,7 +545,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             MovieDb movie = mapper.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
@@ -644,7 +585,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             MovieDb movie = mapper.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
@@ -679,7 +620,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
             TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
@@ -708,7 +649,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovieCasts wrapper = mapper.readValue(webpage, WrapperMovieCasts.class);
@@ -742,7 +683,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -773,7 +714,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovieKeywords wrapper = mapper.readValue(webpage, WrapperMovieKeywords.class);
@@ -804,7 +745,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperReleaseInfo wrapper = mapper.readValue(webpage, WrapperReleaseInfo.class);
@@ -840,11 +781,11 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperVideos wrapper = mapper.readValue(webpage, WrapperVideos.class);
-            TmdbResultsList<Video> results = new TmdbResultsList<Video>(wrapper.getTrailers());
+            TmdbResultsList<Video> results = new TmdbResultsList<Video>(wrapper.getVideos());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -869,7 +810,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperTranslations wrapper = mapper.readValue(webpage, WrapperTranslations.class);
@@ -913,7 +854,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -941,7 +882,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperReviews wrapper = mapper.readValue(webpage, WrapperReviews.class);
@@ -979,7 +920,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
@@ -1026,7 +967,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
 
@@ -1052,7 +993,7 @@ public class TheMovieDbApi {
     public MovieDb getLatestMovie() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/latest");
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, MovieDb.class);
@@ -1086,7 +1027,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -1125,7 +1066,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -1162,7 +1103,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -1200,7 +1141,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -1226,7 +1167,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
@@ -1259,7 +1200,7 @@ public class TheMovieDbApi {
         String jsonBody = convertToJson(Collections.singletonMap("value", rating));
         LOG.info("Body: {}", jsonBody);
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
             StatusCode status = mapper.readValue(webpage, StatusCode.class);
@@ -1295,7 +1236,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, CollectionInfo.class);
@@ -1322,7 +1263,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -1354,7 +1295,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, Person.class);
@@ -1382,7 +1323,7 @@ public class TheMovieDbApi {
         apiUrl.appendToResponse(appendToResponse);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperPersonCredits wrapper = mapper.readValue(webpage, WrapperPersonCredits.class);
@@ -1408,7 +1349,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, personId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
@@ -1472,7 +1413,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
@@ -1494,7 +1435,7 @@ public class TheMovieDbApi {
     public Person getPersonLatest() throws MovieDbException {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, Person.class);
@@ -1520,7 +1461,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, companyId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, Company.class);
@@ -1558,7 +1499,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
@@ -1587,7 +1528,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_LANGUAGE, language);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
@@ -1631,7 +1572,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_INCLUDE_ALL_MOVIES, includeAllMovies);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
@@ -1682,7 +1623,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
@@ -1721,7 +1662,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
             TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
@@ -1755,7 +1696,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
@@ -1794,7 +1735,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
@@ -1828,7 +1769,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
             TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
@@ -1861,7 +1802,7 @@ public class TheMovieDbApi {
 
         URL url = apiUrl.buildUrl();
 
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
@@ -1887,7 +1828,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, listId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, MovieDbList.class);
@@ -1910,7 +1851,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovieDbList.class).getLists();
@@ -1940,7 +1881,7 @@ public class TheMovieDbApi {
         String jsonBody = convertToJson(body);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, MovieDbListStatus.class).getListId();
@@ -1963,7 +1904,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(MOVIE_ID, movieId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
@@ -2009,7 +1950,7 @@ public class TheMovieDbApi {
         String jsonBody = convertToJson(Collections.singletonMap("media_id", movieId + ""));
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, jsonBody);
+        String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -2032,7 +1973,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, WrapperMovie.class).getMovies();
@@ -2057,7 +1998,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_SESSION, sessionId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url, null, true);
+        String webpage = httpTools.deleteRequest(url);
 
         try {
             return mapper.readValue(webpage, StatusCode.class);
@@ -2081,7 +2022,7 @@ public class TheMovieDbApi {
         apiUrl.addArgument(PARAM_ID, keywordId);
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             return mapper.readValue(webpage, Keyword.class);
@@ -2114,7 +2055,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
@@ -2160,7 +2101,7 @@ public class TheMovieDbApi {
         }
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
         try {
             WrapperMovieChanges wrapper = mapper.readValue(webpage, WrapperMovieChanges.class);
 
@@ -2184,7 +2125,7 @@ public class TheMovieDbApi {
         ApiUrl apiUrl = new ApiUrl(apiKey, BASE_JOB, "/list");
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperJobList wrapper = mapper.readValue(webpage, WrapperJobList.class);
@@ -2276,7 +2217,7 @@ public class TheMovieDbApi {
         apiUrl.setArguments(discover.getParams());
 
         URL url = apiUrl.buildUrl();
-        String webpage = requestWebPage(url);
+        String webpage = httpTools.getRequest(url);
 
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);

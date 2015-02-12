@@ -22,7 +22,6 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.model.Trailer;
 import com.omertron.themoviedbapi.model.Video;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,38 +35,34 @@ public class WrapperVideos extends AbstractWrapperId implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<Video> videos = null;
 
-    public List<Video> getTrailers() {
+    public List<Video> getVideos() {
         return videos;
     }
 
     @JsonSetter("results")
-    public void setTrailers(List<Video> trailers) {
-        this.videos = trailers;
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 
     @JsonSetter("quicktime")
     public void setQuickTime(List<Trailer> trailers) {
-        if (trailers == null) {
+        if (this.videos == null) {
             this.videos = new ArrayList<Video>();
         }
 
         for (Trailer t : trailers) {
-            System.out.println(t.toString());
-            System.out.println(convertTrailer(t, "quicktime"));
+            videos.add(convertTrailer(t, "quicktime"));
         }
     }
 
     @JsonSetter("youtube")
     public void setYouTube(List<Trailer> trailers) {
-        if (trailers == null) {
+        if (this.videos == null) {
             this.videos = new ArrayList<Video>();
         }
 
         for (Trailer t : trailers) {
-            System.out.println(t.toString());
-            Video v = convertTrailer(t, "youtube");
-            System.out.println(v.toString());
-            videos.add(v);
+            videos.add(convertTrailer(t, "youtube"));
         }
     }
 

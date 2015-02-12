@@ -20,11 +20,19 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
+import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.wrapper.WrapperReviews;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
+import com.omertron.themoviedbapi.wrapper.WrapperVideos;
+import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import java.util.List;
 
 /**
  * Movie Bean
@@ -345,8 +353,8 @@ public class MovieDb extends AbstractJsonMapping {
         return releases.getCountries();
     }
 
-    public List<Video> getTrailers() {
-        return trailers.getTrailers();
+    public List<Video> getVideos() {
+        return trailers.getVideos();
     }
 
     public List<Translation> getTranslations() {
