@@ -19,13 +19,8 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ADULT;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_YEAR;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
 
 /**
  * Generate a discover object for use in the MovieDbApi
@@ -36,17 +31,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Discover {
 
-    private final Map<String, String> params = new HashMap<String, String>();
-    private static final String PARAM_PRIMARY_RELEASE_YEAR = "primary_release_year=";
-    private static final String PARAM_VOTE_COUNT_GTE = "vote_count.gte=";
-    private static final String PARAM_VOTE_AVERAGE_GTE = "vote_average.gte=";
-    private static final String PARAM_WITH_GENRES = "with_genres=";
-    private static final String PARAM_RELEASE_DATE_GTE = "release_date.gte=";
-    private static final String PARAM_RELEASE_DATE_LTE = "release_date.lte=";
-    private static final String PARAM_CERTIFICATION_COUNTRY = "certification_country=";
-    private static final String PARAM_CERTIFICATION_LTE = "certification.lte=";
-    private static final String PARAM_WITH_COMPANIES = "with_companies=";
-    private static final String PARAM_SORT_BY = "sort_by=";
+    private final TmdbParameters params = new TmdbParameters();
+
     private static final int YEAR_MIN = 1900;
     private static final int YEAR_MAX = 2100;
 
@@ -57,7 +43,7 @@ public class Discover {
      *
      * @return
      */
-    public Map<String, String> getParams() {
+    public TmdbParameters getParams() {
         return params;
     }
 
@@ -68,9 +54,7 @@ public class Discover {
      * @return
      */
     public Discover page(int page) {
-        if (page > 0) {
-            params.put(PARAM_PAGE, String.valueOf(page));
-        }
+        params.add(Param.PAGE, page);
         return this;
     }
 
@@ -81,9 +65,7 @@ public class Discover {
      * @return
      */
     public Discover language(String language) {
-        if (StringUtils.isNotBlank(language)) {
-            params.put(PARAM_LANGUAGE, language);
-        }
+        params.add(Param.LANGUAGE, language);
         return this;
     }
 
@@ -100,9 +82,7 @@ public class Discover {
      * @return
      */
     public Discover sortBy(String sortBy) {
-        if (StringUtils.isNotBlank(sortBy)) {
-            params.put(PARAM_SORT_BY, sortBy);
-        }
+        params.add(Param.SORT_BY, sortBy);
         return this;
     }
 
@@ -113,7 +93,7 @@ public class Discover {
      * @return
      */
     public Discover includeAdult(boolean includeAdult) {
-        params.put(PARAM_ADULT, String.valueOf(includeAdult));
+        params.add(Param.ADULT, includeAdult);
         return this;
     }
 
@@ -125,47 +105,46 @@ public class Discover {
      */
     public Discover year(int year) {
         if (checkYear(year)) {
-            params.put(PARAM_YEAR, String.valueOf(year));
+            params.add(Param.YEAR, year);
         }
         return this;
     }
 
     /**
-     * Filter the results so that only the primary release date year has this value
+     * Filter the results so that only the primary release date year has this
+     * value
      *
      * @param primaryReleaseYear
      * @return
      */
     public Discover primaryReleaseYear(int primaryReleaseYear) {
         if (checkYear(primaryReleaseYear)) {
-            params.put(PARAM_PRIMARY_RELEASE_YEAR, String.valueOf(primaryReleaseYear));
+            params.add(Param.PRIMARY_RELEASE_YEAR, primaryReleaseYear);
         }
         return this;
     }
 
     /**
-     * Only include movies that are equal to, or have a vote count higher than this value
+     * Only include movies that are equal to, or have a vote count higher than
+     * this value
      *
      * @param voteCountGte
      * @return
      */
     public Discover voteCountGte(int voteCountGte) {
-        if (voteCountGte > 0) {
-            params.put(PARAM_VOTE_COUNT_GTE, String.valueOf(voteCountGte));
-        }
+        params.add(Param.VOTE_COUNT_GTE, voteCountGte);
         return this;
     }
 
     /**
-     * Only include movies that are equal to, or have a higher average rating than this value
+     * Only include movies that are equal to, or have a higher average rating
+     * than this value
      *
      * @param voteAverageGte
      * @return
      */
     public Discover voteAverageGte(float voteAverageGte) {
-        if (voteAverageGte > 0) {
-            params.put(PARAM_VOTE_AVERAGE_GTE, String.valueOf(voteAverageGte));
-        }
+        params.add(Param.VOTE_AVERAGE_GTE, voteAverageGte);
         return this;
     }
 
@@ -176,15 +155,14 @@ public class Discover {
      * <p/>
      * Multiple values can be specified.
      * <p/>
-     * Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'
+     * Comma separated indicates an 'AND' query, while a pipe (|) separated
+     * value indicates an 'OR'
      *
      * @param withGenres
      * @return
      */
     public Discover withGenres(String withGenres) {
-        if (StringUtils.isNotBlank(withGenres)) {
-            params.put(PARAM_WITH_GENRES, withGenres);
-        }
+        params.add(Param.WITH_GENRES, withGenres);
         return this;
     }
 
@@ -197,9 +175,7 @@ public class Discover {
      * @return
      */
     public Discover releaseDateGte(String releaseDateGte) {
-        if (StringUtils.isNotBlank(releaseDateGte)) {
-            params.put(PARAM_RELEASE_DATE_GTE, releaseDateGte);
-        }
+        params.add(Param.RELEASE_DATE_GTE, releaseDateGte);
         return this;
     }
 
@@ -212,9 +188,7 @@ public class Discover {
      * @return
      */
     public Discover releaseDateLte(String releaseDateLte) {
-        if (StringUtils.isNotBlank(releaseDateLte)) {
-            params.put(PARAM_RELEASE_DATE_LTE, releaseDateLte);
-        }
+        params.add(Param.RELEASE_DATE_LTE, releaseDateLte);
         return this;
     }
 
@@ -229,24 +203,21 @@ public class Discover {
      * @return
      */
     public Discover certificationCountry(String certificationCountry) {
-        if (StringUtils.isNotBlank(certificationCountry)) {
-            params.put(PARAM_CERTIFICATION_COUNTRY, certificationCountry);
-        }
+        params.add(Param.CERTIFICATION_COUNTRY, certificationCountry);
         return this;
     }
 
     /**
      * Only include movies with this certification and lower.
      * <p/>
-     * Expected value is a valid certification for the specified 'certificationCountry'.
+     * Expected value is a valid certification for the specified
+     * 'certificationCountry'.
      *
      * @param certificationLte
      * @return
      */
     public Discover certificationLte(String certificationLte) {
-        if (StringUtils.isNotBlank(certificationLte)) {
-            params.put(PARAM_CERTIFICATION_LTE, certificationLte);
-        }
+        params.add(Param.CERTIFICATION_LTE, certificationLte);
         return this;
     }
 
@@ -261,9 +232,7 @@ public class Discover {
      * @return
      */
     public Discover withCompanies(String withCompanies) {
-        if (StringUtils.isNotBlank(withCompanies)) {
-            params.put(PARAM_WITH_COMPANIES, withCompanies);
-        }
+        params.add(Param.WITH_COMPANIES, withCompanies);
         return this;
     }
 

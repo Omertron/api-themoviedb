@@ -36,51 +36,19 @@ import org.slf4j.LoggerFactory;
  */
 public class ApiUrl {
 
-    /*
-     * Logger
-     */
     private static final Logger LOG = LoggerFactory.getLogger(ApiUrl.class);
-    /*
-     * TheMovieDbApi API Base URL
-     */
+    // TheMovieDbApi API Base URL
     private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
-    /*
-     * Parameter configuration
-     */
+    // Parameter configuration
     private static final String DELIMITER_FIRST = "?";
     private static final String DELIMITER_SUBSEQUENT = "&";
     private static final String DEFAULT_STRING = "";
-    /*
-     * Properties
-     */
+    // Properties
     private final String apiKey;
     private final String method;
-    private final String submethod;
+    private String submethod;
     private final Map<String, String> arguments = new HashMap<String, String>();
-    /*
-     * API Parameters
-     */
-    public static final String PARAM_ADULT = "include_adult=";
-    public static final String PARAM_API_KEY = "api_key=";
-    public static final String PARAM_COUNTRY = "country=";
-    public static final String PARAM_FAVORITE = "favorite=";
-    public static final String PARAM_ID = "id=";
-    public static final String PARAM_LANGUAGE = "language=";
-    public static final String PARAM_INCLUDE_ALL_MOVIES = "include_all_movies=";
-    public static final String PARAM_MOVIE_WATCHLIST = "movie_watchlist=";
-    public static final String PARAM_PAGE = "page=";
-    public static final String PARAM_QUERY = "query=";
-    public static final String PARAM_SESSION = "session_id=";
-    public static final String PARAM_TOKEN = "request_token=";
-    public static final String PARAM_VALUE = "value=";
-    public static final String PARAM_YEAR = "year=";
-    public static final String PARAM_START_DATE = "start_date=";
-    public static final String PARAM_END_DATE = "end_date=";
-    public static final String PARAM_USERNAME = "username=";
-    public static final String PARAM_PASSWORD = "password=";
-    private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
-    //<editor-fold defaultstate="collapsed" desc="Constructor Methods">
     /**
      * Constructor for the simple API URL method without a sub-method
      *
@@ -90,36 +58,66 @@ public class ApiUrl {
     public ApiUrl(String apiKey, String method) {
         this.apiKey = apiKey;
         this.method = method;
-        this.submethod = DEFAULT_STRING;
     }
 
     /**
-     * Constructor for the API URL with a sub-method
+     * Add a sub-methods
      *
-     * @param apiKey
-     * @param method
      * @param submethod
+     * @return
      */
-    public ApiUrl(String apiKey, String method, String submethod) {
-        this.apiKey = apiKey;
-        this.method = method;
+    public ApiUrl setSubMethod(String submethod) {
         this.submethod = submethod;
+        return this;
     }
-    //</editor-fold>
 
     /**
-     * Build the URL from the pre-created arguments.
+     * Add a sub-method that has an ID at the start
+     *
+     * @param someId
+     * @param submethod
+     * @return
+     */
+    public ApiUrl setSubMethod(int someId, String submethod) {
+        this.submethod = someId + submethod;
+        return this;
+    }
+
+    /**
+     * Add a sub-method that has an ID at the start
+     *
+     * @param someId
+     * @param submethod
+     * @return
+     */
+    public ApiUrl setSubMethod(String someId, String submethod) {
+        this.submethod = someId + submethod;
+        return this;
+    }
+
+    /**
+     * Build the URL with the default parameters
      *
      * @return
      */
     public URL buildUrl() {
+        return buildUrl(new TmdbParameters());
+    }
+
+    /**
+     * Build the URL from the pre-created parameters.
+     *
+     * @param params
+     * @return
+     */
+    public URL buildUrl(TmdbParameters params) {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
 
         // Get the start of the URL
         urlString.append(method);
 
         // We have either a queury, or a direct request
-        if (arguments.containsKey(PARAM_QUERY)) {
+        if (params.has(Param.QUERY)) {
             // Append the suffix of the API URL
             if (StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
                 urlString.deleteCharAt(urlString.length() - 1);
@@ -127,14 +125,14 @@ public class ApiUrl {
             urlString.append(submethod);
 
             // Append the key information
-            urlString.append(DELIMITER_FIRST).append(PARAM_API_KEY);
+            urlString.append(DELIMITER_FIRST).append(Param.API_KEY.getValue());
             urlString.append(apiKey);
 
             // Append the search term
             urlString.append(DELIMITER_SUBSEQUENT);
-            urlString.append(PARAM_QUERY);
+            urlString.append(Param.QUERY.getValue());
 
-            String query = arguments.get(PARAM_QUERY);
+            String query = (String) params.get(Param.QUERY);
 
             try {
                 urlString.append(URLEncoder.encode(query, "UTF-8"));
@@ -145,12 +143,12 @@ public class ApiUrl {
             }
 
             // Remove the query from the arguments so it is not added later
-            arguments.remove(PARAM_QUERY);
+            params.remove(Param.QUERY);
         } else {
             // Append the ID if provided
-            if (arguments.containsKey(PARAM_ID)) {
-                urlString.append(arguments.get(PARAM_ID));
-                arguments.remove(PARAM_ID);
+            if (params.has(Param.ID)) {
+                urlString.append(params.get(Param.ID));
+                params.remove(Param.ID);
             }
 
             // Append the suffix of the API URL
@@ -160,7 +158,7 @@ public class ApiUrl {
             urlString.append(submethod);
 
             // Append the key information
-            urlString.append(DELIMITER_FIRST).append(PARAM_API_KEY);
+            urlString.append(DELIMITER_FIRST).append(Param.API_KEY);
             urlString.append(apiKey);
         }
 
@@ -177,83 +175,6 @@ public class ApiUrl {
             return null;
         } finally {
             arguments.clear();
-        }
-    }
-
-    /**
-     * Add arguments individually
-     *
-     * @param key
-     * @param value
-     */
-    public void addArgument(String key, String value) {
-        arguments.put(key, value);
-    }
-
-    /**
-     * Add arguments individually
-     *
-     * @param key
-     * @param value
-     */
-    public void addArgument(String key, int value) {
-        arguments.put(key, Integer.toString(value));
-    }
-
-    /**
-     * Add arguments individually
-     *
-     * @param key
-     * @param value
-     */
-    public void addArgument(String key, boolean value) {
-        arguments.put(key, Boolean.toString(value));
-    }
-
-    /**
-     * Add arguments individually
-     *
-     * @param key
-     * @param value
-     */
-    public void addArgument(String key, float value) {
-        arguments.put(key, Float.toString(value));
-    }
-
-    /**
-     * Clear the arguments
-     */
-    public void clearArguments() {
-        arguments.clear();
-    }
-
-    /**
-     * Set the arguments directly
-     *
-     * @param args
-     */
-    public void setArguments(Map<String, String> args) {
-        arguments.putAll(args);
-    }
-
-    /**
-     * Append any optional parameters to the URL
-     *
-     * @param appendToResponse
-     */
-    public void appendToResponse(String[] appendToResponse) {
-        if (appendToResponse.length > 0) {
-            StringBuilder sb = new StringBuilder();
-            boolean first = Boolean.TRUE;
-            for (String append : appendToResponse) {
-                if (first) {
-                    first = Boolean.FALSE;
-                } else {
-                    sb.append(",");
-                }
-                sb.append(append);
-            }
-            addArgument(APPEND_TO_RESPONSE, sb.toString());
         }
     }
 }

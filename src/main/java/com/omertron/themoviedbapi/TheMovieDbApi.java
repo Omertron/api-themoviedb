@@ -54,21 +54,9 @@ import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ADULT;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_COUNTRY;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_END_DATE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_ID;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_INCLUDE_ALL_MOVIES;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_LANGUAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PAGE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_PASSWORD;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_QUERY;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_SESSION;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_START_DATE;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_TOKEN;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_USERNAME;
-import static com.omertron.themoviedbapi.tools.ApiUrl.PARAM_YEAR;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperCollection;
@@ -110,7 +98,8 @@ import org.yamj.api.common.http.SimpleHttpClientBuilder;
 /**
  * The MovieDb API
  * <p>
- * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
+ * This is for version 3 of the API as specified here:
+ * http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -164,8 +153,7 @@ public class TheMovieDbApi {
         this.apiKey = apiKey;
         this.httpTools = new HttpTools(httpClient);
 
-        ApiUrl apiUrl = new ApiUrl(apiKey, "configuration");
-        URL configUrl = apiUrl.buildUrl();
+        URL configUrl = new ApiUrl(apiKey, "configuration").buildUrl();
         String webpage = httpTools.getRequest(configUrl);
 
         try {
@@ -194,7 +182,8 @@ public class TheMovieDbApi {
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
      * @param year The year of the movie to compare
-     * @param maxDistance The Levenshtein Distance between the two titles. 0 = exact match
+     * @param maxDistance The Levenshtein Distance between the two titles. 0 =
+     * exact match
      * @param caseSensitive true if the comparison is to be case sensitive
      * @return True if there is a match, False otherwise.
      */
@@ -310,21 +299,24 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Authentication Functions">
     /**
-     * This method is used to generate a valid request token for user based authentication.
+     * This method is used to generate a valid request token for user based
+     * authentication.
      *
      * A request token is required in order to request a session id.
      *
-     * You can generate any number of request tokens but they will expire after 60 minutes.
+     * You can generate any number of request tokens but they will expire after
+     * 60 minutes.
      *
-     * As soon as a valid session id has been created the token will be destroyed.
+     * As soon as a valid session id has been created the token will be
+     * destroyed.
      *
      * @return
      * @throws MovieDbException
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "token/new");
+        TmdbParameters parameters = new TmdbParameters();
+        URL url = new ApiUrl(apiKey, BASE_AUTH).setSubMethod("token/new").buildUrl(parameters);
 
-        URL url = apiUrl.buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -336,7 +328,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to generate a session id for user based authentication.
+     * This method is used to generate a session id for user based
+     * authentication.
      *
      * A session id is required in order to use any of the write methods.
      *
@@ -345,15 +338,15 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "session/new");
+        TmdbParameters parameters = new TmdbParameters();
 
         if (!token.getSuccess()) {
             LOG.warn("Session token was not successful!");
-            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!", apiUrl.buildUrl());
+            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!");
         }
 
-        apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
-        URL url = apiUrl.buildUrl();
+        parameters.add(Param.TOKEN, token.getRequestToken());
+        URL url = new ApiUrl(apiKey, BASE_AUTH).setSubMethod("session/new").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -365,7 +358,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to generate a session id for user based authentication. User must provide their username and password
+     * This method is used to generate a session id for user based
+     * authentication. User must provide their username and password
      *
      * A session id is required in order to use any of the write methods.
      *
@@ -376,18 +370,18 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TokenAuthorisation getSessionTokenLogin(TokenAuthorisation token, String username, String password) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "token/validate_with_login");
+        TmdbParameters parameters = new TmdbParameters();
 
         if (!token.getSuccess()) {
             LOG.warn("Session token was not successful!");
-            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!", apiUrl.buildUrl());
+            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!");
         }
 
-        apiUrl.addArgument(PARAM_TOKEN, token.getRequestToken());
-        apiUrl.addArgument(PARAM_USERNAME, username);
-        apiUrl.addArgument(PARAM_PASSWORD, password);
+        parameters.add(Param.TOKEN, token.getRequestToken());
+        parameters.add(Param.USERNAME, username);
+        parameters.add(Param.PASSWORD, password);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_AUTH).setSubMethod("token/validate_with_login").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -401,22 +395,24 @@ public class TheMovieDbApi {
     /**
      * This method is used to generate a guest session id.
      *
-     * A guest session can be used to rate movies without having a registered TMDb user account.
+     * A guest session can be used to rate movies without having a registered
+     * TMDb user account.
      *
-     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
-     * account in the future.
+     * You should only generate a single guest session per user (or device) as
+     * you will be able to attach the ratings to a TMDb user account in the
+     * future.
      *
-     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
+     * There are also IP limits in place so you should always make sure it's the
+     * end user doing the guest session actions.
      *
-     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
+     * If a guest session is not used for the first time within 24 hours, it
+     * will be automatically discarded.
      *
      * @return
      * @throws MovieDbException
      */
     public TokenSession getGuestSessionToken() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_AUTH, "guest_session/new");
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_AUTH).setSubMethod("guest_session/new").buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -428,18 +424,18 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get the basic information for an account. You will need to have a valid session id.
+     * Get the basic information for an account. You will need to have a valid
+     * session id.
      *
      * @param sessionId
      * @return
      * @throws MovieDbException
      */
     public Account getAccount(String sessionId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT.replace("/", ""));
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT.replace("/", "")).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -450,11 +446,19 @@ public class TheMovieDbApi {
         }
     }
 
+    /**
+     * Get the account favourite movies
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
     public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/favorite_movies");
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/favorite_movies").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -466,16 +470,15 @@ public class TheMovieDbApi {
     }
 
     public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer movieId, boolean isFavorite) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/favorite");
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
         Map<String, Object> body = new HashMap<String, Object>();
         body.put(MOVIE_ID, movieId);
         body.put("favorite", isFavorite);
         String jsonBody = convertToJson(body);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/favorite").buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -513,16 +516,15 @@ public class TheMovieDbApi {
     }
 
     private StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, boolean add) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/movie_watchlist");
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
         Map<String, Object> body = new HashMap<String, Object>();
         body.put(MOVIE_ID, movieId);
         body.put("movie_watchlist", add);
         String jsonBody = convertToJson(body);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/movie_watchlist").buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -540,7 +542,8 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
      * @param movieId
      * @param language
@@ -549,17 +552,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.addArgument(PARAM_ID, movieId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
             MovieDb movie = mapper.readValue(webpage, MovieDb.class);
@@ -579,7 +577,8 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
      * @param imdbId
      * @param language
@@ -588,18 +587,14 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, imdbId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.addArgument(PARAM_ID, imdbId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
+
         try {
             MovieDb movie = mapper.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
@@ -614,7 +609,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for
+     * a particular movie.
      *
      * @param movieId
      * @param country
@@ -623,16 +619,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/alternative_titles");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.COUNTRY, country);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        if (StringUtils.isNotBlank(country)) {
-            apiUrl.addArgument(PARAM_COUNTRY, country);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("/alternative_titles").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
@@ -656,12 +648,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/casts");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("casts").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -676,7 +667,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the
+     * images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -685,16 +677,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, URL_IMAGES);
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod(URL_IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -709,7 +697,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added
+     * to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -719,12 +708,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/keywords");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("keywords").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -739,7 +727,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data
+     * we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -748,13 +737,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/releases");
-        apiUrl.addArgument(PARAM_ID, movieId);
-        apiUrl.addArgument(PARAM_LANGUAGE, language);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("releases").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -769,7 +757,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular movie.
+     * This method is used to retrieve all of the trailers for a particular
+     * movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -780,16 +769,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Video> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/videos");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("videos").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -804,7 +789,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
+     * This method is used to retrieve a list of the available translations for
+     * a specific movie.
      *
      * @param movieId
      * @param appendToResponse
@@ -812,12 +798,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/translations");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("translations").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -832,9 +817,11 @@ public class TheMovieDbApi {
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a particular movie.
+     * The similar movies method will let you retrieve the similar movies for a
+     * particular movie.
      *
-     * This data is created dynamically but with the help of users votes on TMDb.
+     * This data is created dynamically but with the help of users votes on
+     * TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -846,20 +833,13 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/similar_movies");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("similar_movies").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -874,20 +854,13 @@ public class TheMovieDbApi {
     }
 
     public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/reviews");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("reviews").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -912,20 +885,13 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieList> getMovieLists(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/lists");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("lists").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -946,11 +912,13 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item
+     * changing type in the ChangeItem
      *
      * @param movieId
      * @param startDate the start date of the changes, optional
@@ -959,18 +927,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/changes");
-        apiUrl.addArgument(PARAM_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.START_DATE, startDate);
+        parameters.add(Param.END_DATE, endDate);
 
-        if (StringUtils.isNotBlank(startDate)) {
-            apiUrl.addArgument(PARAM_START_DATE, startDate);
-        }
-
-        if (StringUtils.isNotBlank(endDate)) {
-            apiUrl.addArgument(PARAM_END_DATE, endDate);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("changes").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
             WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
@@ -995,8 +957,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public MovieDb getLatestMovie() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/latest");
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("latest").buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1020,17 +981,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "upcoming");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("upcoming").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1048,7 +1003,8 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
      *
      * TODO: Implement more than 20 movies
      *
@@ -1058,17 +1014,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "now-playing");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("now-playing").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1095,17 +1045,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "popular");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("popular").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1120,7 +1064,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb.
      *
      * The default response will return 20 movies.
      *
@@ -1132,17 +1077,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "top-rated");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("top-rated").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1165,10 +1104,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/rated/movies");
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/rated/movies").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1191,17 +1130,16 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, movieId + "/rating");
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
         if (rating < 0 || rating > RATING_MAX) {
-            throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Rating out of range", apiUrl.buildUrl());
+            throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Rating out of range");
         }
 
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
+
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod(movieId, "/rating").buildUrl(parameters);
+
         String jsonBody = convertToJson(Collections.singletonMap("value", rating));
-        LOG.debug("Body: {}", jsonBody);
-        URL url = apiUrl.buildUrl();
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -1218,9 +1156,11 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Collection Functions">
     /**
-     * This method is used to retrieve all of the basic information about a movie collection.
+     * This method is used to retrieve all of the basic information about a
+     * movie collection.
      *
-     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
+     * You can get the ID needed for this method by making a getMovieInfo
+     * request for the belongs_to_collection.
      *
      * @param collectionId
      * @param language
@@ -1228,14 +1168,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION);
-        apiUrl.addArgument(PARAM_ID, collectionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, collectionId);
+        parameters.add(Param.LANGUAGE, language);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_COLLECTION).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1255,14 +1192,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COLLECTION, URL_IMAGES);
-        apiUrl.addArgument(PARAM_ID, collectionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, collectionId);
+        parameters.add(Param.LANGUAGE, language);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_COLLECTION).setSubMethod(URL_IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1289,12 +1223,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.addArgument(PARAM_ID, personId);
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_PERSON).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1306,7 +1239,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the cast & crew information for the person.
+     * This method is used to retrieve all of the cast & crew information for
+     * the person.
      *
      * It will return the single highest rated poster for each movie record.
      *
@@ -1316,12 +1250,11 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<PersonCredit> getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/credits");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+        parameters.add(Param.APPEND, appendToResponse);
 
-        apiUrl.addArgument(PARAM_ID, personId);
-        apiUrl.appendToResponse(appendToResponse);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_PERSON).setSubMethod("credits").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1343,11 +1276,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, URL_IMAGES);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
 
-        apiUrl.addArgument(PARAM_ID, personId);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_PERSON).setSubMethod(URL_IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1368,7 +1300,8 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
@@ -1404,13 +1337,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Person> getPersonPopular(int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/popular");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.PAGE, page);
 
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_PERSON).setSubMethod("popular").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1431,8 +1361,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Person getPersonLatest() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_PERSON, "/latest");
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_PERSON).setSubMethod("latest").buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1446,18 +1375,18 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Company Functions">
     /**
-     * This method is used to retrieve the basic information about a production company on TMDb.
+     * This method is used to retrieve the basic information about a production
+     * company on TMDb.
      *
      * @param companyId
      * @return
      * @throws MovieDbException
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COMPANY);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, companyId);
 
-        apiUrl.addArgument(PARAM_ID, companyId);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_COMPANY).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1471,7 +1400,8 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies associated with a company.
      *
-     * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
+     * These movies are returned in order of most recently released to oldest.
+     * The default response will return 20 movies per page.
      *
      * TODO: Implement more than 20 movies
      *
@@ -1482,19 +1412,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_COMPANY, URL_MOVIES);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, companyId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
 
-        apiUrl.addArgument(PARAM_ID, companyId);
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_COMPANY).setSubMethod(URL_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1520,10 +1443,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, "/list");
-        apiUrl.addArgument(PARAM_LANGUAGE, language);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_GENRE).setSubMethod("list").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1540,9 +1463,11 @@ public class TheMovieDbApi {
     /**
      * Get a list of movies per genre.
      *
-     * It is important to understand that only movies with more than 10 votes get listed.
+     * It is important to understand that only movies with more than 10 votes
+     * get listed.
      *
-     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
+     * This prevents movies from 1 10/10 rating from being listed first and for
+     * the first 5 pages.
      *
      * @param genreId
      * @param language
@@ -1552,20 +1477,13 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_GENRE, URL_MOVIES);
-        apiUrl.addArgument(PARAM_ID, genreId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, genreId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.INCLUDE_ALL_MOVIES, includeAllMovies);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        apiUrl.addArgument(PARAM_INCLUDE_ALL_MOVIES, includeAllMovies);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_GENRE).setSubMethod(URL_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1582,39 +1500,30 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Search Functions">
     /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
+     * Search Movies This is a good starting point to start finding movies on
+     * TMDb.
      *
      * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
+     * @param searchYear Limit the search to the provided year. Zero (0) will
+     * get all years
      * @param language The language to include. Can be blank/null.
      * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first page)
+     * @param page The page of results to return. 0 to get the default (first
+     * page)
      * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "movie");
-        if (StringUtils.isNotBlank(movieName)) {
-            apiUrl.addArgument(PARAM_QUERY, movieName);
-        }
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, movieName);
+        parameters.add(Param.YEAR, searchYear);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.ADULT, Boolean.toString(includeAdult));
+        parameters.add(Param.PAGE, Integer.toString(page));
 
-        if (searchYear > 0) {
-            apiUrl.addArgument(PARAM_YEAR, Integer.toString(searchYear));
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        apiUrl.addArgument(PARAM_ADULT, Boolean.toString(includeAdult));
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
+        URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("movie").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
+
         try {
             WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
@@ -1637,23 +1546,14 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "collection");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, Integer.toString(page));
 
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
+        URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("collection").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
+
         try {
             WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
             TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
@@ -1668,7 +1568,8 @@ public class TheMovieDbApi {
     /**
      * This is a good starting point to start finding people on TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
+     * The idea is to be a quick and light method so you can iterate through
+     * people quickly.
      *
      * @param personName
      * @param includeAdult
@@ -1677,15 +1578,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "person");
-        apiUrl.addArgument(PARAM_QUERY, personName);
-        apiUrl.addArgument(PARAM_ADULT, includeAdult);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, personName);
+        parameters.add(Param.ADULT, includeAdult);
+        parameters.add(Param.PAGE, page);
 
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("person").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1709,23 +1607,14 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "list");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, Integer.toString(page));
 
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
+        URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("list").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
+
         try {
             WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
@@ -1740,8 +1629,8 @@ public class TheMovieDbApi {
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
-     * on movie calls.
+     * You can use this method to search for production companies that are part
+     * of TMDb. The company IDs will map to those returned on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
@@ -1751,15 +1640,13 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "company");
-        apiUrl.addArgument(PARAM_QUERY, companyName);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, companyName);
+        parameters.add(Param.PAGE, page);
 
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("company").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
+
         try {
             WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
             TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
@@ -1780,19 +1667,13 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_SEARCH, "keyword");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.PAGE, Integer.toString(page));
 
-        if (StringUtils.isNotBlank(query)) {
-            apiUrl.addArgument(PARAM_QUERY, query);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, Integer.toString(page));
-        }
-
-        URL url = apiUrl.buildUrl();
-
+        URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("keyword").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
+
         try {
             WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
@@ -1814,10 +1695,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public MovieDbList getList(String listId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST);
-        apiUrl.addArgument(PARAM_ID, listId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, listId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_LIST).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1837,10 +1718,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDbList> getUserLists(String sessionId, int accountID) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountID + "/lists");
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountID, "/lists").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1861,16 +1742,15 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public String createList(String sessionId, String name, String description) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, "list");
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
         Map<String, String> body = new HashMap<String, String>();
         body.put("name", StringUtils.trimToEmpty(name));
         body.put("description", StringUtils.trimToEmpty(description));
-
         String jsonBody = convertToJson(body);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, "list").buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -1890,10 +1770,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST, listId + "/item_status");
-        apiUrl.addArgument(MOVIE_ID, movieId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_LIST).setSubMethod(listId, "/item_status").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1905,7 +1785,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method lets users add new movies to a list that they created. A valid session id is required.
+     * This method lets users add new movies to a list that they created. A
+     * valid session id is required.
      *
      * @param sessionId
      * @param listId
@@ -1918,7 +1799,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method lets users remove movies from a list that they created. A valid session id is required.
+     * This method lets users remove movies from a list that they created. A
+     * valid session id is required.
      *
      * @param sessionId
      * @param listId
@@ -1931,13 +1813,12 @@ public class TheMovieDbApi {
     }
 
     private StatusCode modifyMovieList(String sessionId, String listId, Integer movieId, String operation) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST, listId + operation);
-
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
         String jsonBody = convertToJson(Collections.singletonMap("media_id", movieId + ""));
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_LIST).setSubMethod(listId, operation).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -1957,10 +1838,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public List<MovieDb> getWatchList(String sessionId, int accountId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_ACCOUNT, accountId + "/movie_watchlist");
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/movie_watchlist").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1972,7 +1853,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method lets users delete a list that they created. A valid session id is required.
+     * This method lets users delete a list that they created. A valid session
+     * id is required.
      *
      * @param sessionId
      * @param listId
@@ -1980,11 +1862,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_LIST, listId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
 
-        apiUrl.addArgument(PARAM_SESSION, sessionId);
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_LIST).setSubMethod(listId).buildUrl(parameters);
         String webpage = httpTools.deleteRequest(url);
 
         try {
@@ -2005,10 +1886,10 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public Keyword getKeyword(String keywordId) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD);
-        apiUrl.addArgument(PARAM_ID, keywordId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, keywordId);
 
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_KEYWORD).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -2030,18 +1911,12 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_KEYWORD, URL_MOVIES);
-        apiUrl.addArgument(PARAM_ID, keywordId);
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, keywordId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
 
-        if (StringUtils.isNotBlank(language)) {
-            apiUrl.addArgument(PARAM_LANGUAGE, language);
-        }
-
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_KEYWORD).setSubMethod(URL_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -2059,10 +1934,12 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Changes Functions">
     /**
-     * Get a list of movie ids that have been edited. By default we show the last 24 hours and only 100 items per page. The maximum
-     * number of days that can be returned in a single request is 14. You can then use the movie changes API to get the actual data
-     * that has been changed. Please note that the change log system to support this was changed on October 5, 2012 and will only
-     * show movies that have been edited since.
+     * Get a list of movie ids that have been edited. By default we show the
+     * last 24 hours and only 100 items per page. The maximum number of days
+     * that can be returned in a single request is 14. You can then use the
+     * movie changes API to get the actual data that has been changed. Please
+     * note that the change log system to support this was changed on October 5,
+     * 2012 and will only show movies that have been edited since.
      *
      * @param page
      * @param startDate the start date of the changes, optional
@@ -2071,22 +1948,14 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TmdbResultsList<ChangedMovie> getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_MOVIE, "/changes");
+        TmdbParameters params = new TmdbParameters();
+        params.add(Param.PAGE, page);
+        params.add(Param.START_DATE, startDate);
+        params.add(Param.END_DATE, endDate);
 
-        if (page > 0) {
-            apiUrl.addArgument(PARAM_PAGE, page);
-        }
-
-        if (StringUtils.isNotBlank(startDate)) {
-            apiUrl.addArgument(PARAM_START_DATE, startDate);
-        }
-
-        if (StringUtils.isNotBlank(endDate)) {
-            apiUrl.addArgument(PARAM_END_DATE, endDate);
-        }
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("/changes").buildUrl(params);
         String webpage = httpTools.getRequest(url);
+
         try {
             WrapperMovieChanges wrapper = mapper.readValue(webpage, WrapperMovieChanges.class);
 
@@ -2107,9 +1976,7 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Jobs">
     public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_JOB, "/list");
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_JOB).setSubMethod("list").buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -2126,30 +1993,42 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Discover">
     /**
-     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of
+     * votes, genres and certifications.
      *
-     * You can alternatively create a "discover" object and pass it to this method to cut out the requirement for all of these
-     * parameters
+     * You can alternatively create a "discover" object and pass it to this
+     * method to cut out the requirement for all of these parameters
      *
      * @param page Minimum value is 1
      * @param language ISO 639-1 code.
-     * @param sortBy Available options are vote_average.desc, vote_average.asc, release_date.desc, release_date.asc,
-     * popularity.desc, popularity.asc
+     * @param sortBy Available options are vote_average.desc, vote_average.asc,
+     * release_date.desc, release_date.asc, popularity.desc, popularity.asc
      * @param includeAdult Toggle the inclusion of adult titles
-     * @param year Filter the results release dates to matches that include this value
-     * @param primaryReleaseYear Filter the results so that only the primary release date year has this value
-     * @param voteCountGte Only include movies that are equal to, or have a vote count higher than this value
-     * @param voteAverageGte Only include movies that are equal to, or have a higher average rating than this value
-     * @param withGenres Only include movies with the specified genres. Expected value is an integer (the id of a genre). Multiple
-     * values can be specified. Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'.
-     * @param releaseDateGte The minimum release to include. Expected format is YYYY-MM-DD
-     * @param releaseDateLte The maximum release to include. Expected format is YYYY-MM-DD
-     * @param certificationCountry Only include movies with certifications for a specific country. When this value is specified,
-     * 'certificationLte' is required. A ISO 3166-1 is expected.
-     * @param certificationLte Only include movies with this certification and lower. Expected value is a valid certification for
-     * the specified 'certificationCountry'.
-     * @param withCompanies Filter movies to include a specific company. Expected value is an integer (the id of a company). They
-     * can be comma separated to indicate an 'AND' query.
+     * @param year Filter the results release dates to matches that include this
+     * value
+     * @param primaryReleaseYear Filter the results so that only the primary
+     * release date year has this value
+     * @param voteCountGte Only include movies that are equal to, or have a vote
+     * count higher than this value
+     * @param voteAverageGte Only include movies that are equal to, or have a
+     * higher average rating than this value
+     * @param withGenres Only include movies with the specified genres. Expected
+     * value is an integer (the id of a genre). Multiple values can be
+     * specified. Comma separated indicates an 'AND' query, while a pipe (|)
+     * separated value indicates an 'OR'.
+     * @param releaseDateGte The minimum release to include. Expected format is
+     * YYYY-MM-DD
+     * @param releaseDateLte The maximum release to include. Expected format is
+     * YYYY-MM-DD
+     * @param certificationCountry Only include movies with certifications for a
+     * specific country. When this value is specified, 'certificationLte' is
+     * required. A ISO 3166-1 is expected.
+     * @param certificationLte Only include movies with this certification and
+     * lower. Expected value is a valid certification for the specified
+     * 'certificationCountry'.
+     * @param withCompanies Filter movies to include a specific company.
+     * Expected value is an integer (the id of a company). They can be comma
+     * separated to indicate an 'AND' query.
      * @return
      * @throws MovieDbException
      */
@@ -2177,18 +2056,15 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of
+     * votes, genres and certifications.
      *
      * @param discover A discover object containing the search criteria required
      * @return
      * @throws MovieDbException
      */
     public TmdbResultsList<MovieDb> getDiscover(Discover discover) throws MovieDbException {
-        ApiUrl apiUrl = new ApiUrl(apiKey, BASE_DISCOVER, "/movie");
-
-        apiUrl.setArguments(discover.getParams());
-
-        URL url = apiUrl.buildUrl();
+        URL url = new ApiUrl(apiKey, BASE_DISCOVER).setSubMethod("movie").buildUrl(discover.getParams());
         String webpage = httpTools.getRequest(url);
 
         try {
