@@ -76,6 +76,8 @@ public class ApiUrl {
     public static final String PARAM_YEAR = "year=";
     public static final String PARAM_START_DATE = "start_date=";
     public static final String PARAM_END_DATE = "end_date=";
+    public static final String PARAM_USERNAME = "username=";
+    public static final String PARAM_PASSWORD = "password=";
     private static final String APPEND_TO_RESPONSE = "append_to_response=";
 
     //<editor-fold defaultstate="collapsed" desc="Constructor Methods">

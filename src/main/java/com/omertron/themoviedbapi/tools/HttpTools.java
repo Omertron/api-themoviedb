@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -25,8 +27,7 @@ public class HttpTools {
 
     private final CloseableHttpClient httpClient;
     private static final Charset CHARSET = Charset.forName("UTF-8");
-    private static final int HTTP_STATUS_300 = 300;
-    private static final int HTTP_STATUS_500 = 500;
+    private static final String APPLICATION_JSON = "application/json";
 
     public HttpTools(CloseableHttpClient httpClient) {
         this.httpClient = httpClient;
@@ -42,7 +43,7 @@ public class HttpTools {
     public String getRequest(final URL url) throws MovieDbException {
         try {
             HttpGet httpGet = new HttpGet(url.toURI());
-            httpGet.addHeader("accept", "application/json");
+            httpGet.addHeader(HttpHeaders.ACCEPT, APPLICATION_JSON);
             return validateResponse(DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET), url);
         } catch (URISyntaxException ex) {
             throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
@@ -82,7 +83,8 @@ public class HttpTools {
     public String postRequest(final URL url, final String jsonBody) throws MovieDbException {
         try {
             HttpPost httpPost = new HttpPost(url.toURI());
-            httpPost.addHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            httpPost.addHeader(HTTP.CONTENT_TYPE, APPLICATION_JSON);
+            httpPost.addHeader(HttpHeaders.ACCEPT, APPLICATION_JSON);
             StringEntity params = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
             httpPost.setEntity(params);
 
@@ -103,9 +105,9 @@ public class HttpTools {
      * @throws MovieDbException
      */
     private String validateResponse(final DigestedResponse response, final URL url) throws MovieDbException {
-        if (response.getStatusCode() >= HTTP_STATUS_500) {
+        if (response.getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url, null);
-        } else if (response.getStatusCode() >= HTTP_STATUS_300) {
+        } else if (response.getStatusCode() >= HttpStatus.SC_MULTIPLE_CHOICES) {
             throw new MovieDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), response.getStatusCode(), url, null);
         }
 

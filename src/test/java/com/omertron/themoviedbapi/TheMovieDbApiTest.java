@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ChangedItem;
@@ -39,7 +38,6 @@ import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCredit;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Reviews;
-import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.TmdbConfiguration;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
@@ -50,12 +48,9 @@ import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import java.io.File;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -80,8 +75,6 @@ public class TheMovieDbApiTest {
     // API Key
     private static final String PROP_FIlENAME = "testing.properties";
     private static String API_KEY;
-    private static int ACCOUNT_ID_APITESTS;
-    private static String SESSION_ID_APITESTS;
     private static TheMovieDbApi tmdb;
     // Test data
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
@@ -102,7 +95,7 @@ public class TheMovieDbApiTest {
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void setUpClass() throws MovieDbException {
         TestLogger.Configure();
 
         Properties props = new Properties();
@@ -112,14 +105,12 @@ public class TheMovieDbApiTest {
             TestLogger.loadProperties(props, f);
 
             API_KEY = props.getProperty("API_Key");
-            ACCOUNT_ID_APITESTS = NumberUtils.toInt(props.getProperty("Account_ID"), 0);
-            SESSION_ID_APITESTS = props.getProperty("Session_ID");
         } else {
             LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
 
             props.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
-            props.setProperty("Account_ID", "ACCOUNT ID FOR SESSION TESTS");
-            props.setProperty("Session_ID", "INSERT_YOUR_SESSION_ID_HERE");
+            props.setProperty("Username", "INSERT_YOUR_USERNAME_HERE");
+            props.setProperty("Password", "INSERT_YOUR_PASSWORD_HERE");
 
             TestLogger.saveProperties(props, f, "Properties file for tests");
             fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
@@ -129,7 +120,7 @@ public class TheMovieDbApiTest {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() throws MovieDbException {
     }
 
     @Before
@@ -154,52 +145,6 @@ public class TheMovieDbApiTest {
         assertTrue("No poster sizes", tmdbConfig.getPosterSizes().size() > 0);
         assertTrue("No profile sizes", tmdbConfig.getProfileSizes().size() > 0);
         LOG.info(tmdbConfig.toString());
-    }
-
-    @Test
-    public void testAccount() throws MovieDbException {
-        LOG.info("Using Session ID '{}' for test", SESSION_ID_APITESTS);
-        Account account = tmdb.getAccount(SESSION_ID_APITESTS);
-
-        // Make sure properties are extracted correctly
-        assertEquals("apitests", account.getUserName());
-        assertEquals(ACCOUNT_ID_APITESTS, account.getId());
-    }
-
-    @Ignore("Session required")
-    public void testWatchList() throws MovieDbException {
-        // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-
-        // add a movie
-        tmdb.addToWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
-
-        List<MovieDb> watchList = tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertNotNull("Empty watch list returned", watchList);
-        assertEquals("Watchlist wrong size", 1, watchList.size());
-
-        // clean up again
-        tmdb.removeFromWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550);
-
-        Assert.assertTrue(tmdb.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-    }
-
-    @Ignore("Session required")
-    public void testFavorites() throws MovieDbException {
-        // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
-
-        // add a movie
-        tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, true);
-
-        List<MovieDb> watchList = tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertNotNull("Empty watch list returned", watchList);
-        assertEquals("Watchlist wrong size", 1, watchList.size());
-
-        // clean up again
-        tmdb.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, 550, false);
-
-        Assert.assertTrue(tmdb.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
     }
 
     /**
@@ -563,7 +508,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetUpcoming() throws Exception {
+    public void testGetUpcoming() throws MovieDbException {
         LOG.info("getUpcoming");
         TmdbResultsList<MovieDb> result = tmdb.getUpcoming(LANGUAGE_DEFAULT, 0);
         assertTrue("No upcoming movies found", !result.getResults().isEmpty());
@@ -575,7 +520,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetCollectionImages() throws Exception {
+    public void testGetCollectionImages() throws MovieDbException {
         LOG.info("getCollectionImages");
         TmdbResultsList<Artwork> result = tmdb.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
         assertFalse("No artwork found", result.getResults().isEmpty());
@@ -587,7 +532,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetAuthorisationToken() throws Exception {
+    public void testGetAuthorisationToken() throws MovieDbException {
         LOG.info("getAuthorisationToken");
         TokenAuthorisation result = tmdb.getAuthorisationToken();
         assertFalse("Token is null", result == null);
@@ -604,7 +549,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Ignore("Session required")
-    public void testGetSessionToken() throws Exception {
+    public void testGetSessionToken() throws MovieDbException {
         LOG.info("getSessionToken");
         TokenAuthorisation token = tmdb.getAuthorisationToken();
         assertFalse("Token is null", token == null);
@@ -623,14 +568,14 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Ignore("Not ready yet")
-    public void testGetGuestSessionToken() throws Exception {
+    public void testGetGuestSessionToken() throws MovieDbException {
         LOG.info("getGuestSessionToken");
         TokenSession result = tmdb.getGuestSessionToken();
 
         assertTrue("Failed to get guest session", result.getSuccess());
     }
 
-    public void testGetMovieLists() throws Exception {
+    public void testGetMovieLists() throws MovieDbException {
         LOG.info("getMovieLists");
         TmdbResultsList<MovieList> result = tmdb.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
         assertNotNull("No results found", result);
@@ -645,7 +590,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Ignore("Do not test this until it is fixed")
-    public void testGetMovieChanges() throws Exception {
+    public void testGetMovieChanges() throws MovieDbException {
         LOG.info("getMovieChanges");
 
         String startDate = "";
@@ -662,7 +607,7 @@ public class TheMovieDbApiTest {
     }
 
     @Test
-    public void testGetPersonLatest() throws Exception {
+    public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
 
         Person result = tmdb.getPersonLatest();
@@ -677,7 +622,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testSearchCollection() throws Exception {
+    public void testSearchCollection() throws MovieDbException {
         LOG.info("searchCollection");
         String query = "batman";
         int page = 0;
@@ -692,7 +637,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testSearchList() throws Exception {
+    public void testSearchList() throws MovieDbException {
         LOG.info("searchList");
         String query = "watch";
         int page = 0;
@@ -707,7 +652,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testSearchKeyword() throws Exception {
+    public void testSearchKeyword() throws MovieDbException {
         LOG.info("searchKeyword");
         String query = "action";
         int page = 0;
@@ -717,72 +662,12 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of postMovieRating method, of class TheMovieDbApi.
-     *
-     * TODO: Cannot be tested without a HTTP authorisation:
-     * http://help.themoviedb.org/kb/api/user-authentication
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Session required")
-    public void testMovieRating() throws Exception {
-        LOG.info("postMovieRating");
-        Integer movieID = 68724;
-        Integer rating = new Random().nextInt(10) + 1;
-
-        boolean wasPosted = tmdb.postMovieRating(SESSION_ID_APITESTS, movieID, rating);
-
-        assertNotNull(wasPosted);
-        assertTrue(wasPosted);
-
-        // get all rated movies
-        List<MovieDb> ratedMovies = tmdb.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
-        assertTrue(ratedMovies.size() > 0);
-
-        // make sure that we find the movie and it is rated correctly
-        boolean foundMovie = false;
-        for (MovieDb movie : ratedMovies) {
-            if (movie.getId() == movieID) {
-                assertEquals(movie.getUserRating(), (float) rating, 0);
-                foundMovie = true;
-            }
-        }
-        assertTrue(foundMovie);
-    }
-
-    @Ignore("Session required")
-    public void testMovieLists() throws Exception {
-        Integer movieID = 68724;
-
-        // use a random name to avoid that we clash we leftovers of incomplete test runs
-        String name = "test list " + new Random().nextInt(100);
-
-        // create the list
-        String listId = tmdb.createList(SESSION_ID_APITESTS, name, "api testing only");
-
-        // add a movie, and test that it is on the list now
-        tmdb.addMovieToList(SESSION_ID_APITESTS, listId, movieID);
-        MovieDbList list = tmdb.getList(listId);
-        assertNotNull("Movie list returned was null", list);
-        assertEquals("Unexpected number of items returned", 1, list.getItemCount());
-        assertEquals((int) movieID, list.getItems().get(0).getId());
-
-        // now remove the movie
-        tmdb.removeMovieFromList(SESSION_ID_APITESTS, listId, movieID);
-        assertEquals(tmdb.getList(listId).getItemCount(), 0);
-
-        // delete the test list
-        StatusCode statusCode = tmdb.deleteMovieList(SESSION_ID_APITESTS, listId);
-        assertEquals(statusCode.getStatusCode(), 13);
-    }
-
-    /**
      * Test of getPersonChanges method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
     @Ignore("Not ready yet")
-    public void testGetPersonChanges() throws Exception {
+    public void testGetPersonChanges() throws MovieDbException {
         LOG.info("getPersonChanges");
         String startDate = "";
         String endDate = "";
@@ -795,7 +680,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetList() throws Exception {
+    public void testGetList() throws MovieDbException {
         LOG.info("getList");
         String listId = "509ec17b19c2950a0600050d";
         MovieDbList result = tmdb.getList(listId);
@@ -808,7 +693,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetKeyword() throws Exception {
+    public void testGetKeyword() throws MovieDbException {
         LOG.info("getKeyword");
         Keyword result = tmdb.getKeyword(ID_KEYWORD);
         assertEquals("fight", result.getName());
@@ -820,7 +705,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetKeywordMovies() throws Exception {
+    public void testGetKeywordMovies() throws MovieDbException {
         LOG.info("getKeywordMovies");
         int page = 0;
         TmdbResultsList<KeywordMovie> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
@@ -833,7 +718,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetReviews() throws Exception {
+    public void testGetReviews() throws MovieDbException {
         LOG.info("getReviews");
         int page = 0;
         TmdbResultsList<Reviews> result = tmdb.getReviews(ID_MOVIE_THE_AVENGERS, LANGUAGE_DEFAULT, page);
@@ -842,58 +727,16 @@ public class TheMovieDbApiTest {
     }
 
     /**
-     * Test of compareMovies method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Not required")
-    public void testCompareMovies_3args() {
-    }
-
-    /**
-     * Test of compareMovies method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Not required")
-    public void testCompareMovies_4args() {
-    }
-
-    /**
-     * Test of getPersonPopular method, of class TheMovieDbApi.
-     *
-     */
-    @Ignore("Not required")
-    public void testGetPersonPopular_0args() {
-    }
-
-    /**
      * Test of getPersonPopular method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
     @Test
-    public void testGetPersonPopular_int() throws Exception {
+    public void testGetPersonPopular_int() throws MovieDbException {
         LOG.info("getPersonPopular");
         int page = 0;
         TmdbResultsList<Person> result = tmdb.getPersonPopular(page);
         assertFalse("No popular people", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getGenreMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Not required")
-    public void testGetGenreMovies_3args() throws Exception {
-    }
-
-    /**
-     * Test of getGenreMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Not required")
-    public void testGetGenreMovies_4args() throws Exception {
     }
 
     /**
@@ -902,7 +745,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetMovieChangesList() throws Exception {
+    public void testGetMovieChangesList() throws MovieDbException {
         LOG.info("getMovieChangesList");
         int page = 0;
         String startDate = "";
@@ -917,7 +760,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Ignore("Not ready yet")
-    public void testGetPersonChangesList() throws Exception {
+    public void testGetPersonChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
         int page = 0;
         String startDate = "";
@@ -933,7 +776,7 @@ public class TheMovieDbApiTest {
      * @throws MovieDbException
      */
     @Test
-    public void testGetJobs() throws Exception {
+    public void testGetJobs() throws MovieDbException {
         LOG.info("getJobs");
         TmdbResultsList<JobDepartment> result = tmdb.getJobs();
         assertFalse("No jobs found", result.getResults().isEmpty());
@@ -944,17 +787,8 @@ public class TheMovieDbApiTest {
      *
      * @throws MovieDbException
      */
-    @Ignore("Not required")
-    public void testGetDiscover_14args() throws Exception {
-    }
-
-    /**
-     * Test of getDiscover method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
     @Test
-    public void testGetDiscover_Discover() throws Exception {
+    public void testGetDiscover_Discover() throws MovieDbException {
         LOG.info("getDiscover");
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
