@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.tools;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -41,11 +42,19 @@ public class TmdbParameters {
     }
 
     /**
+     * Get the entry set of the parameters
+     *
+     * @return
+     */
+    public Set<Map.Entry<Param, String>> getEntries() {
+        return parameters.entrySet();
+    }
+
+    /**
      * Add a parameter to the collection
      *
      * @param key Parameter to add
-     * @param value The array value to use (will be converted into a comma
-     * separated list)
+     * @param value The array value to use (will be converted into a comma separated list)
      */
     public void add(Param key, String[] value) {
         parameters.put(key, toList(value));
@@ -70,7 +79,7 @@ public class TmdbParameters {
      * @param value The value to add (will be checked to ensure >0)
      */
     public void add(Param key, int value) {
-        if (value > 0) {
+        if (value > 0f) {
             parameters.put(key, String.valueOf(value));
         }
     }

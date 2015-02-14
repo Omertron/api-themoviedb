@@ -110,20 +110,20 @@ public class TheMovieDbApi {
     private TmdbConfiguration tmdbConfig;
     private HttpTools httpTools;
     // API Methods
-    private static final String BASE_MOVIE = "movie/";
-    private static final String BASE_PERSON = "person/";
-    private static final String BASE_COMPANY = "company/";
-    private static final String BASE_GENRE = "genre/";
-    private static final String BASE_AUTH = "authentication/";
-    private static final String BASE_COLLECTION = "collection/";
-    private static final String BASE_ACCOUNT = "account/";
-    private static final String BASE_SEARCH = "search/";
-    private static final String BASE_LIST = "list/";
-    private static final String BASE_KEYWORD = "keyword/";
-    private static final String BASE_JOB = "job/";
-    private static final String BASE_DISCOVER = "discover/";
-    private static final String URL_MOVIES = "/movies";
-    private static final String URL_IMAGES = "/images";
+    private static final String BASE_MOVIE = "movie";
+    private static final String BASE_PERSON = "person";
+    private static final String BASE_COMPANY = "company";
+    private static final String BASE_GENRE = "genre";
+    private static final String BASE_AUTH = "authentication";
+    private static final String BASE_COLLECTION = "collection";
+    private static final String BASE_ACCOUNT = "account";
+    private static final String BASE_SEARCH = "search";
+    private static final String BASE_LIST = "list";
+    private static final String BASE_KEYWORD = "keyword";
+    private static final String BASE_JOB = "job";
+    private static final String BASE_DISCOVER = "discover";
+    private static final String URL_MOVIES = "movies";
+    private static final String URL_IMAGES = "images";
     // Jackson JSON configuration
     private static ObjectMapper mapper = new ObjectMapper();
     // Constants
@@ -435,7 +435,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT.replace("/", "")).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -458,7 +458,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/favorite_movies").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "favorite_movies").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -478,7 +478,7 @@ public class TheMovieDbApi {
         body.put("favorite", isFavorite);
         String jsonBody = convertToJson(body);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/favorite").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "favorite").buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -524,7 +524,7 @@ public class TheMovieDbApi {
         body.put("movie_watchlist", add);
         String jsonBody = convertToJson(body);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/movie_watchlist").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "movie_watchlist").buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -624,7 +624,7 @@ public class TheMovieDbApi {
         parameters.add(Param.COUNTRY, country);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("/alternative_titles").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("alternative_titles").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
@@ -1107,7 +1107,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/rated/movies").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "rated/movies").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1137,7 +1137,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod(movieId, "/rating").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod(movieId, "rating").buildUrl(parameters);
 
         String jsonBody = convertToJson(Collections.singletonMap("value", rating));
         String webpage = httpTools.postRequest(url, jsonBody);
@@ -1518,8 +1518,8 @@ public class TheMovieDbApi {
         parameters.add(Param.QUERY, movieName);
         parameters.add(Param.YEAR, searchYear);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.ADULT, Boolean.toString(includeAdult));
-        parameters.add(Param.PAGE, Integer.toString(page));
+        parameters.add(Param.ADULT, includeAdult);
+        parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("movie").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -1549,7 +1549,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, Integer.toString(page));
+        parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("collection").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -1610,7 +1610,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, Integer.toString(page));
+        parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("list").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -1669,7 +1669,7 @@ public class TheMovieDbApi {
     public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
-        parameters.add(Param.PAGE, Integer.toString(page));
+        parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, BASE_SEARCH).setSubMethod("keyword").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -1721,7 +1721,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountID, "/lists").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountID, "lists").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1773,7 +1773,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
 
-        URL url = new ApiUrl(apiKey, BASE_LIST).setSubMethod(listId, "/item_status").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_LIST).setSubMethod(listId, "item_status").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1795,7 +1795,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        return modifyMovieList(sessionId, listId, movieId, "/add_item");
+        return modifyMovieList(sessionId, listId, movieId, "add_item");
     }
 
     /**
@@ -1809,7 +1809,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        return modifyMovieList(sessionId, listId, movieId, "/remove_item");
+        return modifyMovieList(sessionId, listId, movieId, "remove_item");
     }
 
     private StatusCode modifyMovieList(String sessionId, String listId, Integer movieId, String operation) throws MovieDbException {
@@ -1841,7 +1841,7 @@ public class TheMovieDbApi {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "/movie_watchlist").buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, BASE_ACCOUNT).setSubMethod(accountId, "movie_watchlist").buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -1953,7 +1953,7 @@ public class TheMovieDbApi {
         params.add(Param.START_DATE, startDate);
         params.add(Param.END_DATE, endDate);
 
-        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("/changes").buildUrl(params);
+        URL url = new ApiUrl(apiKey, BASE_MOVIE).setSubMethod("changes").buildUrl(params);
         String webpage = httpTools.getRequest(url);
 
         try {

@@ -23,9 +23,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,12 +43,10 @@ public class ApiUrl {
     // Parameter configuration
     private static final String DELIMITER_FIRST = "?";
     private static final String DELIMITER_SUBSEQUENT = "&";
-    private static final String DEFAULT_STRING = "";
     // Properties
     private final String apiKey;
     private final String method;
-    private String submethod;
-    private final Map<String, String> arguments = new HashMap<String, String>();
+    private String submethod = StringUtils.EMPTY;
 
     /**
      * Constructor for the simple API URL method without a sub-method
@@ -110,8 +109,11 @@ public class ApiUrl {
      * @param params
      * @return
      */
-    public URL buildUrl(TmdbParameters params) {
+    public URL buildUrl(final TmdbParameters params) {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
+
+        LOG.trace("Method: '{}', Sub-method: '{}', Params: {}", method, submethod,
+                ToStringBuilder.reflectionToString(params, ToStringStyle.SHORT_PREFIX_STYLE));
 
         // Get the start of the URL
         urlString.append(method);
@@ -119,14 +121,14 @@ public class ApiUrl {
         // We have either a queury, or a direct request
         if (params.has(Param.QUERY)) {
             // Append the suffix of the API URL
-            if (StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
-                urlString.deleteCharAt(urlString.length() - 1);
+            if (StringUtils.isNotBlank(submethod)) {
+                urlString.append("/").append(submethod);
             }
-            urlString.append(submethod);
 
             // Append the key information
-            urlString.append(DELIMITER_FIRST).append(Param.API_KEY.getValue());
-            urlString.append(apiKey);
+            urlString.append(DELIMITER_FIRST)
+                    .append(Param.API_KEY.getValue())
+                    .append(apiKey);
 
             // Append the search term
             urlString.append(DELIMITER_SUBSEQUENT);
@@ -141,40 +143,40 @@ public class ApiUrl {
                 // If we can't encode it, try it raw
                 urlString.append(query);
             }
-
-            // Remove the query from the arguments so it is not added later
-            params.remove(Param.QUERY);
         } else {
             // Append the ID if provided
             if (params.has(Param.ID)) {
-                urlString.append(params.get(Param.ID));
-                params.remove(Param.ID);
+                urlString.append("/").append(params.get(Param.ID));
             }
 
-            // Append the suffix of the API URL
-            if (StringUtils.endsWith(urlString, "/") && submethod.startsWith("/")) {
-                urlString.deleteCharAt(urlString.length() - 1);
+            if (StringUtils.isNotBlank(submethod)) {
+                urlString.append("/").append(submethod);
             }
-            urlString.append(submethod);
 
             // Append the key information
-            urlString.append(DELIMITER_FIRST).append(Param.API_KEY);
-            urlString.append(apiKey);
+            urlString.append(DELIMITER_FIRST)
+                    .append(Param.API_KEY.getValue())
+                    .append(apiKey);
         }
 
-        for (Map.Entry<String, String> argEntry : arguments.entrySet()) {
-            urlString.append(DELIMITER_SUBSEQUENT).append(argEntry.getKey());
-            urlString.append(argEntry.getValue());
+        // Append remaining parameters
+        for (Map.Entry<Param, String> argEntry : params.getEntries()) {
+            // Skip the ID an QUERY params
+            if (argEntry.getKey() == Param.ID || argEntry.getKey() == Param.QUERY) {
+                continue;
+            }
+
+            urlString.append(DELIMITER_SUBSEQUENT)
+                    .append(argEntry.getKey().getValue())
+                    .append(argEntry.getValue());
         }
 
         try {
             LOG.trace("URL: {}", urlString.toString());
             return new URL(urlString.toString());
         } catch (MalformedURLException ex) {
-            LOG.warn("Failed to create URL {} - {}", urlString.toString(), ex.toString());
+            LOG.warn("Failed to create URL {} - {}", urlString.toString(), ex.getMessage());
             return null;
-        } finally {
-            arguments.clear();
         }
     }
 }
