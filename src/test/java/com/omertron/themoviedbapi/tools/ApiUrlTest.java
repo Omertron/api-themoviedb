@@ -64,7 +64,7 @@ public class ApiUrlTest {
     public void testConfiguration() {
         LOG.info("Configuration Test");
 
-        URL result = new ApiUrl(APIKEY, "configuration").buildUrl();
+        URL result = new ApiUrl(APIKEY, MethodBase.CONFIGURATION).buildUrl();
         String expResult = "http://api.themoviedb.org/3/configuration?api_key=APIKEY";
         assertEquals("Wrong config URL", expResult, result.toString());
     }
@@ -75,8 +75,8 @@ public class ApiUrlTest {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, "query");
 
-        URL result = new ApiUrl(APIKEY, "method").buildUrl(parameters);
-        String expResult = "http://api.themoviedb.org/3/method?api_key=APIKEY&query=query";
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/movie?api_key=APIKEY&query=query";
         assertEquals("Wrong Query URL", expResult, result.toString());
     }
 
@@ -86,8 +86,8 @@ public class ApiUrlTest {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, "query");
 
-        URL result = new ApiUrl(APIKEY, "method").setSubMethod("sub").buildUrl(parameters);
-        String expResult = "http://api.themoviedb.org/3/method/sub?api_key=APIKEY&query=query";
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/movie/latest?api_key=APIKEY&query=query";
         assertEquals("Wrong Query-Sub URL", expResult, result.toString());
     }
 
@@ -99,8 +99,8 @@ public class ApiUrlTest {
         parameters.add(Param.PAGE, 1);
         parameters.add(Param.LANGUAGE, "lang");
 
-        URL result = new ApiUrl(APIKEY, "method").setSubMethod("sub").buildUrl(parameters);
-        String expResult = "http://api.themoviedb.org/3/method/sub?api_key=APIKEY&query=query&language=lang&page=1";
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/movie/latest?api_key=APIKEY&query=query&language=lang&page=1";
         assertEquals("Wrong Query Extra URL", expResult, result.toString());
     }
 
@@ -110,8 +110,8 @@ public class ApiUrlTest {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, "ID");
 
-        URL result = new ApiUrl(APIKEY, "method").buildUrl(parameters);
-        String expResult = "http://api.themoviedb.org/3/method/ID?api_key=APIKEY";
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/movie/ID?api_key=APIKEY";
         assertEquals("Wrong ID URL", expResult, result.toString());
     }
 
@@ -121,8 +121,8 @@ public class ApiUrlTest {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, "ID");
 
-        URL result = new ApiUrl(APIKEY, "method").setSubMethod("sub").buildUrl(parameters);
-        String expResult = "http://api.themoviedb.org/3/method/ID/sub?api_key=APIKEY";
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/movie/ID/latest?api_key=APIKEY";
         assertEquals("Wrong ID-Sub URL", expResult, result.toString());
     }
 
@@ -134,8 +134,8 @@ public class ApiUrlTest {
         parameters.add(Param.PAGE, 1);
         parameters.add(Param.LANGUAGE, "lang");
 
-        URL result = new ApiUrl(APIKEY, "method").setSubMethod("sub").buildUrl(parameters);
-        String expResult = "http://api.themoviedb.org/3/method/ID/sub?api_key=APIKEY&language=lang&page=1";
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/movie/ID/latest?api_key=APIKEY&language=lang&page=1";
         assertEquals("Wrong Query Extra URL", expResult, result.toString());
     }
 

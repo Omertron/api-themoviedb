@@ -54,9 +54,9 @@ public class ApiUrl {
      * @param apiKey
      * @param method
      */
-    public ApiUrl(String apiKey, String method) {
+    public ApiUrl(String apiKey, MethodBase method) {
         this.apiKey = apiKey;
-        this.method = method;
+        this.method = method.getValue();
     }
 
     /**
@@ -65,8 +65,8 @@ public class ApiUrl {
      * @param submethod
      * @return
      */
-    public ApiUrl setSubMethod(String submethod) {
-        this.submethod = submethod;
+    public ApiUrl setSubMethod(MethodSub submethod) {
+        this.submethod = submethod.getValue();
         return this;
     }
 
@@ -77,8 +77,8 @@ public class ApiUrl {
      * @param submethod
      * @return
      */
-    public ApiUrl setSubMethod(int someId, String submethod) {
-        this.submethod = someId + submethod;
+    public ApiUrl setSubMethod(int someId, MethodSub submethod) {
+        this.submethod = someId + submethod.getValue();
         return this;
     }
 
@@ -89,8 +89,8 @@ public class ApiUrl {
      * @param submethod
      * @return
      */
-    public ApiUrl setSubMethod(String someId, String submethod) {
-        this.submethod = someId + submethod;
+    public ApiUrl setSubMethod(String someId, MethodSub submethod) {
+        this.submethod = someId + submethod.getValue();
         return this;
     }
 
