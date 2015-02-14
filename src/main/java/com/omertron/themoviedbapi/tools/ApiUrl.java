@@ -78,8 +78,7 @@ public class ApiUrl {
      * @return
      */
     public ApiUrl setSubMethod(int someId, MethodSub submethod) {
-        this.submethod = someId + submethod.getValue();
-        return this;
+        return setSubMethod(String.valueOf(someId), submethod);
     }
 
     /**
@@ -90,7 +89,10 @@ public class ApiUrl {
      * @return
      */
     public ApiUrl setSubMethod(String someId, MethodSub submethod) {
-        this.submethod = someId + submethod.getValue();
+        StringBuilder sm = new StringBuilder(someId);
+        sm.append("/");
+        sm.append(submethod.getValue());
+        this.submethod = sm.toString();
         return this;
     }
 
