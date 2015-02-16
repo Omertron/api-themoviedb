@@ -27,7 +27,6 @@ import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
@@ -47,7 +46,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
-import com.omertron.themoviedbapi.wrapper.WrapperReviews;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
@@ -365,26 +363,6 @@ public class TmdbMovies extends AbstractMethod {
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get similar movies", url, ex);
-        }
-    }
-
-    public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, movieId);
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-        parameters.add(Param.APPEND, appendToResponse);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.REVIEWS).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperReviews wrapper = MAPPER.readValue(webpage, WrapperReviews.class);
-            TmdbResultsList<Reviews> results = new TmdbResultsList<Reviews>(wrapper.getReviews());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get reviews", url, ex);
         }
     }
 

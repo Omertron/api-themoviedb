@@ -1249,10 +1249,6 @@ public class TheMovieDbApi {
         return tmdbMovies.getSimilarMovies(movieId, language, page, appendToResponse);
     }
 
-    public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        return tmdbMovies.getReviews(movieId, language, page, appendToResponse);
-    }
-
     /**
      * Get the lists that the movie belongs to
      *
@@ -1447,11 +1443,25 @@ public class TheMovieDbApi {
         return tmdbPeople.getPersonLatest();
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Reviews">
+    /**
+     *
+     * @param movieId
+     * @param language
+     * @param page
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+        return tmdbReviews.getReviews(movieId, language, page, appendToResponse);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Search">
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="TV">
     //</editor-fold>
 }
