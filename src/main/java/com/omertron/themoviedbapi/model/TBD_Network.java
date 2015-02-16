@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * @author stuart.boston
  */
 @JsonRootName("???")
-public class TBD_FindResults extends AbstractJsonMapping {
+public class TBD_Network extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 

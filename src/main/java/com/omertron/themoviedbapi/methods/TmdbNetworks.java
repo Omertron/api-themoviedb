@@ -19,7 +19,16 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.TBD_Network;
+import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
+import java.io.IOException;
+import java.net.URL;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Class to hold the Network Methods
@@ -37,4 +46,28 @@ public class TmdbNetworks extends AbstractMethod {
     public TmdbNetworks(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
     }
+
+    /**
+     * This method is used to retrieve the basic information about a TV network.
+     * <p>
+     * You can use this ID to search for TV shows with the discover method.
+     *
+     * @param networkId
+     * @return
+     * @throws MovieDbException
+     */
+    public TBD_Network getNetworkInfo(int networkId) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, networkId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.NETWORK).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, TBD_Network.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get network information", url, ex);
+        }
+    }
+
 }

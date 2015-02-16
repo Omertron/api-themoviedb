@@ -37,6 +37,7 @@ public enum MethodBase {
     KEYWORD("keyword"),
     LIST("list"),
     MOVIE("movie"),
+    NETWORK("network"),
     PERSON("person"),
     SEARCH("search"),
     TV("tv");
