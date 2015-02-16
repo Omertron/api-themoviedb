@@ -70,8 +70,7 @@ public class TmdbAuthentication extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TokenAuthorisation.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get Authorisation Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Failed to get Authorisation Token", url, ex);
         }
     }
 
@@ -88,7 +87,6 @@ public class TmdbAuthentication extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
 
         if (!token.getSuccess()) {
-            LOG.warn("Session token was not successful!");
             throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!");
         }
 
@@ -99,8 +97,7 @@ public class TmdbAuthentication extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TokenSession.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Session Token", url, ex);
         }
     }
 
@@ -119,7 +116,6 @@ public class TmdbAuthentication extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
 
         if (!token.getSuccess()) {
-            LOG.warn("Session token was not successful!");
             throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!");
         }
 
@@ -133,8 +129,7 @@ public class TmdbAuthentication extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TokenAuthorisation.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Session Token", url, ex);
         }
     }
 
@@ -160,7 +155,6 @@ public class TmdbAuthentication extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TokenSession.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get Guest Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Guest Session Token", url, ex);
         }
     }}

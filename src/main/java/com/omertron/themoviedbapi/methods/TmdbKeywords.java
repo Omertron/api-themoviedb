@@ -68,8 +68,7 @@ public class TmdbKeywords extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, Keyword.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get keyword: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get keyword " + keywordId, url, ex);
         }
 
     }
@@ -98,8 +97,7 @@ public class TmdbKeywords extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            LOG.warn("Failed to get keyword movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get keyword movies", url, ex);
         }
     }
 

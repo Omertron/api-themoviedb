@@ -271,8 +271,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to modify watch list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to modify watch list", url, ex);
         }
     }
 }

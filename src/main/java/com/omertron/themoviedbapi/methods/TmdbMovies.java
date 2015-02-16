@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import static com.omertron.themoviedbapi.TheMovieDbApi.convertToJson;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.Keyword;
@@ -38,6 +37,8 @@ import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.PostBody;
+import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
@@ -51,7 +52,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -79,8 +79,7 @@ public class TmdbMovies extends AbstractMethod {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
-     * found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param movieId
      * @param language
@@ -99,7 +98,6 @@ public class TmdbMovies extends AbstractMethod {
         try {
             MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
-                LOG.warn("No movie found for ID '{}'", movieId);
                 throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for ID: " + movieId, url);
             }
             return movie;
@@ -113,8 +111,7 @@ public class TmdbMovies extends AbstractMethod {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
-     * found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param imdbId
      * @param language
@@ -143,8 +140,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for
-     * a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for a particular movie.
      *
      * @param movieId
      * @param country
@@ -199,8 +195,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the
-     * images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -228,8 +223,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added
-     * to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -257,8 +251,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data
-     * we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -286,8 +279,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular
-     * movie.
+     * This method is used to retrieve all of the trailers for a particular movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -317,8 +309,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for
-     * a specific movie.
+     * This method is used to retrieve a list of the available translations for a specific movie.
      *
      * @param movieId
      * @param appendToResponse
@@ -344,11 +335,9 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a
-     * particular movie.
+     * The similar movies method will let you retrieve the similar movies for a particular movie.
      *
-     * This data is created dynamically but with the help of users votes on
-     * TMDb.
+     * This data is created dynamically but with the help of users votes on TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -480,8 +469,7 @@ public class TmdbMovies extends AbstractMethod {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default
-     * response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
      *
      * TODO: Implement more than 20 movies
      *
@@ -539,8 +527,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10
-     * votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
      *
      * The default response will return 20 movies.
      *
@@ -590,7 +577,9 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(movieId, MethodSub.RATING).buildUrl(parameters);
 
-        String jsonBody = convertToJson(Collections.singletonMap("value", rating));
+        String jsonBody = new PostTools()
+                .add(PostBody.VALUE, rating)
+                .build();
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -599,8 +588,7 @@ public class TmdbMovies extends AbstractMethod {
             int code = status.getStatusCode();
             return code == POST_SUCCESS_STATUS_CODE;
         } catch (IOException ex) {
-            LOG.warn("Failed to post movie rating: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to post movie rating", url, ex);
         }
     }
 

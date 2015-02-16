@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
@@ -92,7 +91,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperPersonList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
@@ -608,21 +606,6 @@ public class TheMovieDbApi {
         } catch (IOException ex) {
             LOG.warn("Failed to find keyword: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Use Jackson to convert Map to JSON string.
-     *
-     * @param map
-     * @return
-     * @throws MovieDbException
-     */
-    public static String convertToJson(Map<String, ?> map) throws MovieDbException {
-        try {
-            return MAPPER.writeValueAsString(map);
-        } catch (JsonProcessingException jpe) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "JSON conversion failed", "", jpe);
         }
     }
 
@@ -1584,7 +1567,9 @@ public class TheMovieDbApi {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="People">
+
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Reviews">
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Search">

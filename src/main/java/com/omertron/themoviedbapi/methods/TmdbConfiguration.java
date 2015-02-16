@@ -119,8 +119,7 @@ public class TmdbConfiguration extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            LOG.warn("Failed to get job list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get job list", url, ex);
         }
     }
 

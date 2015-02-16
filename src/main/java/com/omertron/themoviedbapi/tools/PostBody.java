@@ -31,7 +31,8 @@ public enum PostBody {
     FAVORITE("favorite"),
     WATCHLIST("watchlist"),
     NAME("name"),
-    DESCRIPTION("description");
+    DESCRIPTION("description"),
+    VALUE("value");
 
     private final String value;
 
