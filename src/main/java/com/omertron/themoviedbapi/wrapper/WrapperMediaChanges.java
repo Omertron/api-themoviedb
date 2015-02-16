@@ -19,35 +19,21 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Configuration;
-import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author Stuart
- */
-public class WrapperConfig extends AbstractWrapper {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model.ChangedMedia;
 
-    @JsonProperty("images")
-    private Configuration tmdbConfiguration;
-    @JsonProperty("change_keys")
-    private List<String> changeKeys = Collections.emptyList();
+public class WrapperMediaChanges extends AbstractWrapperAll {
 
-    public Configuration getTmdbConfiguration() {
-        return tmdbConfiguration;
+    @JsonProperty("results")
+    private List<ChangedMedia> results;
+
+    public List<ChangedMedia> getResults() {
+        return results;
     }
 
-    public void setTmdbConfiguration(Configuration tmdbConfiguration) {
-        this.tmdbConfiguration = tmdbConfiguration;
-    }
-
-    public List<String> getChangeKeys() {
-        return changeKeys;
-    }
-
-    public void setChangeKeys(List<String> changeKeys) {
-        this.changeKeys = changeKeys;
+    public void setResults(List<ChangedMedia> results) {
+        this.results = results;
     }
 }

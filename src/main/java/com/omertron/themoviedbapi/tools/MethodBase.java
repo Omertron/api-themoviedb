@@ -26,6 +26,7 @@ public enum MethodBase {
 
     ACCOUNT("account"),
     AUTH("authentication"),
+    CERTIFICATION("certification"),
     COLLECTION("collection"),
     COMPANY("company"),
     CONFIGURATION("configuration"),
@@ -36,7 +37,8 @@ public enum MethodBase {
     LIST("list"),
     MOVIE("movie"),
     PERSON("person"),
-    SEARCH("search");
+    SEARCH("search"),
+    TV("tv");
 
     private final String value;
 

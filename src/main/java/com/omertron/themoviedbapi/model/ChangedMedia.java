@@ -17,37 +17,32 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Configuration;
-import java.util.Collections;
-import java.util.List;
 
-/**
- *
- * @author Stuart
- */
-public class WrapperConfig extends AbstractWrapper {
+public class ChangedMedia extends AbstractJsonMapping {
 
-    @JsonProperty("images")
-    private Configuration tmdbConfiguration;
-    @JsonProperty("change_keys")
-    private List<String> changeKeys = Collections.emptyList();
+    private static final long serialVersionUID = 1L;
 
-    public Configuration getTmdbConfiguration() {
-        return tmdbConfiguration;
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("adult")
+    private boolean adult;
+
+    public String getId() {
+        return id;
     }
 
-    public void setTmdbConfiguration(Configuration tmdbConfiguration) {
-        this.tmdbConfiguration = tmdbConfiguration;
+    public boolean isAdult() {
+        return adult;
     }
 
-    public List<String> getChangeKeys() {
-        return changeKeys;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setChangeKeys(List<String> changeKeys) {
-        this.changeKeys = changeKeys;
+    public void setAdult(boolean adult) {
+        this.adult = adult;
     }
 }

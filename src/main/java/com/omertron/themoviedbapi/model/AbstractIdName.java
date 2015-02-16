@@ -31,9 +31,6 @@ public class AbstractIdName extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 2L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")

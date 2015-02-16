@@ -151,19 +151,19 @@ public class TestAccounts {
         }
 
         // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getWatchList(tokenSession.getSessionId(), account.getId()).isEmpty());
+        Assert.assertTrue(tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId()).isEmpty());
 
         // add a movie
         tmdb.addToWatchList(tokenSession.getSessionId(), account.getId(), 550);
 
-        List<MovieDb> watchList = tmdb.getWatchList(tokenSession.getSessionId(), account.getId());
+        List<MovieDb> watchList = tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId());
         assertNotNull("Empty watch list returned", watchList);
         assertEquals("Watchlist wrong size", 1, watchList.size());
 
         // clean up again
         tmdb.removeFromWatchList(tokenSession.getSessionId(), account.getId(), 550);
 
-        Assert.assertTrue(tmdb.getWatchList(tokenSession.getSessionId(), account.getId()).isEmpty());
+        Assert.assertTrue(tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId()).isEmpty());
     }
 
     @Test

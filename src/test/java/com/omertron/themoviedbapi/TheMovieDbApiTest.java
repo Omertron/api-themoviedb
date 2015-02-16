@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.ChangedItem;
-import com.omertron.themoviedbapi.model.ChangedMovie;
+import com.omertron.themoviedbapi.model.ChangedMedia;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
@@ -38,7 +38,7 @@ import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.model.PersonCredit;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Reviews;
-import com.omertron.themoviedbapi.model.TmdbConfiguration;
+import com.omertron.themoviedbapi.model.Configuration;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
 import com.omertron.themoviedbapi.model.Translation;
@@ -138,7 +138,7 @@ public class TheMovieDbApiTest {
     public void testConfiguration() {
         LOG.info("Test Configuration");
 
-        TmdbConfiguration tmdbConfig = tmdb.getConfiguration();
+        Configuration tmdbConfig = tmdb.getConfiguration();
         assertNotNull("Configuration failed", tmdbConfig);
         assertTrue("No base URL", StringUtils.isNotBlank(tmdbConfig.getBaseUrl()));
         assertTrue("No backdrop sizes", tmdbConfig.getBackdropSizes().size() > 0);
@@ -750,7 +750,7 @@ public class TheMovieDbApiTest {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        TmdbResultsList<ChangedMovie> result = tmdb.getMovieChangesList(page, startDate, endDate);
+        TmdbResultsList<ChangedMedia> result = tmdb.getMovieChangesList(page, startDate, endDate);
         assertFalse("No movie changes.", result.getResults().isEmpty());
     }
 

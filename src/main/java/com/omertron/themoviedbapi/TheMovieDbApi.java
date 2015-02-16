@@ -21,6 +21,27 @@ package com.omertron.themoviedbapi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.omertron.themoviedbapi.methods.TmdbAccount;
+import com.omertron.themoviedbapi.methods.TmdbAuthentication;
+import com.omertron.themoviedbapi.methods.TmdbCertifications;
+import com.omertron.themoviedbapi.methods.TmdbChanges;
+import com.omertron.themoviedbapi.methods.TmdbCollections;
+import com.omertron.themoviedbapi.methods.TmdbCompanies;
+import com.omertron.themoviedbapi.methods.TmdbConfiguration;
+import com.omertron.themoviedbapi.methods.TmdbCredits;
+import com.omertron.themoviedbapi.methods.TmdbDiscover;
+import com.omertron.themoviedbapi.methods.TmdbFind;
+import com.omertron.themoviedbapi.methods.TmdbGenres;
+import com.omertron.themoviedbapi.methods.TmdbJobs;
+import com.omertron.themoviedbapi.methods.TmdbKeywords;
+import com.omertron.themoviedbapi.methods.TmdbLists;
+import com.omertron.themoviedbapi.methods.TmdbMovies;
+import com.omertron.themoviedbapi.methods.TmdbNetworks;
+import com.omertron.themoviedbapi.methods.TmdbPeople;
+import com.omertron.themoviedbapi.methods.TmdbReviews;
+import com.omertron.themoviedbapi.methods.TmdbSearch;
+import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.*;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
@@ -56,15 +77,36 @@ public class TheMovieDbApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
     private String apiKey;
-    private TmdbConfiguration tmdbConfig;
+    private Configuration tmdbConfig;
     private HttpTools httpTools;
     // Jackson JSON configuration
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     // Constants
     private static final String MOVIE_ID = "movie_id";
     private static final int YEAR_LENGTH = 4;
     private static final int RATING_MAX = 10;
     private static final int POST_SUCCESS_STATUS_CODE = 12;
+    // Sub-methods
+    private static TmdbAccount tmdbAccount;
+    private static TmdbAuthentication tmdbAuth;
+    private static TmdbCertifications tmdbCertifications;
+    private static TmdbChanges tmdbChanges;
+    private static TmdbCollections tmdbCollections;
+    private static TmdbCompanies tmdbCompany;
+    private static TmdbConfiguration tmdbConfiguration;
+    private static TmdbCredits tmdbCredits;
+    private static TmdbDiscover tmdbDiscover;
+    private static TmdbFind tmdbFind;
+    private static TmdbGenres tmdbGenre;
+    private static TmdbJobs tmdbJobs;
+    private static TmdbKeywords tmdbKeyword;
+    private static TmdbLists tmdbList;
+    private static TmdbMovies tmdbMovies;
+    private static TmdbNetworks tmdbNetworks;
+    private static TmdbPeople tmdbPeople;
+    private static TmdbReviews tmdbReviews;
+    private static TmdbSearch tmdbSearch;
+    private static TmdbTV tmdbTv;
 
     /**
      * API for The Movie Db.
@@ -91,11 +133,40 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(configUrl);
 
         try {
-            WrapperConfig wc = mapper.readValue(webpage, WrapperConfig.class);
+            WrapperConfig wc = MAPPER.readValue(webpage, WrapperConfig.class);
             tmdbConfig = wc.getTmdbConfiguration();
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to read configuration", configUrl, ex);
         }
+    }
+
+    /**
+     * Initialise the sub-classes once the API key and http client are known
+     *
+     * @param apiKey
+     * @param httpTools
+     */
+    private void initialise(String apiKey, HttpTools httpTools) {
+        tmdbAccount = new TmdbAccount(apiKey, httpTools);
+        tmdbAuth = new TmdbAuthentication(apiKey, httpTools);
+        tmdbCertifications = new TmdbCertifications(apiKey, httpTools);
+        tmdbChanges = new TmdbChanges(apiKey, httpTools);
+        tmdbCollections = new TmdbCollections(apiKey, httpTools);
+        tmdbCompany = new TmdbCompanies(apiKey, httpTools);
+        tmdbConfiguration = new TmdbConfiguration(apiKey, httpTools);
+        tmdbCredits = new TmdbCredits(apiKey, httpTools);
+        tmdbDiscover = new TmdbDiscover(apiKey, httpTools);
+        tmdbFind = new TmdbFind(apiKey, httpTools);
+        tmdbGenre = new TmdbGenres(apiKey, httpTools);
+        tmdbJobs = new TmdbJobs(apiKey, httpTools);
+        tmdbKeyword = new TmdbKeywords(apiKey, httpTools);
+        tmdbList = new TmdbLists(apiKey, httpTools);
+        tmdbMovies = new TmdbMovies(apiKey, httpTools);
+        tmdbNetworks = new TmdbNetworks(apiKey, httpTools);
+        tmdbPeople = new TmdbPeople(apiKey, httpTools);
+        tmdbReviews = new TmdbReviews(apiKey, httpTools);
+        tmdbSearch = new TmdbSearch(apiKey, httpTools);
+        tmdbTv = new TmdbTV(apiKey, httpTools);
     }
 
     /**
@@ -195,13 +266,12 @@ public class TheMovieDbApi {
         return StringUtils.isNotBlank(year) && !"UNKNOWN".equals(year);
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Configuration Functions">
     /**
      * Get the configuration information
      *
      * @return
      */
-    public TmdbConfiguration getConfiguration() {
+    public Configuration getConfiguration() {
         return tmdbConfig;
     }
 
@@ -228,238 +298,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.INVALID_URL, sb.toString(), "", ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Authentication Functions">
-    /**
-     * This method is used to generate a valid request token for user based authentication.
-     *
-     * A request token is required in order to request a session id.
-     *
-     * You can generate any number of request tokens but they will expire after 60 minutes.
-     *
-     * As soon as a valid session id has been created the token will be destroyed.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.TOKEN_NEW).buildUrl(parameters);
-
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, TokenAuthorisation.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Authorisation Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method is used to generate a session id for user based authentication.
-     *
-     * A session id is required in order to use any of the write methods.
-     *
-     * @param token
-     * @return
-     * @throws MovieDbException
-     */
-    public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-
-        if (!token.getSuccess()) {
-            LOG.warn("Session token was not successful!");
-            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!");
-        }
-
-        parameters.add(Param.TOKEN, token.getRequestToken());
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.SESSION_NEW).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, TokenSession.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method is used to generate a session id for user based authentication. User must provide their username and password
-     *
-     * A session id is required in order to use any of the write methods.
-     *
-     * @param token Session token
-     * @param username User's username
-     * @param password User's password
-     * @return
-     * @throws MovieDbException
-     */
-    public TokenAuthorisation getSessionTokenLogin(TokenAuthorisation token, String username, String password) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-
-        if (!token.getSuccess()) {
-            LOG.warn("Session token was not successful!");
-            throw new MovieDbException(ApiExceptionType.AUTH_FAILURE, "Authorisation token was not successful!");
-        }
-
-        parameters.add(Param.TOKEN, token.getRequestToken());
-        parameters.add(Param.USERNAME, username);
-        parameters.add(Param.PASSWORD, password);
-
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.TOKEN_VALIDATE).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, TokenAuthorisation.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method is used to generate a guest session id.
-     *
-     * A guest session can be used to rate movies without having a registered TMDb user account.
-     *
-     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
-     * account in the future.
-     *
-     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
-     *
-     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public TokenSession getGuestSessionToken() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.GUEST_SESSION).buildUrl();
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, TokenSession.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Guest Session Token: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get the basic information for an account. You will need to have a valid session id.
-     *
-     * @param sessionId
-     * @return
-     * @throws MovieDbException
-     */
-    public Account getAccount(String sessionId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, Account.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get Account: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get the account favourite movies
-     *
-     * @param sessionId
-     * @param accountId
-     * @return
-     * @throws MovieDbException
-     */
-    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get favorite movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer movieId, boolean isFavorite) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        Map<String, Object> body = new HashMap<String, Object>();
-        body.put(MOVIE_ID, movieId);
-        body.put("favorite", isFavorite);
-        String jsonBody = convertToJson(body);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.FAVORITE).buildUrl(parameters);
-        String webpage = httpTools.postRequest(url, jsonBody);
-
-        try {
-            return mapper.readValue(webpage, StatusCode.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get favorite status: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Add a movie to an accounts watch list.
-     *
-     * @param sessionId
-     * @param accountId
-     * @param movieId
-     * @return
-     * @throws MovieDbException
-     */
-    public StatusCode addToWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
-        return modifyWatchList(sessionId, accountId, movieId, true);
-    }
-
-    /**
-     * Remove a movie from an accounts watch list.
-     *
-     * @param sessionId
-     * @param accountId
-     * @param movieId
-     * @return
-     * @throws MovieDbException
-     */
-    public StatusCode removeFromWatchList(String sessionId, int accountId, Integer movieId) throws MovieDbException {
-        return modifyWatchList(sessionId, accountId, movieId, false);
-    }
-
-    private StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, boolean add) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        Map<String, Object> body = new HashMap<String, Object>();
-        body.put(MOVIE_ID, movieId);
-        body.put("movie_watchlist", add);
-        String jsonBody = convertToJson(body);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.MOVIE_WATCHLIST).buildUrl(parameters);
-        String webpage = httpTools.postRequest(url, jsonBody);
-
-        try {
-            return mapper.readValue(webpage, StatusCode.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to modify watch list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Movie Functions">
     /**
      * This method is used to retrieve all of the basic movie information.
      *
@@ -482,7 +321,7 @@ public class TheMovieDbApi {
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
-            MovieDb movie = mapper.readValue(webpage, MovieDb.class);
+            MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
                 LOG.warn("No movie found for ID '{}'", movieId);
                 throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for ID: " + movieId, url);
@@ -517,7 +356,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            MovieDb movie = mapper.readValue(webpage, MovieDb.class);
+            MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
             if (movie == null || movie.getId() == 0) {
                 LOG.warn("No movie found for IMDB ID: '{}'", imdbId);
                 throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for IMDB ID: " + imdbId, url);
@@ -547,7 +386,7 @@ public class TheMovieDbApi {
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.ALT_TITLES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
-            WrapperAlternativeTitles wrapper = mapper.readValue(webpage, WrapperAlternativeTitles.class);
+            WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
             TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
             results.copyWrapper(wrapper);
             return results;
@@ -576,7 +415,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovieCasts wrapper = mapper.readValue(webpage, WrapperMovieCasts.class);
+            WrapperMovieCasts wrapper = MAPPER.readValue(webpage, WrapperMovieCasts.class);
             TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -605,7 +444,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -634,7 +473,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovieKeywords wrapper = mapper.readValue(webpage, WrapperMovieKeywords.class);
+            WrapperMovieKeywords wrapper = MAPPER.readValue(webpage, WrapperMovieKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getKeywords());
             results.copyWrapper(wrapper);
             return results;
@@ -663,7 +502,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperReleaseInfo wrapper = mapper.readValue(webpage, WrapperReleaseInfo.class);
+            WrapperReleaseInfo wrapper = MAPPER.readValue(webpage, WrapperReleaseInfo.class);
             TmdbResultsList<ReleaseInfo> results = new TmdbResultsList<ReleaseInfo>(wrapper.getCountries());
             results.copyWrapper(wrapper);
             return results;
@@ -694,7 +533,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperVideos wrapper = mapper.readValue(webpage, WrapperVideos.class);
+            WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
             TmdbResultsList<Video> results = new TmdbResultsList<Video>(wrapper.getVideos());
             results.copyWrapper(wrapper);
             return results;
@@ -721,7 +560,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperTranslations wrapper = mapper.readValue(webpage, WrapperTranslations.class);
+            WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
             TmdbResultsList<Translation> results = new TmdbResultsList<Translation>(wrapper.getTranslations());
             results.copyWrapper(wrapper);
             return results;
@@ -756,7 +595,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -777,7 +616,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperReviews wrapper = mapper.readValue(webpage, WrapperReviews.class);
+            WrapperReviews wrapper = MAPPER.readValue(webpage, WrapperReviews.class);
             TmdbResultsList<Reviews> results = new TmdbResultsList<Reviews>(wrapper.getReviews());
             results.copyWrapper(wrapper);
             return results;
@@ -808,7 +647,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            WrapperMovieList wrapper = MAPPER.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
             results.copyWrapper(wrapper);
             return results;
@@ -816,49 +655,6 @@ public class TheMovieDbApi {
             LOG.warn("Failed to get movie lists: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
-    }
-
-    /**
-     * Get the changes for a specific movie id.
-     *
-     * Changes are grouped by key, and ordered by date in descending order.
-     *
-     * By default, only the last 24 hours of changes are returned.
-     *
-     * The maximum number of days that can be returned in a single request is 14.
-     *
-     * The language is present on fields that are translatable.
-     *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
-     *
-     * @param movieId
-     * @param startDate the start date of the changes, optional
-     * @param endDate the end date of the changes, optional
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, movieId);
-        parameters.add(Param.START_DATE, startDate);
-        parameters.add(Param.END_DATE, endDate);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.CHANGES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-        try {
-            WrapperChanges wrapper = mapper.readValue(webpage, WrapperChanges.class);
-
-            Map<String, List<ChangedItem>> results = new HashMap<String, List<ChangedItem>>();
-            for (ChangeKeyItem changeItem : wrapper.getChangedItems()) {
-                results.put(changeItem.getKey(), changeItem.getChangedItems());
-            }
-
-            return new TmdbResultsMap<String, List<ChangedItem>>(results);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get movie changes: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-
     }
 
     /**
@@ -872,7 +668,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, MovieDb.class);
+            return MAPPER.readValue(webpage, MovieDb.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest movie: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -900,7 +696,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -932,7 +728,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -963,7 +759,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -994,35 +790,12 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
             LOG.warn("Failed to get top rated movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get the list of rated movies (and associated rating) for an account.
-     *
-     * @param sessionId
-     * @param accountId
-     * @return
-     * @throws MovieDbException
-     */
-    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.RATED_MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get rated movies: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
@@ -1052,7 +825,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
-            StatusCode status = mapper.readValue(webpage, StatusCode.class);
+            StatusCode status = MAPPER.readValue(webpage, StatusCode.class);
             LOG.info("Status: {}", status);
             int code = status.getStatusCode();
             return code == POST_SUCCESS_STATUS_CODE;
@@ -1061,9 +834,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Collection Functions">
     /**
      * This method is used to retrieve all of the basic information about a movie collection.
      *
@@ -1083,7 +854,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, CollectionInfo.class);
+            return MAPPER.readValue(webpage, CollectionInfo.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get collection information: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -1107,7 +878,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
             results.copyWrapper(wrapper);
             return results;
@@ -1116,9 +887,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="People Functions">
     /**
      * This method is used to retrieve all of the basic person information.
      *
@@ -1138,7 +907,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, Person.class);
+            return MAPPER.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get person info: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -1164,7 +933,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperPersonCredits wrapper = mapper.readValue(webpage, WrapperPersonCredits.class);
+            WrapperPersonCredits wrapper = MAPPER.readValue(webpage, WrapperPersonCredits.class);
             TmdbResultsList<PersonCredit> results = new TmdbResultsList<PersonCredit>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
@@ -1189,7 +958,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperImages wrapper = mapper.readValue(webpage, WrapperImages.class);
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.PROFILE));
             results.copyWrapper(wrapper);
             return results;
@@ -1197,27 +966,6 @@ public class TheMovieDbApi {
             LOG.warn("Failed to get person images: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
-    }
-
-    /**
-     * Get the changes for a specific person id.
-     *
-     * Changes are grouped by key, and ordered by date in descending order.
-     *
-     * By default, only the last 24 hours of changes are returned.
-     *
-     * The maximum number of days that can be returned in a single request is 14.
-     *
-     * The language is present on fields that are translatable.
-     *
-     * @param personId
-     * @param startDate
-     * @param endDate
-     * @throws MovieDbException
-     */
-    public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
-        LOG.trace("getPersonChanges: id: {}, start: {}, end: {}", personId, startDate, endDate);
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
 
     /**
@@ -1249,7 +997,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperPersonList wrapper = mapper.readValue(webpage, WrapperPersonList.class);
+            WrapperPersonList wrapper = MAPPER.readValue(webpage, WrapperPersonList.class);
             TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getPersonList());
             results.copyWrapper(wrapper);
             return results;
@@ -1270,15 +1018,13 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, Person.class);
+            return MAPPER.readValue(webpage, Person.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get latest person: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Company Functions">
     /**
      * This method is used to retrieve the basic information about a production company on TMDb.
      *
@@ -1294,7 +1040,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, Company.class);
+            return MAPPER.readValue(webpage, Company.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get company information: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -1324,7 +1070,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperCompanyMovies wrapper = mapper.readValue(webpage, WrapperCompanyMovies.class);
+            WrapperCompanyMovies wrapper = MAPPER.readValue(webpage, WrapperCompanyMovies.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -1333,9 +1079,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Genre Functions">
     /**
      * You can use this method to retrieve the list of genres used on TMDb.
      *
@@ -1353,7 +1097,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperGenres wrapper = mapper.readValue(webpage, WrapperGenres.class);
+            WrapperGenres wrapper = MAPPER.readValue(webpage, WrapperGenres.class);
             TmdbResultsList<Genre> results = new TmdbResultsList<Genre>(wrapper.getGenres());
             results.copyWrapper(wrapper);
             return results;
@@ -1388,7 +1132,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -1397,9 +1141,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Search Functions">
     /**
      * Search Movies This is a good starting point to start finding movies on TMDb.
      *
@@ -1423,7 +1165,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -1453,7 +1195,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperCollection wrapper = mapper.readValue(webpage, WrapperCollection.class);
+            WrapperCollection wrapper = MAPPER.readValue(webpage, WrapperCollection.class);
             TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -1484,7 +1226,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperPerson wrapper = mapper.readValue(webpage, WrapperPerson.class);
+            WrapperPerson wrapper = MAPPER.readValue(webpage, WrapperPerson.class);
             TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -1513,7 +1255,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovieList wrapper = mapper.readValue(webpage, WrapperMovieList.class);
+            WrapperMovieList wrapper = MAPPER.readValue(webpage, WrapperMovieList.class);
             TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
             results.copyWrapper(wrapper);
             return results;
@@ -1545,7 +1287,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperCompany wrapper = mapper.readValue(webpage, WrapperCompany.class);
+            WrapperCompany wrapper = MAPPER.readValue(webpage, WrapperCompany.class);
             TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -1572,7 +1314,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperKeywords wrapper = mapper.readValue(webpage, WrapperKeywords.class);
+            WrapperKeywords wrapper = MAPPER.readValue(webpage, WrapperKeywords.class);
             TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -1581,9 +1323,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="List Functions">
     /**
      * Get a list by its ID
      *
@@ -1599,32 +1339,9 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, MovieDbList.class);
+            return MAPPER.readValue(webpage, MovieDbList.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get all lists of a given user
-     *
-     * @param sessionId
-     * @param accountID
-     * @return The lists
-     * @throws MovieDbException
-     */
-    public List<MovieDbList> getUserLists(String sessionId, int accountID) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountID, MethodSub.LISTS).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, WrapperMovieDbList.class).getLists();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get user list: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
@@ -1651,7 +1368,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, MovieDbListStatus.class).getListId();
+            return MAPPER.readValue(webpage, MovieDbListStatus.class).getListId();
         } catch (IOException ex) {
             LOG.warn("Failed to create list: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -1674,7 +1391,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, ListItemStatus.class).isItemPresent();
+            return MAPPER.readValue(webpage, ListItemStatus.class).isItemPresent();
         } catch (IOException ex) {
             LOG.warn("Failed to get item status: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -1717,32 +1434,9 @@ public class TheMovieDbApi {
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class);
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to remove movie from list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get the list of movies on an accounts watchlist.
-     *
-     * @param sessionId
-     * @param accountId
-     * @return The watchlist of the user
-     * @throws MovieDbException
-     */
-    public List<MovieDb> getWatchList(String sessionId, int accountId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.MOVIE_WATCHLIST).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return mapper.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get watch list: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
@@ -1764,15 +1458,13 @@ public class TheMovieDbApi {
         String webpage = httpTools.deleteRequest(url);
 
         try {
-            return mapper.readValue(webpage, StatusCode.class);
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             LOG.warn("Failed to delete movie list: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Keyword Functions">
     /**
      * Get the basic information for a specific keyword id.
      *
@@ -1788,7 +1480,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return mapper.readValue(webpage, Keyword.class);
+            return MAPPER.readValue(webpage, Keyword.class);
         } catch (IOException ex) {
             LOG.warn("Failed to get keyword: {}", ex.getMessage(), ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
@@ -1815,7 +1507,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperKeywordMovies wrapper = mapper.readValue(webpage, WrapperKeywordMovies.class);
+            WrapperKeywordMovies wrapper = MAPPER.readValue(webpage, WrapperKeywordMovies.class);
             TmdbResultsList<KeywordMovie> results = new TmdbResultsList<KeywordMovie>(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -1825,55 +1517,18 @@ public class TheMovieDbApi {
         }
 
     }
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Changes Functions">
-    /**
-     * Get a list of movie ids that have been edited. By default we show the last 24 hours and only 100 items per page. The maximum
-     * number of days that can be returned in a single request is 14. You can then use the movie changes API to get the actual data
-     * that has been changed. Please note that the change log system to support this was changed on October 5, 2012 and will only
-     * show movies that have been edited since.
-     *
-     * @param page
-     * @param startDate the start date of the changes, optional
-     * @param endDate the end date of the changes, optional
-     * @return List of changed movie
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<ChangedMovie> getMovieChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        TmdbParameters params = new TmdbParameters();
-        params.add(Param.PAGE, page);
-        params.add(Param.START_DATE, startDate);
-        params.add(Param.END_DATE, endDate);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.CHANGES).buildUrl(params);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovieChanges wrapper = mapper.readValue(webpage, WrapperMovieChanges.class);
-
-            TmdbResultsList<ChangedMovie> results = new TmdbResultsList<ChangedMovie>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get movie changes: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
 
     public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
         LOG.trace("getPersonChangesList: page: {}, start: {}, end: {}", page, startDate, endDate);
         throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Jobs">
     public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.JOB).setSubMethod(MethodSub.LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperJobList wrapper = mapper.readValue(webpage, WrapperJobList.class);
+            WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
             TmdbResultsList<JobDepartment> results = new TmdbResultsList<JobDepartment>(wrapper.getJobs());
             results.copyWrapper(wrapper);
             return results;
@@ -1882,9 +1537,7 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Discover">
     /**
      * Discover movies by different types of data like average rating, number of votes, genres and certifications.
      *
@@ -1948,7 +1601,7 @@ public class TheMovieDbApi {
         String webpage = httpTools.getRequest(url);
 
         try {
-            WrapperMovie wrapper = mapper.readValue(webpage, WrapperMovie.class);
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
             TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
             results.copyWrapper(wrapper);
             return results;
@@ -1957,7 +1610,6 @@ public class TheMovieDbApi {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
         }
     }
-    //</editor-fold>
 
     /**
      * Use Jackson to convert Map to JSON string.
@@ -1968,9 +1620,359 @@ public class TheMovieDbApi {
      */
     public static String convertToJson(Map<String, ?> map) throws MovieDbException {
         try {
-            return mapper.writeValueAsString(map);
+            return MAPPER.writeValueAsString(map);
         } catch (JsonProcessingException jpe) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "JSON conversion failed", "", jpe);
         }
     }
+
+    //<editor-fold defaultstate="collapsed" desc="Account">
+    /**
+     * Get the basic information for an account. You will need to have a valid session id.
+     *
+     * @param sessionId
+     * @return
+     * @throws MovieDbException
+     */
+    public Account getAccount(String sessionId) throws MovieDbException {
+        return tmdbAccount.getAccount(sessionId);
+    }
+
+    /**
+     * Get all lists of a given user
+     *
+     * @param sessionId
+     * @param accountId
+     * @return The lists
+     * @throws MovieDbException
+     */
+    public List<MovieDbList> getUserLists(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getUserLists(sessionId, accountId);
+    }
+
+    /**
+     * Get the account favourite movies
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getFavoriteMovies(sessionId, accountId);
+    }
+
+    /**
+     * Add or remove a movie to an accounts favourite list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param mediaId
+     * @param mediaType
+     * @param isFavorite
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer mediaId, MediaType mediaType, boolean isFavorite) throws MovieDbException {
+        return tmdbAccount.changeFavoriteStatus(sessionId, accountId, mediaId, mediaType, isFavorite);
+    }
+
+    /**
+     * Get the list of rated movies (and associated rating) for an account.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getRatedMovies(sessionId, accountId);
+    }
+
+    /**
+     * Get the list of rated TV shows (and associated rating) for an account.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
+    public List getRatedTV(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getRatedTV(sessionId, accountId);
+    }
+
+    /**
+     * Get the list of movies on an accounts watchlist.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return The watchlist of the user
+     * @throws MovieDbException
+     */
+    public List<MovieDb> getWatchListMovie(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getWatchListMovie(sessionId, accountId);
+    }
+
+    /**
+     * Get the list of movies on an accounts watchlist.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return The watchlist of the user
+     * @throws MovieDbException
+     */
+    public List getWatchListTV(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getWatchListTV(sessionId, accountId);
+    }
+
+    /**
+     * Add a movie to an accounts watch list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param mediaId
+     * @param mediaType
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode addToWatchList(String sessionId, int accountId, Integer mediaId, MediaType mediaType) throws MovieDbException {
+        return tmdbAccount.modifyWatchList(sessionId, accountId, mediaId, mediaType, true);
+    }
+
+    /**
+     * Remove a movie from an accounts watch list.
+     *
+     * @param sessionId
+     * @param accountId
+     * @param mediaId
+     * @param mediaType
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode removeFromWatchList(String sessionId, int accountId, Integer mediaId, MediaType mediaType) throws MovieDbException {
+        return tmdbAccount.modifyWatchList(sessionId, accountId, mediaId, mediaType, false);
+    }
+
+    /**
+     * Get the list of favorite TV series for an account.
+     *
+     * @param sessionId
+     * @param accountId
+     * @return
+     * @throws MovieDbException
+     */
+    public List getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+        return tmdbAccount.getFavoriteTv(sessionId, accountId);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Authentication">
+    /**
+     * This method is used to generate a valid request token for user based authentication.
+     *
+     * A request token is required in order to request a session id.
+     *
+     * You can generate any number of request tokens but they will expire after 60 minutes.
+     *
+     * As soon as a valid session id has been created the token will be destroyed.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
+        return tmdbAuth.getAuthorisationToken();
+    }
+
+    /**
+     * This method is used to generate a session id for user based authentication.
+     *
+     * A session id is required in order to use any of the write methods.
+     *
+     * @param token
+     * @return
+     * @throws MovieDbException
+     */
+    public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
+        return tmdbAuth.getSessionToken(token);
+    }
+
+    /**
+     * This method is used to generate a session id for user based authentication. User must provide their username and password
+     *
+     * A session id is required in order to use any of the write methods.
+     *
+     * @param token Session token
+     * @param username User's username
+     * @param password User's password
+     * @return
+     * @throws MovieDbException
+     */
+    public TokenAuthorisation getSessionTokenLogin(TokenAuthorisation token, String username, String password) throws MovieDbException {
+        return tmdbAuth.getSessionTokenLogin(token, username, password);
+    }
+
+    /**
+     * This method is used to generate a guest session id.
+     *
+     * A guest session can be used to rate movies without having a registered TMDb user account.
+     *
+     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
+     * account in the future.
+     *
+     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
+     *
+     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TokenSession getGuestSessionToken() throws MovieDbException {
+        return tmdbAuth.getGuestSessionToken();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Certifications">
+    /**
+     * Get a list of movies certification.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsMap<String, List<Certification>> getMoviesCertification() throws MovieDbException {
+        return tmdbCertifications.getMoviesCertification();
+    }
+
+    /**
+     * Get a list of tv certification.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsMap<String, List<Certification>> getTvCertification() throws MovieDbException {
+        return tmdbCertifications.getTvCertification();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Changes">
+    /**
+     * Get the changes for a specific movie id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
+     *
+     * @param movieId
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getMovieChanges(movieId, startDate, endDate);
+    }
+
+    /**
+     * Get the changes for a specific person id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * @param personId
+     * @param startDate
+     * @param endDate
+     * @throws MovieDbException
+     */
+    public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        tmdbChanges.getPersonChanges(personId, startDate, endDate);
+    }
+
+    /**
+     * Get a list of Movie IDs that have been edited.
+     *
+     * You can then use the movie changes API to get the actual data that has been changed.
+     *
+     * @param page
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<ChangedMedia> getMovieChangeList(int page, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getChangeList(MethodBase.MOVIE, page, startDate, endDate);
+    }
+
+    /**
+     * Get a list of TV IDs that have been edited.
+     *
+     * You can then use the TV changes API to get the actual data that has been changed.
+     *
+     * @param page
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<ChangedMedia> getTvChangeList(int page, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getChangeList(MethodBase.TV, page, startDate, endDate);
+    }
+
+    /**
+     * Get a list of Person IDs that have been edited.
+     *
+     * You can then use the person changes API to get the actual data that has been changed.
+     *
+     * @param page
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return List of changed movie
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<ChangedMedia> getPersonChangeList(int page, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getChangeList(MethodBase.PERSON, page, startDate, endDate);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Collections">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Companies">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Configuration">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Credits">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Discover">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Find">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Genres">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Jobs">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Keywords">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Lists">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Movies">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Networks">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="People">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Reviews">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Search">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="TV">
+    //</editor-fold>
 }

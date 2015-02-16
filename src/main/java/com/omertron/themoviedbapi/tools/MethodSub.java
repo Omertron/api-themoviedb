@@ -42,7 +42,9 @@ public enum MethodSub {
     LISTS("lists"),
     MOVIE("movie"),
     MOVIES("movies"),
-    MOVIE_WATCHLIST("movie_watchlist"),
+    WATCHLIST("watchlist"),
+    WATCHLIST_MOVIES("watchlist/movies"),
+    WATCHLIST_TV("watchlist/tv"),
     NOW_PLAYING("now-playing"),
     PERSON("person"),
     POPULAR("popular"),
@@ -59,7 +61,9 @@ public enum MethodSub {
     UPCOMING("upcoming"),
     VIDEOS("videos"),
     ADD_ITEM("add_item"),
-    REMOVE_ITEM("remove_item");
+    REMOVE_ITEM("remove_item"),
+    MOVIE_LIST("movie/list"),
+    TV_LIST("tv/list");
 
     private final String value;
 
