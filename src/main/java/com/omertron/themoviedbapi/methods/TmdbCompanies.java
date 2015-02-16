@@ -19,7 +19,20 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.tools.MethodSub;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperCompanyMovies;
+import java.io.IOException;
+import java.net.URL;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Class to hold the Company Methods
@@ -37,4 +50,60 @@ public class TmdbCompanies extends AbstractMethod {
     public TmdbCompanies(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
     }
+
+    /**
+     * This method is used to retrieve the basic information about a production
+     * company on TMDb.
+     *
+     * @param companyId
+     * @return
+     * @throws MovieDbException
+     */
+    public Company getCompanyInfo(int companyId) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, companyId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.COMPANY).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, Company.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get company information", url, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the movies associated with a company.
+     *
+     * These movies are returned in order of most recently released to oldest.
+     * The default response will return 20 movies per page.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param companyId
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, companyId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+
+        URL url = new ApiUrl(apiKey, MethodBase.COMPANY).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperCompanyMovies wrapper = MAPPER.readValue(webpage, WrapperCompanyMovies.class);
+            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get company movies", url, ex);
+        }
+    }
+
 }

@@ -19,7 +19,11 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.TBD_ExternalSource;
+import com.omertron.themoviedbapi.model.TBD_FindResults;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Class to hold the Find Methods
@@ -36,5 +40,32 @@ public class TmdbFind extends AbstractMethod {
      */
     public TmdbFind(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
+    }
+
+    /**
+     * You con use this method to find movies, tv series or persons using
+     * external ids.
+     *
+     * Supported query ids are
+     * <ul>
+     * <li>Movies: imdb_id</li>
+     * <li>People: imdb_id, freebase_mid, freebase_id, tvrage_id</li>
+     * <li>TV Series: imdb_id, freebase_mid, freebase_id, tvdb_id,
+     * tvrage_id</li>
+     * <li>TV Seasons: freebase_mid, freebase_id, tvdb_id, tvrage_id</li>
+     * <li>TV Episodes: imdb_id, freebase_mid, freebase_id, tvdb_id,
+     * tvrage_idimdb_id, freebase_mid, freebase_id, tvrage_id, tvdb_id.
+     * </ul>
+     *
+     * For details see http://docs.themoviedb.apiary.io/#find
+     *
+     * @param id the external id
+     * @param externalSource one of {@link ExternalSource}.
+     * @param language the language
+     * @return
+     * @throws MovieDbException
+     */
+    public TBD_FindResults find(String id, TBD_ExternalSource externalSource, String language) throws MovieDbException {
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "not implemented yet");
     }
 }

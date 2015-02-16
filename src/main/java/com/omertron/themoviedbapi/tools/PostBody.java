@@ -17,38 +17,34 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.methods;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omertron.themoviedbapi.tools.HttpTools;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.omertron.themoviedbapi.tools;
 
 /**
- * Abstract methods
+ * List of values to use for the POST requests
  *
- * @author Stuart
+ * @author Stuart.Boston
  */
-public class AbstractMethod {
+public enum PostBody {
 
-    // The API key to be used
-    protected final String apiKey;
-    // The HttpTools to use
-    protected final HttpTools httpTools;
-    // Jackson JSON configuration
-    protected static final ObjectMapper MAPPER = new ObjectMapper();
-    // Logger
-    protected static final Logger LOG = LoggerFactory.getLogger(TmdbAccount.class);
+    MEDIA_ID("media_id"),
+    MEDIA_TYPE("media_type"),
+    FAVORITE("favorite"),
+    WATCHLIST("watchlist"),
+    NAME("name"),
+    DESCRIPTION("description");
 
-    /**
-     * Default constructor for the methods
-     *
-     * @param apiKey
-     * @param httpTools
-     */
-    public AbstractMethod(String apiKey, HttpTools httpTools) {
-        this.apiKey = apiKey;
-        this.httpTools = httpTools;
+    private final String value;
+
+    private PostBody(String value) {
+        this.value = value;
     }
 
+    /**
+     * Get the URL parameter to use
+     *
+     * @return
+     */
+    public String getValue() {
+        return this.value;
+    }
 }

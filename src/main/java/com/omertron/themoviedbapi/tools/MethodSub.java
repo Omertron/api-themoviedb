@@ -63,7 +63,8 @@ public enum MethodSub {
     ADD_ITEM("add_item"),
     REMOVE_ITEM("remove_item"),
     MOVIE_LIST("movie/list"),
-    TV_LIST("tv/list");
+    TV_LIST("tv/list"),
+    TV("tv");
 
     private final String value;
 

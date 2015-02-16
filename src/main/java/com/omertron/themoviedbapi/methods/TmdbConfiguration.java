@@ -19,7 +19,21 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import com.omertron.themoviedbapi.model.Configuration;
+import com.omertron.themoviedbapi.model.JobDepartment;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.tools.MethodSub;
+import com.omertron.themoviedbapi.wrapper.WrapperConfig;
+import com.omertron.themoviedbapi.wrapper.WrapperJobList;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Class to hold the Configuration Methods
@@ -27,6 +41,12 @@ import com.omertron.themoviedbapi.tools.HttpTools;
  * @author stuart.boston
  */
 public class TmdbConfiguration extends AbstractMethod {
+
+    /**
+     * Cache the configuration in memory<br/>
+     * It rarely changes, so this should be safe.
+     */
+    private static Configuration config = null;
 
     /**
      * Constructor
@@ -37,4 +57,71 @@ public class TmdbConfiguration extends AbstractMethod {
     public TmdbConfiguration(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
     }
+
+    /**
+     * Get the configuration<br/>
+     * If the configuration has been previously retrieved, use that instead
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public Configuration getConfig() throws MovieDbException {
+        if (config == null) {
+            URL configUrl = new ApiUrl(apiKey, MethodBase.CONFIGURATION).buildUrl();
+            String webpage = httpTools.getRequest(configUrl);
+
+            try {
+                WrapperConfig wc = MAPPER.readValue(webpage, WrapperConfig.class);
+                config = wc.getTmdbConfiguration();
+            } catch (IOException ex) {
+                throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to read configuration", configUrl, ex);
+            }
+        }
+        return config;
+    }
+
+    /**
+     * Generate the full image URL from the size and image path
+     *
+     * @param imagePath
+     * @param requiredSize
+     * @return
+     * @throws MovieDbException
+     */
+    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
+        if (!config.isValidSize(requiredSize)) {
+            throw new MovieDbException(ApiExceptionType.INVALID_IMAGE, "Required size '" + requiredSize + "' is not valid");
+        }
+
+        StringBuilder sb = new StringBuilder(config.getBaseUrl());
+        sb.append(requiredSize);
+        sb.append(imagePath);
+        try {
+            return new URL(sb.toString());
+        } catch (MalformedURLException ex) {
+            throw new MovieDbException(ApiExceptionType.INVALID_URL, "Failed to create image URL", sb.toString(), ex);
+        }
+    }
+
+    /**
+     * Get a list of valid jobs
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
+        URL url = new ApiUrl(apiKey, MethodBase.JOB).setSubMethod(MethodSub.LIST).buildUrl();
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
+            TmdbResultsList<JobDepartment> results = new TmdbResultsList<JobDepartment>(wrapper.getJobs());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            LOG.warn("Failed to get job list: {}", ex.getMessage(), ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+        }
+    }
+
 }

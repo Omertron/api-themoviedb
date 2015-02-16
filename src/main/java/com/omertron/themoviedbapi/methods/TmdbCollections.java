@@ -19,7 +19,21 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.ArtworkType;
+import com.omertron.themoviedbapi.model.CollectionInfo;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.tools.MethodSub;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import java.io.IOException;
+import java.net.URL;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Class to hold the Collections Methods
@@ -36,5 +50,58 @@ public class TmdbCollections extends AbstractMethod {
      */
     public TmdbCollections(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
+    }
+
+    /**
+     * This method is used to retrieve all of the basic information about a
+     * movie collection.
+     *
+     * You can get the ID needed for this method by making a getMovieInfo
+     * request for the belongs_to_collection.
+     *
+     * @param collectionId
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, collectionId);
+        parameters.add(Param.LANGUAGE, language);
+
+        URL url = new ApiUrl(apiKey, MethodBase.COLLECTION).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, CollectionInfo.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get collection information", url, ex);
+        }
+    }
+
+    /**
+     * Get all of the images for a particular collection by collection id.
+     *
+     * @param collectionId
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, collectionId);
+        parameters.add(Param.LANGUAGE, language);
+
+        URL url = new ApiUrl(apiKey, MethodBase.COLLECTION).setSubMethod(MethodSub.IMAGES).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
+            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get collection images", url, ex);
+        }
     }
 }

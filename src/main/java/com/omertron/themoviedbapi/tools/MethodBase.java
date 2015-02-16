@@ -30,6 +30,7 @@ public enum MethodBase {
     COLLECTION("collection"),
     COMPANY("company"),
     CONFIGURATION("configuration"),
+    CREDIT("credit"),
     DISCOVER("discover"),
     GENRE("genre"),
     JOB("job"),

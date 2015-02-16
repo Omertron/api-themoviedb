@@ -33,7 +33,6 @@ import com.omertron.themoviedbapi.methods.TmdbCredits;
 import com.omertron.themoviedbapi.methods.TmdbDiscover;
 import com.omertron.themoviedbapi.methods.TmdbFind;
 import com.omertron.themoviedbapi.methods.TmdbGenres;
-import com.omertron.themoviedbapi.methods.TmdbJobs;
 import com.omertron.themoviedbapi.methods.TmdbKeywords;
 import com.omertron.themoviedbapi.methods.TmdbLists;
 import com.omertron.themoviedbapi.methods.TmdbMovies;
@@ -42,7 +41,36 @@ import com.omertron.themoviedbapi.methods.TmdbPeople;
 import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
-import com.omertron.themoviedbapi.model.*;
+import com.omertron.themoviedbapi.model.Account;
+import com.omertron.themoviedbapi.model.AlternativeTitle;
+import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model.ArtworkType;
+import com.omertron.themoviedbapi.model.Certification;
+import com.omertron.themoviedbapi.model.ChangedMedia;
+import com.omertron.themoviedbapi.model.Collection;
+import com.omertron.themoviedbapi.model.CollectionInfo;
+import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model.Configuration;
+import com.omertron.themoviedbapi.model.Discover;
+import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.JobDepartment;
+import com.omertron.themoviedbapi.model.Keyword;
+import com.omertron.themoviedbapi.model.KeywordMovie;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.MovieDbList;
+import com.omertron.themoviedbapi.model.MovieList;
+import com.omertron.themoviedbapi.model.Person;
+import com.omertron.themoviedbapi.model.PersonCredit;
+import com.omertron.themoviedbapi.model.ReleaseInfo;
+import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.TBD_ExternalSource;
+import com.omertron.themoviedbapi.model.TBD_FindResults;
+import com.omertron.themoviedbapi.model.TBD_PersonCredits;
+import com.omertron.themoviedbapi.model.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.TokenSession;
+import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -51,12 +79,25 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.*;
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperCollection;
+import com.omertron.themoviedbapi.wrapper.WrapperCompany;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovie;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
+import com.omertron.themoviedbapi.wrapper.WrapperPerson;
+import com.omertron.themoviedbapi.wrapper.WrapperPersonCredits;
+import com.omertron.themoviedbapi.wrapper.WrapperPersonList;
+import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.wrapper.WrapperReviews;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
+import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +110,8 @@ import org.yamj.api.common.http.SimpleHttpClientBuilder;
 /**
  * The MovieDb API
  * <p>
- * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
+ * This is for version 3 of the API as specified here:
+ * http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -77,12 +119,10 @@ public class TheMovieDbApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
     private String apiKey;
-    private Configuration tmdbConfig;
     private HttpTools httpTools;
     // Jackson JSON configuration
     private static final ObjectMapper MAPPER = new ObjectMapper();
     // Constants
-    private static final String MOVIE_ID = "movie_id";
     private static final int YEAR_LENGTH = 4;
     private static final int RATING_MAX = 10;
     private static final int POST_SUCCESS_STATUS_CODE = 12;
@@ -98,8 +138,7 @@ public class TheMovieDbApi {
     private static TmdbDiscover tmdbDiscover;
     private static TmdbFind tmdbFind;
     private static TmdbGenres tmdbGenre;
-    private static TmdbJobs tmdbJobs;
-    private static TmdbKeywords tmdbKeyword;
+    private static TmdbKeywords tmdbKeywords;
     private static TmdbLists tmdbList;
     private static TmdbMovies tmdbMovies;
     private static TmdbNetworks tmdbNetworks;
@@ -128,16 +167,7 @@ public class TheMovieDbApi {
     public TheMovieDbApi(String apiKey, CloseableHttpClient httpClient) throws MovieDbException {
         this.apiKey = apiKey;
         this.httpTools = new HttpTools(httpClient);
-
-        URL configUrl = new ApiUrl(apiKey, MethodBase.CONFIGURATION).buildUrl();
-        String webpage = httpTools.getRequest(configUrl);
-
-        try {
-            WrapperConfig wc = MAPPER.readValue(webpage, WrapperConfig.class);
-            tmdbConfig = wc.getTmdbConfiguration();
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to read configuration", configUrl, ex);
-        }
+        initialise(apiKey, httpTools);
     }
 
     /**
@@ -158,8 +188,7 @@ public class TheMovieDbApi {
         tmdbDiscover = new TmdbDiscover(apiKey, httpTools);
         tmdbFind = new TmdbFind(apiKey, httpTools);
         tmdbGenre = new TmdbGenres(apiKey, httpTools);
-        tmdbJobs = new TmdbJobs(apiKey, httpTools);
-        tmdbKeyword = new TmdbKeywords(apiKey, httpTools);
+        tmdbKeywords = new TmdbKeywords(apiKey, httpTools);
         tmdbList = new TmdbLists(apiKey, httpTools);
         tmdbMovies = new TmdbMovies(apiKey, httpTools);
         tmdbNetworks = new TmdbNetworks(apiKey, httpTools);
@@ -187,7 +216,8 @@ public class TheMovieDbApi {
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
      * @param year The year of the movie to compare
-     * @param maxDistance The Levenshtein Distance between the two titles. 0 = exact match
+     * @param maxDistance The Levenshtein Distance between the two titles. 0 =
+     * exact match
      * @param caseSensitive true if the comparison is to be case sensitive
      * @return True if there is a match, False otherwise.
      */
@@ -267,44 +297,12 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get the configuration information
-     *
-     * @return
-     */
-    public Configuration getConfiguration() {
-        return tmdbConfig;
-    }
-
-    /**
-     * Generate the full image URL from the size and image path
-     *
-     * @param imagePath
-     * @param requiredSize
-     * @return
-     * @throws MovieDbException
-     */
-    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
-        if (!tmdbConfig.isValidSize(requiredSize)) {
-            throw new MovieDbException(ApiExceptionType.INVALID_IMAGE, requiredSize);
-        }
-
-        StringBuilder sb = new StringBuilder(tmdbConfig.getBaseUrl());
-        sb.append(requiredSize);
-        sb.append(imagePath);
-        try {
-            return new URL(sb.toString());
-        } catch (MalformedURLException ex) {
-            LOG.warn("Failed to create image URL: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.INVALID_URL, sb.toString(), "", ex);
-        }
-    }
-
-    /**
      * This method is used to retrieve all of the basic movie information.
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
      * @param movieId
      * @param language
@@ -338,7 +336,8 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
      * @param imdbId
      * @param language
@@ -369,7 +368,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for
+     * a particular movie.
      *
      * @param movieId
      * @param country
@@ -426,7 +426,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the
+     * images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -455,7 +456,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added
+     * to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -484,7 +486,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data
+     * we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -513,7 +516,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular movie.
+     * This method is used to retrieve all of the trailers for a particular
+     * movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -544,7 +548,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
+     * This method is used to retrieve a list of the available translations for
+     * a specific movie.
      *
      * @param movieId
      * @param appendToResponse
@@ -571,9 +576,11 @@ public class TheMovieDbApi {
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a particular movie.
+     * The similar movies method will let you retrieve the similar movies for a
+     * particular movie.
      *
-     * This data is created dynamically but with the help of users votes on TMDb.
+     * This data is created dynamically but with the help of users votes on
+     * TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -710,7 +717,8 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
      *
      * TODO: Implement more than 20 movies
      *
@@ -770,7 +778,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb.
      *
      * The default response will return 20 movies.
      *
@@ -836,59 +845,6 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the basic information about a movie collection.
-     *
-     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
-     *
-     * @param collectionId
-     * @param language
-     * @return
-     * @throws MovieDbException
-     */
-    public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, collectionId);
-        parameters.add(Param.LANGUAGE, language);
-
-        URL url = new ApiUrl(apiKey, MethodBase.COLLECTION).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, CollectionInfo.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get collection information: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get all of the images for a particular collection by collection id.
-     *
-     * @param collectionId
-     * @param language
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, collectionId);
-        parameters.add(Param.LANGUAGE, language);
-
-        URL url = new ApiUrl(apiKey, MethodBase.COLLECTION).setSubMethod(MethodSub.IMAGES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get collection images: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
      * This method is used to retrieve all of the basic person information.
      *
      * It will return the single highest rated profile image.
@@ -915,7 +871,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve all of the cast & crew information for the person.
+     * This method is used to retrieve all of the cast & crew information for
+     * the person.
      *
      * It will return the single highest rated poster for each movie record.
      *
@@ -1026,130 +983,16 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to retrieve the basic information about a production company on TMDb.
-     *
-     * @param companyId
-     * @return
-     * @throws MovieDbException
-     */
-    public Company getCompanyInfo(int companyId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, companyId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.COMPANY).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, Company.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get company information: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method is used to retrieve the movies associated with a company.
-     *
-     * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param companyId
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, companyId);
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.COMPANY).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperCompanyMovies wrapper = MAPPER.readValue(webpage, WrapperCompanyMovies.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get company movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * You can use this method to retrieve the list of genres used on TMDb.
-     *
-     * These IDs will correspond to those found in movie calls.
-     *
-     * @param language
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.LANGUAGE, language);
-
-        URL url = new ApiUrl(apiKey, MethodBase.GENRE).setSubMethod(MethodSub.LIST).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperGenres wrapper = MAPPER.readValue(webpage, WrapperGenres.class);
-            TmdbResultsList<Genre> results = new TmdbResultsList<Genre>(wrapper.getGenres());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get genre list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get a list of movies per genre.
-     *
-     * It is important to understand that only movies with more than 10 votes get listed.
-     *
-     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
-     *
-     * @param genreId
-     * @param language
-     * @param page
-     * @param includeAllMovies
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, genreId);
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-        parameters.add(Param.INCLUDE_ALL_MOVIES, includeAllMovies);
-
-        URL url = new ApiUrl(apiKey, MethodBase.GENRE).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get genre movie list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
+     * Search Movies This is a good starting point to start finding movies on
+     * TMDb.
      *
      * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
+     * @param searchYear Limit the search to the provided year. Zero (0) will
+     * get all years
      * @param language The language to include. Can be blank/null.
      * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first page)
+     * @param page The page of results to return. 0 to get the default (first
+     * page)
      * @return
      * @throws MovieDbException
      */
@@ -1208,7 +1051,8 @@ public class TheMovieDbApi {
     /**
      * This is a good starting point to start finding people on TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
+     * The idea is to be a quick and light method so you can iterate through
+     * people quickly.
      *
      * @param personName
      * @param includeAdult
@@ -1268,8 +1112,8 @@ public class TheMovieDbApi {
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
-     * on movie calls.
+     * You can use this method to search for production companies that are part
+     * of TMDb. The company IDs will map to those returned on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
@@ -1325,293 +1169,6 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get a list by its ID
-     *
-     * @param listId
-     * @return The list and its items
-     * @throws MovieDbException
-     */
-    public MovieDbList getList(String listId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, listId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, MovieDbList.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method lets users create a new list. A valid session id is required.
-     *
-     * @param sessionId
-     * @param name
-     * @param description
-     * @return The list id
-     * @throws MovieDbException
-     */
-    public String createList(String sessionId, String name, String description) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        Map<String, String> body = new HashMap<String, String>();
-        body.put("name", StringUtils.trimToEmpty(name));
-        body.put("description", StringUtils.trimToEmpty(description));
-        String jsonBody = convertToJson(body);
-
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).buildUrl(parameters);
-        String webpage = httpTools.postRequest(url, jsonBody);
-
-        try {
-            return MAPPER.readValue(webpage, MovieDbListStatus.class).getListId();
-        } catch (IOException ex) {
-            LOG.warn("Failed to create list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Check to see if a movie ID is already added to a list.
-     *
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, movieId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(listId, MethodSub.ITEM_STATUS).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, ListItemStatus.class).isItemPresent();
-        } catch (IOException ex) {
-            LOG.warn("Failed to get item status: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method lets users add new movies to a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        return modifyMovieList(sessionId, listId, movieId, MethodSub.ADD_ITEM);
-    }
-
-    /**
-     * This method lets users remove movies from a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        return modifyMovieList(sessionId, listId, movieId, MethodSub.REMOVE_ITEM);
-    }
-
-    private StatusCode modifyMovieList(String sessionId, String listId, Integer movieId, MethodSub operation) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
-
-        String jsonBody = convertToJson(Collections.singletonMap("media_id", String.valueOf(movieId)));
-
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(listId, operation).buildUrl(parameters);
-        String webpage = httpTools.postRequest(url, jsonBody);
-
-        try {
-            return MAPPER.readValue(webpage, StatusCode.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to remove movie from list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * This method lets users delete a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @return
-     * @throws MovieDbException
-     */
-    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, listId);
-        parameters.add(Param.SESSION, sessionId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).buildUrl(parameters);
-        String webpage = httpTools.deleteRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, StatusCode.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to delete movie list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Get the basic information for a specific keyword id.
-     *
-     * @param keywordId
-     * @return
-     * @throws MovieDbException
-     */
-    public Keyword getKeyword(String keywordId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, keywordId);
-
-        URL url = new ApiUrl(apiKey, MethodBase.KEYWORD).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, Keyword.class);
-        } catch (IOException ex) {
-            LOG.warn("Failed to get keyword: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-
-    }
-
-    /**
-     * Get the list of movies for a particular keyword by id.
-     *
-     * @param keywordId
-     * @param language
-     * @param page
-     * @return List of movies with the keyword
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, keywordId);
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.KEYWORD).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperKeywordMovies wrapper = MAPPER.readValue(webpage, WrapperKeywordMovies.class);
-            TmdbResultsList<KeywordMovie> results = new TmdbResultsList<KeywordMovie>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get keyword movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-
-    }
-
-    public void getPersonChangesList(int page, String startDate, String endDate) throws MovieDbException {
-        LOG.trace("getPersonChangesList: page: {}, start: {}, end: {}", page, startDate, endDate);
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
-    }
-
-    public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.JOB).setSubMethod(MethodSub.LIST).buildUrl();
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
-            TmdbResultsList<JobDepartment> results = new TmdbResultsList<JobDepartment>(wrapper.getJobs());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get job list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
-     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
-     *
-     * You can alternatively create a "discover" object and pass it to this method to cut out the requirement for all of these
-     * parameters
-     *
-     * @param page Minimum value is 1
-     * @param language ISO 639-1 code.
-     * @param sortBy Available options are vote_average.desc, vote_average.asc, release_date.desc, release_date.asc,
-     * popularity.desc, popularity.asc
-     * @param includeAdult Toggle the inclusion of adult titles
-     * @param year Filter the results release dates to matches that include this value
-     * @param primaryReleaseYear Filter the results so that only the primary release date year has this value
-     * @param voteCountGte Only include movies that are equal to, or have a vote count higher than this value
-     * @param voteAverageGte Only include movies that are equal to, or have a higher average rating than this value
-     * @param withGenres Only include movies with the specified genres. Expected value is an integer (the id of a genre). Multiple
-     * values can be specified. Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'.
-     * @param releaseDateGte The minimum release to include. Expected format is YYYY-MM-DD
-     * @param releaseDateLte The maximum release to include. Expected format is YYYY-MM-DD
-     * @param certificationCountry Only include movies with certifications for a specific country. When this value is specified,
-     * 'certificationLte' is required. A ISO 3166-1 is expected.
-     * @param certificationLte Only include movies with this certification and lower. Expected value is a valid certification for
-     * the specified 'certificationCountry'.
-     * @param withCompanies Filter movies to include a specific company. Expected value is an integer (the id of a company). They
-     * can be comma separated to indicate an 'AND' query.
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getDiscover(int page, String language, String sortBy, boolean includeAdult, int year,
-            int primaryReleaseYear, int voteCountGte, float voteAverageGte, String withGenres, String releaseDateGte,
-            String releaseDateLte, String certificationCountry, String certificationLte, String withCompanies) throws MovieDbException {
-
-        Discover discover = new Discover();
-        discover.page(page)
-                .language(language)
-                .sortBy(sortBy)
-                .includeAdult(includeAdult)
-                .year(year)
-                .primaryReleaseYear(primaryReleaseYear)
-                .voteCountGte(voteCountGte)
-                .voteAverageGte(voteAverageGte)
-                .withGenres(withGenres)
-                .releaseDateGte(releaseDateGte)
-                .releaseDateLte(releaseDateLte)
-                .certificationCountry(certificationCountry)
-                .certificationLte(certificationLte)
-                .withCompanies(withCompanies);
-
-        return getDiscover(discover);
-    }
-
-    /**
-     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
-     *
-     * @param discover A discover object containing the search criteria required
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getDiscover(Discover discover) throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).setSubMethod(MethodSub.MOVIE).buildUrl(discover.getParams());
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            LOG.warn("Failed to get discover list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
-        }
-    }
-
-    /**
      * Use Jackson to convert Map to JSON string.
      *
      * @param map
@@ -1628,7 +1185,8 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Account">
     /**
-     * Get the basic information for an account. You will need to have a valid session id.
+     * Get the basic information for an account. You will need to have a valid
+     * session id.
      *
      * @param sessionId
      * @return
@@ -1768,13 +1326,16 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Authentication">
     /**
-     * This method is used to generate a valid request token for user based authentication.
+     * This method is used to generate a valid request token for user based
+     * authentication.
      *
      * A request token is required in order to request a session id.
      *
-     * You can generate any number of request tokens but they will expire after 60 minutes.
+     * You can generate any number of request tokens but they will expire after
+     * 60 minutes.
      *
-     * As soon as a valid session id has been created the token will be destroyed.
+     * As soon as a valid session id has been created the token will be
+     * destroyed.
      *
      * @return
      * @throws MovieDbException
@@ -1784,7 +1345,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to generate a session id for user based authentication.
+     * This method is used to generate a session id for user based
+     * authentication.
      *
      * A session id is required in order to use any of the write methods.
      *
@@ -1797,7 +1359,8 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method is used to generate a session id for user based authentication. User must provide their username and password
+     * This method is used to generate a session id for user based
+     * authentication. User must provide their username and password
      *
      * A session id is required in order to use any of the write methods.
      *
@@ -1814,14 +1377,18 @@ public class TheMovieDbApi {
     /**
      * This method is used to generate a guest session id.
      *
-     * A guest session can be used to rate movies without having a registered TMDb user account.
+     * A guest session can be used to rate movies without having a registered
+     * TMDb user account.
      *
-     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
-     * account in the future.
+     * You should only generate a single guest session per user (or device) as
+     * you will be able to attach the ratings to a TMDb user account in the
+     * future.
      *
-     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
+     * There are also IP limits in place so you should always make sure it's the
+     * end user doing the guest session actions.
      *
-     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
+     * If a guest session is not used for the first time within 24 hours, it
+     * will be automatically discarded.
      *
      * @return
      * @throws MovieDbException
@@ -1861,20 +1428,47 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item
+     * changing type in the ChangeItem
      *
-     * @param movieId
+     * @param id
      * @param startDate the start date of the changes, optional
      * @param endDate the end date of the changes, optional
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        return tmdbChanges.getMovieChanges(movieId, startDate, endDate);
+    public TmdbResultsList getMovieChanges(int id, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getMovieChanges(id, startDate, endDate);
+    }
+
+    /**
+     * Get the changes for a specific TV id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is
+     * 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item
+     * changing type in the ChangeItem
+     *
+     * @param id
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList getTVChanges(int id, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getMovieChanges(id, startDate, endDate);
     }
 
     /**
@@ -1884,23 +1478,26 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
-     * @param personId
+     * @param id
      * @param startDate
      * @param endDate
+     * @return
      * @throws MovieDbException
      */
-    public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
-        tmdbChanges.getPersonChanges(personId, startDate, endDate);
+    public TmdbResultsList getPersonChanges(int id, String startDate, String endDate) throws MovieDbException {
+        return tmdbChanges.getPersonChanges(id, startDate, endDate);
     }
 
     /**
      * Get a list of Movie IDs that have been edited.
      *
-     * You can then use the movie changes API to get the actual data that has been changed.
+     * You can then use the movie changes API to get the actual data that has
+     * been changed.
      *
      * @param page
      * @param startDate the start date of the changes, optional
@@ -1915,7 +1512,8 @@ public class TheMovieDbApi {
     /**
      * Get a list of TV IDs that have been edited.
      *
-     * You can then use the TV changes API to get the actual data that has been changed.
+     * You can then use the TV changes API to get the actual data that has been
+     * changed.
      *
      * @param page
      * @param startDate the start date of the changes, optional
@@ -1930,7 +1528,8 @@ public class TheMovieDbApi {
     /**
      * Get a list of Person IDs that have been edited.
      *
-     * You can then use the person changes API to get the actual data that has been changed.
+     * You can then use the person changes API to get the actual data that has
+     * been changed.
      *
      * @param page
      * @param startDate the start date of the changes, optional
@@ -1944,25 +1543,321 @@ public class TheMovieDbApi {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Collections">
+    /**
+     * This method is used to retrieve all of the basic information about a
+     * movie collection.
+     *
+     * You can get the ID needed for this method by making a getMovieInfo
+     * request for the belongs_to_collection.
+     *
+     * @param collectionId
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
+        return tmdbCollections.getCollectionInfo(collectionId, language);
+    }
+
+    /**
+     * Get all of the images for a particular collection by collection id.
+     *
+     * @param collectionId
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
+        return tmdbCollections.getCollectionImages(collectionId, language);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Companies">
+    /**
+     * This method is used to retrieve the basic information about a production
+     * company on TMDb.
+     *
+     * @param companyId
+     * @return
+     * @throws MovieDbException
+     */
+    public Company getCompanyInfo(int companyId) throws MovieDbException {
+        return tmdbCompany.getCompanyInfo(companyId);
+    }
+
+    /**
+     * This method is used to retrieve the movies associated with a company.
+     *
+     * These movies are returned in order of most recently released to oldest.
+     * The default response will return 20 movies per page.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param companyId
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
+        return tmdbCompany.getCompanyMovies(companyId, language, page);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Configuration">
+    /**
+     * Get the configuration information
+     *
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public Configuration getConfiguration() throws MovieDbException {
+        return tmdbConfiguration.getConfig();
+    }
+
+    /**
+     * Generate the full image URL from the size and image path
+     *
+     * @param imagePath
+     * @param requiredSize
+     * @return
+     * @throws MovieDbException
+     */
+    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
+        return tmdbConfiguration.createImageUrl(imagePath, requiredSize);
+    }
+
+    /**
+     * Get a list of valid jobs
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
+        return tmdbConfiguration.getJobs();
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Credits">
+    /**
+     * Get the detailed information about a particular credit record.
+     * <p>
+     * This is currently only supported with the new credit model found in TV.
+     * <br/>
+     * These IDs can be found from any TV credit response as well as the
+     * TV_credits and combined_credits methods for people. <br/>
+     * The episodes object returns a list of episodes and are generally going to
+     * be guest stars. <br/>
+     * The season array will return a list of season numbers. <br/>
+     * Season credits are credits that were marked with the "add to every
+     * season" option in the editing interface and are assumed to be "season
+     * regulars".
+     *
+     * @param creditId
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TBD_PersonCredits getCreditInfo(String creditId, String language) throws MovieDbException {
+        return tmdbCredits.getCreditInfo(creditId, language);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Discover">
+    /**
+     * Discover movies by different types of data like average rating, number of
+     * votes, genres and certifications.
+     *
+     * @param discover A discover object containing the search criteria required
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getDiscoverMovies(Discover discover) throws MovieDbException {
+        return tmdbDiscover.getDiscoverMovies(discover);
+    }
+
+    /**
+     * Discover movies by different types of data like average rating, number of
+     * votes, genres and certifications.
+     *
+     * @param discover A discover object containing the search criteria required
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getDiscoverTV(Discover discover) throws MovieDbException {
+        return tmdbDiscover.getDiscoverTV(discover);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Find">
+    /**
+     * You con use this method to find movies, tv series or persons using
+     * external ids.
+     *
+     * Supported query ids are
+     * <ul>
+     * <li>Movies: imdb_id</li>
+     * <li>People: imdb_id, freebase_mid, freebase_id, tvrage_id</li>
+     * <li>TV Series: imdb_id, freebase_mid, freebase_id, tvdb_id,
+     * tvrage_id</li>
+     * <li>TV Seasons: freebase_mid, freebase_id, tvdb_id, tvrage_id</li>
+     * <li>TV Episodes: imdb_id, freebase_mid, freebase_id, tvdb_id,
+     * tvrage_idimdb_id, freebase_mid, freebase_id, tvrage_id, tvdb_id.
+     * </ul>
+     *
+     * For details see http://docs.themoviedb.apiary.io/#find
+     *
+     * @param id the external id
+     * @param externalSource one of {@link ExternalSource}.
+     * @param language the language
+     * @return
+     * @throws MovieDbException
+     */
+    public TBD_FindResults find(String id, TBD_ExternalSource externalSource, String language) throws MovieDbException {
+        return tmdbFind.find(id, externalSource, language);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Genres">
+    /**
+     * You can use this method to retrieve the list of genres used on TMDb.
+     *
+     * These IDs will correspond to those found in movie calls.
+     *
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
+        return tmdbGenre.getGenreList(language);
+    }
+
+    /**
+     * Get a list of movies per genre.
+     *
+     * It is important to understand that only movies with more than 10 votes
+     * get listed.
+     *
+     * This prevents movies from 1 10/10 rating from being listed first and for
+     * the first 5 pages.
+     *
+     * @param genreId
+     * @param language
+     * @param page
+     * @param includeAllMovies
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
+        return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies);
+    }
     //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="Jobs">
-    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Keywords">
+    /**
+     * Get the basic information for a specific keyword id.
+     *
+     * @param keywordId
+     * @return
+     * @throws MovieDbException
+     */
+    public Keyword getKeyword(String keywordId) throws MovieDbException {
+        return tmdbKeywords.getKeyword(keywordId);
+    }
+
+    /**
+     * Get the list of movies for a particular keyword by id.
+     *
+     * @param keywordId
+     * @param language
+     * @param page
+     * @return List of movies with the keyword
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
+        return tmdbKeywords.getKeywordMovies(keywordId, language, page);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Lists">
+    /**
+     * Get a list by its ID
+     *
+     * @param listId
+     * @return The list and its items
+     * @throws MovieDbException
+     */
+    public MovieDbList getList(String listId) throws MovieDbException {
+        return tmdbList.getList(listId);
+    }
+
+    /**
+     * This method lets users create a new list. A valid session id is required.
+     *
+     * @param sessionId
+     * @param name
+     * @param description
+     * @return The list id
+     * @throws MovieDbException
+     */
+    public String createList(String sessionId, String name, String description) throws MovieDbException {
+        return tmdbList.createList(sessionId, name, description);
+    }
+
+    /**
+     * Check to see if a movie ID is already added to a list.
+     *
+     * @param listId
+     * @param movieId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
+        return tmdbList.isMovieOnList(listId, movieId);
+    }
+
+    /**
+     * This method lets users add new movies to a list that they created. A
+     * valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param movieId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
+        return tmdbList.modifyMovieList(sessionId, listId, movieId, MethodSub.ADD_ITEM);
+    }
+
+    /**
+     * This method lets users remove movies from a list that they created. A
+     * valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param movieId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
+        return tmdbList.modifyMovieList(sessionId, listId, movieId, MethodSub.REMOVE_ITEM);
+    }
+
+    /**
+     * This method lets users delete a list that they created. A valid session
+     * id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
+        return tmdbList.deleteMovieList(sessionId, listId);
+    }
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Movies">
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Networks">

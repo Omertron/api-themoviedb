@@ -20,10 +20,8 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.ChangedMedia;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -33,7 +31,6 @@ import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperMediaChanges;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -54,53 +51,10 @@ public class TmdbChanges extends AbstractMethod {
     }
 
     /**
-     * Get the changes for a specific movie id.
-     *
-     * Changes are grouped by key, and ordered by date in descending order.
-     *
-     * By default, only the last 24 hours of changes are returned.
-     *
-     * The maximum number of days that can be returned in a single request is 14.
-     *
-     * The language is present on fields that are translatable.
-     *
-     * TODO: DOES NOT WORK AT THE MOMENT. This is due to the "value" item changing type in the ChangeItem
-     *
-     * @param movieId
-     * @param startDate the start date of the changes, optional
-     * @param endDate the end date of the changes, optional
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsMap<String, List<ChangedItem>> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        return null;
-    }
-
-    /**
-     * Get the changes for a specific person id.
-     *
-     * Changes are grouped by key, and ordered by date in descending order.
-     *
-     * By default, only the last 24 hours of changes are returned.
-     *
-     * The maximum number of days that can be returned in a single request is 14.
-     *
-     * The language is present on fields that are translatable.
-     *
-     * @param personId
-     * @param startDate
-     * @param endDate
-     * @throws MovieDbException
-     */
-    public void getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
-        LOG.trace("getPersonChanges: id: {}, start: {}, end: {}", personId, startDate, endDate);
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
-    }
-
-    /**
      * Get a list of Media IDs that have been edited.
      *
-     * You can then use the movie/TV/person changes API to get the actual data that has been changed.
+     * You can then use the movie/TV/person changes API to get the actual data
+     * that has been changed.
      *
      * @param method The method base to get
      * @param page
@@ -127,5 +81,47 @@ public class TmdbChanges extends AbstractMethod {
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
         }
+    }
+
+    /**
+     * Get the changes for a specific movie id.
+     *
+     * @param id
+     * @param startDate the start date of the changes, optional
+     * @param endDate the end date of the changes, optional
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList getMovieChanges(int id, String startDate, String endDate) throws MovieDbException {
+        LOG.trace("Movie Changes: id: {}, start: {}, end: {}", id, startDate, endDate);
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
+    /**
+     * Get the changes for a specific TV Show
+     *
+     * @param id
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList getTvChanges(int id, String startDate, String endDate) throws MovieDbException {
+        LOG.trace("TV Changes: id: {}, start: {}, end: {}", id, startDate, endDate);
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
+    /**
+     * Get the changes for a specific person id.
+     *
+     * @param id
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList getPersonChanges(int id, String startDate, String endDate) throws MovieDbException {
+        LOG.trace("Person Changes: id: {}, start: {}, end: {}", id, startDate, endDate);
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet", "");
     }
 }

@@ -30,14 +30,14 @@ import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.PostBody;
+import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieDbList;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -46,11 +46,6 @@ import org.yamj.api.common.exception.ApiExceptionType;
  * @author stuart.boston
  */
 public class TmdbAccount extends AbstractMethod {
-
-    private static final String MEDIA_ID = "media_id";
-    private static final String MEDIA_TYPE = "media_type";
-    private static final String FAVORITE = "favorite";
-    private static final String WATCHLIST = "watchlist";
 
     /**
      * Constructor
@@ -63,7 +58,8 @@ public class TmdbAccount extends AbstractMethod {
     }
 
     /**
-     * Get the basic information for an account. You will need to have a valid session id.
+     * Get the basic information for an account. You will need to have a valid
+     * session id.
      *
      * @param sessionId
      * @return
@@ -79,8 +75,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, Account.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get Account: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Account", url, ex);
         }
     }
 
@@ -102,8 +97,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperMovieDbList.class).getLists();
         } catch (IOException ex) {
-            LOG.warn("Failed to get user list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get user list", url, ex);
         }
     }
 
@@ -125,8 +119,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn("Failed to get favorite movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get favorite movies", url, ex);
         }
     }
 
@@ -157,11 +150,11 @@ public class TmdbAccount extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        Map<String, Object> body = new HashMap<String, Object>();
-        body.put(MEDIA_TYPE, mediaType.toString().toLowerCase());
-        body.put(MEDIA_ID, mediaId);
-        body.put(FAVORITE, isFavorite);
-        String jsonBody = convertToJson(body);
+        String jsonBody = new PostTools()
+                .add(PostBody.MEDIA_TYPE, mediaType.toString().toLowerCase())
+                .add(PostBody.MEDIA_ID, mediaId)
+                .add(PostBody.FAVORITE, isFavorite)
+                .build();
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.FAVORITE).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
@@ -169,8 +162,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            LOG.warn("Failed to get favorite status: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get favorite status", url, ex);
         }
     }
 
@@ -192,8 +184,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn("Failed to get rated movies: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get rated movies", url, ex);
         }
     }
 
@@ -227,8 +218,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn("Failed to get Movie watch list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Movie watch list", url, ex);
         }
     }
 
@@ -250,8 +240,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
         } catch (IOException ex) {
-            LOG.warn("Failed to get TV watch list: {}", ex.getMessage(), ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, webpage, url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV watch list", url, ex);
         }
     }
 
@@ -270,11 +259,11 @@ public class TmdbAccount extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
 
-        Map<String, Object> body = new HashMap<String, Object>();
-        body.put(MEDIA_TYPE, mediaType.toString().toLowerCase());
-        body.put(MEDIA_ID, movieId);
-        body.put(WATCHLIST, addToWatchlist);
-        String jsonBody = convertToJson(body);
+        String jsonBody = new PostTools()
+                .add(PostBody.MEDIA_TYPE, mediaType.toString().toLowerCase())
+                .add(PostBody.MEDIA_ID, movieId)
+                .add(PostBody.WATCHLIST, addToWatchlist)
+                .build();
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.WATCHLIST).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);

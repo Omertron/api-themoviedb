@@ -17,24 +17,28 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.methods;
+package com.omertron.themoviedbapi.model;
 
-import com.omertron.themoviedbapi.tools.HttpTools;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
- * Class to hold the Job Methods
- *
  * @author stuart.boston
  */
-public class TmdbJobs extends AbstractMethod {
+@JsonRootName("???")
+public class TBD_ExternalSource extends AbstractJsonMapping {
 
-    /**
-     * Constructor
-     *
-     * @param apiKey
-     * @param httpTools
-     */
-    public TmdbJobs(String apiKey, HttpTools httpTools) {
-        super(apiKey, httpTools);
+    private static final long serialVersionUID = 1L;
+
+    // Properties
+    @JsonProperty("id")
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
