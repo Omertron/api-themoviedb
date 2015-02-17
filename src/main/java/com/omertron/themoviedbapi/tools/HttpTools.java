@@ -7,12 +7,12 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.yamj.api.common.exception.ApiExceptionType;
 import org.yamj.api.common.http.DigestedResponse;
@@ -25,11 +25,11 @@ import org.yamj.api.common.http.DigestedResponseReader;
  */
 public class HttpTools {
 
-    private final CloseableHttpClient httpClient;
+    private final HttpClient httpClient;
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final String APPLICATION_JSON = "application/json";
 
-    public HttpTools(CloseableHttpClient httpClient) {
+    public HttpTools(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
