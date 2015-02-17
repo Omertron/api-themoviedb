@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ChangedItem;
 import com.omertron.themoviedbapi.model.ChangedMedia;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.CollectionInfo;
@@ -44,37 +43,23 @@ import com.omertron.themoviedbapi.model.TokenSession;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
-import java.io.File;
-import java.util.List;
-import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Test cases for TheMovieDbApi API
  *
  * @author stuart.boston
  */
-public class TheMovieDbApiTest {
+public class TheMovieDbApiTest extends AbstractTests{
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApiTest.class);
-    // API Key
-    private static final String PROP_FIlENAME = "testing.properties";
-    private static String API_KEY;
     private static TheMovieDbApi tmdb;
     // Test data
     private static final int ID_MOVIE_BLADE_RUNNER = 78;
@@ -96,46 +81,15 @@ public class TheMovieDbApiTest {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
-
-        Properties props = new Properties();
-        File f = new File(PROP_FIlENAME);
-        if (f.exists()) {
-            LOG.info("Loading properties from '{}'", PROP_FIlENAME);
-            TestLogger.loadProperties(props, f);
-
-            API_KEY = props.getProperty("API_Key");
-        } else {
-            LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
-
-            props.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
-            props.setProperty("Username", "INSERT_YOUR_USERNAME_HERE");
-            props.setProperty("Password", "INSERT_YOUR_PASSWORD_HERE");
-
-            TestLogger.saveProperties(props, f, "Properties file for tests");
-            fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
-        }
-
-        tmdb = new TheMovieDbApi(API_KEY);
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws MovieDbException {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+        tmdb = new TheMovieDbApi(getApiKey());
     }
 
     /**
      * Test of getConfiguration method, of class TheMovieDbApi.
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testConfiguration() {
+    public void testConfiguration() throws MovieDbException {
         LOG.info("Test Configuration");
 
         Configuration tmdbConfig = tmdb.getConfiguration();
@@ -599,7 +553,7 @@ public class TheMovieDbApiTest {
         // Get some popular movies
         TmdbResultsList<MovieDb> movieList = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
         for (MovieDb movie : movieList.getResults()) {
-            TmdbResultsMap<String, List<ChangedItem>> result = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
+            TmdbResultsList result = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
             LOG.info("{} has {} changes.", movie.getTitle(), result.getResults().size());
             assertTrue("No changes found", result.getResults().size() > 0);
             break;
@@ -750,7 +704,7 @@ public class TheMovieDbApiTest {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        TmdbResultsList<ChangedMedia> result = tmdb.getMovieChangesList(page, startDate, endDate);
+        TmdbResultsList<ChangedMedia> result = tmdb.getMovieChangeList(page, startDate, endDate);
         assertFalse("No movie changes.", result.getResults().isEmpty());
     }
 
@@ -765,7 +719,7 @@ public class TheMovieDbApiTest {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        tmdb.getPersonChangesList(page, startDate, endDate);
+        tmdb.getPersonChangeList(page, startDate, endDate);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -793,7 +747,7 @@ public class TheMovieDbApiTest {
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
-        TmdbResultsList<MovieDb> result = tmdb.getDiscover(discover);
+        TmdbResultsList<MovieDb> result = tmdb.getDiscoverMovies(discover);
         assertFalse("No movies discovered", result.getResults().isEmpty());
     }
 }

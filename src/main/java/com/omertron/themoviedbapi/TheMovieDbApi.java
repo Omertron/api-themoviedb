@@ -78,7 +78,7 @@ import com.omertron.themoviedbapi.tools.MethodSub;
 import java.net.URL;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
@@ -137,7 +137,7 @@ public class TheMovieDbApi {
      * @param httpClient The httpClient to use for web requests.
      * @throws MovieDbException
      */
-    public TheMovieDbApi(String apiKey, CloseableHttpClient httpClient) throws MovieDbException {
+    public TheMovieDbApi(String apiKey, HttpClient httpClient) throws MovieDbException {
         this.apiKey = apiKey;
         this.httpTools = new HttpTools(httpClient);
         initialise(apiKey, httpTools);

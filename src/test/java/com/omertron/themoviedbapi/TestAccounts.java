@@ -19,39 +19,26 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
-import java.io.File;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class TestAccounts {
+public class TestAccounts extends AbstractTests {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestAccounts.class);
-    // API Key
-    private static final String PROP_FIlENAME = "testing.properties";
-    private static String API_KEY;
-    private static String ACCOUNT_USERNAME;
-    private static String ACCOUNT_PASSWORD;
     private static TheMovieDbApi tmdb;
     private static TokenSession tokenSession = null;
     private static Account account = null;
@@ -61,30 +48,11 @@ public class TestAccounts {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
-
-        Properties props = new Properties();
-        File f = new File(PROP_FIlENAME);
-        if (f.exists()) {
-            LOG.info("Loading properties from '{}'", PROP_FIlENAME);
-            TestLogger.loadProperties(props, f);
-
-            API_KEY = props.getProperty("API_Key");
-            ACCOUNT_USERNAME = props.getProperty("Username");
-            ACCOUNT_PASSWORD = props.getProperty("Password");
-        } else {
-            // Properties file is created in the main test class
-            fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
-        }
-
-        tmdb = new TheMovieDbApi(API_KEY);
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
+        tmdb = new TheMovieDbApi(getApiKey());
     }
 
     @Before
+    @Override
     public void setUp() throws MovieDbException {
         if (tokenSession == null) {
             testSessionCreation();
@@ -93,10 +61,6 @@ public class TestAccounts {
         if (account == null) {
             testAccount();
         }
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -115,7 +79,7 @@ public class TestAccounts {
         LOG.info("Token (auth): {}", token.toString());
 
         // 2b; Get user permission
-        token = tmdb.getSessionTokenLogin(token, ACCOUNT_USERNAME, ACCOUNT_PASSWORD);
+        token = tmdb.getSessionTokenLogin(token, getUsername(), getPassword());
         assertFalse("Token (login) is null", token == null);
         assertTrue("Token (login) is not valid", token.getSuccess());
         LOG.info("Token (login): {}", token.toString());
@@ -140,7 +104,7 @@ public class TestAccounts {
         LOG.info("Account: {}", account);
 
         // Make sure properties are extracted correctly
-        assertEquals("Wrong username!", ACCOUNT_USERNAME, account.getUserName());
+        assertEquals("Wrong username!", getUsername(), account.getUserName());
     }
 
     @Test
@@ -151,19 +115,19 @@ public class TestAccounts {
         }
 
         // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId()).isEmpty());
+        assertTrue(tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId()).isEmpty());
 
         // add a movie
-        tmdb.addToWatchList(tokenSession.getSessionId(), account.getId(), 550);
+        tmdb.addToWatchList(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE);
 
         List<MovieDb> watchList = tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId());
         assertNotNull("Empty watch list returned", watchList);
         assertEquals("Watchlist wrong size", 1, watchList.size());
 
         // clean up again
-        tmdb.removeFromWatchList(tokenSession.getSessionId(), account.getId(), 550);
+        tmdb.removeFromWatchList(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE);
 
-        Assert.assertTrue(tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId()).isEmpty());
+        assertTrue(tmdb.getWatchListMovie(tokenSession.getSessionId(), account.getId()).isEmpty());
     }
 
     @Test
@@ -174,26 +138,25 @@ public class TestAccounts {
         }
 
         // make sure it's empty (because it's just a test account
-        Assert.assertTrue(tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId()).isEmpty());
+        assertTrue(tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId()).isEmpty());
 
         // add a movie
-        tmdb.changeFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, true);
+        tmdb.changeFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE, true);
 
         List<MovieDb> watchList = tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId());
         assertNotNull("Empty watch list returned", watchList);
         assertEquals("Watchlist wrong size", 1, watchList.size());
 
         // clean up again
-        tmdb.changeFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, false);
+        tmdb.changeFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE, false);
 
-        Assert.assertTrue(tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId()).isEmpty());
+        assertTrue(tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId()).isEmpty());
     }
 
     /**
      * Test of getSessionToken method, of class TheMovieDbApi.
      *
-     * TODO: Cannot be tested without a HTTP authorisation:
-     * http://help.themoviedb.org/kb/api/user-authentication
+     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      *
      * @throws MovieDbException
      */
@@ -217,8 +180,7 @@ public class TestAccounts {
     /**
      * Test of postMovieRating method, of class TheMovieDbApi.
      *
-     * TODO: Cannot be tested without a HTTP authorisation:
-     * http://help.themoviedb.org/kb/api/user-authentication
+     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      *
      * @throws MovieDbException
      */
