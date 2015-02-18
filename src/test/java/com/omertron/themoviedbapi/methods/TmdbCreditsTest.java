@@ -21,19 +21,13 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.TBD_PersonCredits;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -41,9 +35,6 @@ import org.yamj.api.common.http.DefaultPoolingHttpClient;
  */
 public class TmdbCreditsTest extends AbstractTests{
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbCreditsTest.class);
-    // API
     private static TmdbCredits instance;
 
     public TmdbCreditsTest() {
@@ -51,7 +42,7 @@ public class TmdbCreditsTest extends AbstractTests{
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbCredits(getApiKey(),getHttpTools());
     }
 
@@ -77,10 +68,11 @@ public class TmdbCreditsTest extends AbstractTests{
         LOG.info("getCreditInfo");
         String creditId = "525346f619c29579400d4145";
         String language = "";
-        PersonCredits result = instance.getCreditInfo(creditId, language);
-        assertEquals("Wrong name", "Sean Bean", result.getPerson().getName());
-        assertEquals("Wrong job", "Actor", result.getJob());
-        assertFalse("No seasons", result.getMedia().getSeasons().isEmpty());
+        TBD_PersonCredits result = instance.getCreditInfo(creditId, language);
+//        assertEquals("Wrong name", "Sean Bean", result.getPerson().getName());
+//        assertEquals("Wrong job", "Actor", result.getJob());
+//        assertFalse("No seasons", result.getMedia().getSeasons().isEmpty());
+        fail("The test case is a prototype.");
     }
 
 }

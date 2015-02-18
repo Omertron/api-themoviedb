@@ -21,11 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Keyword;
-import com.omertron.themoviedbapi.model.movie.MovieDbBasic;
+import com.omertron.themoviedbapi.model.KeywordMovie;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -34,9 +31,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -44,9 +38,6 @@ import org.yamj.api.common.http.DefaultPoolingHttpClient;
  */
 public class TmdbKeywordsTest extends AbstractTests{
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
-    // API
     private static TmdbKeywords tmdb;
     private static final String ID_KEYWORD = "1721";
 
@@ -55,7 +46,7 @@ public class TmdbKeywordsTest extends AbstractTests{
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         tmdb = new TmdbKeywords(getApiKey(),getHttpTools());
     }
 
@@ -92,8 +83,8 @@ public class TmdbKeywordsTest extends AbstractTests{
     public void testGetKeywordMovies() throws MovieDbException {
         LOG.info("getKeywordMovies");
         int page = 0;
-        TmdbResultsList<MovieDbBasic> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
-        assertFalse("No keyword movies found", result.getResults().isEmpty());
+        TmdbResultsList<KeywordMovie> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
+        assertFalse("No keyword movies found", result.isEmpty());
     }
 
 }

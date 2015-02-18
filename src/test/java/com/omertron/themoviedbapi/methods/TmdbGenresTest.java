@@ -21,11 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -33,9 +30,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -43,9 +37,6 @@ import org.yamj.api.common.http.DefaultPoolingHttpClient;
  */
 public class TmdbGenresTest extends AbstractTests {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
-    // API
     private static TmdbGenres instance;
     private static final int ID_GENRE_ACTION = 28;
 
@@ -54,8 +45,8 @@ public class TmdbGenresTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
-        instance = new TmdbGenres(getApiKey(),getHttpTools());
+        doConfiguration();
+        instance = new TmdbGenres(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -91,7 +82,7 @@ public class TmdbGenresTest extends AbstractTests {
     public void testGetGenreMovies() throws MovieDbException {
         LOG.info("getGenreMovies");
         TmdbResultsList<MovieDb> result = instance.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0, Boolean.TRUE);
-        assertTrue("No genre movies found", !result.getResults().isEmpty());
+        assertTrue("No genre movies found", !result.isEmpty());
     }
 
 }

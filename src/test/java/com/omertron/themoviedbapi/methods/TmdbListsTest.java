@@ -21,12 +21,9 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.SESSION_ID_APITESTS;
+import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.StatusCode;
-import com.omertron.themoviedbapi.model.StatusCodeList;
-import com.omertron.themoviedbapi.model.movie.MovieDbList;
+import com.omertron.themoviedbapi.tools.MethodSub;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -38,16 +35,10 @@ import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TmdbListsTest extends AbstractTests{
+public class TmdbListsTest extends AbstractTests {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbGenresTest.class);
-    // API
     private static TmdbLists instance;
 
     public TmdbListsTest() {
@@ -55,8 +46,8 @@ public class TmdbListsTest extends AbstractTests{
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
-        instance = new TmdbLists(getApiKey(),getHttpTools());
+        doConfiguration();
+        instance = new TmdbLists(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -81,10 +72,10 @@ public class TmdbListsTest extends AbstractTests{
         LOG.info("createList");
         String name = "My Totally Awesome List";
         String description = "This list was created to share all of the totally awesome movies I've seen.";
-        StatusCodeList result = instance.createList(SESSION_ID_APITESTS, name, description);
-        LOG.info(result.toString());
+        String result = instance.createList(getSessionId(), name, description);
+        LOG.info(result);
         // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        fail("The test case is a prototype.");
     }
 
     /**
@@ -111,7 +102,7 @@ public class TmdbListsTest extends AbstractTests{
         String listId = "";
         Integer movieId = null;
         StatusCode expResult = null;
-        StatusCode result = instance.addMovieToList(SESSION_ID_APITESTS, listId, movieId);
+        StatusCode result = instance.modifyMovieList(getSessionId(), listId, movieId, MethodSub.MOVIE);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -145,7 +136,7 @@ public class TmdbListsTest extends AbstractTests{
         String listId = "";
         Integer movieId = null;
         StatusCode expResult = null;
-        StatusCode result = instance.removeMovieFromList(SESSION_ID_APITESTS, listId, movieId);
+        StatusCode result = instance.modifyMovieList(getSessionId(), listId, movieId, MethodSub.MOVIE);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -161,7 +152,7 @@ public class TmdbListsTest extends AbstractTests{
         LOG.info("deleteMovieList");
         String listId = "";
         StatusCode expResult = null;
-        StatusCode result = instance.deleteMovieList(SESSION_ID_APITESTS, listId);
+        StatusCode result = instance.deleteMovieList(getSessionId(), listId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

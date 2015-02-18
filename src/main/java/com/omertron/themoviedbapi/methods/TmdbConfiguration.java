@@ -31,7 +31,6 @@ import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.wrapper.WrapperConfig;
 import com.omertron.themoviedbapi.wrapper.WrapperJobList;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
 
@@ -78,29 +77,6 @@ public class TmdbConfiguration extends AbstractMethod {
             }
         }
         return config;
-    }
-
-    /**
-     * Generate the full image URL from the size and image path
-     *
-     * @param imagePath
-     * @param requiredSize
-     * @return
-     * @throws MovieDbException
-     */
-    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
-        if (!config.isValidSize(requiredSize)) {
-            throw new MovieDbException(ApiExceptionType.INVALID_IMAGE, "Required size '" + requiredSize + "' is not valid");
-        }
-
-        StringBuilder sb = new StringBuilder(config.getBaseUrl());
-        sb.append(requiredSize);
-        sb.append(imagePath);
-        try {
-            return new URL(sb.toString());
-        } catch (MalformedURLException ex) {
-            throw new MovieDbException(ApiExceptionType.INVALID_URL, "Failed to create image URL", sb.toString(), ex);
-        }
     }
 
     /**

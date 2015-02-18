@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.CollectionInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -36,7 +35,6 @@ import org.junit.Test;
  */
 public class TmdbCollectionsTest extends AbstractTests {
 
-    // API
     private static TmdbCollections instance;
     private static final int ID_COLLECTION_STAR_WARS = 10;
 
@@ -45,7 +43,7 @@ public class TmdbCollectionsTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbCollections(getApiKey(), getHttpTools());
     }
 

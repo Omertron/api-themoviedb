@@ -19,15 +19,17 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.omertron.themoviedbapi.methods.TmdbAccount;
+import com.omertron.themoviedbapi.methods.TmdbAuthentication;
+import com.omertron.themoviedbapi.model.Account;
+import com.omertron.themoviedbapi.model.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.TokenSession;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import java.io.File;
 import java.util.Properties;
-import org.apache.http.impl.client.HttpClient;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.apache.http.client.HttpClient;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
@@ -39,13 +41,15 @@ public class AbstractTests {
     private static final Properties props = new Properties();
     private static HttpClient httpClient;
     private static HttpTools httpTools;
+    // Session informaion
+    private static TokenSession tokenSession = null;
+    private static Account account = null;
     // Constants
     protected static final String LANGUAGE_DEFAULT = "";
     protected static final String LANGUAGE_ENGLISH = "en";
     protected static final String LANGUAGE_RUSSIAN = "ru";
 
-    @BeforeClass
-    public static void setUpClass() throws MovieDbException {
+    public static final void doConfiguration() throws MovieDbException {
         TestLogger.Configure();
         httpClient = new SimpleHttpClientBuilder().build();
         httpTools = new HttpTools(httpClient);
@@ -68,16 +72,30 @@ public class AbstractTests {
         }
     }
 
-    @AfterClass
-    public static void tearDownClass() throws MovieDbException {
+    public static final String getSessionId() throws MovieDbException {
+        if (tokenSession == null) {
+            TmdbAuthentication auth = new TmdbAuthentication(getApiKey(), getHttpTools());
+            LOG.info("Test and create a session token for the rest of the tests");
+            // 1: Create a request token
+            TokenAuthorisation token = auth.getAuthorisationToken();
+            assertTrue("Token (auth) is not valid", token.getSuccess());
+            token = auth.getSessionTokenLogin(token, getUsername(), getPassword());
+            assertTrue("Token (login) is not valid", token.getSuccess());
+            // 3: Create the sessions ID
+            tokenSession = auth.getSessionToken(token);
+            assertTrue("Session token is not valid", tokenSession.getSuccess());
+
+        }
+        return tokenSession.getSessionId();
     }
 
-    @Before
-    public void setUp() throws MovieDbException {
-    }
-
-    @After
-    public void tearDown() throws MovieDbException {
+    public static final int getAccountId() throws MovieDbException {
+        if (account == null) {
+            TmdbAccount instance = new TmdbAccount(getApiKey(), getHttpTools());
+            // Get the account for later tests
+            account = instance.getAccount(tokenSession.getSessionId());
+        }
+        return account.getId();
     }
 
     public static HttpClient getHttpClient() {

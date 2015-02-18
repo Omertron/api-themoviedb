@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
 import org.junit.AfterClass;
@@ -37,7 +36,6 @@ import org.junit.Test;
  */
 public class TmdbAuthenticationTest extends AbstractTests{
 
-    // API
     private static TmdbAuthentication instance;
 
     public TmdbAuthenticationTest() {
@@ -45,7 +43,7 @@ public class TmdbAuthenticationTest extends AbstractTests{
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbAuthentication(getApiKey(),getHttpTools());
     }
 

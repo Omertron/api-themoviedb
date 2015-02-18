@@ -21,29 +21,20 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import com.omertron.themoviedbapi.model.FindResults;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
  * @author stuart.boston
  * @author Luca Tagliani
-  */
+ */
 public class TmdbFindTest extends AbstractTests {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbFindTest.class);
-    // API
     private static TmdbFind instance;
 
     public TmdbFindTest() {
@@ -51,8 +42,8 @@ public class TmdbFindTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
-        instance = new TmdbFind(getApiKey(),getHttpTools());
+        doConfiguration();
+        instance = new TmdbFind(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -75,23 +66,25 @@ public class TmdbFindTest extends AbstractTests {
     @Test
     public void testFindMoviesImdbID() throws MovieDbException {
         LOG.info("findMoviesImdbID");
-        FindResults result = instance.find("tt0196229", TmdbFind.ExternalSource.imdb_id, "it");
-        assertFalse("No movie for id.", result.getMovieResults().isEmpty());
+//        TBD_FindResults result = instance.find("tt0196229", TBD_ExternalSource.imdb_id, "it");
+//        assertFalse("No movie for id.", result.getMovieResults().isEmpty());
+        fail("The test case is a prototype.");
     }
 
     @Test
     public void testFindTvSeriesImdbID() throws MovieDbException {
         LOG.info("findTvSeriesImdbID");
-        FindResults result = instance.find("tt1219024", TmdbFind.ExternalSource.imdb_id, "it");
-        assertFalse("No tv for id.", result.getTvResults().isEmpty());
+//        TBD_FindResults result = instance.find("tt1219024", TBD_ExternalSource.imdb_id, "it");
+//        assertFalse("No tv for id.", result.getTvResults().isEmpty());
+        fail("The test case is a prototype.");
     }
 
     @Test
     public void testFindPersonImdbID() throws MovieDbException {
         LOG.info("findPersonImdbID");
-        FindResults result = instance.find("nm0001774", TmdbFind.ExternalSource.imdb_id, "it");
-        assertFalse("No person for id.", result.getPersonResults().isEmpty());
+//        TBD_FindResults result = instance.find("nm0001774", TBD_ExternalSource.imdb_id, "it");
+//        assertFalse("No person for id.", result.getPersonResults().isEmpty());
+        fail("The test case is a prototype.");
     }
-
 
 }

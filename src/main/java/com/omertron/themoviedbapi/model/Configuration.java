@@ -20,8 +20,12 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.MovieDbException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * @author stuart.boston
@@ -180,4 +184,29 @@ public class Configuration extends AbstractJsonMapping {
                 || isValidProfileSize(sizeToCheck)
                 || isValidLogoSize(sizeToCheck);
     }
+
+    /**
+     * Generate the full image URL from the size and image path
+     *
+     * @param imagePath
+     * @param requiredSize
+     * @return
+     * @throws MovieDbException
+     */
+    public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
+        if (!isValidSize(requiredSize)) {
+            throw new MovieDbException(ApiExceptionType.INVALID_IMAGE, "Required size '" + requiredSize + "' is not valid");
+        }
+
+        StringBuilder sb = new StringBuilder(getBaseUrl());
+        sb.append(requiredSize);
+        sb.append(imagePath);
+        
+        try {
+            return new URL(sb.toString());
+        } catch (MalformedURLException ex) {
+            throw new MovieDbException(ApiExceptionType.INVALID_URL, "Failed to create image URL", sb.toString(), ex);
+        }
+    }
+
 }

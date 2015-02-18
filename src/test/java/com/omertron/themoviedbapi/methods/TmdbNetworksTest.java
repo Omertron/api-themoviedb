@@ -22,9 +22,9 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.model.tv.Network;
+import com.omertron.themoviedbapi.model.TBD_Network;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -58,8 +58,9 @@ public class TmdbNetworksTest extends AbstractTests {
     @Test
     public void testGetNetworkInfo() throws MovieDbException {
         LOG.info("getNetworkInfo");
-        Network result = instance.getNetworkInfo(1);
-        assertEquals("Wrong network returned", "Fuji Television", result.getName());
+        TBD_Network result = instance.getNetworkInfo(1);
+//        assertEquals("Wrong network returned", "Fuji Television", result.getName());
+        fail("The test case is a prototype.");
     }
 
 }

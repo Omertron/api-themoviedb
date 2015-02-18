@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
@@ -79,8 +78,6 @@ import java.net.URL;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
 
 /**
@@ -92,11 +89,7 @@ import org.yamj.api.common.http.SimpleHttpClientBuilder;
  */
 public class TheMovieDbApi {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TheMovieDbApi.class);
-    private String apiKey;
     private HttpTools httpTools;
-    // Jackson JSON configuration
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     // Constants
     private static final int YEAR_LENGTH = 4;
     // Sub-methods
@@ -138,7 +131,6 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public TheMovieDbApi(String apiKey, HttpClient httpClient) throws MovieDbException {
-        this.apiKey = apiKey;
         this.httpTools = new HttpTools(httpClient);
         initialise(apiKey, httpTools);
     }
@@ -687,7 +679,7 @@ public class TheMovieDbApi {
      * @throws MovieDbException
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
-        return tmdbConfiguration.createImageUrl(imagePath, requiredSize);
+        return tmdbConfiguration.getConfig().createImageUrl(imagePath, requiredSize);
     }
 
     /**

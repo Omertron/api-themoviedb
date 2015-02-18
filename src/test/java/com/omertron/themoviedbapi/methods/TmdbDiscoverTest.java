@@ -21,11 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_ENGLISH;
-import com.omertron.themoviedbapi.model.discover.Discover;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.Discover;
+import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -33,9 +30,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -43,9 +37,6 @@ import org.yamj.api.common.http.DefaultPoolingHttpClient;
  */
 public class TmdbDiscoverTest extends AbstractTests {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbDiscoverTest.class);
-    // API
     private static TmdbDiscover instance;
 
     public TmdbDiscoverTest() {
@@ -53,7 +44,7 @@ public class TmdbDiscoverTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbDiscover(getApiKey(),getHttpTools());
     }
 
@@ -80,7 +71,7 @@ public class TmdbDiscoverTest extends AbstractTests {
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
-        TmdbResultsList<MovieDb> result = instance.getDiscoverMovie(discover);
+        TmdbResultsList<MovieDb> result = instance.getDiscoverMovies(discover);
         assertFalse("No movies discovered", result.getResults().isEmpty());
     }
 
@@ -95,7 +86,7 @@ public class TmdbDiscoverTest extends AbstractTests {
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
-        TmdbResultsList<MovieDb> result = instance.getDiscoverMovie(discover);
+        TmdbResultsList<MovieDb> result = instance.getDiscoverMovies(discover);
         assertFalse("No TV shows discovered", result.getResults().isEmpty());
     }
 

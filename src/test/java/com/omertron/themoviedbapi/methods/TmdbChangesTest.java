@@ -21,9 +21,9 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.model.ChangedMovie;
+import com.omertron.themoviedbapi.model.ChangedMedia;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.MethodBase;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
@@ -45,7 +45,7 @@ public class TmdbChangesTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbChanges(getApiKey(), getHttpTools());
     }
 
@@ -54,7 +54,7 @@ public class TmdbChangesTest extends AbstractTests {
     }
 
     /**
-     * Test of getMovieChangesList method, of class TmdbChanges.
+     * Test of getChangeList(MOVIE) method, of class TmdbChanges.
      *
      * @throws MovieDbException
      */
@@ -64,12 +64,13 @@ public class TmdbChangesTest extends AbstractTests {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        TmdbResultsList<ChangedMovie> result = instance.getMovieChangesList(page, startDate, endDate);
+
+        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.MOVIE, page, startDate, endDate);
         assertFalse("No movie changes.", result.getResults().isEmpty());
     }
 
     /**
-     * Test of getPersonMovieOldChangesList method, of class TheMovieDbApi.
+     * Test of getChangeList(PERSON) method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
@@ -79,7 +80,23 @@ public class TmdbChangesTest extends AbstractTests {
         int page = 0;
         String startDate = "";
         String endDate = "";
-        instance.getPersonChangesList(page, startDate, endDate);
+        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, page, startDate, endDate);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getChangeList(TV) method, of class TheMovieDbApi.
+     *
+     * @throws MovieDbException
+     */
+    @Ignore("Not ready yet")
+    public void testGetTVChangesList() throws MovieDbException {
+        LOG.info("getPersonChangesList");
+        int page = 0;
+        String startDate = "";
+        String endDate = "";
+        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, page, startDate, endDate);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

@@ -21,11 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.LANGUAGE_DEFAULT;
 import com.omertron.themoviedbapi.model.Company;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -34,19 +31,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
  * @author stuart.boston
  */
-public class TmdbCompaniesTest extends AbstractTests{
+public class TmdbCompaniesTest extends AbstractTests {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbCompaniesTest.class);
-    // API
     private static TmdbCompanies instance;
     private static final int ID_COMPANY = 2;
 
@@ -55,8 +46,8 @@ public class TmdbCompaniesTest extends AbstractTests{
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
-        instance = new TmdbCompanies(getApiKey(),getHttpTools());
+        doConfiguration();
+        instance = new TmdbCompanies(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -93,6 +84,6 @@ public class TmdbCompaniesTest extends AbstractTests{
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
         TmdbResultsList<MovieDb> result = instance.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
-        assertTrue("No company movies found", !result.getResults().isEmpty());
+        assertTrue("No company movies found", !result.isEmpty());
     }
 }

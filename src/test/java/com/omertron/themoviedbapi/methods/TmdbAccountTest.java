@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.Account;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
@@ -42,7 +42,6 @@ import org.junit.Test;
  */
 public class TmdbAccountTest extends AbstractTests {
 
-    // API
     private static TmdbAccount instance;
     // Constants
     private static final int ID_MOVIE_FIGHT_CLUB = 550;
@@ -52,7 +51,7 @@ public class TmdbAccountTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbAccount(getApiKey(), getHttpTools());
     }
 
@@ -61,15 +60,17 @@ public class TmdbAccountTest extends AbstractTests {
     }
 
     /**
-     * Test of getAccount method, of class TmdbAccount.
+     * Test of getAccountId method, of class TmdbAccount.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetAccount() throws MovieDbException {
         LOG.info("getAccount");
-        Account result = instance.getAccount(SESSION_ID_APITESTS);
-        assertEquals("Wrong account returned", ACCOUNT_ID_APITESTS, result.getId());
+        Account result = instance.getAccount(getSessionId());
+        assertNotNull("No account returned", result);
+        // Make sure properties are extracted correctly
+        assertEquals("Wrong username!", getUsername(), result.getUserName());
     }
 
     /**
@@ -80,7 +81,7 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
-        List<MovieDbList> result = instance.getUserLists(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        List<MovieDbList> result = instance.getUserLists(getSessionId(), getAccountId());
         assertNotNull("Null list returned", result);
     }
 
@@ -95,16 +96,16 @@ public class TmdbAccountTest extends AbstractTests {
 
         LOG.info("Check favorite list is empty");
         // make sure it's empty (because it's just a test account
-        List<MovieDb> favList = instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        List<MovieDb> favList = instance.getFavoriteMovies(getSessionId(), getAccountId());
         assertTrue("Favorite list was not empty!", favList.isEmpty());
 
         LOG.info("Add movie to list");
         // add a movie
-        StatusCode status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, ID_MOVIE_FIGHT_CLUB, true);
+        StatusCode status = instance.changeFavoriteStatus(getSessionId(), getAccountId(), ID_MOVIE_FIGHT_CLUB, MediaType.MOVIE, true);
         LOG.info("Add Status: {}", status);
 
         LOG.info("Get favorite list");
-        favList = instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        favList = instance.getFavoriteMovies(getSessionId(), getAccountId());
         assertNotNull("Empty favorite list returned", favList);
         assertFalse("Favorite list empty", favList.isEmpty());
 
@@ -112,10 +113,10 @@ public class TmdbAccountTest extends AbstractTests {
         LOG.info("Remove movie(s) from list");
         for (MovieDb movie : favList) {
             LOG.info("Removing movie {}-'{}'", movie.getId(), movie.getTitle());
-            status = instance.changeFavoriteStatus(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, movie.getId(), false);
+            status = instance.changeFavoriteStatus(getSessionId(), getAccountId(), movie.getId(), MediaType.MOVIE, false);
             LOG.info("Remove status: {}", status);
         }
-        assertTrue("Favorite list was not empty", instance.getFavoriteMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
+        assertTrue("Favorite list was not empty", instance.getFavoriteMovies(getSessionId(), getAccountId()).isEmpty());
     }
 
     /**
@@ -135,7 +136,7 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetRatedMovies() throws MovieDbException {
         LOG.info("getRatedMovies");
-        List<MovieDb> result = instance.getRatedMovies(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        List<MovieDb> result = instance.getRatedMovies(getSessionId(), getAccountId());
         assertFalse("No rated movies", result.isEmpty());
     }
 
@@ -150,16 +151,16 @@ public class TmdbAccountTest extends AbstractTests {
 
         LOG.info("Check list is empty");
         // make sure it's empty (because it's just a test account
-        List<MovieDb> watchList = instance.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        List<MovieDb> watchList = instance.getWatchListMovie(getSessionId(), getAccountId());
         assertTrue("Watch list was not empty!", watchList.isEmpty());
 
         LOG.info("Add movie to list");
         // add a movie
-        StatusCode status = instance.modifyWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, ID_MOVIE_FIGHT_CLUB, true);
+        StatusCode status = instance.modifyWatchList(getSessionId(), getAccountId(), ID_MOVIE_FIGHT_CLUB, MediaType.MOVIE, true);
         LOG.info("Add Status: {}", status);
 
         LOG.info("Get watch list");
-        watchList = instance.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS);
+        watchList = instance.getWatchListMovie(getSessionId(), getAccountId());
         assertNotNull("Empty watch list returned", watchList);
         assertFalse("Watchlist list empty", watchList.isEmpty());
 
@@ -167,11 +168,11 @@ public class TmdbAccountTest extends AbstractTests {
         // clean up again
         for (MovieDb movie : watchList) {
             LOG.info("Removing movie {}-'{}'", movie.getId(), movie.getTitle());
-            status = instance.modifyWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS, movie.getId(), false);
+            status = instance.modifyWatchList(getSessionId(), getAccountId(), movie.getId(), MediaType.MOVIE, false);
             LOG.info("Remove status: {}", status);
         }
 
-        assertTrue(instance.getWatchList(SESSION_ID_APITESTS, ACCOUNT_ID_APITESTS).isEmpty());
+        assertTrue(instance.getWatchListMovie(getSessionId(), getAccountId()).isEmpty());
     }
 
     /**

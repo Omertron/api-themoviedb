@@ -48,11 +48,11 @@ public class TestAccounts extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
+        doConfiguration();
         tmdb = new TheMovieDbApi(getApiKey());
     }
 
     @Before
-    @Override
     public void setUp() throws MovieDbException {
         if (tokenSession == null) {
             testSessionCreation();

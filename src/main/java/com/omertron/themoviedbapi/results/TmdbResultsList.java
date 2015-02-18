@@ -48,6 +48,10 @@ public final class TmdbResultsList<T> extends AbstractResults {
         this.results = results;
     }
 
+    public boolean isEmpty() {
+        return results.isEmpty();
+    }
+
     @Override
     public int getTotalResults() {
         if (super.getTotalResults() == 0) {

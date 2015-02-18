@@ -21,10 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import static com.omertron.themoviedbapi.TheMovieDbApiTest.getApiKey();
 import com.omertron.themoviedbapi.model.Configuration;
-import com.omertron.themoviedbapi.model.type.ArtworkType;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -33,9 +30,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yamj.api.common.http.DefaultPoolingHttpClient;
 
 /**
  *
@@ -43,19 +37,15 @@ import org.yamj.api.common.http.DefaultPoolingHttpClient;
  */
 public class TmdbConfigurationTest extends AbstractTests {
 
-    // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TmdbConfigurationTest.class);
-
-    // API
     private static TmdbConfiguration instance;
 
     public TmdbConfigurationTest() {
     }
 
     @BeforeClass
-    public static void setUpClass() {
-        TestLogger.Configure();
-        instance = new TmdbConfiguration(getApiKey(),getHttpTools());
+    public static void setUpClass() throws MovieDbException {
+        doConfiguration();
+        instance = new TmdbConfiguration(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -98,7 +88,7 @@ public class TmdbConfigurationTest extends AbstractTests {
         LOG.info("createImageUrl");
         Configuration config = instance.getConfig();
 
-        String result = config.createImageUrl("http://mediaplayersite.com/image.jpg", ArtworkType.POSTER, "original").toString();
+        String result = config.createImageUrl("http://mediaplayersite.com/image.jpg", "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());
     }
 

@@ -21,14 +21,12 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
 import com.omertron.themoviedbapi.model.Collection;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.Keyword;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
-import com.omertron.themoviedbapi.model.person.PersonMovieOld;
-import com.omertron.themoviedbapi.model.tv.TVSeriesBasic;
+import com.omertron.themoviedbapi.model.Person;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
@@ -51,7 +49,7 @@ public class TmdbSearchTest extends AbstractTests {
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbSearch(getApiKey(), getHttpTools());
     }
 
@@ -83,18 +81,6 @@ public class TmdbSearchTest extends AbstractTests {
     }
 
     /**
-     * Test of searchTv method, of class TmdbSearch.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testSearchTv() throws MovieDbException {
-        LOG.info("searchTv");
-        TmdbResultsList<TVSeriesBasic> results = instance.searchTv("Big Bang Theory", 0, LANGUAGE_DEFAULT, null, 0);
-        assertFalse("No shows found, should be at least 1", results.getResults().isEmpty());
-    }
-
-    /**
      * Test of searchCollection method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
@@ -119,7 +105,7 @@ public class TmdbSearchTest extends AbstractTests {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
         boolean includeAdult = false;
-        TmdbResultsList<PersonMovieOld> result = instance.searchPeople(personName, includeAdult, 0);
+        TmdbResultsList<Person> result = instance.searchPeople(personName, includeAdult, 0);
         assertTrue("Couldn't find the person", result.getResults().size() > 0);
     }
 
