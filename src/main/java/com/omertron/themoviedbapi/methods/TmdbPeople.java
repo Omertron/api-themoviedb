@@ -175,4 +175,8 @@ public class TmdbPeople extends AbstractMethod {
         }
     }
 
+    int getPersonMovieCredits(int ID_BRUCE_WILLIS, String LANGUAGE_DEFAULT) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
