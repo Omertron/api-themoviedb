@@ -17,67 +17,39 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.change;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ChangedItem extends AbstractJsonMapping {
+public class ChangeKeyItem {
 
     private static final long serialVersionUID = 1L;
-    @JsonProperty("id")
-    private String id;
-    @JsonProperty("action")
-    private String action;
-    @JsonProperty("time")
-    private String time;
-    @JsonProperty("iso_639_1")
-    private String language;
-    @JsonProperty("value")
-    private Object value;
+    @JsonProperty("key")
+    private String key;
+    @JsonProperty("items")
+    private List<ChangedItem> changedItems = new ArrayList<ChangedItem>();
     private final Map<String, Object> newItems = new HashMap<String, Object>();
 
-    public String getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getAction() {
-        return action;
+    public List<ChangedItem> getChangedItems() {
+        return changedItems;
     }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
+    public void setChangedItems(List<ChangedItem> changes) {
+        this.changedItems = changes;
     }
 
     @JsonAnyGetter

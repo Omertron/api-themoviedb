@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

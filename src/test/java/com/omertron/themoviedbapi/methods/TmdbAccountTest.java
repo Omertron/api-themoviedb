@@ -27,11 +27,14 @@ import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.StatusCode;
 import java.util.List;
+import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,6 +60,14 @@ public class TmdbAccountTest extends AbstractTests {
 
     @AfterClass
     public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
     /**
@@ -182,5 +193,65 @@ public class TmdbAccountTest extends AbstractTests {
      */
     @Ignore("Tested as part of testGetWatchList")
     public void testModifyWatchList() throws MovieDbException {
+    }
+
+    /**
+     * Test of getFavoriteTv method, of class TmdbAccount.
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetFavoriteTv() throws MovieDbException {
+        System.out.println("getFavoriteTv");
+        List result = instance.getFavoriteTv(getSessionId(), getAccountId());
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getRatedTV method, of class TmdbAccount.
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetRatedTV() throws MovieDbException {
+        System.out.println("getRatedTV");
+        String sessionId = "";
+        int accountId = 0;
+        List expResult = null;
+        List result = instance.getRatedTV(sessionId, accountId);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getWatchListMovie method, of class TmdbAccount.
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetWatchListMovie() throws MovieDbException {
+        System.out.println("getWatchListMovie");
+        String sessionId = "";
+        int accountId = 0;
+        List<MovieDb> expResult = null;
+        List<MovieDb> result = instance.getWatchListMovie(sessionId, accountId);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getWatchListTV method, of class TmdbAccount.
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetWatchListTV() throws MovieDbException {
+        System.out.println("getWatchListTV");
+        String sessionId = "";
+        int accountId = 0;
+        List expResult = null;
+        List result = instance.getWatchListTV(sessionId, accountId);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 }

@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.wrapper;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.ChangedMedia;
+import com.omertron.themoviedbapi.model.change.ChangedMedia;
 
 public class WrapperMediaChanges extends AbstractWrapperAll {
 

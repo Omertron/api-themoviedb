@@ -132,6 +132,12 @@ public class TmdbAccount extends AbstractMethod {
      * @throws MovieDbException
      */
     public List getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId,MethodSub.FAVORITE_TV).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+        
         throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
 

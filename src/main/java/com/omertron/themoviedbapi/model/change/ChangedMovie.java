@@ -17,17 +17,33 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.change;
 
-/**
- * @author stuart.boston
- */
-public enum PersonType {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
-    // A member of the cast
-    CAST,
-    // A member of the crew
-    CREW,
-    // No specific type
-    PERSON
+public class ChangedMovie extends AbstractJsonMapping {
+
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("adult")
+    private boolean adult;
+
+    public String getId() {
+        return id;
+    }
+
+    public boolean isAdult() {
+        return adult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
 }

@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.PersonCredit;
-import com.omertron.themoviedbapi.model.PersonType;
+import com.omertron.themoviedbapi.model.person.PersonCredit;
+import com.omertron.themoviedbapi.model.person.PersonType;
 import java.util.ArrayList;
 import java.util.List;
 

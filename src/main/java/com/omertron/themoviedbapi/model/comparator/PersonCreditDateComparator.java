@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi.model.comparator;
 
-import com.omertron.themoviedbapi.model.PersonCredit;
+import com.omertron.themoviedbapi.model.person.PersonCredit;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.regex.Matcher;

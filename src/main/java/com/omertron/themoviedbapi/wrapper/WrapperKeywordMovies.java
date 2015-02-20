@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.KeywordMovie;
+import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import java.util.List;
 
 /**

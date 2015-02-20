@@ -19,6 +19,9 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.person.PersonCast;
+import com.omertron.themoviedbapi.model.person.PersonCrew;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;

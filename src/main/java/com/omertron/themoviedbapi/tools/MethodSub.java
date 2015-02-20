@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum MethodSub {
 
+    ADD_ITEM("add_item"),
     ALT_TITLES("alternative_titles"),
     CASTS("casts"),
     CHANGES("changes"),
@@ -31,7 +32,8 @@ public enum MethodSub {
     COMPANY("company"),
     CREDITS("credits"),
     FAVORITE("favorite"),
-    FAVORITE_MOVIES("favorite_movies"),
+    FAVORITE_MOVIES("favorite/movies"),
+    FAVORITE_TV("favorite/tv"),
     GUEST_SESSION("guest_session/new"),
     IMAGES("images"),
     ITEM_STATUS("item_status"),
@@ -42,15 +44,14 @@ public enum MethodSub {
     LISTS("lists"),
     MOVIE("movie"),
     MOVIES("movies"),
-    WATCHLIST("watchlist"),
-    WATCHLIST_MOVIES("watchlist/movies"),
-    WATCHLIST_TV("watchlist/tv"),
+    MOVIE_LIST("movie/list"),
     NOW_PLAYING("now-playing"),
     PERSON("person"),
     POPULAR("popular"),
     RATED_MOVIES("rated/movies"),
     RATING("rating"),
     RELEASES("releases"),
+    REMOVE_ITEM("remove_item"),
     REVIEWS("reviews"),
     SESSION_NEW("session/new"),
     SIMILAR_MOVIES("similar_movies"),
@@ -58,13 +59,13 @@ public enum MethodSub {
     TOKEN_VALIDATE("token/validate_with_login"),
     TOP_RATED("top-rated"),
     TRANSLATIONS("translations"),
+    TV("tv"),
+    TV_LIST("tv/list"),
     UPCOMING("upcoming"),
     VIDEOS("videos"),
-    ADD_ITEM("add_item"),
-    REMOVE_ITEM("remove_item"),
-    MOVIE_LIST("movie/list"),
-    TV_LIST("tv/list"),
-    TV("tv");
+    WATCHLIST("watchlist"),
+    WATCHLIST_MOVIES("watchlist/movies"),
+    WATCHLIST_TV("watchlist/tv");
 
     private final String value;
 

@@ -17,17 +17,15 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model.keyword;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.omertron.themoviedbapi.model.AbstractIdName;
 
 /**
- * ArtworkType enum List of the artwork types that are available
+ * @author stuart.boston
  */
-public enum ArtworkType {
-
-    // Poster artwork
-    POSTER,
-    // Fanart/backdrop
-    BACKDROP,
-    // Person image
-    PROFILE
+@JsonRootName("keyword")
+public class Keyword extends AbstractIdName {
+    // Nothing to override from the base class.
 }

@@ -21,9 +21,9 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ArtworkType;
-import com.omertron.themoviedbapi.model.Person;
-import com.omertron.themoviedbapi.model.PersonCredit;
+import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonCredit;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;

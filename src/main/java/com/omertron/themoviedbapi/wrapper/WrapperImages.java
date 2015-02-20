@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.Artwork;
-import com.omertron.themoviedbapi.model.ArtworkType;
+import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
