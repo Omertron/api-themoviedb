@@ -117,6 +117,13 @@
             <artifactId>api-common</artifactId>
             <version>1.4</version>
         </dependency>
+        <!-- Apache Utils -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

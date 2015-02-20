@@ -26,7 +26,12 @@ import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.http.client.HttpClient;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -38,6 +43,8 @@ public class AbstractTests {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
     private static final String PROP_FIlENAME = "testing.properties";
+    private static final String ACCT_FILENAME = "account.bin";
+    private static final String TOKEN_FILENAME = "token.bin";
     private static final Properties props = new Properties();
     private static HttpClient httpClient;
     private static HttpTools httpTools;
@@ -49,6 +56,11 @@ public class AbstractTests {
     protected static final String LANGUAGE_ENGLISH = "en";
     protected static final String LANGUAGE_RUSSIAN = "ru";
 
+    /**
+     * Do the initial configuration for the test cases
+     *
+     * @throws MovieDbException
+     */
     public static final void doConfiguration() throws MovieDbException {
         TestLogger.Configure();
         httpClient = new SimpleHttpClientBuilder().build();
@@ -72,7 +84,80 @@ public class AbstractTests {
         }
     }
 
+    /**
+     * Write out the object to a file
+     *
+     * @param object
+     * @param filename
+     * @return
+     */
+    private static boolean writeObject(Serializable object, String filename) {
+        File serFile = new File(filename);
+
+        if (serFile.exists()) {
+            long ft = serFile.lastModified();
+            long diff = System.currentTimeMillis() - ft;
+            LOG.info("File time: {}, diff: {} - {}", ft, diff, TimeUnit.HOURS.toMillis(1));
+            if (diff < TimeUnit.HOURS.toMillis(1)) {
+                LOG.info("File is current, no need to reacquire");
+                return true;
+            } else {
+                LOG.info("File is too old, re-acquiring");
+            }
+        }
+
+        try {
+            byte[] serObject = SerializationUtils.serialize(object);
+            FileUtils.writeByteArrayToFile(serFile, serObject);
+            return true;
+        } catch (IOException ex) {
+            LOG.info("Failed to write {}: {}", filename, ex.getMessage(), ex);
+            return false;
+        }
+    }
+
+    /**
+     * Read the object back from a file
+     *
+     * @param <T>
+     * @param filename
+     * @return
+     */
+    private static <T> T readObject(String filename) {
+        File serFile = new File(filename);
+
+        if (serFile.exists()) {
+            long diff = System.currentTimeMillis() - serFile.lastModified();
+            if (diff < TimeUnit.HOURS.toMillis(1)) {
+                LOG.info("File is current, no need to reacquire");
+                return null;
+            } else {
+                LOG.info("File is too old, re-acquiring");
+            }
+        } else {
+            LOG.info("File doesn't exist: {}", filename);
+            return null;
+        }
+
+        try {
+            byte[] serObject = FileUtils.readFileToByteArray(serFile);
+            return SerializationUtils.deserialize(serObject);
+        } catch (IOException ex) {
+            LOG.info("Failed to read {}: {}", filename, ex.getMessage(), ex);
+            return null;
+        }
+    }
+
+    /**
+     * get the Session ID
+     *
+     * @return
+     * @throws MovieDbException
+     */
     public static final String getSessionId() throws MovieDbException {
+        // Read the object from a file
+        tokenSession = readObject(TOKEN_FILENAME);
+
         if (tokenSession == null) {
             TmdbAuthentication auth = new TmdbAuthentication(getApiKey(), getHttpTools());
             LOG.info("Test and create a session token for the rest of the tests");
@@ -85,39 +170,85 @@ public class AbstractTests {
             tokenSession = auth.getSessionToken(token);
             assertTrue("Session token is not valid", tokenSession.getSuccess());
 
+            // Write the object to a file
+            writeObject(token, TOKEN_FILENAME);
+
         }
         return tokenSession.getSessionId();
     }
 
+    /**
+     * Get the Account information
+     *
+     * @return
+     * @throws MovieDbException
+     */
     public static final int getAccountId() throws MovieDbException {
+        // Read the object from a file
+        account = readObject(ACCT_FILENAME);
+
         if (account == null) {
             TmdbAccount instance = new TmdbAccount(getApiKey(), getHttpTools());
             // Get the account for later tests
             account = instance.getAccount(tokenSession.getSessionId());
+
+            // Write the object to a file
+            writeObject(account, ACCT_FILENAME);
         }
         return account.getId();
     }
 
+    /**
+     * get the Http Client
+     *
+     * @return
+     */
     public static HttpClient getHttpClient() {
         return httpClient;
     }
 
+    /**
+     * Get the Http Tools
+     *
+     * @return
+     */
     public static HttpTools getHttpTools() {
         return httpTools;
     }
 
+    /**
+     * Get the API Key
+     *
+     * @return
+     */
     public static String getApiKey() {
         return props.getProperty("API_Key");
     }
 
+    /**
+     * Get the Account username
+     *
+     * @return
+     */
     public static String getUsername() {
         return props.getProperty("Username");
     }
 
+    /**
+     * Get the Account password
+     *
+     * @return
+     */
     public static String getPassword() {
         return props.getProperty("Password");
     }
 
+    /**
+     * Get the named property
+     *
+     * @param property
+     * @return
+     */
     public static String getProperty(String property) {
         return props.getProperty(property);
     }

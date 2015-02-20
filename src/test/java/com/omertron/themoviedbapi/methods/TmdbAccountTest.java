@@ -21,22 +21,15 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.Account;
-import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbList;
-import com.omertron.themoviedbapi.model.StatusCode;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -63,11 +56,11 @@ public class TmdbAccountTest extends AbstractTests {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws MovieDbException {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() throws MovieDbException {
     }
 
     /**
@@ -86,172 +79,11 @@ public class TmdbAccountTest extends AbstractTests {
 
     /**
      * Test of getUserLists method, of class TmdbAccount.
-     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         List<MovieDbList> result = instance.getUserLists(getSessionId(), getAccountId());
-        assertNotNull("Null list returned", result);
-    }
-
-    /**
-     * Test of getFavoriteMovies method, of class TmdbAccount.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetFavoriteMovies() throws MovieDbException {
-        LOG.info("getFavoriteMovies");
-
-        LOG.info("Check favorite list is empty");
-        // make sure it's empty (because it's just a test account
-        List<MovieDb> favList = instance.getFavoriteMovies(getSessionId(), getAccountId());
-        assertTrue("Favorite list was not empty!", favList.isEmpty());
-
-        LOG.info("Add movie to list");
-        // add a movie
-        StatusCode status = instance.changeFavoriteStatus(getSessionId(), getAccountId(), ID_MOVIE_FIGHT_CLUB, MediaType.MOVIE, true);
-        LOG.info("Add Status: {}", status);
-
-        LOG.info("Get favorite list");
-        favList = instance.getFavoriteMovies(getSessionId(), getAccountId());
-        assertNotNull("Empty favorite list returned", favList);
-        assertFalse("Favorite list empty", favList.isEmpty());
-
-        // clean up again
-        LOG.info("Remove movie(s) from list");
-        for (MovieDb movie : favList) {
-            LOG.info("Removing movie {}-'{}'", movie.getId(), movie.getTitle());
-            status = instance.changeFavoriteStatus(getSessionId(), getAccountId(), movie.getId(), MediaType.MOVIE, false);
-            LOG.info("Remove status: {}", status);
-        }
-        assertTrue("Favorite list was not empty", instance.getFavoriteMovies(getSessionId(), getAccountId()).isEmpty());
-    }
-
-    /**
-     * Test of changeFavoriteStatus method, of class TmdbAccount.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Ignore("Tested as part of getFavoriteMovies")
-    public void testChangeFavoriteStatus() throws MovieDbException {
-    }
-
-    /**
-     * Test of getRatedMovies method, of class TmdbAccount.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetRatedMovies() throws MovieDbException {
-        LOG.info("getRatedMovies");
-        List<MovieDb> result = instance.getRatedMovies(getSessionId(), getAccountId());
-        assertFalse("No rated movies", result.isEmpty());
-    }
-
-    /**
-     * Test of getWatchList method, of class TmdbAccount.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetWatchList() throws MovieDbException {
-        LOG.info("getWatchList");
-
-        LOG.info("Check list is empty");
-        // make sure it's empty (because it's just a test account
-        List<MovieDb> watchList = instance.getWatchListMovie(getSessionId(), getAccountId());
-        assertTrue("Watch list was not empty!", watchList.isEmpty());
-
-        LOG.info("Add movie to list");
-        // add a movie
-        StatusCode status = instance.modifyWatchList(getSessionId(), getAccountId(), ID_MOVIE_FIGHT_CLUB, MediaType.MOVIE, true);
-        LOG.info("Add Status: {}", status);
-
-        LOG.info("Get watch list");
-        watchList = instance.getWatchListMovie(getSessionId(), getAccountId());
-        assertNotNull("Empty watch list returned", watchList);
-        assertFalse("Watchlist list empty", watchList.isEmpty());
-
-        LOG.info("Removing movie(s) from list");
-        // clean up again
-        for (MovieDb movie : watchList) {
-            LOG.info("Removing movie {}-'{}'", movie.getId(), movie.getTitle());
-            status = instance.modifyWatchList(getSessionId(), getAccountId(), movie.getId(), MediaType.MOVIE, false);
-            LOG.info("Remove status: {}", status);
-        }
-
-        assertTrue(instance.getWatchListMovie(getSessionId(), getAccountId()).isEmpty());
-    }
-
-    /**
-     * Test of modifyWatchList method, of class TmdbAccount.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Ignore("Tested as part of testGetWatchList")
-    public void testModifyWatchList() throws MovieDbException {
-    }
-
-    /**
-     * Test of getFavoriteTv method, of class TmdbAccount.
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetFavoriteTv() throws MovieDbException {
-        System.out.println("getFavoriteTv");
-        List result = instance.getFavoriteTv(getSessionId(), getAccountId());
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getRatedTV method, of class TmdbAccount.
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetRatedTV() throws MovieDbException {
-        System.out.println("getRatedTV");
-        String sessionId = "";
-        int accountId = 0;
-        List expResult = null;
-        List result = instance.getRatedTV(sessionId, accountId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getWatchListMovie method, of class TmdbAccount.
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetWatchListMovie() throws MovieDbException {
-        System.out.println("getWatchListMovie");
-        String sessionId = "";
-        int accountId = 0;
-        List<MovieDb> expResult = null;
-        List<MovieDb> result = instance.getWatchListMovie(sessionId, accountId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getWatchListTV method, of class TmdbAccount.
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testGetWatchListTV() throws MovieDbException {
-        System.out.println("getWatchListTV");
-        String sessionId = "";
-        int accountId = 0;
-        List expResult = null;
-        List result = instance.getWatchListTV(sessionId, accountId);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }
