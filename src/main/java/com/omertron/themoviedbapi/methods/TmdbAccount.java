@@ -79,6 +79,17 @@ public class TmdbAccount extends AbstractMethod {
         }
     }
 
+    /*
+     /account/{id}/lists Get the lists that you have created and marked as a favorite.
+     /account/{id}/favorite/movies Get the list of favorite movies for an account.
+     /account/{id}/favorite/tv Get the list of favorite TV series for an account
+     /account/{id}/favorite Add or remove a movie to an accounts favorite list
+     /account/{id}/rated/movies Get the list of rated movies (and associated rating) for an account
+     /account/{id}/rated/tv Get the list of rated TV shows (and associated rating) for an account.
+     /account/{id}/watchlist/movies Get the list of movies on an accounts watchlist
+     /account/{id}/watchlist/tv Get the list of TV series on an accounts watchlist
+     /account/{id}/watchlist Add or remove a movie to an accounts watch list
+     */
     /**
      * Get all lists of a given user
      *
@@ -90,8 +101,9 @@ public class TmdbAccount extends AbstractMethod {
     public List<MovieDbList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.LISTS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.LISTS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -112,8 +124,9 @@ public class TmdbAccount extends AbstractMethod {
     public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -134,10 +147,11 @@ public class TmdbAccount extends AbstractMethod {
     public List getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId,MethodSub.FAVORITE_TV).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-        
+
         throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
     }
 
@@ -155,6 +169,7 @@ public class TmdbAccount extends AbstractMethod {
     public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer mediaId, MediaType mediaType, boolean isFavorite) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
         String jsonBody = new PostTools()
                 .add(PostBody.MEDIA_TYPE, mediaType.toString().toLowerCase())
@@ -162,7 +177,7 @@ public class TmdbAccount extends AbstractMethod {
                 .add(PostBody.FAVORITE, isFavorite)
                 .build();
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.FAVORITE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -183,8 +198,9 @@ public class TmdbAccount extends AbstractMethod {
     public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.RATED_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -217,8 +233,9 @@ public class TmdbAccount extends AbstractMethod {
     public List<MovieDb> getWatchListMovie(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -239,8 +256,9 @@ public class TmdbAccount extends AbstractMethod {
     public List getWatchListTV(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.WATCHLIST_TV).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -264,6 +282,7 @@ public class TmdbAccount extends AbstractMethod {
     public StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, MediaType mediaType, boolean addToWatchlist) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
 
         String jsonBody = new PostTools()
                 .add(PostBody.MEDIA_TYPE, mediaType.toString().toLowerCase())
@@ -271,7 +290,7 @@ public class TmdbAccount extends AbstractMethod {
                 .add(PostBody.WATCHLIST, addToWatchlist)
                 .build();
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(accountId, MethodSub.WATCHLIST).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {

@@ -71,32 +71,6 @@ public class ApiUrl {
     }
 
     /**
-     * Add a sub-method that has an ID at the start
-     *
-     * @param someId
-     * @param submethod
-     * @return
-     */
-    public ApiUrl setSubMethod(int someId, MethodSub submethod) {
-        return setSubMethod(String.valueOf(someId), submethod);
-    }
-
-    /**
-     * Add a sub-method that has an ID at the start
-     *
-     * @param someId
-     * @param submethod
-     * @return
-     */
-    public ApiUrl setSubMethod(String someId, MethodSub submethod) {
-        StringBuilder sm = new StringBuilder(someId);
-        sm.append("/");
-        sm.append(submethod.getValue());
-        this.submethod = sm.toString();
-        return this;
-    }
-
-    /**
      * Build the URL with the default parameters
      *
      * @return

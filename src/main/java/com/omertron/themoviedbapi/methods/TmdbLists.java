@@ -113,9 +113,10 @@ public class TmdbLists extends AbstractMethod {
      */
     public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, movieId);
+        parameters.add(Param.ID, listId);
+        parameters.add(Param.MOVIE_ID, movieId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(listId, MethodSub.ITEM_STATUS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(MethodSub.ITEM_STATUS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -138,12 +139,13 @@ public class TmdbLists extends AbstractMethod {
     public StatusCode modifyMovieList(String sessionId, String listId, Integer movieId, MethodSub operation) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, listId);
 
         String jsonBody = new PostTools()
                 .add(PostBody.MEDIA_ID, movieId)
                 .build();
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(listId, operation).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(operation).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {

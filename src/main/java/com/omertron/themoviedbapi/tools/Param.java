@@ -38,6 +38,7 @@ public enum Param {
     ID("id="),
     INCLUDE_ALL_MOVIES("include_all_movies="),
     LANGUAGE("language="),
+    MOVIE_ID("movie_id="),
     MOVIE_WATCHLIST("movie_watchlist="),
     PAGE("page="),
     PASSWORD("password="),
