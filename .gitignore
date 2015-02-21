@@ -6,6 +6,7 @@
 /target/
 /nbactions.xml
 testing.properties
+*.bin
 .settings
 .classpath
 .project

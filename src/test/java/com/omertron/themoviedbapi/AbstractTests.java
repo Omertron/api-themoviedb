@@ -43,8 +43,7 @@ public class AbstractTests {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
     private static final String PROP_FIlENAME = "testing.properties";
-    private static final String ACCT_FILENAME = "account.bin";
-    private static final String TOKEN_FILENAME = "token.bin";
+    private static final String FILENAME_EXT = ".bin";
     private static final Properties props = new Properties();
     private static HttpClient httpClient;
     private static HttpTools httpTools;
@@ -91,19 +90,12 @@ public class AbstractTests {
      * @param filename
      * @return
      */
-    private static boolean writeObject(Serializable object, String filename) {
+    private static boolean writeObject(final Serializable object, final String baseFilename) {
+        String filename = baseFilename + FILENAME_EXT;
         File serFile = new File(filename);
 
         if (serFile.exists()) {
-            long ft = serFile.lastModified();
-            long diff = System.currentTimeMillis() - ft;
-            LOG.info("File time: {}, diff: {} - {}", ft, diff, TimeUnit.HOURS.toMillis(1));
-            if (diff < TimeUnit.HOURS.toMillis(1)) {
-                LOG.info("File is current, no need to reacquire");
-                return true;
-            } else {
-                LOG.info("File is too old, re-acquiring");
-            }
+            serFile.delete();
         }
 
         try {
@@ -111,7 +103,7 @@ public class AbstractTests {
             FileUtils.writeByteArrayToFile(serFile, serObject);
             return true;
         } catch (IOException ex) {
-            LOG.info("Failed to write {}: {}", filename, ex.getMessage(), ex);
+            LOG.info("Failed to write object to '{}': {}", filename, ex.getMessage(), ex);
             return false;
         }
     }
@@ -123,22 +115,24 @@ public class AbstractTests {
      * @param filename
      * @return
      */
-    private static <T> T readObject(String filename) {
+    private static <T> T readObject(final String baseFilename) {
+        String filename = baseFilename + FILENAME_EXT;
         File serFile = new File(filename);
 
         if (serFile.exists()) {
             long diff = System.currentTimeMillis() - serFile.lastModified();
             if (diff < TimeUnit.HOURS.toMillis(1)) {
-                LOG.info("File is current, no need to reacquire");
-                return null;
+                LOG.info("File '{}' is current, no need to reacquire", filename);
             } else {
-                LOG.info("File is too old, re-acquiring");
+                LOG.info("File '{}' is too old, re-acquiring", filename);
+                return null;
             }
         } else {
-            LOG.info("File doesn't exist: {}", filename);
+            LOG.info("File '{}' doesn't exist", filename);
             return null;
         }
 
+        LOG.info("Reading object from '{}'", filename);
         try {
             byte[] serObject = FileUtils.readFileToByteArray(serFile);
             return SerializationUtils.deserialize(serObject);
@@ -155,24 +149,27 @@ public class AbstractTests {
      * @throws MovieDbException
      */
     public static final String getSessionId() throws MovieDbException {
-        // Read the object from a file
-        tokenSession = readObject(TOKEN_FILENAME);
+        LOG.info("Create a session token for the rest of the tests");
 
         if (tokenSession == null) {
-            TmdbAuthentication auth = new TmdbAuthentication(getApiKey(), getHttpTools());
-            LOG.info("Test and create a session token for the rest of the tests");
-            // 1: Create a request token
-            TokenAuthorisation token = auth.getAuthorisationToken();
-            assertTrue("Token (auth) is not valid", token.getSuccess());
-            token = auth.getSessionTokenLogin(token, getUsername(), getPassword());
-            assertTrue("Token (login) is not valid", token.getSuccess());
-            // 3: Create the sessions ID
-            tokenSession = auth.getSessionToken(token);
-            assertTrue("Session token is not valid", tokenSession.getSuccess());
+            String filename = TokenSession.class.getSimpleName();
+            // Try to read the object from a file
+            tokenSession = readObject(filename);
 
-            // Write the object to a file
-            writeObject(token, TOKEN_FILENAME);
+            if (tokenSession == null) {
+                TmdbAuthentication auth = new TmdbAuthentication(getApiKey(), getHttpTools());
+                // 1: Create a request token
+                TokenAuthorisation token = auth.getAuthorisationToken();
+                assertTrue("Token (auth) is not valid", token.getSuccess());
+                token = auth.getSessionTokenLogin(token, getUsername(), getPassword());
+                assertTrue("Token (login) is not valid", token.getSuccess());
+                // 3: Create the sessions ID
+                tokenSession = auth.getSessionToken(token);
+                assertTrue("Session token is not valid", tokenSession.getSuccess());
 
+                // Write the object to a file
+                writeObject(token, filename);
+            }
         }
         return tokenSession.getSessionId();
     }
@@ -184,16 +181,21 @@ public class AbstractTests {
      * @throws MovieDbException
      */
     public static final int getAccountId() throws MovieDbException {
-        // Read the object from a file
-        account = readObject(ACCT_FILENAME);
+        LOG.info("Getting account information");
 
         if (account == null) {
-            TmdbAccount instance = new TmdbAccount(getApiKey(), getHttpTools());
-            // Get the account for later tests
-            account = instance.getAccount(tokenSession.getSessionId());
+            String filename = Account.class.getSimpleName();
+            // Read the object from a file
+            account = readObject(filename);
 
-            // Write the object to a file
-            writeObject(account, ACCT_FILENAME);
+            if (account == null) {
+                TmdbAccount instance = new TmdbAccount(getApiKey(), getHttpTools());
+                // Get the account for later tests
+                account = instance.getAccount(tokenSession.getSessionId());
+
+                // Write the object to a file
+                writeObject(account, filename);
+            }
         }
         return account.getId();
     }
