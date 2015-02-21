@@ -23,9 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TokenAuthorisation extends AbstractJsonMapping {
 
-    /*
-     * Properties
-     */
+    private static final long serialVersionUID = 2L;
     @JsonProperty("expires_at")
     private String expires;
     @JsonProperty("request_token")

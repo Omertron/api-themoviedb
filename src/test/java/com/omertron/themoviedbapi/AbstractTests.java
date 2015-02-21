@@ -135,7 +135,7 @@ public class AbstractTests {
         LOG.info("Reading object from '{}'", filename);
         try {
             byte[] serObject = FileUtils.readFileToByteArray(serFile);
-            return SerializationUtils.deserialize(serObject);
+            return (T) SerializationUtils.deserialize(serObject);
         } catch (IOException ex) {
             LOG.info("Failed to read {}: {}", filename, ex.getMessage(), ex);
             return null;
@@ -168,7 +168,7 @@ public class AbstractTests {
                 assertTrue("Session token is not valid", tokenSession.getSuccess());
 
                 // Write the object to a file
-                writeObject(token, filename);
+                writeObject(tokenSession, filename);
             }
         }
         return tokenSession.getSessionId();

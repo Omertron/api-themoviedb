@@ -23,9 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TokenSession extends AbstractJsonMapping {
 
-    /*
-     * Properties
-     */
+    private static final long serialVersionUID = 2L;
     @JsonProperty("session_id")
     private String sessionId;
     @JsonProperty("success")
