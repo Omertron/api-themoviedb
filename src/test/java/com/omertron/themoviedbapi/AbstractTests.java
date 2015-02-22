@@ -149,9 +149,8 @@ public class AbstractTests {
      * @throws MovieDbException
      */
     public static final String getSessionId() throws MovieDbException {
-        LOG.info("Create a session token for the rest of the tests");
-
         if (tokenSession == null) {
+            LOG.info("Create a session token for the rest of the tests");
             String filename = TokenSession.class.getSimpleName();
             // Try to read the object from a file
             tokenSession = readObject(filename);
@@ -181,9 +180,8 @@ public class AbstractTests {
      * @throws MovieDbException
      */
     public static final int getAccountId() throws MovieDbException {
-        LOG.info("Getting account information");
-
         if (account == null) {
+            LOG.info("Getting account information");
             String filename = Account.class.getSimpleName();
             // Read the object from a file
             account = readObject(filename);

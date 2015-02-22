@@ -49,9 +49,7 @@ public enum Param {
     USERNAME("username="),
     VALUE("value="),
     YEAR("year="),
-    /*
-     * Discover parameters
-     */
+    // Discover parameters
     CERTIFICATION_COUNTRY("certification_country="),
     CERTIFICATION_LTE("certification.lte="),
     PRIMARY_RELEASE_YEAR("primary_release_year="),

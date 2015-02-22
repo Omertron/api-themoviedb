@@ -313,7 +313,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         // get all rated movies
         TmdbAccount account = new TmdbAccount(getApiKey(), getHttpTools());
-        List<MovieDb> ratedMovies = account.getRatedMovies(getSessionId(), getAccountId());
+        List<MovieDb> ratedMovies = account.getRatedMovies(getSessionId(), getAccountId(),null,null,null);
         assertTrue(ratedMovies.size() > 0);
 
         // make sure that we find the movie and it is rated correctly

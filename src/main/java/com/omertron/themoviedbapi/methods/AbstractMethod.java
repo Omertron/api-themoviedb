@@ -19,10 +19,17 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Abstract methods
@@ -51,4 +58,26 @@ public class AbstractMethod {
         this.httpTools = httpTools;
     }
 
+    /**
+     * Process the wrapper list and return the results
+     *
+     * @param <T> Type of list to process
+     * @param url URL of the page (Error output only)
+     * @param errorMessageSuffix Error message to output (Error output only)
+     * @return
+     * @throws MovieDbException
+     */
+    public <T> List<T> processWrapperList(URL url, String errorMessageSuffix) throws MovieDbException {
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            TypeReference<WrapperGenericList<T>> ref = new TypeReference<WrapperGenericList<T>>() {
+            };
+            WrapperGenericList<T> results = MAPPER.readValue(webpage, ref);
+            return results.getResults();
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get " + errorMessageSuffix, url, ex);
+        }
+
+    }
 }

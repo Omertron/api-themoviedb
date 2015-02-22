@@ -26,6 +26,7 @@ import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
+import com.omertron.themoviedbapi.model.list.MovieFavorite;
 import java.util.List;
 import java.util.Random;
 import static org.junit.Assert.assertEquals;
@@ -141,14 +142,14 @@ public class TestAccounts extends AbstractTests {
         assertTrue(tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId()).isEmpty());
 
         // add a movie
-        tmdb.changeFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE, true);
+        tmdb.modifyFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE, true);
 
-        List<MovieDb> watchList = tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId());
+        List<MovieFavorite> watchList = tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId());
         assertNotNull("Empty watch list returned", watchList);
         assertEquals("Watchlist wrong size", 1, watchList.size());
 
         // clean up again
-        tmdb.changeFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE, false);
+        tmdb.modifyFavoriteStatus(tokenSession.getSessionId(), account.getId(), 550, MediaType.MOVIE, false);
 
         assertTrue(tmdb.getFavoriteMovies(tokenSession.getSessionId(), account.getId()).isEmpty());
     }
@@ -195,7 +196,7 @@ public class TestAccounts extends AbstractTests {
         assertTrue("Rating was not added", wasPosted);
 
         // get all rated movies
-        List<MovieDb> ratedMovies = tmdb.getRatedMovies(tokenSession.getSessionId(), account.getId());
+        List<MovieDb> ratedMovies = tmdb.getRatedMovies(tokenSession.getSessionId(), account.getId(), null, null, null);
         assertTrue("No rated movies", ratedMovies.size() > 0);
 
         // We should check that the movie was correctly rated, but the CDN does not update fast enough.

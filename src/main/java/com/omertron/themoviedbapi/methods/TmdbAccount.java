@@ -19,12 +19,14 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.Account;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.list.MovieFavorite;
+import com.omertron.themoviedbapi.model.list.TVFavorite;
+import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -33,8 +35,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieDbList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -58,8 +58,7 @@ public class TmdbAccount extends AbstractMethod {
     }
 
     /**
-     * Get the basic information for an account. You will need to have a valid
-     * session id.
+     * Get the basic information for an account. You will need to have a valid session id.
      *
      * @param sessionId
      * @return
@@ -80,12 +79,6 @@ public class TmdbAccount extends AbstractMethod {
     }
 
     /*
-     /account/{id}/lists Get the lists that you have created and marked as a favorite.
-     /account/{id}/favorite/movies Get the list of favorite movies for an account.
-     /account/{id}/favorite/tv Get the list of favorite TV series for an account
-     /account/{id}/favorite Add or remove a movie to an accounts favorite list
-     /account/{id}/rated/movies Get the list of rated movies (and associated rating) for an account
-     /account/{id}/rated/tv Get the list of rated TV shows (and associated rating) for an account.
      /account/{id}/watchlist/movies Get the list of movies on an accounts watchlist
      /account/{id}/watchlist/tv Get the list of TV series on an accounts watchlist
      /account/{id}/watchlist Add or remove a movie to an accounts watch list
@@ -98,19 +91,13 @@ public class TmdbAccount extends AbstractMethod {
      * @return The lists
      * @throws MovieDbException
      */
-    public List<MovieDbList> getUserLists(String sessionId, int accountId) throws MovieDbException {
+    public List<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.LISTS).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, WrapperMovieDbList.class).getLists();
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get user list", url, ex);
-        }
+        return processWrapperList(url, "user list");
     }
 
     /**
@@ -121,19 +108,13 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public List<MovieFavorite> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get favorite movies", url, ex);
-        }
+        return processWrapperList(url, "favorite movies");
     }
 
     /**
@@ -144,15 +125,13 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+    public List<TVFavorite> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+        return processWrapperList(url, "favorite TV shows");
     }
 
     /**
@@ -162,11 +141,11 @@ public class TmdbAccount extends AbstractMethod {
      * @param accountId
      * @param mediaType
      * @param mediaId
-     * @param isFavorite
+     * @param setFavorite
      * @return
      * @throws MovieDbException
      */
-    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer mediaId, MediaType mediaType, boolean isFavorite) throws MovieDbException {
+    public StatusCode modifyFavoriteStatus(String sessionId, int accountId, MediaType mediaType, int mediaId, boolean setFavorite) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
@@ -174,7 +153,7 @@ public class TmdbAccount extends AbstractMethod {
         String jsonBody = new PostTools()
                 .add(PostBody.MEDIA_TYPE, mediaType.toString().toLowerCase())
                 .add(PostBody.MEDIA_ID, mediaId)
-                .add(PostBody.FAVORITE, isFavorite)
+                .add(PostBody.FAVORITE, setFavorite)
                 .build();
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE).buildUrl(parameters);
@@ -183,7 +162,7 @@ public class TmdbAccount extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get favorite status", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to set favorite status", url, ex);
         }
     }
 
@@ -192,22 +171,24 @@ public class TmdbAccount extends AbstractMethod {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
+    public List<MovieFavorite> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.SORT_BY, sortBy);
+        parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get rated movies", url, ex);
-        }
+        TypeReference<MovieFavorite> ref = new TypeReference<MovieFavorite>() {
+        };
+        return processWrapperList(url, "rated movies");
     }
 
     /**
@@ -215,11 +196,22 @@ public class TmdbAccount extends AbstractMethod {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return
      * @throws MovieDbException
      */
-    public List getRatedTV(String sessionId, int accountId) throws MovieDbException {
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    public List<TVFavorite> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, accountId);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.SORT_BY, sortBy);
+        parameters.add(Param.LANGUAGE, language);
+
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_TV).buildUrl(parameters);
+        return processWrapperList(url, "rated TV shows");
     }
 
     /**
@@ -227,22 +219,22 @@ public class TmdbAccount extends AbstractMethod {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public List<MovieDb> getWatchListMovie(String sessionId, int accountId) throws MovieDbException {
+    public List<MovieFavorite> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.SORT_BY, sortBy);
+        parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Movie watch list", url, ex);
-        }
+        return processWrapperList(url, "movie watch list");
     }
 
     /**
@@ -250,22 +242,22 @@ public class TmdbAccount extends AbstractMethod {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public List getWatchListTV(String sessionId, int accountId) throws MovieDbException {
+    public List<TVFavorite> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.SORT_BY, sortBy);
+        parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, WrapperMovie.class).getMovies();
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV watch list", url, ex);
-        }
+        return processWrapperList(url, "TV watch list");
     }
 
     /**

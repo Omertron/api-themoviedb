@@ -69,6 +69,9 @@ import com.omertron.themoviedbapi.model.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.TokenSession;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
+import com.omertron.themoviedbapi.model.list.MovieFavorite;
+import com.omertron.themoviedbapi.model.list.TVFavorite;
+import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -280,7 +283,7 @@ public class TheMovieDbApi {
      * @return The lists
      * @throws MovieDbException
      */
-    public List<MovieDbList> getUserLists(String sessionId, int accountId) throws MovieDbException {
+    public List<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getUserLists(sessionId, accountId);
     }
 
@@ -292,7 +295,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public List<MovieFavorite> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteMovies(sessionId, accountId);
     }
 
@@ -307,8 +310,8 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public StatusCode changeFavoriteStatus(String sessionId, int accountId, Integer mediaId, MediaType mediaType, boolean isFavorite) throws MovieDbException {
-        return tmdbAccount.changeFavoriteStatus(sessionId, accountId, mediaId, mediaType, isFavorite);
+    public StatusCode modifyFavoriteStatus(String sessionId, int accountId, Integer mediaId, MediaType mediaType, boolean isFavorite) throws MovieDbException {
+        return tmdbAccount.modifyFavoriteStatus(sessionId, accountId, mediaType, mediaId, isFavorite);
     }
 
     /**
@@ -316,11 +319,14 @@ public class TheMovieDbApi {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return
      * @throws MovieDbException
      */
-    public List<MovieDb> getRatedMovies(String sessionId, int accountId) throws MovieDbException {
-        return tmdbAccount.getRatedMovies(sessionId, accountId);
+    public List<MovieFavorite> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+        return tmdbAccount.getRatedMovies(sessionId, accountId, page, sortBy, language);
     }
 
     /**
@@ -328,11 +334,14 @@ public class TheMovieDbApi {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return
      * @throws MovieDbException
      */
-    public List getRatedTV(String sessionId, int accountId) throws MovieDbException {
-        return tmdbAccount.getRatedTV(sessionId, accountId);
+    public List<TVFavorite> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+        return tmdbAccount.getRatedTV(sessionId, accountId, page, sortBy, language);
     }
 
     /**
@@ -340,11 +349,14 @@ public class TheMovieDbApi {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return The watchlist of the user
      * @throws MovieDbException
      */
-    public List<MovieDb> getWatchListMovie(String sessionId, int accountId) throws MovieDbException {
-        return tmdbAccount.getWatchListMovie(sessionId, accountId);
+    public List<MovieFavorite> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+        return tmdbAccount.getWatchListMovie(sessionId, accountId, page, sortBy, language);
     }
 
     /**
@@ -352,11 +364,14 @@ public class TheMovieDbApi {
      *
      * @param sessionId
      * @param accountId
+     * @param page
+     * @param sortBy
+     * @param language
      * @return The watchlist of the user
      * @throws MovieDbException
      */
-    public List getWatchListTV(String sessionId, int accountId) throws MovieDbException {
-        return tmdbAccount.getWatchListTV(sessionId, accountId);
+    public List<TVFavorite> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+        return tmdbAccount.getWatchListTV(sessionId, accountId, page, sortBy, language);
     }
 
     /**
