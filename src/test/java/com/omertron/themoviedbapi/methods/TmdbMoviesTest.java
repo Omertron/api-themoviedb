@@ -29,6 +29,7 @@ import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
+import com.omertron.themoviedbapi.model.list.MovieFavorite;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.util.List;
 import java.util.Random;
@@ -290,8 +291,7 @@ public class TmdbMoviesTest extends AbstractTests {
     /**
      * Test of postMovieRating method, of class TheMovieDbApi.
      *
-     * TODO: Cannot be tested without a HTTP authorisation:
-     * http://help.themoviedb.org/kb/api/user-authentication /**
+     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication /**
      *
      * @throws MovieDbException
      */
@@ -313,14 +313,14 @@ public class TmdbMoviesTest extends AbstractTests {
 
         // get all rated movies
         TmdbAccount account = new TmdbAccount(getApiKey(), getHttpTools());
-        List<MovieDb> ratedMovies = account.getRatedMovies(getSessionId(), getAccountId(),null,null,null);
+        List<MovieFavorite> ratedMovies = account.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
         assertTrue(ratedMovies.size() > 0);
 
         // make sure that we find the movie and it is rated correctly
         boolean foundMovie = false;
-        for (MovieDb movie : ratedMovies) {
+        for (MovieFavorite movie : ratedMovies) {
             if (movie.getId() == movieID) {
-                assertEquals("Incorrect rating", movie.getUserRating(), (float) rating, 0);
+                assertEquals("Incorrect rating", movie.getRating(), (float) rating, 0);
                 foundMovie = true;
                 break;
             }

@@ -20,7 +20,9 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.util.List;
 
@@ -32,6 +34,9 @@ import java.util.List;
  */
 public class WrapperGenericList<T> extends AbstractWrapperAll implements Serializable {
 
+    @JsonIgnore
+    private final TypeReference typeRef = new TypeReference<WrapperGenericList<T>>() {
+    };
     @JsonProperty("results")
     private List<T> results;
 
@@ -44,4 +49,7 @@ public class WrapperGenericList<T> extends AbstractWrapperAll implements Seriali
         this.results = results;
     }
 
+    public TypeReference getTypeRef() {
+        return typeRef;
+    }
 }

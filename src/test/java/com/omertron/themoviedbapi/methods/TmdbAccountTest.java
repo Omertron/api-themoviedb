@@ -34,7 +34,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -76,7 +75,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetAccount() throws MovieDbException {
         LOG.info("getAccount");
         Account result = instance.getAccount(getSessionId());
@@ -90,7 +89,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         List<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
@@ -106,7 +105,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
         List<MovieFavorite> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
@@ -122,7 +121,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetFavoriteTv() throws MovieDbException {
         LOG.info("getFavoriteTv");
         List<TVFavorite> results = instance.getFavoriteTv(getSessionId(), getAccountId());
@@ -138,7 +137,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testModifyFavoriteStatus() throws MovieDbException {
         LOG.info("modifyFavoriteStatus");
 
@@ -161,7 +160,6 @@ public class TmdbAccountTest extends AbstractTests {
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
         LOG.info("Result: {}", result);
         assertTrue("Incorrect status code", result.getStatusCode() == 13);
-
     }
 
     /**
@@ -175,11 +173,6 @@ public class TmdbAccountTest extends AbstractTests {
         List<MovieFavorite> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
         assertNotNull("No rated list found", results);
         assertFalse("No entries found", results.isEmpty());
-
-        for(MovieFavorite r: results){
-            LOG.info("    {}-{}", r.getClass(),r.toString());
-        }
-
     }
 
     /**
@@ -187,7 +180,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetRatedTV() throws MovieDbException {
         LOG.info("getRatedTV");
         List<TVFavorite> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
@@ -203,7 +196,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetWatchListMovie() throws MovieDbException {
         LOG.info("getWatchListMovie");
         List<MovieFavorite> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
@@ -219,7 +212,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetWatchListTV() throws MovieDbException {
         LOG.info("getWatchListTV");
         List<TVFavorite> results = instance.getWatchListTV(getSessionId(), getAccountId(), null, null, null);
@@ -235,16 +228,28 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testModifyWatchList() throws MovieDbException {
         LOG.info("modifyWatchList");
-        Integer movieId = null;
-        MediaType mediaType = null;
-        boolean addToWatchlist = false;
-        StatusCode expResult = null;
-        StatusCode result = instance.modifyWatchList(getSessionId(), getAccountId(), movieId, mediaType, addToWatchlist);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        // Add a movie to the watch list
+        StatusCode result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, true);
+        LOG.info("Result: {}", result);
+        assertTrue("Incorrect status code", result.getStatusCode() == 1 || result.getStatusCode() == 12);
+
+        // Remove a movie from the watch list
+        result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, false);
+        LOG.info("Result: {}", result);
+        assertTrue("Incorrect status code", result.getStatusCode() == 13);
+
+        // Add a TV Show to the watch list
+        result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, true);
+        LOG.info("Result: {}", result);
+        assertTrue("Incorrect status code", result.getStatusCode() == 1 || result.getStatusCode() == 12);
+
+        // Remove a TV Show from the watch list
+        result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
+        LOG.info("Result: {}", result);
+        assertTrue("Incorrect status code", result.getStatusCode() == 13);
     }
 }

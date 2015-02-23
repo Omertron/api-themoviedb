@@ -384,8 +384,8 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public StatusCode addToWatchList(String sessionId, int accountId, Integer mediaId, MediaType mediaType) throws MovieDbException {
-        return tmdbAccount.modifyWatchList(sessionId, accountId, mediaId, mediaType, true);
+    public StatusCode addToWatchList(String sessionId, int accountId, MediaType mediaType, Integer mediaId) throws MovieDbException {
+        return tmdbAccount.modifyWatchList(sessionId, accountId, mediaType, mediaId, true);
     }
 
     /**
@@ -398,8 +398,8 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public StatusCode removeFromWatchList(String sessionId, int accountId, Integer mediaId, MediaType mediaType) throws MovieDbException {
-        return tmdbAccount.modifyWatchList(sessionId, accountId, mediaId, mediaType, false);
+    public StatusCode removeFromWatchList(String sessionId, int accountId, MediaType mediaType, Integer mediaId) throws MovieDbException {
+        return tmdbAccount.modifyWatchList(sessionId, accountId, mediaType, mediaId, false);
     }
 
     /**

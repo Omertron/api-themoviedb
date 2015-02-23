@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.methods;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.Account;
@@ -97,7 +96,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.LISTS).buildUrl(parameters);
-        return processWrapperList(url, "user list");
+        return processWrapperList(TR_USER_LIST, url, "user list");
     }
 
     /**
@@ -114,7 +113,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
-        return processWrapperList(url, "favorite movies");
+        return processWrapperList(TR_MOVIE_FAV, url, "favorite movies");
     }
 
     /**
@@ -131,7 +130,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
-        return processWrapperList(url, "favorite TV shows");
+        return processWrapperList(TR_TV_FAV, url, "favorite TV shows");
     }
 
     /**
@@ -186,9 +185,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
-        TypeReference<MovieFavorite> ref = new TypeReference<MovieFavorite>() {
-        };
-        return processWrapperList(url, "rated movies");
+        return processWrapperList(TR_MOVIE_FAV, url, "rated movies");
     }
 
     /**
@@ -211,7 +208,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_TV).buildUrl(parameters);
-        return processWrapperList(url, "rated TV shows");
+        return processWrapperList(TR_TV_FAV, url, "rated TV shows");
     }
 
     /**
@@ -234,7 +231,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
-        return processWrapperList(url, "movie watch list");
+        return processWrapperList(TR_MOVIE_FAV, url, "movie watch list");
     }
 
     /**
@@ -257,7 +254,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
-        return processWrapperList(url, "TV watch list");
+        return processWrapperList(TR_TV_FAV, url, "TV watch list");
     }
 
     /**
@@ -271,7 +268,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public StatusCode modifyWatchList(String sessionId, int accountId, Integer movieId, MediaType mediaType, boolean addToWatchlist) throws MovieDbException {
+    public StatusCode modifyWatchList(String sessionId, int accountId, MediaType mediaType, Integer movieId, boolean addToWatchlist) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
