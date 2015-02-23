@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.TBD_PersonCredits;
+import com.omertron.themoviedbapi.model2.person.CreditInfo;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -66,7 +66,7 @@ public class TmdbCredits extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TBD_PersonCredits getCreditInfo(String creditId, String language) throws MovieDbException {
+    public CreditInfo getCreditInfo(String creditId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, creditId);
         parameters.add(Param.LANGUAGE, language);
@@ -75,7 +75,7 @@ public class TmdbCredits extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, TBD_PersonCredits.class);
+            return MAPPER.readValue(webpage, CreditInfo.class);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get credit info", url, ex);
         }

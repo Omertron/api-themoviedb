@@ -17,29 +17,46 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.tv;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
+ * TV Favorite information
+ *
  * @author stuart.boston
  */
-@JsonRootName("???")
-public class TBD_PersonCredits extends AbstractJsonMapping {
+public class TVSeasonBasic extends AbstractJsonMapping {
 
-    private static final long serialVersionUID = 1L;
+    @JsonProperty("air_date")
+    private String airDate;
+    @JsonProperty("poster_path")
+    private String posterPath;
+    @JsonProperty("season_number")
+    private int seasonNumber;
 
-    // Properties
-    @JsonProperty("id")
-    private int id;
-
-    public int getId() {
-        return id;
+    public String getAirDate() {
+        return airDate;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAirDate(String airDate) {
+        this.airDate = airDate;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public int getSeasonNumber() {
+        return seasonNumber;
+    }
+
+    public void setSeasonNumber(int seasonNumber) {
+        this.seasonNumber = seasonNumber;
     }
 }

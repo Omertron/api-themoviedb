@@ -29,7 +29,7 @@ Collections (Done)
 /collection/{id} Get the basic collection information for a specific collection id.
 /collection/{id}/images Get all of the images for a particular collection by collection id.
 
-Companies
+Companies (Done)
 /company/{id} This method is used to retrieve all of the basic information about a company
 /company/{id}/movies Get the list of movies associated with a particular company.
 

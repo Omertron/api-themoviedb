@@ -64,7 +64,7 @@ import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model.TBD_ExternalSource;
 import com.omertron.themoviedbapi.model.TBD_FindResults;
 import com.omertron.themoviedbapi.model.TBD_Network;
-import com.omertron.themoviedbapi.model.TBD_PersonCredits;
+import com.omertron.themoviedbapi.model2.person.CreditInfo;
 import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
 import com.omertron.themoviedbapi.model.Translation;
@@ -658,7 +658,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TBD_PersonCredits getCreditInfo(String creditId, String language) throws MovieDbException {
+    public CreditInfo getCreditInfo(String creditId, String language) throws MovieDbException {
         return tmdbCredits.getCreditInfo(creditId, language);
     }
     //</editor-fold>

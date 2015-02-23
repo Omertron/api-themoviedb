@@ -21,10 +21,11 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.TBD_PersonCredits;
+import com.omertron.themoviedbapi.model2.person.CreditInfo;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,7 +34,7 @@ import org.junit.Test;
  *
  * @author stuart.boston
  */
-public class TmdbCreditsTest extends AbstractTests{
+public class TmdbCreditsTest extends AbstractTests {
 
     private static TmdbCredits instance;
 
@@ -43,7 +44,7 @@ public class TmdbCreditsTest extends AbstractTests{
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
-        instance = new TmdbCredits(getApiKey(),getHttpTools());
+        instance = new TmdbCredits(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -66,13 +67,12 @@ public class TmdbCreditsTest extends AbstractTests{
     @Test
     public void testGetCreditInfo() throws MovieDbException {
         LOG.info("getCreditInfo");
-        String creditId = "525346f619c29579400d4145";
-        String language = "";
-        TBD_PersonCredits result = instance.getCreditInfo(creditId, language);
-//        assertEquals("Wrong name", "Sean Bean", result.getPerson().getName());
-//        assertEquals("Wrong job", "Actor", result.getJob());
-//        assertFalse("No seasons", result.getMedia().getSeasons().isEmpty());
-        fail("The test case is a prototype.");
+        String creditId = "53392a9c9251417da10041c8";
+        CreditInfo result = instance.getCreditInfo(creditId, LANGUAGE_DEFAULT);
+        assertEquals("Wrong name", "Josh McDermitt", result.getPerson().getName());
+        assertEquals("Wrong job", "Actor", result.getJob());
+        assertFalse("No seasons", result.getMedia().getSeasons().isEmpty());
+        assertFalse("No episodes", result.getMedia().getEpisodes().isEmpty());
     }
 
 }
