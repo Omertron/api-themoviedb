@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Certification;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import org.junit.BeforeClass;
@@ -62,6 +63,10 @@ public class TmdbCertificationsTest extends AbstractTests {
         LOG.info("getMovieCertifications");
         TmdbResultsMap<String, List<Certification>> result = instance.getMoviesCertification();
         assertFalse("No movie certifications.", result.getResults().isEmpty());
+        for (Map.Entry<String, List<Certification>> entry : result.getResults().entrySet()) {
+            LOG.info("{} = {} entries", entry.getKey(), entry.getValue().size());
+            assertFalse("No entries for " + entry.getKey(), entry.getValue().isEmpty());
+        }
     }
 
     /**
@@ -74,5 +79,9 @@ public class TmdbCertificationsTest extends AbstractTests {
         LOG.info("getTvCertifications");
         TmdbResultsMap<String, List<Certification>> result = instance.getTvCertification();
         assertFalse("No tv certifications.", result.getResults().isEmpty());
+        for (Map.Entry<String, List<Certification>> entry : result.getResults().entrySet()) {
+            LOG.info("{} = {} entries", entry.getKey(), entry.getValue().size());
+            assertFalse("No entries for " + entry.getKey(), entry.getValue().isEmpty());
+        }
     }
 }

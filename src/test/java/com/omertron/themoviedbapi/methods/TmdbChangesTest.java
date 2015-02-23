@@ -26,7 +26,6 @@ import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -61,11 +60,7 @@ public class TmdbChangesTest extends AbstractTests {
     @Test
     public void testGetMovieChangesList() throws MovieDbException {
         LOG.info("getMovieChangesList");
-        int page = 0;
-        String startDate = "";
-        String endDate = "";
-
-        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.MOVIE, page, startDate, endDate);
+        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.MOVIE, null, null, null);
         assertFalse("No movie changes.", result.getResults().isEmpty());
     }
 
@@ -77,12 +72,8 @@ public class TmdbChangesTest extends AbstractTests {
     @Ignore("Not ready yet")
     public void testGetPersonChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
-        int page = 0;
-        String startDate = "";
-        String endDate = "";
-        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, page, startDate, endDate);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
+        assertFalse("No Person changes.", result.getResults().isEmpty());
     }
 
     /**
@@ -93,11 +84,7 @@ public class TmdbChangesTest extends AbstractTests {
     @Ignore("Not ready yet")
     public void testGetTVChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
-        int page = 0;
-        String startDate = "";
-        String endDate = "";
-        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, page, startDate, endDate);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
+        assertFalse("No TV changes.", result.getResults().isEmpty());
     }
 }
