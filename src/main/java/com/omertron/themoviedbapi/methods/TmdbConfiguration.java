@@ -21,8 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
-import com.omertron.themoviedbapi.model.Configuration;
-import com.omertron.themoviedbapi.model.JobDepartment;
+import com.omertron.themoviedbapi.model2.Configuration;
+import com.omertron.themoviedbapi.model2.JobDepartment;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;

@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.model.change;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 
 public class ChangedMedia extends AbstractJsonMapping {
 

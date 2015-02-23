@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.MovieDbList;
-import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import org.junit.After;
 import org.junit.AfterClass;

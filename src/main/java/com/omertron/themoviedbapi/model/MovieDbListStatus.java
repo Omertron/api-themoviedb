@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model2.StatusCode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MovieDbListStatus extends StatusCode {

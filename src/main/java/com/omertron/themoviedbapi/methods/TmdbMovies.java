@@ -25,7 +25,7 @@ import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.model.keyword.Keyword;

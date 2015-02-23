@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.ListItemStatus;
 import com.omertron.themoviedbapi.model.MovieDbList;
 import com.omertron.themoviedbapi.model.MovieDbListStatus;
-import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;

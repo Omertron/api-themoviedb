@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

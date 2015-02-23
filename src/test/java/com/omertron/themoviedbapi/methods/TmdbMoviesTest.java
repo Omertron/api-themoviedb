@@ -29,7 +29,7 @@ import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model.list.MovieFavorite;
+import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.util.List;
 import java.util.Random;

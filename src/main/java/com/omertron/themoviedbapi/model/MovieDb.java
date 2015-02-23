@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.person.PersonCast;
 import com.omertron.themoviedbapi.model.person.PersonCrew;

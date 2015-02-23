@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

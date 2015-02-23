@@ -21,11 +21,11 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
-import com.omertron.themoviedbapi.model.Account;
-import com.omertron.themoviedbapi.model.StatusCode;
-import com.omertron.themoviedbapi.model.list.MovieFavorite;
-import com.omertron.themoviedbapi.model.list.TVFavorite;
-import com.omertron.themoviedbapi.model.list.UserList;
+import com.omertron.themoviedbapi.model2.account.Account;
+import com.omertron.themoviedbapi.model2.StatusCode;
+import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
+import com.omertron.themoviedbapi.model2.tv.TVFavorite;
+import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;

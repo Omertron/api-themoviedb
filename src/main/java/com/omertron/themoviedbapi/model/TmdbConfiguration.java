@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;

@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;

@@ -1,4 +1,4 @@
-Account
+Account (done)
 /account Get the basic information for an account. You will need to have a valid session id.
 /account/{id}/lists Get the lists that you have created and marked as a favorite.
 /account/{id}/favorite/movies Get the list of favorite movies for an account.
@@ -10,7 +10,7 @@ Account
 /account/{id}/watchlist/tv Get the list of TV series on an accounts watchlist
 /account/{id}/watchlist Add or remove a movie to an accounts watch list
 
-Authentication
+Authentication (done)
 /authentication/token/new This method is used to generate a valid request token for user based authentication
 /authentication/token/validate_with_login Once you have a valid request token you can use this method to authenticate a user with a TMDb username and password.
 /authentication/session/new This method is used to generate a session id for user based authentication. A session id is required in order to use any of the write methods.
@@ -51,7 +51,7 @@ Genres
 Guest Sessions
 /guest_session/{guest_session_id}/rated_movies Get a list of rated movies for a specific guest session id.
 
-Jobs
+Jobs (Done)
 /job/list Get a list of valid jobs.
 
 Keyword
