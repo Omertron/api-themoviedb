@@ -25,7 +25,7 @@ Changes (Done)
 /person/changes Get a list of people ids that have been edited.
 /tv/changes Get a list of TV show ids that have been edited
 
-Collections
+Collections (Done)
 /collection/{id} Get the basic collection information for a specific collection id.
 /collection/{id}/images Get all of the images for a particular collection by collection id.
 

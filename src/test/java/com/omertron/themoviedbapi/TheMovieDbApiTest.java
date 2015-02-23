@@ -22,8 +22,8 @@ package com.omertron.themoviedbapi;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangedMedia;
-import com.omertron.themoviedbapi.model.Collection;
-import com.omertron.themoviedbapi.model.CollectionInfo;
+import com.omertron.themoviedbapi.model2.collection.Collection;
+import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model.Company;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.Genre;
@@ -58,7 +58,7 @@ import org.junit.Test;
  *
  * @author stuart.boston
  */
-public class TheMovieDbApiTest extends AbstractTests{
+public class TheMovieDbApiTest extends AbstractTests {
 
     private static TheMovieDbApi tmdb;
     // Test data
@@ -70,11 +70,6 @@ public class TheMovieDbApiTest extends AbstractTests{
     private static final String COMPANY_NAME = "Marvel Studios";
     private static final int ID_GENRE_ACTION = 28;
     private static final String ID_KEYWORD = "1721";
-    // Languages
-    private static final String LANGUAGE_DEFAULT = "";
-    private static final String LANGUAGE_ENGLISH = "en";
-    private static final String LANGUAGE_RUSSIAN = "ru";
-    // session and account id of test users named 'apitests'
 
     public TheMovieDbApiTest() throws MovieDbException {
     }
@@ -86,6 +81,7 @@ public class TheMovieDbApiTest extends AbstractTests{
 
     /**
      * Test of getConfiguration method, of class TheMovieDbApi.
+     *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
@@ -497,8 +493,7 @@ public class TheMovieDbApiTest extends AbstractTests{
     /**
      * Test of getSessionToken method, of class TheMovieDbApi.
      *
-     * TODO: Cannot be tested without a HTTP authorisation:
-     * http://help.themoviedb.org/kb/api/user-authentication
+     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication
      *
      * @throws MovieDbException
      */
@@ -534,30 +529,6 @@ public class TheMovieDbApiTest extends AbstractTests{
         TmdbResultsList<MovieList> result = tmdb.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
         assertNotNull("No results found", result);
         assertTrue("No results found", result.getResults().size() > 0);
-    }
-
-    /**
-     * Test of getMovieChanges method,of class TheMovieDbApi
-     *
-     * TODO: Do not test this until it is fixed
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Do not test this until it is fixed")
-    public void testGetMovieChanges() throws MovieDbException {
-        LOG.info("getMovieChanges");
-
-        String startDate = "";
-        String endDate = null;
-
-        // Get some popular movies
-        TmdbResultsList<MovieDb> movieList = tmdb.getPopularMovieList(LANGUAGE_DEFAULT, 0);
-        for (MovieDb movie : movieList.getResults()) {
-            TmdbResultsList result = tmdb.getMovieChanges(movie.getId(), startDate, endDate);
-            LOG.info("{} has {} changes.", movie.getTitle(), result.getResults().size());
-            assertTrue("No changes found", result.getResults().size() > 0);
-            break;
-        }
     }
 
     @Test
@@ -613,19 +584,6 @@ public class TheMovieDbApiTest extends AbstractTests{
         TmdbResultsList<Keyword> result = tmdb.searchKeyword(query, page);
         assertFalse("No keywords found", result.getResults() == null);
         assertTrue("No keywords found", result.getResults().size() > 0);
-    }
-
-    /**
-     * Test of getPersonChanges method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Ignore("Not ready yet")
-    public void testGetPersonChanges() throws MovieDbException {
-        LOG.info("getPersonChanges");
-        String startDate = "";
-        String endDate = "";
-        tmdb.getPersonChanges(ID_PERSON_BRUCE_WILLIS, startDate, endDate);
     }
 
     /**
