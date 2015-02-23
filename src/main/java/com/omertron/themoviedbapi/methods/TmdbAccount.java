@@ -77,11 +77,6 @@ public class TmdbAccount extends AbstractMethod {
         }
     }
 
-    /*
-     /account/{id}/watchlist/movies Get the list of movies on an accounts watchlist
-     /account/{id}/watchlist/tv Get the list of TV series on an accounts watchlist
-     /account/{id}/watchlist Add or remove a movie to an accounts watch list
-     */
     /**
      * Get all lists of a given user
      *
