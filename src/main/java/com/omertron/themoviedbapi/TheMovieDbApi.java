@@ -46,7 +46,7 @@ import com.omertron.themoviedbapi.model.Certification;
 import com.omertron.themoviedbapi.model.change.ChangedMedia;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
-import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.Configuration;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.Genre;
@@ -602,7 +602,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
+    public List<MovieFavorite> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
         return tmdbCompany.getCompanyMovies(companyId, language, page);
     }
     //</editor-fold>

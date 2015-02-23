@@ -24,7 +24,7 @@ import com.omertron.themoviedbapi.model.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangedMedia;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
-import com.omertron.themoviedbapi.model.Company;
+import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model2.JobDepartment;
