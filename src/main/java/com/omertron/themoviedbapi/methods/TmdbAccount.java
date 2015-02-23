@@ -23,8 +23,8 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.StatusCode;
-import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
-import com.omertron.themoviedbapi.model2.tv.TVFavorite;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -102,13 +102,13 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public List<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_FAV, url, "favorite movies");
+        return processWrapperList(TR_MOVIE_BASIC, url, "favorite movies");
     }
 
     /**
@@ -119,13 +119,13 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<TVFavorite> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+    public List<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
-        return processWrapperList(TR_TV_FAV, url, "favorite TV shows");
+        return processWrapperList(TR_TV_BASIC, url, "favorite TV shows");
     }
 
     /**
@@ -171,7 +171,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
@@ -180,7 +180,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_FAV, url, "rated movies");
+        return processWrapperList(TR_MOVIE_BASIC, url, "rated movies");
     }
 
     /**
@@ -194,7 +194,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<TVFavorite> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
@@ -203,7 +203,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_TV).buildUrl(parameters);
-        return processWrapperList(TR_TV_FAV, url, "rated TV shows");
+        return processWrapperList(TR_TV_BASIC, url, "rated TV shows");
     }
 
     /**
@@ -217,7 +217,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
@@ -226,7 +226,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_FAV, url, "movie watch list");
+        return processWrapperList(TR_MOVIE_BASIC, url, "movie watch list");
     }
 
     /**
@@ -240,7 +240,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public List<TVFavorite> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
@@ -249,7 +249,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
-        return processWrapperList(TR_TV_FAV, url, "TV watch list");
+        return processWrapperList(TR_TV_BASIC, url, "TV watch list");
     }
 
     /**

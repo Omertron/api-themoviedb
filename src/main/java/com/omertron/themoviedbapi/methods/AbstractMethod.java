@@ -22,8 +22,8 @@ package com.omertron.themoviedbapi.methods;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
-import com.omertron.themoviedbapi.model2.tv.TVFavorite;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
@@ -49,9 +49,9 @@ public class AbstractMethod {
     protected static final ObjectMapper MAPPER = new ObjectMapper();
     // Logger
     protected static final Logger LOG = LoggerFactory.getLogger(TmdbAccount.class);
-    protected static final TypeReference<WrapperGenericList<MovieFavorite>> TR_MOVIE_FAV = new TypeReference<WrapperGenericList<MovieFavorite>>() {
+    protected static final TypeReference<WrapperGenericList<MovieBasic>> TR_MOVIE_BASIC = new TypeReference<WrapperGenericList<MovieBasic>>() {
     };
-    protected static final TypeReference<WrapperGenericList<TVFavorite>> TR_TV_FAV = new TypeReference<WrapperGenericList<TVFavorite>>() {
+    protected static final TypeReference<WrapperGenericList<TVBasic>> TR_TV_BASIC = new TypeReference<WrapperGenericList<TVBasic>>() {
     };
     protected static final TypeReference<WrapperGenericList<UserList>> TR_USER_LIST = new TypeReference<WrapperGenericList<UserList>>() {
     };

@@ -42,7 +42,9 @@ import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -400,8 +402,8 @@ public class TheMovieDbApiTest extends AbstractTests {
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
-        TmdbResultsList<MovieDb> result = tmdb.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
-        assertTrue("No company movies found", !result.getResults().isEmpty());
+        List<MovieBasic> result = tmdb.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
+        assertFalse("No company movies found", result.isEmpty());
     }
 
     /**

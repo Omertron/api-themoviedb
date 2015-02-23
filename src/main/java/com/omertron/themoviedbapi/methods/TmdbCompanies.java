@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model2.company.Company;
-import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -84,7 +84,7 @@ public class TmdbCompanies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
+    public List<MovieBasic> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, companyId);
         parameters.add(Param.LANGUAGE, language);
@@ -92,7 +92,7 @@ public class TmdbCompanies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.COMPANY).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-        return processWrapperList(TR_MOVIE_FAV, url, webpage);
+        return processWrapperList(TR_MOVIE_BASIC, url, webpage);
     }
 
 }

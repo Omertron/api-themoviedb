@@ -69,8 +69,8 @@ import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
-import com.omertron.themoviedbapi.model2.tv.TVFavorite;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
@@ -295,7 +295,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public List<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteMovies(sessionId, accountId);
     }
 
@@ -325,7 +325,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getRatedMovies(sessionId, accountId, page, sortBy, language);
     }
 
@@ -340,7 +340,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<TVFavorite> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getRatedTV(sessionId, accountId, page, sortBy, language);
     }
 
@@ -355,7 +355,7 @@ public class TheMovieDbApi {
      * @return The watchlist of the user
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getWatchListMovie(sessionId, accountId, page, sortBy, language);
     }
 
@@ -370,7 +370,7 @@ public class TheMovieDbApi {
      * @return The watchlist of the user
      * @throws MovieDbException
      */
-    public List<TVFavorite> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public List<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getWatchListTV(sessionId, accountId, page, sortBy, language);
     }
 
@@ -602,7 +602,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieFavorite> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
+    public List<MovieBasic> getCompanyMovies(int companyId, String language, int page) throws MovieDbException {
         return tmdbCompany.getCompanyMovies(companyId, language, page);
     }
     //</editor-fold>

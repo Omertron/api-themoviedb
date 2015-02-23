@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model2.company.Company;
-import com.omertron.themoviedbapi.model2.movie.MovieFavorite;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -84,7 +84,7 @@ public class TmdbCompaniesTest extends AbstractTests {
     @Test
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
-        List<MovieFavorite> result = instance.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
+        List<MovieBasic> result = instance.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
         assertFalse("No company movies found", result.isEmpty());
     }
 }

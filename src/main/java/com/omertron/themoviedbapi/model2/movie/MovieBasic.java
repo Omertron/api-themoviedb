@@ -17,40 +17,41 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model2.tv;
+package com.omertron.themoviedbapi.model2.movie;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 
 /**
- * TV Favorite information
+ * Movie Favorite information
  *
  * @author stuart.boston
  */
-public class TVFavorite extends AbstractJsonMapping {
+public class MovieBasic extends AbstractJsonMapping {
 
     @JsonProperty("id")
     private int id;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("original_name")
-    private String originalName;
+    @JsonProperty("adult")
+    private boolean adult;
     @JsonProperty("backdrop_path")
     private String backdropPath;
+    @JsonProperty("original_title")
+    private String originalTitle;
+    @JsonProperty("release_date")
+    private String releaseDate;
     @JsonProperty("poster_path")
     private String posterPath;
+    @JsonProperty("popularity")
+    private float popularity;
+    @JsonProperty("title")
+    private String title;
+    @JsonProperty("video")
+    private boolean video;
     @JsonProperty("vote_average")
     private float voteAverage;
     @JsonProperty("vote_count")
     private int voteCount;
-    @JsonProperty("first_air_date")
-    private String firstAirDate;
-    @JsonProperty("popularity")
-    private float popularity;
-    @JsonProperty("origin_country")
-    private List<String> originCountry;
     @JsonProperty("rating")
     private float rating = -1f;
 
@@ -62,20 +63,12 @@ public class TVFavorite extends AbstractJsonMapping {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public boolean isAdult() {
+        return adult;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setAdult(boolean adult) {
+        this.adult = adult;
     }
 
     public String getBackdropPath() {
@@ -86,12 +79,52 @@ public class TVFavorite extends AbstractJsonMapping {
         this.backdropPath = backdropPath;
     }
 
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     public String getPosterPath() {
         return posterPath;
     }
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
+    }
+
+    public float getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isVideo() {
+        return video;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
     }
 
     public float getVoteAverage() {
@@ -110,30 +143,6 @@ public class TVFavorite extends AbstractJsonMapping {
         this.voteCount = voteCount;
     }
 
-    public String getFirstAirDate() {
-        return firstAirDate;
-    }
-
-    public void setFirstAirDate(String firstAirDate) {
-        this.firstAirDate = firstAirDate;
-    }
-
-    public float getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
-    }
-
-    public List<String> getOriginCountry() {
-        return originCountry;
-    }
-
-    public void setOriginCountry(List<String> originCountry) {
-        this.originCountry = originCountry;
-    }
-
     public float getRating() {
         return rating;
     }
@@ -141,5 +150,4 @@ public class TVFavorite extends AbstractJsonMapping {
     public void setRating(float rating) {
         this.rating = rating;
     }
-
 }
