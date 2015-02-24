@@ -36,7 +36,7 @@ Companies (Done)
 Credits (Done)
 /credit/{credit_id} Get the detailed information about a particular credit record.
 
-Discover
+Discover (Done)
 /discover/movie Discover movies by different types of data like average rating, number of votes, genres and certifications.
 /discover/tv Discover TV shows by different types of data like average rating, number of votes, genres, the network they aired on and air dates.
 
