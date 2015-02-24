@@ -50,16 +50,28 @@ public enum Param {
     VALUE("value="),
     YEAR("year="),
     // Discover parameters
+    CERTIFICATION("certification="),
     CERTIFICATION_COUNTRY("certification_country="),
     CERTIFICATION_LTE("certification.lte="),
+    FIRST_AIR_DATE_GTE("first_air_date.gte"),
+    FIRST_AIR_DATE_LTE("first_air_date.lte"),
+    FIRST_AIR_DATE_YEAR("first_air_date_year="),
+    INCLUDE_VIDEO("include_video="),
     PRIMARY_RELEASE_YEAR("primary_release_year="),
     RELEASE_DATE_GTE("release_date.gte="),
     RELEASE_DATE_LTE("release_date.lte="),
     SORT_BY("sort_by="),
     VOTE_AVERAGE_GTE("vote_average.gte="),
+    VOTE_AVERAGE_LTE("vote_average.lte="),
     VOTE_COUNT_GTE("vote_count.gte="),
+    VOTE_COUNT_LTE("vote_count.lte="),
+    WITH_CAST("with_cast="),
     WITH_COMPANIES("with_companies="),
-    WITH_GENRES("with_genres=");
+    WITH_CREW("with_crew="),
+    WITH_GENRES("with_genres="),
+    WITH_KEYWORDS("with_keywords="),
+    WITH_NETWORKS("with_networks="),
+    WITH_PEOPLE("with_people=");
 
     private final String value;
 

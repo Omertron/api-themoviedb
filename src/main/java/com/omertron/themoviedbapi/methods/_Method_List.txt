@@ -33,7 +33,7 @@ Companies (Done)
 /company/{id} This method is used to retrieve all of the basic information about a company
 /company/{id}/movies Get the list of movies associated with a particular company.
 
-Credits
+Credits (Done)
 /credit/{credit_id} Get the detailed information about a particular credit record.
 
 Discover

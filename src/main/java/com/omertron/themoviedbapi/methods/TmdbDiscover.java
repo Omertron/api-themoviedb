@@ -20,17 +20,15 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.discover.Discover;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.model2.discover.Discover;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
-import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import java.io.IOException;
 import java.net.URL;
-import org.yamj.api.common.exception.ApiExceptionType;
+import java.util.List;
 
 /**
  * Class to hold the Discover Methods
@@ -50,37 +48,28 @@ public class TmdbDiscover extends AbstractMethod {
     }
 
     /**
-     * Discover movies by different types of data like average rating, number of
-     * votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
      *
      * @param discover A discover object containing the search criteria required
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getDiscoverMovies(Discover discover) throws MovieDbException {
+    public List<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).setSubMethod(MethodSub.MOVIE).buildUrl(discover.getParams());
         String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie discover list", url, ex);
-        }
+        return processWrapperList(TR_MOVIE_BASIC, url, webpage);
     }
 
     /**
-     * Discover movies by different types of data like average rating, number of
-     * votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
      *
      * @param discover A discover object containing the search criteria required
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getDiscoverTV(Discover discover) throws MovieDbException {
+    public List<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).setSubMethod(MethodSub.TV).buildUrl(discover.getParams());
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+        String webpage = httpTools.getRequest(url);
+        return processWrapperList(TR_TV_BASIC, url, webpage);
     }
 }

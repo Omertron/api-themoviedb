@@ -48,7 +48,7 @@ import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.Configuration;
-import com.omertron.themoviedbapi.model.discover.Discover;
+import com.omertron.themoviedbapi.model2.discover.Discover;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model2.JobDepartment;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
@@ -671,7 +671,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getDiscoverMovies(Discover discover) throws MovieDbException {
+    public List<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
         return tmdbDiscover.getDiscoverMovies(discover);
     }
 
@@ -682,7 +682,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getDiscoverTV(Discover discover) throws MovieDbException {
+    public List<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
         return tmdbDiscover.getDiscoverTV(discover);
     }
     //</editor-fold>

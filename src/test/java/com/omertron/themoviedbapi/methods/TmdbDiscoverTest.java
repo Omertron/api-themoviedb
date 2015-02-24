@@ -21,9 +21,10 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.discover.Discover;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.model2.discover.Discover;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
@@ -45,7 +46,7 @@ public class TmdbDiscoverTest extends AbstractTests {
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
-        instance = new TmdbDiscover(getApiKey(),getHttpTools());
+        instance = new TmdbDiscover(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -65,14 +66,14 @@ public class TmdbDiscoverTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetDiscoverMovie() throws MovieDbException {
         LOG.info("getDiscoverMovie");
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
-        TmdbResultsList<MovieDb> result = instance.getDiscoverMovies(discover);
-        assertFalse("No movies discovered", result.getResults().isEmpty());
+        List<MovieBasic> result = instance.getDiscoverMovies(discover);
+        assertFalse("No movies discovered", result.isEmpty());
     }
 
     /**
@@ -86,8 +87,8 @@ public class TmdbDiscoverTest extends AbstractTests {
         Discover discover = new Discover();
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
-        TmdbResultsList<MovieDb> result = instance.getDiscoverMovies(discover);
-        assertFalse("No TV shows discovered", result.getResults().isEmpty());
+        List<TVBasic> result = instance.getDiscoverTV(discover);
+        assertFalse("No TV shows discovered", result.isEmpty());
     }
 
 }
