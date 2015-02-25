@@ -119,6 +119,9 @@ public class TmdbFindTest extends AbstractTests {
             assertFalse("No person for ID: " + test.getName(), result.getPersonResults().isEmpty());
             boolean found = false;
             for (PersonFind p : result.getPersonResults()) {
+                for (Object x : p.getKnownFor()) {
+                    LOG.info("  {}", x.toString());
+                }
                 if (p.getId() == test.getTmdb()) {
                     found = true;
                     break;

@@ -22,6 +22,8 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.ExternalSource;
 import com.omertron.themoviedbapi.model2.FindResults;
+import com.omertron.themoviedbapi.model2.MediaBasic;
+import com.omertron.themoviedbapi.model2.MediaTypeMixIn;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -46,6 +48,8 @@ public class TmdbFind extends AbstractMethod {
      */
     public TmdbFind(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
+
+        MAPPER.addMixIn(MediaBasic.class, MediaTypeMixIn.class);
     }
 
     /**
@@ -81,7 +85,6 @@ public class TmdbFind extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, FindResults.class);
         } catch (IOException ex) {
-            LOG.info("{}",ex.getMessage(),ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get find results", url, ex);
         }
     }

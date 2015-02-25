@@ -20,27 +20,12 @@
 package com.omertron.themoviedbapi.model2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.omertron.themoviedbapi.model2.movie.MovieBasic;
-import com.omertron.themoviedbapi.model2.tv.TVBasic;
 
 /**
  * Basic media information
  *
  * @author stuart.boston
  */
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
-        property = "media_type",
-        defaultImpl = MovieBasic.class
-)
-@JsonSubTypes({
-    @Type(value = MovieBasic.class, name = "movie"),
-    @Type(value = TVBasic.class, name = "tv")
-})
 public class MediaBasic extends AbstractJsonMapping {
 
     @JsonProperty("id")
