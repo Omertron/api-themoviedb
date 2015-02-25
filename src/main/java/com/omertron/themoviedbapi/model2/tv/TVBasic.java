@@ -19,48 +19,27 @@
  */
 package com.omertron.themoviedbapi.model2.tv;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 import java.util.List;
 
 /**
- * TV Favorite information
+ * Basic TV information
  *
  * @author stuart.boston
  */
-public class TVBasic extends AbstractJsonMapping {
+public class TVBasic extends MediaBasic {
 
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("original_name")
     private String originalName;
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
-    @JsonProperty("poster_path")
-    private String posterPath;
-    @JsonProperty("vote_average")
-    private float voteAverage;
-    @JsonProperty("vote_count")
-    private int voteCount;
     @JsonProperty("first_air_date")
     private String firstAirDate;
-    @JsonProperty("popularity")
-    private float popularity;
     @JsonProperty("origin_country")
     private List<String> originCountry;
     @JsonProperty("rating")
     private float rating = -1f;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -78,52 +57,12 @@ public class TVBasic extends AbstractJsonMapping {
         this.originalName = originalName;
     }
 
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public float getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(float voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
     public String getFirstAirDate() {
         return firstAirDate;
     }
 
     public void setFirstAirDate(String firstAirDate) {
         this.firstAirDate = firstAirDate;
-    }
-
-    public float getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
     }
 
     public List<String> getOriginCountry() {

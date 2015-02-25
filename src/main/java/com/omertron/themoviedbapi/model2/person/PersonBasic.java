@@ -27,5 +27,4 @@ import com.omertron.themoviedbapi.model.AbstractIdName;
 public class PersonBasic extends AbstractIdName {
 
     private static final long serialVersionUID = 1L;
-
 }

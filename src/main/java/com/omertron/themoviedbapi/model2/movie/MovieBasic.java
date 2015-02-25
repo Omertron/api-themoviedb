@@ -19,49 +19,28 @@
  */
 package com.omertron.themoviedbapi.model2.movie;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 
 /**
- * Movie Favorite information
+ * Basic Movie information
  *
  * @author stuart.boston
  */
-public class MovieBasic extends AbstractJsonMapping {
+public class MovieBasic extends MediaBasic {
 
-    @JsonProperty("id")
-    private int id;
     @JsonProperty("adult")
     private boolean adult;
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
     @JsonProperty("original_title")
     private String originalTitle;
     @JsonProperty("release_date")
     private String releaseDate;
-    @JsonProperty("poster_path")
-    private String posterPath;
-    @JsonProperty("popularity")
-    private float popularity;
     @JsonProperty("title")
     private String title;
     @JsonProperty("video")
     private boolean video;
-    @JsonProperty("vote_average")
-    private float voteAverage;
-    @JsonProperty("vote_count")
-    private int voteCount;
     @JsonProperty("rating")
     private float rating = -1f;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public boolean isAdult() {
         return adult;
@@ -69,14 +48,6 @@ public class MovieBasic extends AbstractJsonMapping {
 
     public void setAdult(boolean adult) {
         this.adult = adult;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
     }
 
     public String getOriginalTitle() {
@@ -95,22 +66,6 @@ public class MovieBasic extends AbstractJsonMapping {
         this.releaseDate = releaseDate;
     }
 
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public float getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -125,22 +80,6 @@ public class MovieBasic extends AbstractJsonMapping {
 
     public void setVideo(boolean video) {
         this.video = video;
-    }
-
-    public float getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(float voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
     }
 
     public float getRating() {

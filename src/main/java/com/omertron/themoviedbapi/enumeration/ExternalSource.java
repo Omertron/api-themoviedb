@@ -17,29 +17,22 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
-
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
+package com.omertron.themoviedbapi.enumeration;
 
 /**
- * @author stuart.boston
+ *
+ * @author Stuart
  */
-@JsonRootName("???")
-public class TBD_ExternalSource extends AbstractJsonMapping {
+public enum ExternalSource {
 
-    private static final long serialVersionUID = 1L;
+    FREEBASE_ID,
+    FREEBASE_MID,
+    IMDB_ID,
+    TVDB_ID,
+    TVRAGE_ID;
 
-    // Properties
-    @JsonProperty("id")
-    private int id;
-
-    public int getId() {
-        return id;
+    public String getPropertyString() {
+        return this.name().toLowerCase();
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

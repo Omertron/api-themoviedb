@@ -32,6 +32,7 @@ public enum MethodBase {
     CONFIGURATION("configuration"),
     CREDIT("credit"),
     DISCOVER("discover"),
+    FIND("find"),
     GENRE("genre"),
     JOB("job"),
     KEYWORD("keyword"),

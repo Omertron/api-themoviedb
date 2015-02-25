@@ -34,6 +34,7 @@ public enum Param {
     APPEND("append_to_response="),
     COUNTRY("country="),
     END_DATE("end_date="),
+    EXTERNAL_SOURCE("external_source="),
     FAVORITE("favorite="),
     ID("id="),
     INCLUDE_ALL_MOVIES("include_all_movies="),

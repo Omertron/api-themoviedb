@@ -20,9 +20,15 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.TBD_ExternalSource;
-import com.omertron.themoviedbapi.model.TBD_FindResults;
+import com.omertron.themoviedbapi.enumeration.ExternalSource;
+import com.omertron.themoviedbapi.model2.FindResults;
+import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
+import java.io.IOException;
+import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -43,18 +49,16 @@ public class TmdbFind extends AbstractMethod {
     }
 
     /**
-     * You con use this method to find movies, tv series or persons using
-     * external ids.
+     * You con use this method to find movies, tv series or persons using external ids.
      *
      * Supported query ids are
      * <ul>
      * <li>Movies: imdb_id</li>
      * <li>People: imdb_id, freebase_mid, freebase_id, tvrage_id</li>
-     * <li>TV Series: imdb_id, freebase_mid, freebase_id, tvdb_id,
-     * tvrage_id</li>
+     * <li>TV Series: imdb_id, freebase_mid, freebase_id, tvdb_id, tvrage_id</li>
      * <li>TV Seasons: freebase_mid, freebase_id, tvdb_id, tvrage_id</li>
-     * <li>TV Episodes: imdb_id, freebase_mid, freebase_id, tvdb_id,
-     * tvrage_idimdb_id, freebase_mid, freebase_id, tvrage_id, tvdb_id.
+     * <li>TV Episodes: imdb_id, freebase_mid, freebase_id, tvdb_id, tvrage_idimdb_id, freebase_mid, freebase_id, tvrage_id,
+     * tvdb_id.
      * </ul>
      *
      * For details see http://docs.themoviedb.apiary.io/#find
@@ -65,7 +69,20 @@ public class TmdbFind extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TBD_FindResults find(String id, TBD_ExternalSource externalSource, String language) throws MovieDbException {
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "not implemented yet");
+    public FindResults find(String id, ExternalSource externalSource, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, id);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.EXTERNAL_SOURCE, externalSource.getPropertyString());
+
+        URL url = new ApiUrl(apiKey, MethodBase.FIND).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, FindResults.class);
+        } catch (IOException ex) {
+            LOG.info("{}",ex.getMessage(),ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get find results", url, ex);
+        }
     }
 }

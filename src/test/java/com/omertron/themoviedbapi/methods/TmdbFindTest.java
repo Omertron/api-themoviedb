@@ -21,9 +21,18 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.enumeration.ExternalSource;
+import com.omertron.themoviedbapi.model2.FindResults;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,6 +45,9 @@ import org.junit.Test;
 public class TmdbFindTest extends AbstractTests {
 
     private static TmdbFind instance;
+    private static final List<TestID> PERSON_IDS = new ArrayList<TestID>();
+    private static final List<TestID> FILM_IDS = new ArrayList<TestID>();
+    private static final List<TestID> TV_IDS = new ArrayList<TestID>();
 
     public TmdbFindTest() {
     }
@@ -44,6 +56,15 @@ public class TmdbFindTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbFind(getApiKey(), getHttpTools());
+
+        PERSON_IDS.add(new TestID("Mila Kunis", "nm0005109", 18973));
+        PERSON_IDS.add(new TestID("Andrew Lincoln", "nm0511088", 7062));
+
+        FILM_IDS.add(new TestID("Jupiter Ascending", "tt1617661", 76757));
+        FILM_IDS.add(new TestID("Lucy", "tt2872732", 240832));
+
+        TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402));
+        TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622));
     }
 
     @AfterClass
@@ -59,32 +80,76 @@ public class TmdbFindTest extends AbstractTests {
     }
 
     /**
-     * Test of getMovieChangesList method, of class TmdbFindTest.
+     * Test of Find Movie
+     *
+     * @throws MovieDbException
+     */
+//    @Test
+    public void testFindMoviesImdbID() throws MovieDbException {
+        LOG.info("findMoviesImdbID");
+        FindResults result;
+
+        for (TestID test : FILM_IDS) {
+            result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
+            assertFalse("No movie for ID " + test.getName(), result.getMovieResults().isEmpty());
+            boolean found = false;
+            for (MovieBasic m : result.getMovieResults()) {
+                if (m.getId() == test.getTmdb()) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue("No movie found: " + test.getName(), found);
+        }
+    }
+
+    /**
+     * Test of Find Person
+     *
+     * @throws MovieDbException
+     * @throws IOException
+     */
+//    @Test
+    public void testFindPersonImdbID() throws MovieDbException, IOException {
+        LOG.info("findPersonImdbID");
+        FindResults result;
+
+        for (TestID test : PERSON_IDS) {
+            result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
+            assertFalse("No person for ID: " + test.getName(), result.getPersonResults().isEmpty());
+            boolean found = false;
+            for (PersonFind p : result.getPersonResults()) {
+                if (p.getId() == test.getTmdb()) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue("No person found for ID: " + test.getName(), found);
+        }
+    }
+
+    /**
+     * Test of Find TV
      *
      * @throws MovieDbException
      */
     @Test
-    public void testFindMoviesImdbID() throws MovieDbException {
-        LOG.info("findMoviesImdbID");
-//        TBD_FindResults result = instance.find("tt0196229", TBD_ExternalSource.imdb_id, "it");
-//        assertFalse("No movie for id.", result.getMovieResults().isEmpty());
-        fail("The test case is a prototype.");
-    }
-
-    @Test
     public void testFindTvSeriesImdbID() throws MovieDbException {
         LOG.info("findTvSeriesImdbID");
-//        TBD_FindResults result = instance.find("tt1219024", TBD_ExternalSource.imdb_id, "it");
-//        assertFalse("No tv for id.", result.getTvResults().isEmpty());
-        fail("The test case is a prototype.");
-    }
+        FindResults result;
 
-    @Test
-    public void testFindPersonImdbID() throws MovieDbException {
-        LOG.info("findPersonImdbID");
-//        TBD_FindResults result = instance.find("nm0001774", TBD_ExternalSource.imdb_id, "it");
-//        assertFalse("No person for id.", result.getPersonResults().isEmpty());
-        fail("The test case is a prototype.");
+        for (TestID test : TV_IDS) {
+            result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
+            assertFalse("No TV Show for ID: " + test.getName(), result.getPersonResults().isEmpty());
+            boolean found = false;
+            for (PersonFind p : result.getPersonResults()) {
+                if (p.getId() == test.getTmdb()) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue("No TV Show found for ID: " + test.getName(), found);
+        }
     }
 
 }
