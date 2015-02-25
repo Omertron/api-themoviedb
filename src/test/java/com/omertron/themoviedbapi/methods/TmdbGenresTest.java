@@ -22,11 +22,13 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,27 +64,45 @@ public class TmdbGenresTest extends AbstractTests {
     }
 
     /**
-     * Test of getGenreList method, of class TheMovieDbApi.
+     * Test of getGenreMovieList method, of class TmdbGenres.
      *
-     * @throws MovieDbException
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetGenreList() throws MovieDbException {
-        LOG.info("getGenreList");
-        TmdbResultsList<Genre> result = instance.getGenreList(LANGUAGE_DEFAULT);
-        assertTrue("No genres found", !result.getResults().isEmpty());
+    public void testGetGenreMovieList() throws MovieDbException {
+        LOG.info("getGenreMovieList");
+        TmdbResultsList<Genre> result = instance.getGenreMovieList(LANGUAGE_DEFAULT);
+        assertNotNull("List is null", result.getResults());
+        assertFalse("List is empty", result.getResults().isEmpty());
     }
 
     /**
-     * Test of getGenreMovies method, of class TheMovieDbApi.
+     * Test of getGenreTVList method, of class TmdbGenres.
      *
-     * @throws MovieDbException
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetGenreTVList() throws MovieDbException {
+        LOG.info("getGenreTVList");
+        TmdbResultsList<Genre> result = instance.getGenreTVList(LANGUAGE_DEFAULT);
+        assertNotNull("List is null", result.getResults());
+        assertFalse("List is empty", result.getResults().isEmpty());
+    }
+
+    /**
+     * Test of getGenreMovies method, of class TmdbGenres.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetGenreMovies() throws MovieDbException {
         LOG.info("getGenreMovies");
-        TmdbResultsList<MovieDb> result = instance.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, 0, Boolean.TRUE);
-        assertTrue("No genre movies found", !result.isEmpty());
+        Integer page = null;
+        Boolean includeAllMovies = null;
+        Boolean includeAdult = null;
+        List<MovieBasic> result = instance.getGenreMovies(ID_GENRE_ACTION, LANGUAGE_DEFAULT, page, includeAllMovies, includeAdult);
+        assertNotNull("List is null", result);
+        assertFalse("List is empty", result.isEmpty());
     }
 
 }
