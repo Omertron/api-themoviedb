@@ -48,7 +48,6 @@ public class TmdbFind extends AbstractMethod {
      */
     public TmdbFind(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
-
         MAPPER.addMixIn(MediaBasic.class, MediaTypeMixIn.class);
     }
 
