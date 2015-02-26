@@ -2,6 +2,8 @@ package com.omertron.themoviedbapi.enumeration;
 
 public enum SortBy {
 
+    CREATED_AT_ASC,
+    CREATED_AT_DESC,
     POPULARITY_ASC,
     POPULARITY_DESC,
     RELEASE_DATE_ASC,

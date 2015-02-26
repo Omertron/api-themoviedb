@@ -49,6 +49,7 @@ public enum MethodSub {
     PERSON("person"),
     POPULAR("popular"),
     RATED_MOVIES("rated/movies"),
+    RATED_MOVIES_GUEST("rated_movies"),
     RATED_TV("rated/tv"),
     RATING("rating"),
     RELEASES("releases"),

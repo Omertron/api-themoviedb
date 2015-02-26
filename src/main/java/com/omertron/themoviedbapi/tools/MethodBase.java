@@ -34,6 +34,7 @@ public enum MethodBase {
     DISCOVER("discover"),
     FIND("find"),
     GENRE("genre"),
+    GUEST_SESSION("guest_session"),
     JOB("job"),
     KEYWORD("keyword"),
     LIST("list"),

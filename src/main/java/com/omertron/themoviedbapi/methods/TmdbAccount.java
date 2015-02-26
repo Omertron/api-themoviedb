@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
@@ -282,5 +283,29 @@ public class TmdbAccount extends AbstractMethod {
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to modify watch list", url, ex);
         }
+    }
+
+    /**
+     * Get a list of rated movies for a specific guest session id.
+     *
+     * @param guestSessionId
+     * @param language
+     * @param page
+     * @param sortBy only CREATED_AT_ASC or CREATED_AT_DESC is supported
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, guestSessionId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+        //TODO: Test this works
+        if (sortBy != null) {
+            parameters.add(Param.SORT_BY, sortBy.getPropertyString());
+        }
+
+        URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).setSubMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);
+        return processWrapperList(TR_MOVIE_BASIC, url, "Guest Session Movies");
     }
 }

@@ -43,7 +43,7 @@ Discover (Done)
 Find
 /find/{id} The find method makes it easy to search for objects in our database by an external id.
 
-Genres
+Genres (Done)
 /genre/movie/list Get the list of movie genres.
 /genre/tv/list Get the list of TV genres.
 /genre/{id}/movies Get the list of movies for a particular genre by id.

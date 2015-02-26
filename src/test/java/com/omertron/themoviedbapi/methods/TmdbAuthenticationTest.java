@@ -23,9 +23,13 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,7 +38,7 @@ import org.junit.Test;
  *
  * @author stuart.boston
  */
-public class TmdbAuthenticationTest extends AbstractTests{
+public class TmdbAuthenticationTest extends AbstractTests {
 
     private static TmdbAuthentication instance;
 
@@ -44,11 +48,19 @@ public class TmdbAuthenticationTest extends AbstractTests{
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
-        instance = new TmdbAuthentication(getApiKey(),getHttpTools());
+        instance = new TmdbAuthentication(getApiKey(), getHttpTools());
     }
 
     @AfterClass
     public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
     /**
@@ -92,6 +104,20 @@ public class TmdbAuthenticationTest extends AbstractTests{
         LOG.info("getGuestSessionToken");
         TokenSession result = instance.getGuestSessionToken();
         assertTrue("Failed to get guest session", result.getSuccess());
+    }
+
+    /**
+     * Test of getSessionTokenLogin method, of class TmdbAuthentication.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetSessionTokenLogin() throws MovieDbException {
+        System.out.println("getSessionTokenLogin");
+        TokenAuthorisation token = instance.getAuthorisationToken();
+        TokenAuthorisation result = instance.getSessionTokenLogin(token, getUsername(), getPassword());
+        assertNotNull("Null token returned", result);
+        assertTrue("Empty token", StringUtils.isNotBlank(result.getRequestToken()));
     }
 
 }

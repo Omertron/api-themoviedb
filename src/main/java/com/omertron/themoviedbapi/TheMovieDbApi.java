@@ -62,6 +62,7 @@ import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Reviews;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.enumeration.ExternalSource;
+import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.model2.FindResults;
 import com.omertron.themoviedbapi.model.TBD_Network;
 import com.omertron.themoviedbapi.model2.person.CreditInfo;
@@ -413,6 +414,20 @@ public class TheMovieDbApi {
     public List getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteTv(sessionId, accountId);
     }
+
+    /**
+     * Get a list of rated movies for a specific guest session id.
+     *
+     * @param guestSessionId
+     * @param language
+     * @param page
+     * @param sortBy only CREATED_AT_ASC or CREATED_AT_DESC is supported
+     * @return
+     * @throws MovieDbException
+     */
+    public List<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
+        return tmdbAccount.getGuestRatedMovies(guestSessionId, language, page, sortBy);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Authentication">
@@ -716,16 +731,25 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Genres">
     /**
-     * You can use this method to retrieve the list of genres used on TMDb.
-     *
-     * These IDs will correspond to those found in movie calls.
+     * Get the list of Movie genres.
      *
      * @param language
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Genre> getGenreList(String language) throws MovieDbException {
-        return tmdbGenre.getGenreList(language);
+    public TmdbResultsList<Genre> getGenreMovieList(String language) throws MovieDbException {
+        return tmdbGenre.getGenreMovieList(language);
+    }
+
+    /**
+     * Get the list of TV genres..
+     *
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Genre> getGenreTVList(String language) throws MovieDbException {
+        return tmdbGenre.getGenreTVList(language);
     }
 
     /**
@@ -739,11 +763,12 @@ public class TheMovieDbApi {
      * @param language
      * @param page
      * @param includeAllMovies
+     * @param includeAdult
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getGenreMovies(int genreId, String language, int page, boolean includeAllMovies) throws MovieDbException {
-        return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies);
+    public List<MovieBasic> getGenreMovies(int genreId, String language, Integer page, Boolean includeAllMovies, Boolean includeAdult) throws MovieDbException {
+        return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies, includeAdult);
     }
     //</editor-fold>
 

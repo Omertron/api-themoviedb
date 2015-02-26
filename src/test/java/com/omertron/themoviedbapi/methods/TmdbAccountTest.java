@@ -22,8 +22,10 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.StatusCode;
+import com.omertron.themoviedbapi.model2.authentication.TokenSession;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.model2.list.UserList;
@@ -34,6 +36,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -251,5 +254,27 @@ public class TmdbAccountTest extends AbstractTests {
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
         LOG.info("Result: {}", result);
         assertTrue("Incorrect status code", result.getStatusCode() == 13);
+    }
+
+    /**
+     * Test of getGuestRatedMovies method, of class TmdbAccount.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetGuestRatedMovies() throws MovieDbException {
+        LOG.info("getGuestRatedMovies");
+
+        //TODO: Need to use rated movies with the guest session to add some movies to get
+        TmdbAuthentication auth = new TmdbAuthentication(getApiKey(), getHttpTools());
+        TokenSession guestToken = auth.getGuestSessionToken();
+        TmdbMovies tmdbM = new TmdbMovies(getApiKey(), getHttpTools());
+
+        String language = LANGUAGE_DEFAULT;
+        Integer page = null;
+        SortBy sortBy = null;
+        List<MovieBasic> result = instance.getGuestRatedMovies(guestToken.getGuestSessionId(), language, page, sortBy);
+        LOG.info("{}", result);
+        fail("Need rated movies");
     }
 }
