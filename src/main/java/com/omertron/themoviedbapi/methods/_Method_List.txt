@@ -41,24 +41,24 @@ Discover (Done)
 /discover/tv Discover TV shows by different types of data like average rating, number of votes, genres, the network they aired on and air dates.
 
 Find
-/find/{id} The find method makes it easy to search for objects in our database by an external id.
+*** /find/{id} The find method makes it easy to search for objects in our database by an external id.
 
 Genres (Done)
 /genre/movie/list Get the list of movie genres.
 /genre/tv/list Get the list of TV genres.
 /genre/{id}/movies Get the list of movies for a particular genre by id.
 
-Guest Sessions
+Guest Sessions (Partial - in Account)
 /guest_session/{guest_session_id}/rated_movies Get a list of rated movies for a specific guest session id.
 
 Jobs (Done)
 /job/list Get a list of valid jobs.
 
-Keyword
+Keyword (Done)
 /keyword/{id} Get the basic information for a specific keyword id
 /keyword/{id}/movies Get the list of movies for a particular keyword by id
 
-Lists
+Lists (Done)
 /list/{id} Get a list by id.
 /list/{id}/item_status Check to see if a movie ID is already added to a list.
 /list This method lets users create a new list. A valid session id is required.

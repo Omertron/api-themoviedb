@@ -28,6 +28,7 @@ public enum MethodSub {
     ALT_TITLES("alternative_titles"),
     CASTS("casts"),
     CHANGES("changes"),
+    CLEAR("clear"),
     COLLECTION("collection"),
     COMPANY("company"),
     CREDITS("credits"),

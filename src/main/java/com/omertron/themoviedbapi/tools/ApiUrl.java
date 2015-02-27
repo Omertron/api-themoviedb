@@ -40,6 +40,7 @@ public class ApiUrl {
     private static final Logger LOG = LoggerFactory.getLogger(ApiUrl.class);
     // TheMovieDbApi API Base URL
     private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
+//    private static final String TMDB_API_BASE = "http://private-639f-themoviedb.apiary-proxy.com/3/";
     // Parameter configuration
     private static final String DELIMITER_FIRST = "?";
     private static final String DELIMITER_SUBSEQUENT = "&";

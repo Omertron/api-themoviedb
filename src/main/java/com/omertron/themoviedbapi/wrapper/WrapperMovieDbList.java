@@ -20,20 +20,20 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.MovieDbList;
+import com.omertron.themoviedbapi.model2.list.ListItem;
 import java.util.List;
 
 public class WrapperMovieDbList extends AbstractWrapperAll {
 
 
     @JsonProperty("results")
-    private List<MovieDbList> lists;
+    private List<ListItem> lists;
 
-    public List<MovieDbList> getLists() {
+    public List<ListItem> getLists() {
         return lists;
     }
 
-    public void setLists(List<MovieDbList> lists) {
+    public void setLists(List<ListItem> lists) {
         this.lists = lists;
     }
 }

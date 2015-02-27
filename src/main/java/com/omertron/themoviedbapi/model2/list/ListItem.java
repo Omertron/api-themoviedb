@@ -17,19 +17,20 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.list;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Wrapper for the MovieDbList function
+ * Wrapper for the ListItem function
  *
  * @author stuart.boston
+ * @param <T> Type of list
  */
-public class MovieDbList extends AbstractJsonMapping {
+public class ListItem<T> extends AbstractJsonMapping {
 
     @JsonProperty("id")
     private String id;
@@ -40,7 +41,7 @@ public class MovieDbList extends AbstractJsonMapping {
     @JsonProperty("favorite_count")
     private int favoriteCount;
     @JsonProperty("items")
-    private List<MovieDb> items = Collections.emptyList();
+    private List<T> items = Collections.emptyList();
     @JsonProperty("item_count")
     private int itemCount;
     @JsonProperty("iso_639_1")
@@ -70,7 +71,7 @@ public class MovieDbList extends AbstractJsonMapping {
         return favoriteCount;
     }
 
-    public List<MovieDb> getItems() {
+    public List<T> getItems() {
         return items;
     }
 
@@ -114,7 +115,7 @@ public class MovieDbList extends AbstractJsonMapping {
         this.favoriteCount = favoriteCount;
     }
 
-    public void setItems(List<MovieDb> items) {
+    public void setItems(List<T> items) {
         this.items = items;
     }
 

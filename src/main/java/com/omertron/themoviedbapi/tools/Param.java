@@ -32,6 +32,7 @@ public enum Param {
     ADULT("include_adult="),
     API_KEY("api_key="),
     APPEND("append_to_response="),
+    CONFIRM("confirm="),
     COUNTRY("country="),
     END_DATE("end_date="),
     EXTERNAL_SOURCE("external_source="),

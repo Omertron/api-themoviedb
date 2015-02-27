@@ -54,7 +54,7 @@ import com.omertron.themoviedbapi.model2.JobDepartment;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.MovieDbList;
+import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredit;
@@ -77,7 +77,6 @@ import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
-import com.omertron.themoviedbapi.tools.MethodSub;
 import java.net.URL;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -806,7 +805,7 @@ public class TheMovieDbApi {
      * @return The list and its items
      * @throws MovieDbException
      */
-    public MovieDbList getList(String listId) throws MovieDbException {
+    public ListItem<MovieDb> getList(String listId) throws MovieDbException {
         return tmdbList.getList(listId);
     }
 
@@ -824,44 +823,6 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Check to see if a movie ID is already added to a list.
-     *
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
-        return tmdbList.isMovieOnList(listId, movieId);
-    }
-
-    /**
-     * This method lets users add new movies to a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public StatusCode addMovieToList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        return tmdbList.modifyMovieList(sessionId, listId, movieId, MethodSub.ADD_ITEM);
-    }
-
-    /**
-     * This method lets users remove movies from a list that they created. A valid session id is required.
-     *
-     * @param sessionId
-     * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
-     * @throws MovieDbException
-     */
-    public StatusCode removeMovieFromList(String sessionId, String listId, Integer movieId) throws MovieDbException {
-        return tmdbList.modifyMovieList(sessionId, listId, movieId, MethodSub.REMOVE_ITEM);
-    }
-
-    /**
      * This method lets users delete a list that they created. A valid session id is required.
      *
      * @param sessionId
@@ -869,9 +830,52 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
-        return tmdbList.deleteMovieList(sessionId, listId);
+    public StatusCode deleteList(String sessionId, String listId) throws MovieDbException {
+        return tmdbList.deleteList(sessionId, listId);
     }
+
+    /**
+     * Check to see if an item is already on a list.
+     *
+     * @param listId
+     * @param mediaId
+     * @return true if the item is on the list
+     * @throws MovieDbException
+     */
+    public boolean checkItemStatus(String listId, Integer mediaId) throws MovieDbException {
+        return tmdbList.checkItemStatus(listId, mediaId);
+    }
+
+    /**
+     * This method lets users add new items to a list that they created.
+     *
+     * A valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param mediaId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode addItemToList(String sessionId, String listId, Integer mediaId) throws MovieDbException {
+        return tmdbList.addItem(sessionId, listId, mediaId);
+    }
+
+    /**
+     * This method lets users remove items from a list that they created.
+     *
+     * A valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param mediaId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public StatusCode removeItemFromList(String sessionId, String listId, Integer mediaId) throws MovieDbException {
+        return tmdbList.removeItem(sessionId, listId, mediaId);
+    }
+
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Movies">

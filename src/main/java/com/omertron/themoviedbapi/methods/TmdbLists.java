@@ -19,9 +19,11 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.ListItemStatus;
-import com.omertron.themoviedbapi.model.MovieDbList;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model.MovieDbListStatus;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -61,7 +63,7 @@ public class TmdbLists extends AbstractMethod {
      * @return The list and its items
      * @throws MovieDbException
      */
-    public MovieDbList getList(String listId) throws MovieDbException {
+    public ListItem<MovieDb> getList(String listId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, listId);
 
@@ -69,9 +71,32 @@ public class TmdbLists extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, MovieDbList.class);
+            return MAPPER.readValue(webpage, new TypeReference<ListItem<MovieDb>>(){});
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get list", url, ex);
+        }
+    }
+
+    /**
+     * Check to see if an ID is already on a list.
+     *
+     * @param listId
+     * @param mediaId
+     * @return true if the movie is on the list
+     * @throws MovieDbException
+     */
+    public boolean checkItemStatus(String listId, int mediaId) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, listId);
+        parameters.add(Param.MOVIE_ID, mediaId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(MethodSub.ITEM_STATUS).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, ListItemStatus.class).isItemPresent();
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get item status", url, ex);
         }
     }
 
@@ -104,30 +129,32 @@ public class TmdbLists extends AbstractMethod {
     }
 
     /**
-     * Check to see if a movie ID is already added to a list.
+     * This method lets users delete a list that they created. A valid session id is required.
      *
+     * @param sessionId
      * @param listId
-     * @param movieId
-     * @return true if the movie is on the list
+     * @return
      * @throws MovieDbException
      */
-    public boolean isMovieOnList(String listId, Integer movieId) throws MovieDbException {
+    public StatusCode deleteList(String sessionId, String listId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, listId);
-        parameters.add(Param.MOVIE_ID, movieId);
+        parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(MethodSub.ITEM_STATUS).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).buildUrl(parameters);
+        String webpage = httpTools.deleteRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, ListItemStatus.class).isItemPresent();
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get media status", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to delete list", url, ex);
         }
     }
 
     /**
      * Modify a list
+     *
+     * This can be used to add or remove an item from the list
      *
      * @param sessionId
      * @param listId
@@ -136,7 +163,7 @@ public class TmdbLists extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public StatusCode modifyMovieList(String sessionId, String listId, Integer movieId, MethodSub operation) throws MovieDbException {
+    private StatusCode modifyMovieList(String sessionId, String listId, int movieId, MethodSub operation) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, listId);
@@ -151,31 +178,68 @@ public class TmdbLists extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to remove movie from list", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to remove item from list", url, ex);
         }
     }
 
     /**
-     * This method lets users delete a list that they created. A valid session
-     * id is required.
+     * This method lets users add new items to a list that they created.
+     *
+     * A valid session id is required.
      *
      * @param sessionId
      * @param listId
+     * @param mediaId
      * @return
      * @throws MovieDbException
      */
-    public StatusCode deleteMovieList(String sessionId, String listId) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, listId);
-        parameters.add(Param.SESSION, sessionId);
+    public StatusCode addItem(String sessionId, String listId, int mediaId) throws MovieDbException {
+        return modifyMovieList(sessionId, listId, mediaId, MethodSub.ADD_ITEM);
+    }
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).buildUrl(parameters);
-        String webpage = httpTools.deleteRequest(url);
+    /**
+     * This method lets users delete items from a list that they created.
+     *
+     * A valid session id is required.
+     *
+     * @param sessionId
+     * @param listId
+     * @param mediaId
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode removeItem(String sessionId, String listId, int mediaId) throws MovieDbException {
+        return modifyMovieList(sessionId, listId, mediaId, MethodSub.REMOVE_ITEM);
+    }
+
+    /**
+     * Clear all of the items within a list.
+     *
+     * This is a irreversible action and should be treated with caution.
+     *
+     * A valid session id is required. A call without confirm=true will return status code 29.
+     *
+     * @param sessionId
+     * @param listId
+     * @param confirm
+     * @return
+     * @throws MovieDbException
+     */
+    public StatusCode clear(String sessionId, String listId, boolean confirm) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.ID, listId);
+        parameters.add(Param.CONFIRM, confirm);
+
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(MethodSub.CLEAR).buildUrl(parameters);
+        String webpage = httpTools.postRequest(url, "");
 
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to delete movie list", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to clear list", url, ex);
         }
+
     }
+
 }
