@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.TBD_Network;
+import com.omertron.themoviedbapi.model2.network.Network;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -56,7 +56,7 @@ public class TmdbNetworks extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TBD_Network getNetworkInfo(int networkId) throws MovieDbException {
+    public Network getNetworkInfo(int networkId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, networkId);
 
@@ -64,7 +64,7 @@ public class TmdbNetworks extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, TBD_Network.class);
+            return MAPPER.readValue(webpage, Network.class);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get network information", url, ex);
         }

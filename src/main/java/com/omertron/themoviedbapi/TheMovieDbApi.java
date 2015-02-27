@@ -64,7 +64,7 @@ import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.enumeration.ExternalSource;
 import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.model2.FindResults;
-import com.omertron.themoviedbapi.model.TBD_Network;
+import com.omertron.themoviedbapi.model2.network.Network;
 import com.omertron.themoviedbapi.model2.person.CreditInfo;
 import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
@@ -1139,7 +1139,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TBD_Network getNetworkInfo(int networkId) throws MovieDbException {
+    public Network getNetworkInfo(int networkId) throws MovieDbException {
         return tmdbNetworks.getNetworkInfo(networkId);
     }
     //</editor-fold>

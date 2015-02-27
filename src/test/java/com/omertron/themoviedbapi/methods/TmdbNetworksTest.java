@@ -21,10 +21,12 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.TestLogger;
-import com.omertron.themoviedbapi.model.TBD_Network;
+import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.model2.network.Network;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -34,16 +36,18 @@ import org.junit.Test;
  */
 public class TmdbNetworksTest extends AbstractTests {
 
-    // API
     private static TmdbNetworks instance;
+    private static final List<TestID> testIDs = new ArrayList<TestID>();
 
     public TmdbNetworksTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
-        TestLogger.Configure();
+        doConfiguration();
         instance = new TmdbNetworks(getApiKey(), getHttpTools());
+        testIDs.add(new TestID("Fuji Television", "", 1));
+        testIDs.add(new TestID("Sonshine Media Network International", "", 200));
     }
 
     @AfterClass
@@ -58,9 +62,12 @@ public class TmdbNetworksTest extends AbstractTests {
     @Test
     public void testGetNetworkInfo() throws MovieDbException {
         LOG.info("getNetworkInfo");
-        TBD_Network result = instance.getNetworkInfo(1);
-//        assertEquals("Wrong network returned", "Fuji Television", result.getName());
-        fail("The test case is a prototype.");
+
+        Network result;
+        for (TestID t : testIDs) {
+            result = instance.getNetworkInfo(t.getTmdb());
+            assertEquals("Wrong network returned", t.getName(), result.getName());
+        }
     }
 
 }

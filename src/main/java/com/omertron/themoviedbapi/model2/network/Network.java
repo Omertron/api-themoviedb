@@ -17,23 +17,22 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.network;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
  * @author stuart.boston
  */
-@JsonRootName("???")
-public class TBD_Network extends AbstractJsonMapping {
+public class Network extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    // Properties
     @JsonProperty("id")
     private int id;
+    @JsonProperty("name")
+    private String name;
 
     public int getId() {
         return id;
@@ -42,4 +41,13 @@ public class TBD_Network extends AbstractJsonMapping {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
