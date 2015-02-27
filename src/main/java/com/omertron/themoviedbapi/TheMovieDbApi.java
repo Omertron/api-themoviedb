@@ -59,7 +59,7 @@ import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredit;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model.Reviews;
+import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.enumeration.ExternalSource;
 import com.omertron.themoviedbapi.enumeration.SortBy;
@@ -1220,7 +1220,7 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Reviews">
+    //<editor-fold defaultstate="collapsed" desc="Review">
     /**
      *
      * @param movieId
@@ -1230,7 +1230,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Reviews> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<Review> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
         return tmdbReviews.getReviews(movieId, language, page, appendToResponse);
     }
     //</editor-fold>

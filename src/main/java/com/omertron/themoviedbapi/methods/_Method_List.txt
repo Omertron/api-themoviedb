@@ -87,7 +87,7 @@ Movies
 /movie/popular Get the list of popular movies on The Movie Database. This list refreshes every day.
 /movie/top_rated Get the list of top rated movies. By default, this list will only include movies that have 10 or more votes. This list refreshes every day.
 
-Networks
+Networks (Done)
 /network/{id} This method is used to retrieve the basic information about a TV network.
 
 People
@@ -102,7 +102,7 @@ People
 /person/popular Get the list of popular people on The Movie Database. This list refreshes every day.
 /person/latest Get the latest person id.
 
-Reviews
+Reviews (Done)
 /review/{id} Get the full details of a review by ID.
 
 Search

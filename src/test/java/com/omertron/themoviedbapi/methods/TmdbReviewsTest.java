@@ -21,9 +21,13 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model2.review.Review;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -66,7 +70,11 @@ public class TmdbReviewsTest extends AbstractTests {
     @Test
     public void testGetReview() throws MovieDbException {
         LOG.info("getReview");
-        fail("The test case is a prototype.");
+        String reviewId = "53fc2f600e0a267a7b009aba";
+        Review result = instance.getReview(reviewId);
+        assertNotNull("No review", result);
+        assertTrue("No content", StringUtils.isNotBlank(result.getContent()));
+        assertEquals("Wrong media ID", "70160", result.getMediaId());
     }
 
 }

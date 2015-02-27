@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
@@ -374,7 +375,7 @@ public class MovieDb extends AbstractJsonMapping {
         return lists.getMovieList();
     }
 
-    public List<Reviews> getReviews() {
+    public List<Review> getReviews() {
         return reviews.getReviews();
     }
     // </editor-fold>
