@@ -127,7 +127,6 @@ public class TmdbSearch extends AbstractMethod {
      * Search for lists by name and description.
      *
      * @param query
-     * @param language
      * @param includeAdult
      * @param page
      * @return

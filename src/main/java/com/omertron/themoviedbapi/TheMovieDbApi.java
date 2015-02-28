@@ -62,6 +62,7 @@ import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.enumeration.ExternalSource;
+import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.model2.FindResults;
 import com.omertron.themoviedbapi.model2.network.Network;
@@ -664,7 +665,7 @@ public class TheMovieDbApi {
         return tmdbConfiguration.getTimezones();
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Credits">
     /**
      * Get the detailed information about a particular credit record.
@@ -1242,18 +1243,20 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Search">
     /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
+     * Search Companies.
      *
-     * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
-     * @param language The language to include. Can be blank/null.
-     * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first page)
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
+     * on movie calls.
+     *
+     * http://help.themoviedb.org/kb/api/search-companies
+     *
+     * @param query
+     * @param page
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
-        return tmdbSearch.searchMovie(movieName, searchYear, language, includeAdult, page);
+    public TmdbResultsList<Company> searchCompanies(String query, Integer page) throws MovieDbException {
+        return tmdbSearch.searchCompanies(query, page);
     }
 
     /**
@@ -1265,53 +1268,8 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
-        return tmdbSearch.searchCollection(query, language, page);
-    }
-
-    /**
-     * This is a good starting point to start finding people on TMDb.
-     *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
-     *
-     * @param personName
-     * @param includeAdult
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        return tmdbSearch.searchPeople(personName, includeAdult, page);
-    }
-
-    /**
-     * Search for lists by name and description.
-     *
-     * @param query
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
-        return tmdbSearch.searchList(query, language, page);
-    }
-
-    /**
-     * Search Companies.
-     *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
-     * on movie calls.
-     *
-     * http://help.themoviedb.org/kb/api/search-companies
-     *
-     * @param companyName
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        return tmdbSearch.searchCompanies(companyName, page);
+    public TmdbResultsList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
+        return tmdbSearch.searchCollection(query, page, language);
     }
 
     /**
@@ -1322,8 +1280,93 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
+    public TmdbResultsList<Keyword> searchKeyword(String query, Integer page) throws MovieDbException {
         return tmdbSearch.searchKeyword(query, page);
+    }
+
+    /**
+     * Search for lists by name and description.
+     *
+     * @param query
+     * @param includeAdult
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<UserList> searchList(String query, Integer page, Boolean includeAdult) throws MovieDbException {
+        return tmdbSearch.searchList(query, page, includeAdult);
+    }
+
+    /**
+     * Search Movies This is a good starting point to start finding movies on TMDb.
+     *
+     * @param query
+     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
+     * @param language The language to include. Can be blank/null.
+     * @param includeAdult true or false to include adult titles in the search
+     * @param page The page of results to return. 0 to get the default (first page)
+     * @param primaryReleaseYear
+     * @param searchType
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> searchMovie(String query,
+            Integer page,
+            String language,
+            Boolean includeAdult,
+            Integer searchYear,
+            Integer primaryReleaseYear,
+            SearchType searchType) throws MovieDbException {
+        return tmdbSearch.searchMovie(query, page, language, includeAdult, searchYear, primaryReleaseYear, SearchType.PHRASE);
+    }
+
+    /**
+     * Search the movie, tv show and person collections with a single query.
+     *
+     * Each item returned in the result array has a media_type field that maps to either movie, tv or person.
+     *
+     * Each mapped result is the same response you would get from each independent search
+     *
+     * @param query
+     * @param page
+     * @param language
+     * @param includeAdult
+     * @return
+     * @throws MovieDbException
+     */
+    public String searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
+        return tmdbSearch.searchMulti(query, page, language, includeAdult);
+    }
+
+    /**
+     * This is a good starting point to start finding people on TMDb.
+     *
+     * The idea is to be a quick and light method so you can iterate through people quickly.
+     *
+     * @param query
+     * @param includeAdult
+     * @param page
+     * @param searchType
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Person> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
+        return tmdbSearch.searchPeople(query, page, includeAdult, searchType);
+    }
+
+    /**
+     * Search for TV shows by title.
+     *
+     * @param query
+     * @param page
+     * @param language
+     * @param firstAirDateYear
+     * @param searchType
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVBasic> searchTV(String query, Integer page, String language, Integer firstAirDateYear, SearchType searchType) throws MovieDbException {
+        return tmdbSearch.searchTV(query, page, language, firstAirDateYear, searchType);
     }
     //</editor-fold>
 
