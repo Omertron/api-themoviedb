@@ -21,11 +21,16 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.Configuration;
+import com.omertron.themoviedbapi.model2.config.Configuration;
+import com.omertron.themoviedbapi.model2.config.JobDepartment;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -65,7 +70,7 @@ public class TmdbConfigurationTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetConfig() throws MovieDbException {
         LOG.info("getConfig");
         Configuration result = instance.getConfig();
@@ -83,13 +88,42 @@ public class TmdbConfigurationTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-    @Test
+//    @Test
     public void testCreateImageUrl() throws MovieDbException {
         LOG.info("createImageUrl");
         Configuration config = instance.getConfig();
 
         String result = config.createImageUrl("http://mediaplayersite.com/image.jpg", "original").toString();
         assertTrue("Error compiling image URL", !result.isEmpty());
+    }
+
+    /**
+     * Test of getJobs method, of class TmdbConfiguration.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+//    @Test
+    public void testGetJobs() throws MovieDbException {
+        LOG.info("getJobs");
+        TmdbResultsList<JobDepartment> result = instance.getJobs();
+        assertNotNull("Null results", result);
+        assertFalse("Empty results", result.getResults().isEmpty());
+        assertTrue("No results", result.getResults().size() > 0);
+    }
+
+    /**
+     * Test of getTimezones method, of class TmdbConfiguration.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTimezones() throws MovieDbException {
+        LOG.info("getTimezones");
+        Map<String, List<String>> result = instance.getTimezones();
+        assertNotNull("Null results", result);
+        assertFalse("Empty results", result.isEmpty());
+        assertTrue("No US TZ",result.containsKey("US"));
+        assertTrue("No GB TZ",result.containsKey("GB"));
     }
 
 }

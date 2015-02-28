@@ -43,6 +43,7 @@ public enum MethodBase {
     PERSON("person"),
     REVIEW("review"),
     SEARCH("search"),
+    TIMEZONES("timezones"),
     TV("tv");
 
     private final String value;

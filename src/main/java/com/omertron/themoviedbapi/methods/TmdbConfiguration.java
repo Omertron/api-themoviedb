@@ -19,10 +19,11 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
-import com.omertron.themoviedbapi.model2.Configuration;
-import com.omertron.themoviedbapi.model2.JobDepartment;
+import com.omertron.themoviedbapi.model2.config.Configuration;
+import com.omertron.themoviedbapi.model2.config.JobDepartment;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -32,6 +33,9 @@ import com.omertron.themoviedbapi.wrapper.WrapperConfig;
 import com.omertron.themoviedbapi.wrapper.WrapperJobList;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -97,6 +101,29 @@ public class TmdbConfiguration extends AbstractMethod {
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get job list", url, ex);
         }
+    }
+
+    public Map<String, List<String>> getTimezones() throws MovieDbException {
+        URL url = new ApiUrl(apiKey, MethodBase.TIMEZONES).setSubMethod(MethodSub.LIST).buildUrl();
+        String webpage = httpTools.getRequest(url);
+
+        List<Map<String, List<String>>> tzList;
+        try {
+            tzList = MAPPER.readValue(webpage, new TypeReference<List<Map<String, List<String>>>>() {
+            });
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get timezone list", url, ex);
+        }
+
+        Map<String, List<String>> timezones = new HashMap<String, List<String>>();
+
+        for (Map<String, List<String>> tzMap : tzList) {
+            for (Map.Entry<String, List<String>> x : tzMap.entrySet()) {
+                timezones.put(x.getKey(), x.getValue());
+            }
+        }
+
+        return timezones;
     }
 
 }

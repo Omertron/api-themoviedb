@@ -17,11 +17,12 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model2;
+package com.omertron.themoviedbapi.model2.config;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;

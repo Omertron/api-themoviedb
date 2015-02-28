@@ -51,7 +51,7 @@ Genres (Done)
 Guest Sessions (Partial - in Account)
 /guest_session/{guest_session_id}/rated_movies Get a list of rated movies for a specific guest session id.
 
-Jobs (Done)
+Jobs (Done - part of configuration)
 /job/list Get a list of valid jobs.
 
 Keyword (Done)
@@ -115,7 +115,7 @@ Search
 /search/person Search for people by name.
 /search/tv Search for TV shows by title.
 
-Timezones
+Timezones (Done - part of configuration)
 /timezones/list Get the list of supported timezones for the API methods that support them.
 
 TV

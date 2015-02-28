@@ -47,10 +47,10 @@ import com.omertron.themoviedbapi.model.change.ChangedMedia;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model2.company.Company;
-import com.omertron.themoviedbapi.model2.Configuration;
+import com.omertron.themoviedbapi.model2.config.Configuration;
 import com.omertron.themoviedbapi.model2.discover.Discover;
 import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model2.JobDepartment;
+import com.omertron.themoviedbapi.model2.config.JobDepartment;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model.MovieDb;
@@ -79,6 +79,7 @@ import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
@@ -653,8 +654,17 @@ public class TheMovieDbApi {
     public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
         return tmdbConfiguration.getJobs();
     }
-    //</editor-fold>
 
+    /**
+     * Get the list of supported timezones for the API methods that support them.
+     *
+     * @return @throws MovieDbException
+     */
+    public Map<String, List<String>> getTimezones() throws MovieDbException {
+        return tmdbConfiguration.getTimezones();
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Credits">
     /**
      * Get the detailed information about a particular credit record.
@@ -875,7 +885,6 @@ public class TheMovieDbApi {
     public StatusCode removeItemFromList(String sessionId, String listId, Integer mediaId) throws MovieDbException {
         return tmdbList.removeItem(sessionId, listId, mediaId);
     }
-
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Movies">
@@ -1223,15 +1232,11 @@ public class TheMovieDbApi {
     //<editor-fold defaultstate="collapsed" desc="Review">
     /**
      *
-     * @param movieId
-     * @param language
-     * @param page
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
+     * @param reviewId
+     * @return @throws MovieDbException
      */
-    public TmdbResultsList<Review> getReviews(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
-        return tmdbReviews.getReviews(movieId, language, page, appendToResponse);
+    public Review getReviews(String reviewId) throws MovieDbException {
+        return tmdbReviews.getReview(reviewId);
     }
     //</editor-fold>
 
