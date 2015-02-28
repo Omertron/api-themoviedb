@@ -46,6 +46,7 @@ public enum MethodSub {
     MOVIE("movie"),
     MOVIES("movies"),
     MOVIE_LIST("movie/list"),
+    MULTI("multi"),
     NOW_PLAYING("now-playing"),
     PERSON("person"),
     POPULAR("popular"),

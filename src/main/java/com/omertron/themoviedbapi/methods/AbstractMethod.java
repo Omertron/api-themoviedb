@@ -49,12 +49,14 @@ public class AbstractMethod {
     protected static final ObjectMapper MAPPER = new ObjectMapper();
     // Logger
     protected static final Logger LOG = LoggerFactory.getLogger(TmdbAccount.class);
-    protected static final TypeReference<WrapperGenericList<MovieBasic>> TR_MOVIE_BASIC = new TypeReference<WrapperGenericList<MovieBasic>>() {
-    };
-    protected static final TypeReference<WrapperGenericList<TVBasic>> TR_TV_BASIC = new TypeReference<WrapperGenericList<TVBasic>>() {
-    };
-    protected static final TypeReference<WrapperGenericList<UserList>> TR_USER_LIST = new TypeReference<WrapperGenericList<UserList>>() {
-    };
+    protected static final TypeReference<WrapperGenericList<MovieBasic>> TR_MOVIE_BASIC = getTypeReference(MovieBasic.class);
+    protected static final TypeReference<WrapperGenericList<TVBasic>> TR_TV_BASIC = getTypeReference(TVBasic.class);
+    protected static final TypeReference<WrapperGenericList<UserList>> TR_USER_LIST = getTypeReference(UserList.class);
+
+    protected static <T> TypeReference getTypeReference(T Class) {
+        return new TypeReference<WrapperGenericList<T>>() {
+        };
+    }
 
     /**
      * Default constructor for the methods
@@ -78,16 +80,28 @@ public class AbstractMethod {
      * @throws MovieDbException
      */
     public <T> List<T> processWrapperList(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
+        WrapperGenericList<T> val = processWrapper(typeRef, url, errorMessageSuffix);
+        return val.getResults();
+    }
+
+    /**
+     * Process the wrapper list and return the whole wrapper
+     *
+     * @param <T> Type of list to process
+     * @param typeRef
+     * @param url URL of the page (Error output only)
+     * @param errorMessageSuffix Error message to output (Error output only)
+     * @return
+     * @throws MovieDbException
+     */
+    public <T> WrapperGenericList<T> processWrapper(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
         String webpage = httpTools.getRequest(url);
         try {
             // Due to type erasure, this doesn't work
             // TypeReference<WrapperGenericList<T>> typeRef = new TypeReference<WrapperGenericList<T>>() {};
-            WrapperGenericList<T> results = MAPPER.readValue(webpage, typeRef);
-            return results.getResults();
+            return MAPPER.readValue(webpage, typeRef);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get " + errorMessageSuffix, url, ex);
         }
-
     }
-
 }

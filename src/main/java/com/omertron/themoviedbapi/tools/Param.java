@@ -46,6 +46,7 @@ public enum Param {
     PAGE("page="),
     PASSWORD("password="),
     QUERY("query="),
+    SEARCH_TYPE("search_type="),
     SESSION("session_id="),
     START_DATE("start_date="),
     TOKEN("request_token="),

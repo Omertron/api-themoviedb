@@ -20,12 +20,14 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -33,13 +35,7 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperCollection;
-import com.omertron.themoviedbapi.wrapper.WrapperCompany;
-import com.omertron.themoviedbapi.wrapper.WrapperKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
-import com.omertron.themoviedbapi.wrapper.WrapperPerson;
-import java.io.IOException;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
 
@@ -61,36 +57,28 @@ public class TmdbSearch extends AbstractMethod {
     }
 
     /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
+     * Search Companies.
      *
-     * @param movieName
-     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
-     * @param language The language to include. Can be blank/null.
-     * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first page)
+     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
+     * on movie calls.
+     *
+     * http://help.themoviedb.org/kb/api/search-companies
+     *
+     * @param query
+     * @param page
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> searchMovie(String movieName, int searchYear, String language, boolean includeAdult, int page) throws MovieDbException {
+    public TmdbResultsList<Company> searchCompanies(String query, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, movieName);
-        parameters.add(Param.YEAR, searchYear);
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.ADULT, includeAdult);
+        parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MOVIE).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to find movie", url, ex);
-        }
-
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.COMPANY).buildUrl(parameters);
+        WrapperGenericList<Company> wrapper = processWrapper(getTypeReference(Company.class), url, "company");
+        TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
     }
 
     /**
@@ -102,112 +90,17 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Collection> searchCollection(String query, String language, int page) throws MovieDbException {
+    public TmdbResultsList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
-        parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
+        parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.COLLECTION).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperCollection wrapper = MAPPER.readValue(webpage, WrapperCollection.class);
-            TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to find collection", url, ex);
-        }
-    }
-
-    /**
-     * This is a good starting point to start finding people on TMDb.
-     *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
-     *
-     * @param personName
-     * @param includeAdult
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Person> searchPeople(String personName, boolean includeAdult, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, personName);
-        parameters.add(Param.ADULT, includeAdult);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.PERSON).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperPerson wrapper = MAPPER.readValue(webpage, WrapperPerson.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to find person", url, ex);
-        }
-    }
-
-    /**
-     * Search for lists by name and description.
-     *
-     * @param query
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieList> searchList(String query, String language, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, query);
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.LIST).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovieList wrapper = MAPPER.readValue(webpage, WrapperMovieList.class);
-            TmdbResultsList<MovieList> results = new TmdbResultsList<MovieList>(wrapper.getMovieList());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to find list", url, ex);
-        }
-    }
-
-    /**
-     * Search Companies.
-     *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
-     * on movie calls.
-     *
-     * http://help.themoviedb.org/kb/api/search-companies
-     *
-     * @param companyName
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Company> searchCompanies(String companyName, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, companyName);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.COMPANY).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperCompany wrapper = MAPPER.readValue(webpage, WrapperCompany.class);
-            TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to find company", url, ex);
-        }
+        WrapperGenericList<Collection> wrapper = processWrapper(getTypeReference(Collection.class), url, "collection");
+        TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
     }
 
     /**
@@ -218,22 +111,158 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Keyword> searchKeyword(String query, int page) throws MovieDbException {
+    public TmdbResultsList<Keyword> searchKeyword(String query, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.KEYWORD).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
+        WrapperGenericList<Keyword> wrapper = processWrapper(getTypeReference(Keyword.class), url, "keyword");
+        TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
+    }
 
-        try {
-            WrapperKeywords wrapper = MAPPER.readValue(webpage, WrapperKeywords.class);
-            TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to find keyword", url, ex);
+    /**
+     * Search for lists by name and description.
+     *
+     * @param query
+     * @param language
+     * @param includeAdult
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<UserList> searchList(String query, Integer page, Boolean includeAdult) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.INCLUDE_ADULT, includeAdult);
+
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.LIST).buildUrl(parameters);
+        WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "list");
+        TmdbResultsList<UserList> results = new TmdbResultsList<UserList>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
+    }
+
+    /**
+     * Search Movies This is a good starting point to start finding movies on TMDb.
+     *
+     * @param query
+     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
+     * @param language The language to include. Can be blank/null.
+     * @param includeAdult true or false to include adult titles in the search
+     * @param page The page of results to return. 0 to get the default (first page)
+     * @param primaryReleaseYear
+     * @param searchType
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> searchMovie(String query,
+            Integer page,
+            String language,
+            Boolean includeAdult,
+            Integer searchYear,
+            Integer primaryReleaseYear,
+            SearchType searchType) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.ADULT, includeAdult);
+        parameters.add(Param.YEAR, searchYear);
+        parameters.add(Param.PRIMARY_RELEASE_YEAR, primaryReleaseYear);
+        if (searchType != null) {
+            parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
         }
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MOVIE).buildUrl(parameters);
+
+        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "movie");
+        TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
+    }
+
+    /**
+     * Search the movie, tv show and person collections with a single query.
+     *
+     * Each item returned in the result array has a media_type field that maps to either movie, tv or person.
+     *
+     * Each mapped result is the same response you would get from each independent search
+     *
+     * @param query
+     * @param page
+     * @param language
+     * @param includeAdult
+     * @return
+     * @throws MovieDbException
+     */
+    public String searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.ADULT, includeAdult);
+
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MULTI).buildUrl(parameters);
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
+    }
+
+    /**
+     * This is a good starting point to start finding people on TMDb.
+     *
+     * The idea is to be a quick and light method so you can iterate through people quickly.
+     *
+     * @param query
+     * @param includeAdult
+     * @param page
+     * @param searchType
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Person> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.ADULT, includeAdult);
+        parameters.add(Param.PAGE, page);
+        if (searchType != null) {
+            parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
+        }
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.PERSON).buildUrl(parameters);
+
+        WrapperGenericList<Person> wrapper = processWrapper(getTypeReference(Person.class), url, "person");
+        TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
+    }
+
+    /**
+     * Search for TV shows by title.
+     *
+     * @param query
+     * @param page
+     * @param language
+     * @param firstAirDateYear
+     * @param searchType
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVBasic> searchTV(String query, Integer page, String language, Integer firstAirDateYear, SearchType searchType) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.QUERY, query);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.FIRST_AIR_DATE_YEAR, firstAirDateYear);
+        if (searchType != null) {
+            parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
+        }
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MOVIE).buildUrl(parameters);
+
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "TV Show");
+        TmdbResultsList<TVBasic> results = new TmdbResultsList<TVBasic>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
     }
 
 }

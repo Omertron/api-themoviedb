@@ -105,13 +105,13 @@ People
 Reviews (Done)
 /review/{id} Get the full details of a review by ID.
 
-Search
+Search (Partial - multi search to do)
 /search/company Search for companies by name.
 /search/collection Search for collections by name.
 /search/keyword Search for keywords by name.
 /search/list Search for lists by name and description.
 /search/movie Search for movies by title.
-/search/multi Search the movie, tv show and person collections with a single query.
+*** /search/multi Search the movie, tv show and person collections with a single query.
 /search/person Search for people by name.
 /search/tv Search for TV shows by title.
 
