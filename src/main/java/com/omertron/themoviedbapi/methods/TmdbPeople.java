@@ -29,6 +29,7 @@ import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
 import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonCredits;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -38,7 +39,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
-import com.omertron.themoviedbapi.wrapper.WrapperPersonList;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -277,21 +277,23 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getPersonPopular(Integer page) throws MovieDbException {
+    public TmdbResultsList<PersonFind> getPersonPopular(Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.POPULAR).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
+        WrapperGenericList<PersonFind> wrapper;
         try {
-            WrapperPersonList wrapper = MAPPER.readValue(webpage, WrapperPersonList.class);
-//            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getPersonList());
-//            results.copyWrapper(wrapper);
-//            return results;
-            return null;
+            TypeReference tr = new TypeReference<WrapperGenericList<PersonFind>>() {
+            };
+            wrapper = MAPPER.readValue(webpage, tr);
+            TmdbResultsList<PersonFind> results = new TmdbResultsList<PersonFind>(wrapper.getResults());
+            results.copyWrapper(wrapper);
+            return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get popular person", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get tagged images", url, ex);
         }
     }
 

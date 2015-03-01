@@ -23,6 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
@@ -30,6 +31,7 @@ import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
 import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonCredits;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +55,6 @@ import org.junit.Test;
 public class TmdbPeopleTest extends AbstractTests {
 
     private static TmdbPeople instance;
-    private static final int ID_BRUCE_WILLIS = 62;
-    private static final int ID_SEAN_BEAN = 48;
     private static final int ID_DICK_WOLF = 117443;
     private static final List<TestID> testIDs = new ArrayList<TestID>();
 
@@ -244,12 +244,15 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         Integer page = null;
-
-        TmdbResultsList<Person> expResult = null;
-        TmdbResultsList<Person> result = instance.getPersonPopular(page);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<PersonFind> result = instance.getPersonPopular(page);
+        assertFalse("No results", result.isEmpty());
+        assertTrue("No results", result.getResults().size() > 0);
+        for (PersonFind p : result.getResults()) {
+            LOG.info("{} ({}) = {}", p.getName(), p.getId(), p.getKnownFor().size());
+            for (MediaBasic k : p.getKnownFor()) {
+                LOG.info("    {}", k.toString());
+            }
+        }
     }
 
     /**

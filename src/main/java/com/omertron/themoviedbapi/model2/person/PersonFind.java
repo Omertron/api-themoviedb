@@ -20,7 +20,13 @@
 package com.omertron.themoviedbapi.model2.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.omertron.themoviedbapi.model2.MediaBasic;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
+import com.omertron.themoviedbapi.model2.tv.TVEpisodeBasic;
 import java.util.List;
 
 /**
@@ -35,7 +41,7 @@ public class PersonFind extends PersonBasic {
     private Float popularity;
     @JsonProperty("profile_path")
     private String profilePath;
-    @JsonProperty("known_for")
+//    @JsonProperty("known_for")
     private List<? extends MediaBasic> knownFor;
 
     public Boolean getAdult() {
@@ -66,6 +72,19 @@ public class PersonFind extends PersonBasic {
         return knownFor;
     }
 
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+//            include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "media_type",
+            defaultImpl = MediaBasic.class
+    )
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = MovieBasic.class, name = "movie"),
+        @JsonSubTypes.Type(value = TVBasic.class, name = "tv"),
+        @JsonSubTypes.Type(value = TVEpisodeBasic.class, name = "episode")
+    })
+    @JsonSetter("known_for")
     public void setKnownFor(List<? extends MediaBasic> knownFor) {
         this.knownFor = knownFor;
     }

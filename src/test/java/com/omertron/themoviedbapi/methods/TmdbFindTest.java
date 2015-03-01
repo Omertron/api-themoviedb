@@ -84,7 +84,7 @@ public class TmdbFindTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testFindMoviesImdbID() throws MovieDbException {
         LOG.info("findMoviesImdbID");
         FindResults result;
@@ -109,7 +109,7 @@ public class TmdbFindTest extends AbstractTests {
      * @throws MovieDbException
      * @throws IOException
      */
-//    @Test
+    @Test
     public void testFindPersonImdbID() throws MovieDbException, IOException {
         LOG.info("findPersonImdbID");
         FindResults result;
