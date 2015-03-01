@@ -19,15 +19,15 @@
  */
 package com.omertron.themoviedbapi.model2.tv;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 
 /**
  * TV Favorite information
  *
  * @author stuart.boston
  */
-public class TVEpisodeBasic extends AbstractJsonMapping {
+public class TVEpisodeBasic extends MediaBasic {
 
     @JsonProperty("air_date")
     private String airDate;
@@ -41,6 +41,8 @@ public class TVEpisodeBasic extends AbstractJsonMapping {
     private String overview;
     @JsonProperty("still_path")
     private String stillPath;
+    @JsonProperty("show_id")
+    private String showId;
 
     public String getAirDate() {
         return airDate;
@@ -88,6 +90,14 @@ public class TVEpisodeBasic extends AbstractJsonMapping {
 
     public void setStillPath(String stillPath) {
         this.stillPath = stillPath;
+    }
+
+    public String getShowId() {
+        return showId;
+    }
+
+    public void setShowId(String showId) {
+        this.showId = showId;
     }
 
 }

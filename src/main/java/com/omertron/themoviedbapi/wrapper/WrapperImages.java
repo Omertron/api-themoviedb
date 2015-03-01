@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class WrapperImages extends AbstractWrapperAll implements Serializable {
             artwork.addAll(backdrops);
         }
 
-        // Add all the backdrops to the list
+        // Add all the profiles to the list
         if (types.contains(ArtworkType.PROFILE)) {
             updateArtworkType(profiles, ArtworkType.PROFILE);
             artwork.addAll(profiles);

@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.AfterClass;

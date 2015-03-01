@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi.enumeration;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Media type options
  *
@@ -33,5 +35,28 @@ public enum MediaType {
     /**
      * TV Show media type
      */
-    TV;
+    TV,
+    /**
+     * TV Episode media type
+     */
+    EPISODE;
+
+    /**
+     * Convert a string into an Enum type
+     *
+     * @param mediaType
+     * @return
+     * @throws IllegalArgumentException If type is not recognised
+     *
+     */
+    public static MediaType fromString(String mediaType) {
+        if (StringUtils.isNotBlank(mediaType)) {
+            try {
+                return MediaType.valueOf(mediaType.trim().toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("MediaType " + mediaType + " does not exist.", ex);
+            }
+        }
+        throw new IllegalArgumentException("MediaType must not be null");
+    }
 }

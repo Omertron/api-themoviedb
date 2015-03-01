@@ -34,15 +34,10 @@ public class Person extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Static fields for default cast information
-     */
     private static final String CAST_DEPARTMENT = "acting";
     private static final String CAST_JOB = "actor";
     private static final String DEFAULT_STRING = "";
-    /*
-     * Properties
-     */
+    // Properties
     @JsonProperty("id")
     private int id = -1;
     @JsonProperty("name")

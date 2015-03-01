@@ -19,12 +19,16 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
-import static com.omertron.themoviedbapi.methods.AbstractMethod.getTypeReference;
-import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.person.PersonCredit;
+import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
+import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
+import com.omertron.themoviedbapi.model2.person.ExternalID;
+import com.omertron.themoviedbapi.model2.person.Person;
+import com.omertron.themoviedbapi.model2.person.PersonCredits;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -88,17 +92,21 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonCredit> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.MOVIE_CREDITS).buildUrl(parameters);
 
-        WrapperGenericList<PersonCredit> wrapper = processWrapper(getTypeReference(PersonCredit.class), url, "person movie credits");
-        TmdbResultsList<PersonCredit> results = new TmdbResultsList<PersonCredit>(wrapper.getResults());
-        results.copyWrapper(wrapper);
-        return results;
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.MOVIE_CREDITS).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, new TypeReference<PersonCredits<CreditMovieBasic>>() {
+            });
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+        }
     }
 
     /**
@@ -114,8 +122,21 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
-        return null;
+    public PersonCredits<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
+
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.TV_CREDITS).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, new TypeReference<PersonCredits<CreditTVBasic>>() {
+            });
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+        }
     }
 
     /**
@@ -131,8 +152,21 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
-        return null;
+    public PersonCredits<CreditTVBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
+
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.COMBINED_CREDITS).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, new TypeReference<PersonCredits<CreditTVBasic>>() {
+            });
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+        }
     }
 
     /**
@@ -142,8 +176,18 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getPersonExternalIds(int personId) throws MovieDbException {
-        return null;
+    public ExternalID getPersonExternalIds(int personId) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.EXTERNAL_IDS).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, ExternalID.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+        }
     }
 
     /**
@@ -179,9 +223,28 @@ public class TmdbPeople extends AbstractMethod {
      * @param page
      * @param language
      * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public TmdbResultsList<Person> getPersonTaggedImages(int personId, Integer page, String language) {
-        return null;
+    public TmdbResultsList<ArtworkMedia> getPersonTaggedImages(int personId, Integer page, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.TAGGED_IMAGES).buildUrl(parameters);
+
+        WrapperGenericList<ArtworkMedia> wrapper;
+
+        String webpage = httpTools.getRequest(url);
+        try {
+            TypeReference tr = new TypeReference<WrapperGenericList<ArtworkMedia>>() {
+            };
+            wrapper = MAPPER.readValue(webpage, tr);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get tagged images", url, ex);
+        }
+
+        TmdbResultsList<ArtworkMedia> results = new TmdbResultsList<ArtworkMedia>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
     }
 
     /**
@@ -199,9 +262,10 @@ public class TmdbPeople extends AbstractMethod {
      * @param startDate
      * @param endDate
      * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public TmdbResultsList<Person> getPersonChanges(int persondId, String startDate, String endDate) {
-        return null;
+    public TmdbResultsList<Person> getPersonChanges(int persondId, String startDate, String endDate) throws MovieDbException {
+        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not done");
     }
 
     /**
@@ -222,9 +286,10 @@ public class TmdbPeople extends AbstractMethod {
 
         try {
             WrapperPersonList wrapper = MAPPER.readValue(webpage, WrapperPersonList.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getPersonList());
-            results.copyWrapper(wrapper);
-            return results;
+//            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getPersonList());
+//            results.copyWrapper(wrapper);
+//            return results;
+            return null;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get popular person", url, ex);
         }
@@ -246,5 +311,4 @@ public class TmdbPeople extends AbstractMethod {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest person", url, ex);
         }
     }
-
 }

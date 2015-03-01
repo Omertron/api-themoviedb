@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model2.collection.Collection;
@@ -264,4 +265,8 @@ public class TmdbSearch extends AbstractMethod {
         return results;
     }
 
+    private static <T> TypeReference getTypeReference(T Class) {
+        return new TypeReference<WrapperGenericList<T>>() {
+        };
+    }
 }

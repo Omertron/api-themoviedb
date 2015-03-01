@@ -17,11 +17,12 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.artwork;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -54,84 +55,89 @@ public class Artwork extends AbstractJsonMapping {
     private String flag;
     private ArtworkType artworkType = ArtworkType.POSTER;
 
-    public ArtworkType getArtworkType() {
-        return artworkType;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public float getAspectRatio() {
         return aspectRatio;
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public float getVoteAverage() {
-        return voteAverage;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public String getFlag() {
-        return flag;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setArtworkType(ArtworkType artworkType) {
-        this.artworkType = artworkType;
-    }
-
     public void setAspectRatio(float aspectRatio) {
         this.aspectRatio = aspectRatio;
+    }
+
+    public String getFilePath() {
+        return filePath;
     }
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public void setLanguage(String language) {
         this.language = language;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage;
     }
 
     public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
     }
 
+    public int getVoteCount() {
+        return voteCount;
+    }
+
     public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
+    }
+
+    public String getFlag() {
+        return flag;
     }
 
     public void setFlag(String flag) {
         this.flag = flag;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public ArtworkType getArtworkType() {
+        return artworkType;
+    }
+
+    public void setArtworkType(ArtworkType artworkType) {
+        this.artworkType = artworkType;
+    }
+
+    @JsonSetter("image_type")
+    public void setArtworkType(String artworkType){
+        this.artworkType=ArtworkType.fromString(artworkType);
     }
 
     @Override

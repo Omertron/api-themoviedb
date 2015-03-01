@@ -41,7 +41,7 @@ import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model.Artwork;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model.Certification;
 import com.omertron.themoviedbapi.model.change.ChangedMedia;
 import com.omertron.themoviedbapi.model2.collection.Collection;
@@ -57,7 +57,6 @@ import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.person.PersonCredit;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.model2.StatusCode;
@@ -1155,79 +1154,10 @@ public class TheMovieDbApi {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="People">
-    /**
-     * This method is used to retrieve all of the basic person information.
-     *
-     * It will return the single highest rated profile image.
-     *
-     * @param personId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
-        return tmdbPeople.getPersonInfo(personId, appendToResponse);
-    }
 
-    /**
-     * This method is used to retrieve all of the cast & crew information for the person.
-     *
-     * It will return the single highest rated poster for each movie record.
-     *
-     * @param personId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<PersonCredit> getPersonCredits(int personId, String... appendToResponse) throws MovieDbException {
-        return tmdbPeople.getPersonCredits(personId, appendToResponse);
-    }
+    null;
 
-    /**
-     * This method is used to retrieve all of the profile images for a person.
-     *
-     * @param personId
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
-        return tmdbPeople.getPersonImages(personId);
-    }
 
-    /**
-     * Get the list of popular people on The Movie Database.
-     *
-     * This list refreshes every day.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Person> getPersonPopular() throws MovieDbException {
-        return tmdbPeople.getPersonPopular(0);
-    }
-
-    /**
-     * Get the list of popular people on The Movie Database.
-     *
-     * This list refreshes every day.
-     *
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Person> getPersonPopular(int page) throws MovieDbException {
-        return tmdbPeople.getPersonPopular(page);
-    }
-
-    /**
-     * Get the latest person id.
-     *
-     * @return
-     * @throws MovieDbException
-     */
-    public Person getPersonLatest() throws MovieDbException {
-        return tmdbPeople.getPersonLatest();
-    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Review">

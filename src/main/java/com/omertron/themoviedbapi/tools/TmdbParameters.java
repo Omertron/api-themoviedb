@@ -57,7 +57,9 @@ public class TmdbParameters {
      * @param value The array value to use (will be converted into a comma separated list)
      */
     public void add(final Param key, final String[] value) {
-        parameters.put(key, toList(value));
+        if (value != null && value.length > 0) {
+            parameters.put(key, toList(value));
+        }
     }
 
     /**

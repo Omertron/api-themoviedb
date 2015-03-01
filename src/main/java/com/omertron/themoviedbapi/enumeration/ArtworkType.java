@@ -19,15 +19,46 @@
  */
 package com.omertron.themoviedbapi.enumeration;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * ArtworkType enum List of the artwork types that are available
  */
 public enum ArtworkType {
 
-    // Poster artwork
+    /**
+     * Poster artwork
+     */
     POSTER,
-    // Fanart/backdrop
+    /**
+     * Fanart/backdrop
+     */
     BACKDROP,
-    // Person image
-    PROFILE
+    /**
+     * Person image
+     */
+    PROFILE,
+    /**
+     * Still (Video image)
+     */
+    STILL;
+
+    /**
+     * Convert a string into an Enum type
+     *
+     * @param artworkType
+     * @return
+     * @throws IllegalArgumentException If type is not recognised
+     *
+     */
+    public static ArtworkType fromString(String artworkType) {
+        if (StringUtils.isNotBlank(artworkType)) {
+            try {
+                return ArtworkType.valueOf(artworkType.trim().toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("ArtworkType " + artworkType + " does not exist.", ex);
+            }
+        }
+        throw new IllegalArgumentException("ArtworkType must not be null");
+    }
 }

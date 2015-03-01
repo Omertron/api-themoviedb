@@ -53,7 +53,7 @@ public class AbstractMethod {
     protected static final TypeReference<WrapperGenericList<TVBasic>> TR_TV_BASIC = getTypeReference(TVBasic.class);
     protected static final TypeReference<WrapperGenericList<UserList>> TR_USER_LIST = getTypeReference(UserList.class);
 
-    protected static <T> TypeReference getTypeReference(T Class) {
+    private static <T> TypeReference getTypeReference(T Class) {
         return new TypeReference<WrapperGenericList<T>>() {
         };
     }
