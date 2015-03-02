@@ -69,11 +69,8 @@ public class TmdbChanges extends AbstractMethod {
         params.add(Param.END_DATE, endDate);
 
         URL url = new ApiUrl(apiKey, method).setSubMethod(MethodSub.CHANGES).buildUrl(params);
-        String webpage = httpTools.getRequest(url);
-
         TypeReference tr = new TypeReference<WrapperGenericList<ChangeListItem>>() {
         };
-
         return processWrapperList(tr, url, "changes");
     }
 

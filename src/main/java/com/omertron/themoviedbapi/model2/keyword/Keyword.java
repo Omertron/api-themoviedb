@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.keyword;
+package com.omertron.themoviedbapi.model2.keyword;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.omertron.themoviedbapi.model.AbstractIdName;

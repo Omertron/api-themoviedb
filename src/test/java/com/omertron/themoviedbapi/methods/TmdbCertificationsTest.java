@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import static com.omertron.themoviedbapi.AbstractTests.doConfiguration;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.Certification;
+import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import java.util.List;
 import java.util.Map;

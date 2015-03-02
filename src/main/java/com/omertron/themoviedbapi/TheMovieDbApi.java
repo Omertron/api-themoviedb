@@ -43,20 +43,20 @@ import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model.Certification;
+import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
-import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model2.FindResults;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
+import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
 import com.omertron.themoviedbapi.model2.change.ChangeListItem;
@@ -71,12 +71,19 @@ import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.network.Network;
 import com.omertron.themoviedbapi.model2.person.CreditInfo;
+import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
+import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
+import com.omertron.themoviedbapi.model2.person.ExternalID;
+import com.omertron.themoviedbapi.model2.person.Person;
+import com.omertron.themoviedbapi.model2.person.PersonCredits;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -945,7 +952,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<com.omertron.themoviedbapi.model.person.Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getMovieCasts(movieId, appendToResponse);
     }
 
@@ -1154,10 +1161,145 @@ public class TheMovieDbApi {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="People">
+    /**
+     * Get the general person information for a specific id.
+     *
+     * @param personId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonInfo(personId, appendToResponse);
+    }
 
-    //TODO: Methods here
+    /**
+     * Get the movie credits for a specific person id.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonCredits<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonMovieCredits(personId, language, appendToResponse);
+    }
 
+    /**
+     * Get the TV credits for a specific person id.
+     *
+     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     *
+     * This will provide details about which episode and/or season the credit is for.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonCredits<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonTVCredits(personId, language, appendToResponse);
+    }
 
+    /**
+     * Get the combined (movie and TV) credits for a specific person id.
+     *
+     * To get the expanded details for each TV record, call the /credit method with the provided credit_id.
+     *
+     * This will provide details about which episode and/or season the credit is for.
+     *
+     * @param personId
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public PersonCredits<CreditTVBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbPeople.getPersonCombinedCredits(personId, language, appendToResponse);
+    }
+
+    /**
+     * Get the external ids for a specific person id.
+     *
+     * @param personId
+     * @return
+     * @throws MovieDbException
+     */
+    public ExternalID getPersonExternalIds(int personId) throws MovieDbException {
+        return tmdbPeople.getPersonExternalIds(personId);
+    }
+
+    /**
+     * Get the images for a specific person id.
+     *
+     * @param personId
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
+        return tmdbPeople.getPersonImages(personId);
+    }
+
+    /**
+     * Get the images that have been tagged with a specific person id.
+     *
+     * We return all of the image results with a media object mapped for each image.
+     *
+     * @param personId
+     * @param page
+     * @param language
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<ArtworkMedia> getPersonTaggedImages(int personId, Integer page, String language) throws MovieDbException {
+        return tmdbPeople.getPersonTaggedImages(personId, page, language);
+    }
+
+    /**
+     * Get the changes for a specific person id.
+     *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * @param personId
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public WrapperChanges getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        return tmdbPeople.getPersonChanges(personId, startDate, endDate);
+    }
+
+    /**
+     * Get the list of popular people on The Movie Database.
+     *
+     * This list refreshes every day.
+     *
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<PersonFind> getPersonPopular(Integer page) throws MovieDbException {
+        return tmdbPeople.getPersonPopular(page);
+    }
+
+    /**
+     * Get the latest person id.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public Person getPersonLatest() throws MovieDbException {
+        return tmdbPeople.getPersonLatest();
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Review">
