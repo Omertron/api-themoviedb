@@ -24,7 +24,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.list.UserList;
