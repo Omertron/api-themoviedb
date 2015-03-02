@@ -57,7 +57,7 @@ public class TmdbDiscover extends AbstractMethod {
     public List<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).setSubMethod(MethodSub.MOVIE).buildUrl(discover.getParams());
         String webpage = httpTools.getRequest(url);
-        return processWrapperList(TR_MOVIE_BASIC, url, webpage);
+        return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);
     }
 
     /**
@@ -70,6 +70,6 @@ public class TmdbDiscover extends AbstractMethod {
     public List<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).setSubMethod(MethodSub.TV).buildUrl(discover.getParams());
         String webpage = httpTools.getRequest(url);
-        return processWrapperList(TR_TV_BASIC, url, webpage);
+        return processWrapperList(getTypeReference(TVBasic.class), url, webpage);
     }
 }

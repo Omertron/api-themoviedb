@@ -19,14 +19,13 @@
  */
 package com.omertron.themoviedbapi.methods;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
-import com.omertron.themoviedbapi.model.keyword.Keyword;
-import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -265,8 +264,4 @@ public class TmdbSearch extends AbstractMethod {
         return results;
     }
 
-    private static <T> TypeReference getTypeReference(T Class) {
-        return new TypeReference<WrapperGenericList<T>>() {
-        };
-    }
 }

@@ -23,12 +23,12 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.enumeration.SortBy;
-import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.StatusCode;
+import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
+import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
-import com.omertron.themoviedbapi.model2.list.UserList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -39,6 +39,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -78,7 +79,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetAccount() throws MovieDbException {
         LOG.info("getAccount");
         Account result = instance.getAccount(getSessionId());
@@ -92,7 +93,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         List<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
@@ -108,7 +109,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
         List<MovieBasic> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
@@ -124,7 +125,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetFavoriteTv() throws MovieDbException {
         LOG.info("getFavoriteTv");
         List<TVBasic> results = instance.getFavoriteTv(getSessionId(), getAccountId());
@@ -140,7 +141,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testModifyFavoriteStatus() throws MovieDbException {
         LOG.info("modifyFavoriteStatus");
 
@@ -170,7 +171,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetRatedMovies() throws MovieDbException {
         LOG.info("getRatedMovies");
         List<MovieBasic> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
@@ -183,7 +184,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetRatedTV() throws MovieDbException {
         LOG.info("getRatedTV");
         List<TVBasic> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
@@ -199,7 +200,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetWatchListMovie() throws MovieDbException {
         LOG.info("getWatchListMovie");
         List<MovieBasic> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
@@ -231,7 +232,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testModifyWatchList() throws MovieDbException {
         LOG.info("modifyWatchList");
 
@@ -261,7 +262,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    @Ignore
     public void testGetGuestRatedMovies() throws MovieDbException {
         LOG.info("getGuestRatedMovies");
 

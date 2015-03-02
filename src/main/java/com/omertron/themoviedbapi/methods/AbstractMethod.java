@@ -22,14 +22,16 @@ package com.omertron.themoviedbapi.methods;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
-import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -49,13 +51,20 @@ public class AbstractMethod {
     protected static final ObjectMapper MAPPER = new ObjectMapper();
     // Logger
     protected static final Logger LOG = LoggerFactory.getLogger(TmdbAccount.class);
-    protected static final TypeReference<WrapperGenericList<MovieBasic>> TR_MOVIE_BASIC = getTypeReference(MovieBasic.class);
-    protected static final TypeReference<WrapperGenericList<TVBasic>> TR_TV_BASIC = getTypeReference(TVBasic.class);
-    protected static final TypeReference<WrapperGenericList<UserList>> TR_USER_LIST = getTypeReference(UserList.class);
 
-    private static <T> TypeReference getTypeReference(T Class) {
-        return new TypeReference<WrapperGenericList<T>>() {
-        };
+    private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<Class, TypeReference>();
+
+    static {
+        TYPE_REFS.put(MovieBasic.class, new TypeReference<WrapperGenericList<MovieBasic>>() {
+        });
+        TYPE_REFS.put(TVBasic.class, new TypeReference<WrapperGenericList<TVBasic>>() {
+        });
+        TYPE_REFS.put(UserList.class, new TypeReference<WrapperGenericList<UserList>>() {
+        });
+    }
+
+    protected static TypeReference getTypeReference(Class aClass) {
+        return TYPE_REFS.get(aClass);
     }
 
     /**

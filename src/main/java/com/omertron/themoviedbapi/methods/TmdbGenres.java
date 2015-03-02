@@ -122,6 +122,6 @@ public class TmdbGenres extends AbstractMethod {
         URL url = new ApiUrl(apiKey, MethodBase.GENRE).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
-        return processWrapperList(TR_MOVIE_BASIC, url, webpage);
+        return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);
     }
 }

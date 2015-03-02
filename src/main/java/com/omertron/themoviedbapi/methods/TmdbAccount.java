@@ -22,11 +22,11 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.enumeration.SortBy;
-import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.StatusCode;
+import com.omertron.themoviedbapi.model2.account.Account;
+import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
-import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -92,7 +92,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.LISTS).buildUrl(parameters);
-        return processWrapperList(TR_USER_LIST, url, "user list");
+        return processWrapperList(getTypeReference(UserList.class), url, "user list");
     }
 
     /**
@@ -109,7 +109,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_BASIC, url, "favorite movies");
+        return processWrapperList(getTypeReference(MovieBasic.class), url, "favorite movies");
     }
 
     /**
@@ -126,7 +126,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
-        return processWrapperList(TR_TV_BASIC, url, "favorite TV shows");
+        return processWrapperList(getTypeReference(TVBasic.class), url, "favorite TV shows");
     }
 
     /**
@@ -181,7 +181,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_BASIC, url, "rated movies");
+        return processWrapperList(getTypeReference(MovieBasic.class), url, "rated movies");
     }
 
     /**
@@ -204,7 +204,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_TV).buildUrl(parameters);
-        return processWrapperList(TR_TV_BASIC, url, "rated TV shows");
+        return processWrapperList(getTypeReference(TVBasic.class), url, "rated TV shows");
     }
 
     /**
@@ -227,7 +227,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_BASIC, url, "movie watch list");
+        return processWrapperList(getTypeReference(MovieBasic.class), url, "movie watch list");
     }
 
     /**
@@ -250,7 +250,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
-        return processWrapperList(TR_TV_BASIC, url, "TV watch list");
+        return processWrapperList(getTypeReference(TVBasic.class), url, "TV watch list");
     }
 
     /**
@@ -306,6 +306,6 @@ public class TmdbAccount extends AbstractMethod {
         }
 
         URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).setSubMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);
-        return processWrapperList(TR_MOVIE_BASIC, url, "Guest Session Movies");
+        return processWrapperList(getTypeReference(MovieBasic.class), url, "Guest Session Movies");
     }
 }
