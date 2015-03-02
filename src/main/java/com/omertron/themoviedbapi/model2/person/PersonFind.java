@@ -41,7 +41,6 @@ public class PersonFind extends PersonBasic {
     private Float popularity;
     @JsonProperty("profile_path")
     private String profilePath;
-//    @JsonProperty("known_for")
     private List<? extends MediaBasic> knownFor;
 
     public Boolean getAdult() {
@@ -74,7 +73,6 @@ public class PersonFind extends PersonBasic {
 
     @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,
-//            include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
             include = JsonTypeInfo.As.PROPERTY,
             property = "media_type",
             defaultImpl = MediaBasic.class

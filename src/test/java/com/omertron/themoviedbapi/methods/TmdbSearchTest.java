@@ -24,10 +24,10 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import org.junit.After;
@@ -183,7 +183,7 @@ public class TmdbSearchTest extends AbstractTests {
     public void testSearchPeople() throws MovieDbException {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
-        TmdbResultsList<Person> result = instance.searchPeople(personName, null, null, SearchType.PHRASE);
+        TmdbResultsList<PersonFind> result = instance.searchPeople(personName, null, null, SearchType.PHRASE);
         assertNotNull("Null results", result);
         assertNotNull("Null people", result.getResults());
         assertFalse("Empty people", result.isEmpty());

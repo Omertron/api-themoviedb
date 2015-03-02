@@ -23,10 +23,10 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -220,7 +220,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
+    public TmdbResultsList<PersonFind> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.ADULT, includeAdult);
@@ -230,8 +230,8 @@ public class TmdbSearch extends AbstractMethod {
         }
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.PERSON).buildUrl(parameters);
 
-        WrapperGenericList<Person> wrapper = processWrapper(getTypeReference(Person.class), url, "person");
-        TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getResults());
+        WrapperGenericList<PersonFind> wrapper = processWrapper(getTypeReference(PersonFind.class), url, "person");
+        TmdbResultsList<PersonFind> results = new TmdbResultsList<PersonFind>(wrapper.getResults());
         results.copyWrapper(wrapper);
         return results;
     }

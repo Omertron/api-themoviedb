@@ -29,6 +29,7 @@ import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
@@ -75,6 +76,8 @@ public class AbstractMethod {
         TYPE_REFS.put(MovieDb.class, new TypeReference<WrapperGenericList<MovieDb>>() {
         });
         TYPE_REFS.put(Person.class, new TypeReference<WrapperGenericList<Person>>() {
+        });
+        TYPE_REFS.put(PersonFind.class, new TypeReference<WrapperGenericList<PersonFind>>() {
         });
     }
 
