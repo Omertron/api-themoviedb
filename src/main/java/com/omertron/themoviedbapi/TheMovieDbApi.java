@@ -53,6 +53,7 @@ import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model2.FindResults;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
@@ -1406,7 +1407,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public String searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
+    public TmdbResultsList<MediaBasic> searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
         return tmdbSearch.searchMulti(query, page, language, includeAdult);
     }
 
@@ -1422,7 +1423,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Person> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
+    public TmdbResultsList<PersonFind> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
         return tmdbSearch.searchPeople(query, page, includeAdult, searchType);
     }
 

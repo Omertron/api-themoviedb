@@ -21,7 +21,9 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
@@ -36,7 +38,10 @@ import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
+import com.omertron.themoviedbapi.wrapper.WrapperMultiSearch;
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -197,7 +202,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public String searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
+    public TmdbResultsList<MediaBasic> searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
@@ -205,8 +210,18 @@ public class TmdbSearch extends AbstractMethod {
         parameters.add(Param.ADULT, includeAdult);
 
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MULTI).buildUrl(parameters);
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not implemented yet");
-    }
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperMultiSearch wrapper = MAPPER.readValue(webpage, WrapperMultiSearch.class);
+            TmdbResultsList<MediaBasic> results = new TmdbResultsList<MediaBasic>(null);
+            List<? extends MediaBasic> x = wrapper.getResults();
+            results.getResults().addAll(wrapper.getResults());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get multi search", url, ex);
+        }    }
 
     /**
      * This is a good starting point to start finding people on TMDb.
