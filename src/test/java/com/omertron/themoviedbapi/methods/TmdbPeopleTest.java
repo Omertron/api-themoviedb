@@ -23,9 +23,10 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
-import com.omertron.themoviedbapi.model2.MediaBasic;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
+import com.omertron.themoviedbapi.model2.change.ChangeListItem;
 import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
 import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
@@ -33,15 +34,19 @@ import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonCredits;
 import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Before;
@@ -55,7 +60,6 @@ import org.junit.Test;
 public class TmdbPeopleTest extends AbstractTests {
 
     private static TmdbPeople instance;
-    private static final int ID_DICK_WOLF = 117443;
     private static final List<TestID> testIDs = new ArrayList<TestID>();
 
     public TmdbPeopleTest() {
@@ -210,8 +214,10 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : testIDs) {
             TmdbResultsList<ArtworkMedia> result = instance.getPersonTaggedImages(test.getTmdb(), page, language);
+            assertFalse("No images", result.isEmpty());
             for (ArtworkMedia am : result.getResults()) {
-                LOG.info("{}", ToStringBuilder.reflectionToString(am, ToStringStyle.DEFAULT_STYLE));
+                assertTrue("No ID", StringUtils.isNotBlank(am.getId()));
+                assertTrue("No file path", StringUtils.isNotBlank(am.getFilePath()));
             }
         }
     }
@@ -221,18 +227,30 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonChanges() throws MovieDbException {
         LOG.info("getPersonChanges");
-        int persondId = 0;
-        String startDate = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDate = sdf.format(DateUtils.addDays(new Date(), -14));
         String endDate = "";
+        int maxCheck = 5;
 
-        TmdbResultsList<Person> expResult = null;
-        TmdbResultsList<Person> result = instance.getPersonChanges(persondId, startDate, endDate);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
+        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
+        LOG.info("Found {} person changes to check", changeList.size());
+
+        int count = 1;
+        WrapperChanges result;
+        for (ChangeListItem item : changeList) {
+            result = instance.getPersonChanges(item.getId(), startDate, endDate);
+            for (ChangeKeyItem ci : result.getChangedItems()) {
+                assertNotNull("Null changes",ci);
+            }
+
+            if (count++ > maxCheck) {
+                break;
+            }
+        }
     }
 
     /**
@@ -240,7 +258,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+//    @Test
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         Integer page = null;
@@ -248,10 +266,8 @@ public class TmdbPeopleTest extends AbstractTests {
         assertFalse("No results", result.isEmpty());
         assertTrue("No results", result.getResults().size() > 0);
         for (PersonFind p : result.getResults()) {
+            assertFalse("No known for entries", p.getKnownFor().isEmpty());
             LOG.info("{} ({}) = {}", p.getName(), p.getId(), p.getKnownFor().size());
-            for (MediaBasic k : p.getKnownFor()) {
-                LOG.info("    {}", k.toString());
-            }
         }
     }
 
@@ -264,11 +280,9 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
 
-        Person expResult = null;
         Person result = instance.getPersonLatest();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue("No ID", result.getId() > 0);
+        assertTrue("No name!", StringUtils.isNotBlank(result.getName()));
     }
 
 }

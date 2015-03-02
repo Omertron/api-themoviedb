@@ -19,19 +19,18 @@
  */
 package com.omertron.themoviedbapi.methods;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.change.ChangedMedia;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.model2.change.ChangeListItem;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperMediaChanges;
-import java.io.IOException;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.net.URL;
-import org.yamj.api.common.exception.ApiExceptionType;
+import java.util.List;
 
 /**
  * Class to hold the Change Methods
@@ -53,7 +52,8 @@ public class TmdbChanges extends AbstractMethod {
     /**
      * Get a list of Media IDs that have been edited.
      *
-     * You can then use the movie/TV/person changes API to get the actual data that has been changed.
+     * You can then use the movie/TV/person changes API to get the actual data
+     * that has been changed.
      *
      * @param method The method base to get
      * @param page
@@ -62,7 +62,7 @@ public class TmdbChanges extends AbstractMethod {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsList<ChangedMedia> getChangeList(MethodBase method, Integer page, String startDate, String endDate) throws MovieDbException {
+    public List<ChangeListItem> getChangeList(MethodBase method, Integer page, String startDate, String endDate) throws MovieDbException {
         TmdbParameters params = new TmdbParameters();
         params.add(Param.PAGE, page);
         params.add(Param.START_DATE, startDate);
@@ -71,15 +71,10 @@ public class TmdbChanges extends AbstractMethod {
         URL url = new ApiUrl(apiKey, method).setSubMethod(MethodSub.CHANGES).buildUrl(params);
         String webpage = httpTools.getRequest(url);
 
-        try {
-            WrapperMediaChanges wrapper = MAPPER.readValue(webpage, WrapperMediaChanges.class);
+        TypeReference tr = new TypeReference<WrapperGenericList<ChangeListItem>>() {
+        };
 
-            TmdbResultsList<ChangedMedia> results = new TmdbResultsList<ChangedMedia>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
-        }
+        return processWrapperList(tr, url, "changes");
     }
 
 }

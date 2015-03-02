@@ -21,8 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
 import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
@@ -37,6 +37,7 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import java.io.IOException;
@@ -112,9 +113,11 @@ public class TmdbPeople extends AbstractMethod {
     /**
      * Get the TV credits for a specific person id.
      *
-     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     * To get the expanded details for each record, call the /credit method with
+     * the provided credit_id.
      *
-     * This will provide details about which episode and/or season the credit is for.
+     * This will provide details about which episode and/or season the credit is
+     * for.
      *
      * @param personId
      * @param language
@@ -142,9 +145,11 @@ public class TmdbPeople extends AbstractMethod {
     /**
      * Get the combined (movie and TV) credits for a specific person id.
      *
-     * To get the expanded details for each TV record, call the /credit method with the provided credit_id.
+     * To get the expanded details for each TV record, call the /credit method
+     * with the provided credit_id.
      *
-     * This will provide details about which episode and/or season the credit is for.
+     * This will provide details about which episode and/or season the credit is
+     * for.
      *
      * @param personId
      * @param language
@@ -217,7 +222,8 @@ public class TmdbPeople extends AbstractMethod {
     /**
      * Get the images that have been tagged with a specific person id.
      *
-     * We return all of the image results with a media object mapped for each image.
+     * We return all of the image results with a media object mapped for each
+     * image.
      *
      * @param personId
      * @param page
@@ -254,18 +260,31 @@ public class TmdbPeople extends AbstractMethod {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
-     * @param persondId
+     * @param personId
      * @param startDate
      * @param endDate
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public TmdbResultsList<Person> getPersonChanges(int persondId, String startDate, String endDate) throws MovieDbException {
-        throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Not done");
+    public WrapperChanges getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, personId);
+        parameters.add(Param.START_DATE, startDate);
+        parameters.add(Param.END_DATE, endDate);
+
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.CHANGES).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, WrapperChanges.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person changes", url, ex);
+        }
     }
 
     /**

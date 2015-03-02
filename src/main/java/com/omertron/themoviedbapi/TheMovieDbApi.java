@@ -50,7 +50,6 @@ import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model.change.ChangedMedia;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model.person.Person;
@@ -60,6 +59,7 @@ import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model2.authentication.TokenSession;
+import com.omertron.themoviedbapi.model2.change.ChangeListItem;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model2.company.Company;
@@ -529,7 +529,7 @@ public class TheMovieDbApi {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsList<ChangedMedia> getMovieChangeList(int page, String startDate, String endDate) throws MovieDbException {
+    public List<ChangeListItem> getMovieChangeList(int page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.MOVIE, page, startDate, endDate);
     }
 
@@ -544,7 +544,7 @@ public class TheMovieDbApi {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsList<ChangedMedia> getTvChangeList(int page, String startDate, String endDate) throws MovieDbException {
+    public List<ChangeListItem> getTvChangeList(int page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.TV, page, startDate, endDate);
     }
 
@@ -559,7 +559,7 @@ public class TheMovieDbApi {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsList<ChangedMedia> getPersonChangeList(int page, String startDate, String endDate) throws MovieDbException {
+    public List<ChangeListItem> getPersonChangeList(int page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.PERSON, page, startDate, endDate);
     }
     //</editor-fold>

@@ -17,30 +17,33 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.model2.change;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 
-public class WrapperChanges extends AbstractWrapper{
+public class ChangeListItem extends AbstractJsonMapping {
 
-    @JsonProperty("changes")
-    private List<ChangeKeyItem> changedItems = new ArrayList<ChangeKeyItem>();
+    private static final long serialVersionUID = 1L;
 
-    public List<ChangeKeyItem> getChangedItems() {
-        return changedItems;
+    @JsonProperty("id")
+    private int id;
+    @JsonProperty("adult")
+    private boolean adult;
+
+    public int getId() {
+        return id;
     }
 
-    public void setChangedItems(List<ChangeKeyItem> changes) {
-        this.changedItems = changes;
+    public boolean isAdult() {
+        return adult;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
     }
 }

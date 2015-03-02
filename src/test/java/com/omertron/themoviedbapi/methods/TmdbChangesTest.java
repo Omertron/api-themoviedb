@@ -21,9 +21,9 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.change.ChangedMedia;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.model2.change.ChangeListItem;
 import com.omertron.themoviedbapi.tools.MethodBase;
+import java.util.List;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import org.junit.BeforeClass;
@@ -60,8 +60,8 @@ public class TmdbChangesTest extends AbstractTests {
     @Test
     public void testGetMovieChangesList() throws MovieDbException {
         LOG.info("getMovieChangesList");
-        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.MOVIE, null, null, null);
-        assertFalse("No movie changes.", result.getResults().isEmpty());
+        List<ChangeListItem> result = instance.getChangeList(MethodBase.MOVIE, null, null, null);
+        assertFalse("No movie changes.", result.isEmpty());
     }
 
     /**
@@ -72,8 +72,8 @@ public class TmdbChangesTest extends AbstractTests {
     @Ignore("Not ready yet")
     public void testGetPersonChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
-        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
-        assertFalse("No Person changes.", result.getResults().isEmpty());
+        List<ChangeListItem> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
+        assertFalse("No Person changes.", result.isEmpty());
     }
 
     /**
@@ -84,7 +84,7 @@ public class TmdbChangesTest extends AbstractTests {
     @Ignore("Not ready yet")
     public void testGetTVChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
-        TmdbResultsList<ChangedMedia> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
-        assertFalse("No TV changes.", result.getResults().isEmpty());
+        List<ChangeListItem> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
+        assertFalse("No TV changes.", result.isEmpty());
     }
 }
