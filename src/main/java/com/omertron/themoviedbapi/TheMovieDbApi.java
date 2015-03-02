@@ -19,7 +19,10 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.omertron.themoviedbapi.enumeration.ExternalSource;
 import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.omertron.themoviedbapi.enumeration.SearchType;
+import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
 import com.omertron.themoviedbapi.methods.TmdbCertifications;
@@ -39,40 +42,37 @@ import com.omertron.themoviedbapi.methods.TmdbPeople;
 import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
-import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model.Certification;
+import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.MovieList;
+import com.omertron.themoviedbapi.model.ReleaseInfo;
+import com.omertron.themoviedbapi.model.Translation;
+import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.model.change.ChangedMedia;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
+import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.FindResults;
+import com.omertron.themoviedbapi.model2.StatusCode;
+import com.omertron.themoviedbapi.model2.account.Account;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
+import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
+import com.omertron.themoviedbapi.model2.authentication.TokenSession;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.config.Configuration;
-import com.omertron.themoviedbapi.model2.discover.Discover;
-import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model2.config.JobDepartment;
-import com.omertron.themoviedbapi.model.keyword.Keyword;
-import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
-import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model2.discover.Discover;
 import com.omertron.themoviedbapi.model2.list.ListItem;
-import com.omertron.themoviedbapi.model.MovieList;
-import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model2.review.Review;
-import com.omertron.themoviedbapi.model2.StatusCode;
-import com.omertron.themoviedbapi.enumeration.ExternalSource;
-import com.omertron.themoviedbapi.enumeration.SearchType;
-import com.omertron.themoviedbapi.enumeration.SortBy;
-import com.omertron.themoviedbapi.model2.FindResults;
+import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.network.Network;
 import com.omertron.themoviedbapi.model2.person.CreditInfo;
-import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
-import com.omertron.themoviedbapi.model2.authentication.TokenSession;
-import com.omertron.themoviedbapi.model.Translation;
-import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
-import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -1155,7 +1155,7 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="People">
 
-    null;
+    //TODO: Methods here
 
 
     //</editor-fold>

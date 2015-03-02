@@ -70,7 +70,7 @@ public class TmdbConfigurationTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetConfig() throws MovieDbException {
         LOG.info("getConfig");
         Configuration result = instance.getConfig();
@@ -88,7 +88,7 @@ public class TmdbConfigurationTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testCreateImageUrl() throws MovieDbException {
         LOG.info("createImageUrl");
         Configuration config = instance.getConfig();
@@ -102,7 +102,7 @@ public class TmdbConfigurationTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetJobs() throws MovieDbException {
         LOG.info("getJobs");
         TmdbResultsList<JobDepartment> result = instance.getJobs();

@@ -66,7 +66,7 @@ public class TmdbDiscoverTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetDiscoverMovie() throws MovieDbException {
         LOG.info("getDiscoverMovie");
         Discover discover = new Discover();
