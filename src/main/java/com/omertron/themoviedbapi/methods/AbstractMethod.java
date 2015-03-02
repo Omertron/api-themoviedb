@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.list.UserList;
@@ -79,7 +79,11 @@ public class AbstractMethod {
     }
 
     protected static TypeReference getTypeReference(Class aClass) {
-        return TYPE_REFS.get(aClass);
+        if (TYPE_REFS.containsKey(aClass)) {
+            return TYPE_REFS.get(aClass);
+        } else {
+            throw new RuntimeException("Class type reference for '" + aClass.getSimpleName() + "' not found!");
+        }
     }
 
     /**

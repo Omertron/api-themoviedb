@@ -47,7 +47,6 @@ import org.junit.Test;
  */
 public class TmdbSearchTest extends AbstractTests {
 
-    // API
     private static TmdbSearch instance;
     private static final String COMPANY_NAME = "Marvel Studios";
 
