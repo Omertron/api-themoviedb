@@ -90,11 +90,11 @@ Movies
 Networks (Done)
 /network/{id} This method is used to retrieve the basic information about a TV network.
 
-People
+People (Done)
 /person/{id} Get the general person information for a specific id
 /person/{id}/movie_credits Get the movie credits for a specific person id.
 /person/{id}/tv_credits Get the TV credits for a specific person id.
-*** /person/{id}/combined_credits Get the combined (movie and TV) credits for a specific person id.
+/person/{id}/combined_credits Get the combined (movie and TV) credits for a specific person id.
 /person/{id}/external_ids Get the external ids for a specific person id.
 /person/{id}/images Get the images for a specific person id.
 /person/{id}/tagged_images Get the images that have been tagged with a specific person id
