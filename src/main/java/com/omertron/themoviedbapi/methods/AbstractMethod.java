@@ -22,6 +22,11 @@ package com.omertron.themoviedbapi.methods;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.collection.Collection;
+import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
@@ -60,6 +65,16 @@ public class AbstractMethod {
         TYPE_REFS.put(TVBasic.class, new TypeReference<WrapperGenericList<TVBasic>>() {
         });
         TYPE_REFS.put(UserList.class, new TypeReference<WrapperGenericList<UserList>>() {
+        });
+        TYPE_REFS.put(Company.class, new TypeReference<WrapperGenericList<Company>>() {
+        });
+        TYPE_REFS.put(Collection.class, new TypeReference<WrapperGenericList<Collection>>() {
+        });
+        TYPE_REFS.put(Keyword.class, new TypeReference<WrapperGenericList<Keyword>>() {
+        });
+        TYPE_REFS.put(MovieDb.class, new TypeReference<WrapperGenericList<MovieDb>>() {
+        });
+        TYPE_REFS.put(Person.class, new TypeReference<WrapperGenericList<Person>>() {
         });
     }
 
