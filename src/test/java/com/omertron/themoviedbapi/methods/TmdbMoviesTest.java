@@ -20,14 +20,19 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
+import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
+import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model2.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model2.movie.Translation;
 import com.omertron.themoviedbapi.model2.movie.Video;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
+import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
+import com.omertron.themoviedbapi.model2.change.ChangeListItem;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.media.MediaCreditCast;
@@ -35,9 +40,15 @@ import com.omertron.themoviedbapi.model2.media.MediaCreditList;
 import com.omertron.themoviedbapi.model2.media.MediaState;
 import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -331,7 +342,7 @@ public class TmdbMoviesTest extends AbstractTests {
         for (TestID test : FILM_IDS) {
             TmdbResultsList<UserList> result = instance.getMovieLists(test.getTmdb(), page, language, appendToResponse);
             assertFalse("Empty list", result.isEmpty());
-            assertTrue(result.getTotalResults()>0);
+            assertTrue(result.getTotalResults() > 0);
         }
     }
 
@@ -343,15 +354,27 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetMovieChanges() throws MovieDbException {
         LOG.info("getMovieChanges");
-
-        String startDate = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDate = sdf.format(DateUtils.addDays(new Date(), -14));
         String endDate = "";
+        int maxCheck = 5;
 
-        for (TestID test : FILM_IDS) {
-            String result = instance.getMovieChanges(test.getTmdb(), startDate, endDate);
+        TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
+        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
+        LOG.info("Found {} person changes to check", changeList.size());
+
+        int count = 1;
+        WrapperChanges result;
+        for (ChangeListItem item : changeList) {
+            result = instance.getMovieChanges(item.getId(), startDate, endDate);
+            for (ChangeKeyItem ci : result.getChangedItems()) {
+                assertNotNull("Null changes", ci);
+            }
+
+            if (count++ > maxCheck) {
+                break;
+            }
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -365,10 +388,9 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer rating = new Random().nextInt(10) + 1;
 
         for (TestID test : FILM_IDS) {
-            boolean result = instance.postMovieRating(getSessionId(), test.getTmdb(), rating);
+            StatusCode result = instance.postMovieRating(test.getTmdb(), rating, getSessionId(), null);
+            assertEquals("failed to post rating", 12, result.getStatusCode());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -380,11 +402,10 @@ public class TmdbMoviesTest extends AbstractTests {
     public void testGetLatestMovie() throws MovieDbException {
         LOG.info("getLatestMovie");
 
-        for (TestID test : FILM_IDS) {
-            MovieDb result = instance.getLatestMovie();
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        MovieDb result = instance.getLatestMovie();
+        assertNotNull("Null movie returned", result);
+        assertTrue("No ID", result.getId() > 0);
+        assertTrue("No title", StringUtils.isNotBlank(result.getTitle()));
     }
 
     /**
@@ -398,11 +419,8 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : FILM_IDS) {
-            TmdbResultsList<MovieDb> result = instance.getUpcoming(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<MovieDb> result = instance.getUpcoming(page, language);
+        assertFalse("No results found", result.isEmpty());
     }
 
     /**
@@ -416,11 +434,8 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : FILM_IDS) {
-            TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(page, language);
+        assertFalse("No results found", result.isEmpty());
     }
 
     /**
@@ -434,11 +449,8 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : FILM_IDS) {
-            TmdbResultsList<MovieDb> result = instance.getPopularMovieList(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<MovieDb> result = instance.getPopularMovieList(page, language);
+        assertFalse("No results found", result.isEmpty());
     }
 
     /**
@@ -452,11 +464,8 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : FILM_IDS) {
-            TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(page, language);
+        assertFalse("No results found", result.isEmpty());
     }
 
 }

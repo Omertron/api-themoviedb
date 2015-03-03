@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model2.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model2.movie.Translation;
@@ -41,6 +42,7 @@ import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
@@ -60,7 +62,6 @@ import org.yamj.api.common.exception.ApiExceptionType;
 public class TmdbMovies extends AbstractMethod {
 
     private static final int RATING_MAX = 10;
-    private static final int POST_SUCCESS_STATUS_CODE = 12;
 
     /**
      * Constructor
@@ -449,36 +450,43 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public String getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
+    public WrapperChanges getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.START_DATE, startDate);
         parameters.add(Param.END_DATE, endDate);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.CHANGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-        return null;
+
+        try {
+            return MAPPER.readValue(webpage, WrapperChanges.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie changes", url, ex);
+        }
     }
 
     /**
      * This method lets users rate a movie.
      *
-     * A valid session id is required.
+     * A valid session id or guest session id is required.
      *
      * @param sessionId
      * @param movieId
      * @param rating
+     * @param guestSessionId
      * @return
      * @throws MovieDbException
      */
-    public boolean postMovieRating(String sessionId, Integer movieId, Integer rating) throws MovieDbException {
+    public StatusCode postMovieRating(int movieId, int rating, String sessionId, String guestSessionId) throws MovieDbException {
         if (rating < 0 || rating > RATING_MAX) {
             throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Rating out of range");
         }
 
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, movieId);
+        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.GUEST_SESSION_ID, guestSessionId);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.RATING).buildUrl(parameters);
 
@@ -488,10 +496,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
-            StatusCode status = MAPPER.readValue(webpage, StatusCode.class);
-            LOG.info("Status: {}", status);
-            int code = status.getStatusCode();
-            return code == POST_SUCCESS_STATUS_CODE;
+            return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to post movie rating", url, ex);
         }

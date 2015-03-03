@@ -37,6 +37,7 @@ public enum Param {
     END_DATE("end_date="),
     EXTERNAL_SOURCE("external_source="),
     FAVORITE("favorite="),
+    GUEST_SESSION_ID("guest_session_id="),
     ID("id="),
     INCLUDE_ALL_MOVIES("include_all_movies="),
     INCLUDE_ADULT("include_adult="),

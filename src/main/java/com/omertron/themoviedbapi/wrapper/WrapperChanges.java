@@ -23,10 +23,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class WrapperChanges extends AbstractWrapper{
+public class WrapperChanges extends AbstractWrapper {
 
     @JsonProperty("changes")
     private List<ChangeKeyItem> changedItems = new ArrayList<ChangeKeyItem>();
@@ -39,8 +37,4 @@ public class WrapperChanges extends AbstractWrapper{
         this.changedItems = changes;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
-    }
 }
