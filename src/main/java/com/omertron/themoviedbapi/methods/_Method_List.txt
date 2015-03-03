@@ -66,7 +66,7 @@ Lists (Done)
 /list/{id}/remove_item This method lets users delete movies from a list that they created. A valid session id is required.
 /list/{id}/clear Clear all of the items within a list. This is a irreversible action and should be treated with caution. A valid session id is required.
 
-Movies
+Movies (Done)
 /movie/{id} Get the basic movie information for a specific movie id.
 /movie/{id}/account_states This method lets a TMDb user account get the status of whether or not the movie has been rated or added to their favourite or movie watch list
 /movie/{id}/alternative_titles Get the alternative titles for a specific movie id.
@@ -105,13 +105,13 @@ People (Done)
 Reviews (Done)
 /review/{id} Get the full details of a review by ID.
 
-Search (Partial - multi search to do)
+Search (Done)
 /search/company Search for companies by name.
 /search/collection Search for collections by name.
 /search/keyword Search for keywords by name.
 /search/list Search for lists by name and description.
 /search/movie Search for movies by title.
-*** /search/multi Search the movie, tv show and person collections with a single query.
+/search/multi Search the movie, tv show and person collections with a single query.
 /search/person Search for people by name.
 /search/tv Search for TV shows by title.
 

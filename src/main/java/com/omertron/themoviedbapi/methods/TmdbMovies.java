@@ -32,6 +32,7 @@ import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.media.MediaCreditList;
 import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -43,6 +44,7 @@ import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
@@ -397,16 +399,19 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public String getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<Review> getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-        return null;
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.REVIEWS).buildUrl(parameters);
+        WrapperGenericList<Review> wrapper = processWrapper(getTypeReference(Review.class), url, "review");
+        TmdbResultsList<Review> results = new TmdbResultsList<Review>(null);
+        results.getResults().addAll(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
     }
 
     /**
