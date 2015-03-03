@@ -21,15 +21,15 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
-import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.StatusCode;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
+import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -140,6 +140,27 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
+     * This method lets a user get the status of whether or not the movie has
+     * been rated or added to their favourite or movie watch list.
+     *
+     * A valid session id is required.
+     *
+     * @param movieId
+     * @param sessionId
+     * @return
+     * @throws MovieDbException
+     */
+    public String getMovieAccountState(int movieId, String sessionId) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.SESSION, sessionId);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+        return null;
+    }
+
+    /**
      * This method is used to retrieve all of the alternative titles we have for
      * a particular movie.
      *
@@ -165,6 +186,24 @@ public class TmdbMovies extends AbstractMethod {
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie alternative titles", url, ex);
         }
+    }
+
+    /**
+     * Get the cast and crew information for a specific movie id.
+     *
+     * @param movieId
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public String getMovieCredits(int movieId, String... appendToResponse) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.APPEND, appendToResponse);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+        return null;
     }
 
     /**
@@ -294,7 +333,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Video> getMovieTrailers(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<Video> getMovieVideos(int movieId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -356,7 +395,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -377,6 +416,28 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
+     * Get the reviews for a particular movie id.
+     *
+     * @param movieId
+     * @param page
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws MovieDbException
+     */
+    public String getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.APPEND, appendToResponse);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+        return null;
+    }
+
+    /**
      * Get the lists that the movie belongs to
      *
      * @param movieId
@@ -386,7 +447,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieList> getMovieLists(int movieId, String language, int page, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<MovieList> getMovieLists(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -407,143 +468,32 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve the newest movie that was added to TMDb.
+     * Get the changes for a specific movie ID.
      *
+     * Changes are grouped by key, and ordered by date in descending order.
+     *
+     * By default, only the last 24 hours of changes are returned.
+     *
+     * The maximum number of days that can be returned in a single request is
+     * 14.
+     *
+     * The language is present on fields that are translatable.
+     *
+     * @param movieId
+     * @param startDate
+     * @param endDate
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getLatestMovie() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl();
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            return MAPPER.readValue(webpage, MovieDb.class);
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest movie", url, ex);
-        }
-    }
-
-    /**
-     * Get the list of upcoming movies.
-     *
-     * This list refreshes every day.
-     *
-     * The maximum number of items this list will include is 100.
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getUpcoming(String language, int page) throws MovieDbException {
+    public String getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.START_DATE, startDate);
+        parameters.add(Param.END_DATE, endDate);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.UPCOMING).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get upcoming movies", url, ex);
-        }
-
-    }
-
-    /**
-     * This method is used to retrieve the movies currently in theatres.
-     *
-     * This is a curated list that will normally contain 100 movies. The default
-     * response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getNowPlayingMovies(String language, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.NOW_PLAYING).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get now playing movies", url, ex);
-        }
-    }
-
-    /**
-     * This method is used to retrieve the daily movie popularity list.
-     *
-     * This list is updated daily. The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getPopularMovieList(String language, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.POPULAR).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get popular movie list", url, ex);
-        }
-    }
-
-    /**
-     * This method is used to retrieve the top rated movies that have over 10
-     * votes on TMDb.
-     *
-     * The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
-     *
-     * @param language
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<MovieDb> getTopRatedMovies(String language, int page) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.PAGE, page);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.TOP_RATED).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
-            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get top rated movies", url, ex);
-        }
+        return null;
     }
 
     /**
@@ -580,6 +530,146 @@ public class TmdbMovies extends AbstractMethod {
             return code == POST_SUCCESS_STATUS_CODE;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to post movie rating", url, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the newest movie that was added to TMDb.
+     *
+     * @return
+     * @throws MovieDbException
+     */
+    public MovieDb getLatestMovie() throws MovieDbException {
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl();
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, MovieDb.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest movie", url, ex);
+        }
+    }
+
+    /**
+     * Get the list of upcoming movies.
+     *
+     * This list refreshes every day.
+     *
+     * The maximum number of items this list will include is 100.
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getUpcoming(Integer page, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.UPCOMING).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
+            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get upcoming movies", url, ex);
+        }
+
+    }
+
+    /**
+     * This method is used to retrieve the movies currently in theatres.
+     *
+     * This is a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.NOW_PLAYING).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
+            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get now playing movies", url, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the daily movie popularity list.
+     *
+     * This list is updated daily. The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getPopularMovieList(Integer page, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.POPULAR).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
+            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get popular movie list", url, ex);
+        }
+    }
+
+    /**
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb.
+     *
+     * The default response will return 20 movies.
+     *
+     * TODO: Implement more than 20 movies
+     *
+     * @param language
+     * @param page
+     * @return
+     * @throws MovieDbException
+     */
+    public TmdbResultsList<MovieDb> getTopRatedMovies(Integer page, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.PAGE, page);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.TOP_RATED).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperMovie wrapper = MAPPER.readValue(webpage, WrapperMovie.class);
+            TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getMovies());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get top rated movies", url, ex);
         }
     }
 

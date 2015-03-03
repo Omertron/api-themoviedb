@@ -22,13 +22,13 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model2.artwork.Artwork;
-import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
+import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.util.List;
@@ -179,14 +179,14 @@ public class TmdbMoviesTest extends AbstractTests {
     }
 
     /**
-     * Test of getMovieTrailers method, of class TheMovieDbApi.
+     * Test of getMovieVideos method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
     @Test
     public void testGetMovieTrailers() throws MovieDbException {
         LOG.info("getMovieTrailers");
-        TmdbResultsList<Video> result = instance.getMovieTrailers(ID_MOVIE_BLADE_RUNNER, "");
+        TmdbResultsList<Video> result = instance.getMovieVideos(ID_MOVIE_BLADE_RUNNER, "");
         assertFalse("Movie trailers missing", result.getResults().isEmpty());
     }
 
@@ -210,7 +210,7 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetSimilarMovies() throws MovieDbException {
         LOG.info("getSimilarMovies");
-        TmdbResultsList<MovieDb> result = instance.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, 0, LANGUAGE_DEFAULT);
         assertTrue("No similar movies found", !result.getResults().isEmpty());
     }
 
@@ -222,7 +222,7 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetMovieLists() throws MovieDbException {
         LOG.info("getMovieLists");
-        TmdbResultsList<MovieList> result = instance.getMovieLists(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, 0);
+        TmdbResultsList<MovieList> result = instance.getMovieLists(ID_MOVIE_BLADE_RUNNER, 0, LANGUAGE_ENGLISH);
         assertNotNull("No results found", result);
         assertTrue("No results found", result.getResults().size() > 0);
     }
@@ -248,7 +248,7 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetUpcoming() throws MovieDbException {
         LOG.info("getUpcoming");
-        TmdbResultsList<MovieDb> result = instance.getUpcoming(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getUpcoming(0, LANGUAGE_DEFAULT);
         assertTrue("No upcoming movies found", !result.getResults().isEmpty());
     }
 
@@ -260,7 +260,7 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
         LOG.info("getNowPlayingMovies");
-        TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(0, LANGUAGE_DEFAULT);
         assertTrue("No now playing movies found", !result.getResults().isEmpty());
     }
 
@@ -272,7 +272,7 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetPopularMovieList() throws MovieDbException {
         LOG.info("getPopularMovieList");
-        TmdbResultsList<MovieDb> result = instance.getPopularMovieList(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getPopularMovieList(0, LANGUAGE_DEFAULT);
         assertTrue("No popular movies found", !result.getResults().isEmpty());
     }
 
@@ -284,14 +284,15 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetTopRatedMovies() throws MovieDbException {
         LOG.info("getTopRatedMovies");
-        TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(LANGUAGE_DEFAULT, 0);
+        TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(0, LANGUAGE_DEFAULT);
         assertTrue("No top rated movies found", !result.getResults().isEmpty());
     }
 
     /**
      * Test of postMovieRating method, of class TheMovieDbApi.
      *
-     * TODO: Cannot be tested without a HTTP authorisation: http://help.themoviedb.org/kb/api/user-authentication /**
+     * TODO: Cannot be tested without a HTTP authorisation:
+     * http://help.themoviedb.org/kb/api/user-authentication /**
      *
      * @throws MovieDbException
      */
