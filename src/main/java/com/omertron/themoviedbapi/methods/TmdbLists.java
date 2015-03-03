@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.ListItemStatus;
-import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model.MovieDbListStatus;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.list.ListItem;
@@ -130,8 +130,7 @@ public class TmdbLists extends AbstractMethod {
     }
 
     /**
-     * This method lets users delete a list that they created. A valid session
-     * id is required.
+     * This method lets users delete a list that they created. A valid session id is required.
      *
      * @param sessionId
      * @param listId
@@ -219,8 +218,7 @@ public class TmdbLists extends AbstractMethod {
      *
      * This is a irreversible action and should be treated with caution.
      *
-     * A valid session id is required. A call without confirm=true will return
-     * status code 29.
+     * A valid session id is required. A call without confirm=true will return status code 29.
      *
      * @param sessionId
      * @param listId

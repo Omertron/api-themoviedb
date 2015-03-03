@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.movie;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,6 +40,8 @@ public class ReleaseInfo extends AbstractJsonMapping {
     private String certification;
     @JsonProperty("release_date")
     private String releaseDate;
+    @JsonProperty("primary")
+    private boolean primary;
 
     public String getCertification() {
         return certification;
@@ -65,6 +67,14 @@ public class ReleaseInfo extends AbstractJsonMapping {
         this.releaseDate = releaseDate;
     }
 
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(boolean primary) {
+        this.primary = primary;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ReleaseInfo) {
@@ -73,6 +83,7 @@ public class ReleaseInfo extends AbstractJsonMapping {
                     .append(country, other.country)
                     .append(certification, other.certification)
                     .append(releaseDate, other.releaseDate)
+                    .append(primary, other.primary)
                     .isEquals();
         } else {
             return false;
@@ -85,6 +96,7 @@ public class ReleaseInfo extends AbstractJsonMapping {
                 .append(country)
                 .append(certification)
                 .append(releaseDate)
+                .append(primary)
                 .toHashCode();
     }
 }

@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
-import com.omertron.themoviedbapi.model.MovieDb;
+import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model2.media.MediaBasic;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.collection.Collection;

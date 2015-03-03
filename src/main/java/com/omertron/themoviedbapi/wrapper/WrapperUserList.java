@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.MovieList;
+import com.omertron.themoviedbapi.model2.list.UserList;
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,17 +28,17 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class WrapperMovieList extends AbstractWrapperAll implements Serializable {
+public class WrapperUserList extends AbstractWrapperAll implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("results")
-    private List<MovieList> movieList;
+    private List<UserList> userList;
 
-    public List<MovieList> getMovieList() {
-        return movieList;
+    public List<UserList> getUserList() {
+        return userList;
     }
 
-    public void setMovieList(List<MovieList> movieList) {
-        this.movieList = movieList;
+    public void setUserList(List<UserList> userList) {
+        this.userList = userList;
     }
 }

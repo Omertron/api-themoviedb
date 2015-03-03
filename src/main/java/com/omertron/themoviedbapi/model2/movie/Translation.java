@@ -17,103 +17,64 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.movie;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * Video specific information
- *
  * @author Stuart
  */
-public class Video extends AbstractJsonMapping {
+public class Translation extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("id")
-    private String id;
+    /*
+     * Properties
+     */
+    @JsonProperty("english_name")
+    private String englishName;
     @JsonProperty("iso_639_1")
-    private String language;
-    @JsonProperty("key")
-    private String key;
+    private String isoCode;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("site")
-    private String site;
-    @JsonProperty("size")
-    private String size;
-    @JsonProperty("type")
-    private String type;
 
-    public String getId() {
-        return id;
+    public String getEnglishName() {
+        return englishName;
+    }
+
+    public String getIsoCode() {
+        return isoCode;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getSize() {
-        return size;
+    public void setEnglishName(String englishName) {
+        this.englishName = englishName;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setIsoCode(String isoCode) {
+        this.isoCode = isoCode;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Video) {
-            final Video other = (Video) obj;
+        if (obj instanceof Translation) {
+            final Translation other = (Translation) obj;
             return new EqualsBuilder()
-                    .append(id, other.id)
                     .append(name, other.name)
-                    .append(size, other.size)
-                    .append(key, other.key)
-                    .append(language, other.language)
+                    .append(englishName, other.englishName)
+                    .append(isoCode, other.isoCode)
                     .isEquals();
         } else {
             return false;
@@ -123,12 +84,14 @@ public class Video extends AbstractJsonMapping {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(id)
+                .append(englishName)
+                .append(isoCode)
                 .append(name)
-                .append(size)
-                .append(key)
-                .append(site)
-                .append(language)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 }

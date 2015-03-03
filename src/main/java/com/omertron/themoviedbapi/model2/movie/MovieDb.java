@@ -17,8 +17,9 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.movie;
 
+import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.person.PersonCast;
 import com.omertron.themoviedbapi.model.person.PersonCrew;
@@ -26,14 +27,14 @@ import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
+import com.omertron.themoviedbapi.wrapper.WrapperUserList;
 import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
 import com.omertron.themoviedbapi.wrapper.WrapperReviews;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
@@ -120,7 +121,7 @@ public class MovieDb extends AbstractJsonMapping {
     @JsonProperty("reviews")
     private WrapperReviews reviews;
     @JsonProperty("lists")
-    private WrapperMovieList lists;
+    private WrapperUserList lists;
     @JsonProperty("video")
     private Boolean video = null;
 
@@ -373,8 +374,8 @@ public class MovieDb extends AbstractJsonMapping {
         return similarMovies.getMovies();
     }
 
-    public List<MovieList> getLists() {
-        return lists.getMovieList();
+    public List<UserList> getLists() {
+        return lists.getUserList();
     }
 
     public List<Review> getReviews() {
@@ -415,7 +416,7 @@ public class MovieDb extends AbstractJsonMapping {
         this.similarMovies = similarMovies;
     }
 
-    public void setLists(WrapperMovieList lists) {
+    public void setLists(WrapperUserList lists) {
         this.lists = lists;
     }
 
