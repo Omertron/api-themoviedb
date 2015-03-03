@@ -235,6 +235,8 @@ public class TmdbPeople extends AbstractMethod {
     public TmdbResultsList<ArtworkMedia> getPersonTaggedImages(int personId, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
+        parameters.add(Param.PAGE, page);
+        parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.TAGGED_IMAGES).buildUrl(parameters);
 

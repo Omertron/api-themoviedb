@@ -43,15 +43,14 @@ import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
-import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
+import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.model2.FindResults;
 import com.omertron.themoviedbapi.model2.MediaBasic;
 import com.omertron.themoviedbapi.model2.StatusCode;
@@ -67,6 +66,7 @@ import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.config.Configuration;
 import com.omertron.themoviedbapi.model2.config.JobDepartment;
 import com.omertron.themoviedbapi.model2.discover.Discover;
+import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
@@ -1390,7 +1390,7 @@ public class TheMovieDbApi {
             Integer searchYear,
             Integer primaryReleaseYear,
             SearchType searchType) throws MovieDbException {
-        return tmdbSearch.searchMovie(query, page, language, includeAdult, searchYear, primaryReleaseYear, SearchType.PHRASE);
+        return tmdbSearch.searchMovie(query, page, language, includeAdult, searchYear, primaryReleaseYear, searchType);
     }
 
     /**
