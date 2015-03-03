@@ -20,11 +20,16 @@
 package com.omertron.themoviedbapi.model2.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model2.MediaBasic;
 import java.util.List;
 
 /**
  * @author stuart.boston
+ * @param <T>
  */
 public class PersonCredits<T> extends AbstractJsonMapping {
 
@@ -32,9 +37,9 @@ public class PersonCredits<T> extends AbstractJsonMapping {
 
     @JsonProperty("id")
     private int id;
-    @JsonProperty("cast")
+//    @JsonProperty("cast")
     private List<T> cast;
-    @JsonProperty("crew")
+//    @JsonProperty("crew")
     private List<T> crew;
 
     public int getId() {
@@ -49,6 +54,17 @@ public class PersonCredits<T> extends AbstractJsonMapping {
         return cast;
     }
 
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "media_type",
+            defaultImpl = MediaBasic.class
+    )
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = CreditMovieBasic.class, name = "movie"),
+        @JsonSubTypes.Type(value = CreditTVBasic.class, name = "tv")
+    })
+    @JsonSetter("cast")
     public void setCast(List<T> cast) {
         this.cast = cast;
     }
@@ -57,6 +73,17 @@ public class PersonCredits<T> extends AbstractJsonMapping {
         return crew;
     }
 
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.PROPERTY,
+            property = "media_type",
+            defaultImpl = MediaBasic.class
+    )
+    @JsonSubTypes({
+        @JsonSubTypes.Type(value = CreditMovieBasic.class, name = "movie"),
+        @JsonSubTypes.Type(value = CreditTVBasic.class, name = "tv")
+    })
+    @JsonSetter("crew")
     public void setCrew(List<T> crew) {
         this.crew = crew;
     }

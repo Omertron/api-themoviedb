@@ -27,6 +27,7 @@ import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model2.change.ChangeListItem;
+import com.omertron.themoviedbapi.model2.person.CreditBasic;
 import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
 import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
@@ -48,7 +49,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -161,13 +161,12 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<CreditTVBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits<? extends CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
             assertFalse("No crew", result.getCrew().isEmpty());
         }
-        fail("Not working");
     }
 
     /**
@@ -244,7 +243,7 @@ public class TmdbPeopleTest extends AbstractTests {
         for (ChangeListItem item : changeList) {
             result = instance.getPersonChanges(item.getId(), startDate, endDate);
             for (ChangeKeyItem ci : result.getChangedItems()) {
-                assertNotNull("Null changes",ci);
+                assertNotNull("Null changes", ci);
             }
 
             if (count++ > maxCheck) {

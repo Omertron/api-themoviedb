@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model2.person.CreditBasic;
 import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
 import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
@@ -167,7 +168,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, new TypeReference<PersonCredits<CreditTVBasic>>() {
+            return MAPPER.readValue(webpage, new TypeReference<PersonCredits<? extends CreditBasic>>() {
             });
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);

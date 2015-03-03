@@ -41,7 +41,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperMultiSearch;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -215,7 +214,6 @@ public class TmdbSearch extends AbstractMethod {
         try {
             WrapperMultiSearch wrapper = MAPPER.readValue(webpage, WrapperMultiSearch.class);
             TmdbResultsList<MediaBasic> results = new TmdbResultsList<MediaBasic>(null);
-            List<? extends MediaBasic> x = wrapper.getResults();
             results.getResults().addAll(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
