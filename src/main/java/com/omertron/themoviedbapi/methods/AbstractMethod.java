@@ -23,12 +23,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.MovieDb;
-import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
+import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -56,7 +56,7 @@ public class AbstractMethod {
     // Jackson JSON configuration
     protected static final ObjectMapper MAPPER = new ObjectMapper();
     // Logger
-    protected static final Logger LOG = LoggerFactory.getLogger(TmdbAccount.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(AbstractMethod.class);
 
     private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<Class, TypeReference>();
 
@@ -81,14 +81,6 @@ public class AbstractMethod {
         });
     }
 
-    protected static TypeReference getTypeReference(Class aClass) {
-        if (TYPE_REFS.containsKey(aClass)) {
-            return TYPE_REFS.get(aClass);
-        } else {
-            throw new RuntimeException("Class type reference for '" + aClass.getSimpleName() + "' not found!");
-        }
-    }
-
     /**
      * Default constructor for the methods
      *
@@ -98,6 +90,21 @@ public class AbstractMethod {
     public AbstractMethod(String apiKey, HttpTools httpTools) {
         this.apiKey = apiKey;
         this.httpTools = httpTools;
+    }
+
+    /**
+     * Helper function to get a pre-generated TypeReference for a class
+     *
+     * @param aClass
+     * @return
+     * @throws MovieDbException
+     */
+    protected static TypeReference getTypeReference(Class aClass) throws MovieDbException {
+        if (TYPE_REFS.containsKey(aClass)) {
+            return TYPE_REFS.get(aClass);
+        } else {
+            throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Class type reference for '" + aClass.getSimpleName() + "' not found!");
+        }
     }
 
     /**

@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.model2.config;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
@@ -203,7 +202,7 @@ public class Configuration extends AbstractJsonMapping {
         StringBuilder sb = new StringBuilder(getBaseUrl());
         sb.append(requiredSize);
         sb.append(imagePath);
-        
+
         try {
             return new URL(sb.toString());
         } catch (MalformedURLException ex) {

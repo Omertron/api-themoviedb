@@ -139,7 +139,7 @@ public class TmdbPeople extends AbstractMethod {
             return MAPPER.readValue(webpage, new TypeReference<PersonCredits<CreditTVBasic>>() {
             });
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person TV credits", url, ex);
         }
     }
 
@@ -171,7 +171,7 @@ public class TmdbPeople extends AbstractMethod {
             return MAPPER.readValue(webpage, new TypeReference<PersonCredits<? extends CreditBasic>>() {
             });
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person combined credits", url, ex);
         }
     }
 
@@ -192,7 +192,7 @@ public class TmdbPeople extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, ExternalID.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person external IDs", url, ex);
         }
     }
 
@@ -315,7 +315,7 @@ public class TmdbPeople extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get tagged images", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person popular", url, ex);
         }
     }
 

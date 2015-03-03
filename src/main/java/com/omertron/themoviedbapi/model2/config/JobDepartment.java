@@ -19,10 +19,8 @@
  */
 package com.omertron.themoviedbapi.model2.config;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-
 import java.util.List;
 
 public class JobDepartment extends AbstractJsonMapping {
