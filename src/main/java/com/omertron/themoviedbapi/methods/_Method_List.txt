@@ -40,8 +40,8 @@ Discover (Done)
 /discover/movie Discover movies by different types of data like average rating, number of votes, genres and certifications.
 /discover/tv Discover TV shows by different types of data like average rating, number of votes, genres, the network they aired on and air dates.
 
-Find
-*** /find/{id} The find method makes it easy to search for objects in our database by an external id.
+Find (Done)
+/find/{id} The find method makes it easy to search for objects in our database by an external id.
 
 Genres (Done)
 /genre/movie/list Get the list of movie genres.

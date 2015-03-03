@@ -1064,7 +1064,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public String getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<Review> getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getMovieReviews(movieId, page, language, appendToResponse);
     }
 
