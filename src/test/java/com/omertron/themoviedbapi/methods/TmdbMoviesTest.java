@@ -21,23 +21,19 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
+import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,8 +45,7 @@ import org.junit.Test;
 public class TmdbMoviesTest extends AbstractTests {
 
     private static TmdbMovies instance;
-    private static final int ID_MOVIE_BLADE_RUNNER = 78;
-    private static final int ID_MOVIE_THE_AVENGERS = 24428;
+    private static final List<TestID> FILM_IDS = new ArrayList<TestID>();
 
     public TmdbMoviesTest() {
     }
@@ -60,273 +55,82 @@ public class TmdbMoviesTest extends AbstractTests {
         doConfiguration();
         instance = new TmdbMovies(getApiKey(), getHttpTools());
 
-    }
+        FILM_IDS.add(new TestID("Blade Runner", "", 78));
+        FILM_IDS.add(new TestID("Jupiter Ascending", "tt1617661", 76757));
+        FILM_IDS.add(new TestID("Lucy", "tt2872732", 240832));
 
-    @AfterClass
-    public static void tearDownClass() {
     }
 
     /**
-     * Test of getMovieInfo method, of class TheMovieDbApi.
+     * Test of getMovieInfo method, of class TmdbMovies.
      *
-     * @throws MovieDbException
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetMovieInfo() throws MovieDbException {
         LOG.info("getMovieInfo");
-        MovieDb result = instance.getMovieInfo(ID_MOVIE_BLADE_RUNNER, LANGUAGE_ENGLISH, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
-        assertEquals("Incorrect movie information", "Blade Runner", result.getOriginalTitle());
+
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            MovieDb result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getMovieInfoImdb method, of class TheMovieDbApi.
+     * Test of getMovieInfoImdb method, of class TmdbMovies.
      *
-     * @throws MovieDbException
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetMovieInfoImdb() throws MovieDbException {
         LOG.info("getMovieInfoImdb");
-        MovieDb result = instance.getMovieInfoImdb("tt0076759", "en-US");
-        assertTrue("Error getting the movie from IMDB ID", result.getId() == 11);
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            MovieDb result = instance.getMovieInfoImdb(test.getImdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getMovieAlternativeTitles method, of class TheMovieDbApi.
+     * Test of getMovieAccountState method, of class TmdbMovies.
      *
-     * @throws MovieDbException
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieAccountState() throws MovieDbException {
+        LOG.info("getMovieAccountState");
+
+        for (TestID test : FILM_IDS) {
+            String result = instance.getMovieAccountState(test.getTmdb(), getSessionId());
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieAlternativeTitles method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
     public void testGetMovieAlternativeTitles() throws MovieDbException {
         LOG.info("getMovieAlternativeTitles");
+
         String country = "";
-        TmdbResultsList<AlternativeTitle> result = instance.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country, "casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
-        assertTrue("No alternative titles found", result.getResults().size() > 0);
+        String[] appendToResponse = null;
 
-        country = "US";
-        result = instance.getMovieAlternativeTitles(ID_MOVIE_BLADE_RUNNER, country);
-        assertTrue("No alternative titles found", result.getResults().size() > 0);
-
-    }
-
-    /**
-     * Test of getMovieCredits method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieCasts() throws MovieDbException {
-        LOG.info("getMovieCasts");
-        /*
-         TmdbResultsList<PersonMovieOld> people = instance.getMovieCredits(ID_MOVIE_BLADE_RUNNER, "alternative_titles,casts,images,keywords,releases,trailers,translations,similar_movies,reviews,lists");
-         assertTrue("No cast information", people.getResults().size() > 0);
-
-         String name1 = "Harrison Ford";
-         String name2 = "Charles Knode";
-         boolean foundName1 = Boolean.FALSE;
-         boolean foundName2 = Boolean.FALSE;
-
-         for (PersonMovieOld person : people.getResults()) {
-         if (!foundName1 && person.getName().equalsIgnoreCase(name1)) {
-         foundName1 = Boolean.TRUE;
-         }
-
-         if (!foundName2 && person.getName().equalsIgnoreCase(name2)) {
-         foundName2 = Boolean.TRUE;
-         }
-         }
-         assertTrue("Couldn't find " + name1, foundName1);
-         assertTrue("Couldn't find " + name2, foundName2);
-         */
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<AlternativeTitle> result = instance.getMovieAlternativeTitles(test.getTmdb(), country, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
-
-    }
-
-    /**
-     * Test of getMovieImages method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieImages() throws MovieDbException {
-        LOG.info("getMovieImages");
-        String language = "";
-        TmdbResultsList<Artwork> result = instance.getMovieImages(ID_MOVIE_BLADE_RUNNER, language);
-        assertFalse("No artwork found", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getMovieKeywords method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieKeywords() throws MovieDbException {
-        LOG.info("getMovieKeywords");
-        TmdbResultsList<Keyword> result = instance.getMovieKeywords(ID_MOVIE_BLADE_RUNNER);
-        assertFalse("No keywords found", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getMovieReleaseInfo method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieReleaseInfo() throws MovieDbException {
-        LOG.info("getMovieReleaseInfo");
-        TmdbResultsList<ReleaseInfo> result = instance.getMovieReleaseInfo(ID_MOVIE_BLADE_RUNNER, "");
-        assertFalse("Release information missing", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getMovieVideos method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieTrailers() throws MovieDbException {
-        LOG.info("getMovieTrailers");
-        TmdbResultsList<Video> result = instance.getMovieVideos(ID_MOVIE_BLADE_RUNNER, "");
-        assertFalse("Movie trailers missing", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getMovieTranslations method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieTranslations() throws MovieDbException {
-        LOG.info("getMovieTranslations");
-        TmdbResultsList<Translation> result = instance.getMovieTranslations(ID_MOVIE_BLADE_RUNNER);
-        assertFalse("No translations found", result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getSimilarMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetSimilarMovies() throws MovieDbException {
-        LOG.info("getSimilarMovies");
-        TmdbResultsList<MovieDb> result = instance.getSimilarMovies(ID_MOVIE_BLADE_RUNNER, 0, LANGUAGE_DEFAULT);
-        assertTrue("No similar movies found", !result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getMovieLists method, of class TmdbMovie.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetMovieLists() throws MovieDbException {
-        LOG.info("getMovieLists");
-        TmdbResultsList<MovieList> result = instance.getMovieLists(ID_MOVIE_BLADE_RUNNER, 0, LANGUAGE_ENGLISH);
-        assertNotNull("No results found", result);
-        assertTrue("No results found", result.getResults().size() > 0);
-    }
-
-    /**
-     * Test of getLatestMovie method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetLatestMovie() throws MovieDbException {
-        LOG.info("getLatestMovie");
-        MovieDb result = instance.getLatestMovie();
-        assertTrue("No latest movie found", result != null);
-        assertTrue("No latest movie found", result.getId() > 0);
-    }
-
-    /**
-     * Test of getUpcoming method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetUpcoming() throws MovieDbException {
-        LOG.info("getUpcoming");
-        TmdbResultsList<MovieDb> result = instance.getUpcoming(0, LANGUAGE_DEFAULT);
-        assertTrue("No upcoming movies found", !result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getNowPlayingMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetNowPlayingMovies() throws MovieDbException {
-        LOG.info("getNowPlayingMovies");
-        TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(0, LANGUAGE_DEFAULT);
-        assertTrue("No now playing movies found", !result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getPopularMovieList method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetPopularMovieList() throws MovieDbException {
-        LOG.info("getPopularMovieList");
-        TmdbResultsList<MovieDb> result = instance.getPopularMovieList(0, LANGUAGE_DEFAULT);
-        assertTrue("No popular movies found", !result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of getTopRatedMovies method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testGetTopRatedMovies() throws MovieDbException {
-        LOG.info("getTopRatedMovies");
-        TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(0, LANGUAGE_DEFAULT);
-        assertTrue("No top rated movies found", !result.getResults().isEmpty());
-    }
-
-    /**
-     * Test of postMovieRating method, of class TheMovieDbApi.
-     *
-     * TODO: Cannot be tested without a HTTP authorisation:
-     * http://help.themoviedb.org/kb/api/user-authentication /**
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testMovieRating() throws MovieDbException {
-        LOG.info("postMovieRating");
-        Integer movieID = 68724;
-        Integer rating = new Random().nextInt(10) + 1;
-
-        boolean wasPosted = instance.postMovieRating(getSessionId(), movieID, rating);
-        assertTrue("Failed to post rating", wasPosted);
-
-        try {
-            // Make sure that we pause long enough for the record to by updated
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
-            // Ignore the exception and move on
-        }
-
-        // get all rated movies
-        TmdbAccount account = new TmdbAccount(getApiKey(), getHttpTools());
-        List<MovieBasic> ratedMovies = account.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
-        assertTrue(ratedMovies.size() > 0);
-
-        // make sure that we find the movie and it is rated correctly
-        boolean foundMovie = false;
-        for (MovieBasic movie : ratedMovies) {
-            if (movie.getId() == movieID) {
-                assertEquals("Incorrect rating", movie.getRating(), (float) rating, 0);
-                foundMovie = true;
-                break;
-            }
-        }
-        assertTrue("Movie not found!", foundMovie);
     }
 
     /**
@@ -337,6 +141,203 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testGetMovieCredits() throws MovieDbException {
         LOG.info("getMovieCredits");
+
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            String result = instance.getMovieCredits(test.getTmdb(), appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieCasts method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieCasts() throws MovieDbException {
+        LOG.info("getMovieCasts");
+
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<Person> result = instance.getMovieCasts(test.getTmdb(), appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieImages method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieImages() throws MovieDbException {
+        LOG.info("getMovieImages");
+
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<Artwork> result = instance.getMovieImages(test.getTmdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieKeywords method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieKeywords() throws MovieDbException {
+        LOG.info("getMovieKeywords");
+
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<Keyword> result = instance.getMovieKeywords(test.getTmdb(), appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieReleaseInfo method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieReleaseInfo() throws MovieDbException {
+        LOG.info("getMovieReleaseInfo");
+
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<ReleaseInfo> result = instance.getMovieReleaseInfo(test.getTmdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieVideos method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieVideos() throws MovieDbException {
+        LOG.info("getMovieVideos");
+
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<Video> result = instance.getMovieVideos(test.getTmdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieTranslations method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieTranslations() throws MovieDbException {
+        LOG.info("getMovieTranslations");
+
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<Translation> result = instance.getMovieTranslations(test.getTmdb(), appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getSimilarMovies method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetSimilarMovies() throws MovieDbException {
+        LOG.info("getSimilarMovies");
+
+        Integer page = null;
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<MovieDb> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieReviews method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieReviews() throws MovieDbException {
+        LOG.info("getMovieReviews");
+
+        Integer page = null;
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            String result = instance.getMovieReviews(test.getTmdb(), page, language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieLists method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieLists() throws MovieDbException {
+        LOG.info("getMovieLists");
+
+        Integer page = null;
+        String language = "";
+        String[] appendToResponse = null;
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<MovieList> result = instance.getMovieLists(test.getTmdb(), page, language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMovieChanges method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetMovieChanges() throws MovieDbException {
+        LOG.info("getMovieChanges");
+
+        String startDate = "";
+        String endDate = "";
+
+        for (TestID test : FILM_IDS) {
+            String result = instance.getMovieChanges(test.getTmdb(), startDate, endDate);
+        }
+        // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
@@ -348,9 +349,102 @@ public class TmdbMoviesTest extends AbstractTests {
     @Test
     public void testPostMovieRating() throws MovieDbException {
         LOG.info("postMovieRating");
-        Integer rating = 10;
-        boolean result = instance.postMovieRating(getSessionId(), ID_MOVIE_BLADE_RUNNER, rating);
-        assertEquals("Failed to set rating", true, result);
+        String sessionId = "";
+        Integer rating = null;
+
+        for (TestID test : FILM_IDS) {
+            boolean result = instance.postMovieRating(sessionId, test.getTmdb(), rating);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getLatestMovie method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetLatestMovie() throws MovieDbException {
+        LOG.info("getLatestMovie");
+
+        for (TestID test : FILM_IDS) {
+            MovieDb result = instance.getLatestMovie();
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getUpcoming method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetUpcoming() throws MovieDbException {
+        LOG.info("getUpcoming");
+        Integer page = null;
+        String language = "";
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<MovieDb> result = instance.getUpcoming(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getNowPlayingMovies method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetNowPlayingMovies() throws MovieDbException {
+        LOG.info("getNowPlayingMovies");
+        Integer page = null;
+        String language = "";
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getPopularMovieList method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetPopularMovieList() throws MovieDbException {
+        LOG.info("getPopularMovieList");
+        Integer page = null;
+        String language = "";
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<MovieDb> result = instance.getPopularMovieList(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTopRatedMovies method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTopRatedMovies() throws MovieDbException {
+        LOG.info("getTopRatedMovies");
+        Integer page = null;
+        String language = "";
+
+        for (TestID test : FILM_IDS) {
+            TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
 }
