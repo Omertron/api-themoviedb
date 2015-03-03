@@ -28,6 +28,8 @@ import com.omertron.themoviedbapi.model2.MediaBasic;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.model2.tv.TVEpisodeBasic;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  *
@@ -69,6 +71,27 @@ public class ArtworkMedia extends Artwork {
 
     public void setMedia(MediaBasic media) {
         this.media = media;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(mediaType)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ArtworkMedia) {
+            final ArtworkMedia other = (ArtworkMedia) obj;
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(mediaType, other.mediaType)
+                    .isEquals();
+        } else {
+            return false;
+        }
     }
 
 }
