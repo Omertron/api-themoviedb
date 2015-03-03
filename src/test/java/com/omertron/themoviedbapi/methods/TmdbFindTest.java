@@ -26,6 +26,7 @@ import com.omertron.themoviedbapi.enumeration.ExternalSource;
 import com.omertron.themoviedbapi.model2.FindResults;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.person.PersonFind;
+import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,10 +144,10 @@ public class TmdbFindTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            assertFalse("No TV Show for ID: " + test.getName(), result.getPersonResults().isEmpty());
+            assertFalse("No TV Show info for ID: " + test.getName(), result.getTvResults().isEmpty());
             boolean found = false;
-            for (PersonFind p : result.getPersonResults()) {
-                if (p.getId() == test.getTmdb()) {
+            for (TVBasic tv : result.getTvResults()) {
+                if (tv.getId() == test.getTmdb()) {
                     found = true;
                     break;
                 }
