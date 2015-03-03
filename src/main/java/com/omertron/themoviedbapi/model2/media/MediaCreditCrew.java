@@ -17,28 +17,35 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.model2.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
-import java.io.Serializable;
-import java.util.List;
 
 /**
  *
- * @author Stuart
+ * @author Stuart.Boston
  */
-public class WrapperAlternativeTitles extends AbstractWrapperId implements Serializable {
+public class MediaCreditCrew extends MediaCredit {
 
-    private static final long serialVersionUID = 1L;
-    @JsonProperty("titles")
-    private List<AlternativeTitle> titles;
+    @JsonProperty("department")
+    private String department;
+    @JsonProperty("job")
+    private String job;
 
-    public List<AlternativeTitle> getTitles() {
-        return titles;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setTitles(List<AlternativeTitle> titles) {
-        this.titles = titles;
+    public void setDepartment(String department) {
+        this.department = department;
     }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
 }

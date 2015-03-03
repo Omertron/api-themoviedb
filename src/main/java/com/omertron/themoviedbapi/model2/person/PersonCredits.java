@@ -24,23 +24,19 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model2.MediaBasic;
 import java.util.List;
 
 /**
  * @author stuart.boston
- * @param <T>
  */
-public class PersonCredits<T> extends AbstractJsonMapping {
+public class PersonCredits extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
     private int id;
-//    @JsonProperty("cast")
-    private List<T> cast;
-//    @JsonProperty("crew")
-    private List<T> crew;
+    private List<? extends CreditBasic> cast;
+    private List<? extends CreditBasic> crew;
 
     public int getId() {
         return id;
@@ -50,7 +46,7 @@ public class PersonCredits<T> extends AbstractJsonMapping {
         this.id = id;
     }
 
-    public List<T> getCast() {
+    public List<? extends CreditBasic> getCast() {
         return cast;
     }
 
@@ -58,18 +54,18 @@ public class PersonCredits<T> extends AbstractJsonMapping {
             use = JsonTypeInfo.Id.NAME,
             include = JsonTypeInfo.As.PROPERTY,
             property = "media_type",
-            defaultImpl = MediaBasic.class
+            defaultImpl = CreditBasic.class
     )
     @JsonSubTypes({
         @JsonSubTypes.Type(value = CreditMovieBasic.class, name = "movie"),
         @JsonSubTypes.Type(value = CreditTVBasic.class, name = "tv")
     })
     @JsonSetter("cast")
-    public void setCast(List<T> cast) {
+    public void setCast(List<? extends CreditBasic> cast) {
         this.cast = cast;
     }
 
-    public List<T> getCrew() {
+    public List<? extends CreditBasic> getCrew() {
         return crew;
     }
 
@@ -77,14 +73,14 @@ public class PersonCredits<T> extends AbstractJsonMapping {
             use = JsonTypeInfo.Id.NAME,
             include = JsonTypeInfo.As.PROPERTY,
             property = "media_type",
-            defaultImpl = MediaBasic.class
+            defaultImpl = CreditBasic.class
     )
     @JsonSubTypes({
         @JsonSubTypes.Type(value = CreditMovieBasic.class, name = "movie"),
         @JsonSubTypes.Type(value = CreditTVBasic.class, name = "tv")
     })
     @JsonSetter("crew")
-    public void setCrew(List<T> crew) {
+    public void setCrew(List<? extends CreditBasic> crew) {
         this.crew = crew;
     }
 }

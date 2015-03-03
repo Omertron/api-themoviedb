@@ -24,7 +24,7 @@ public class TestID {
     private String name;
     private String imdb;
     private int tmdb;
-    private String other = null;
+    private String other;
 
     public TestID() {
     }
@@ -33,6 +33,13 @@ public class TestID {
         this.name = name;
         this.imdb = imdb;
         this.tmdb = tmdb;
+    }
+
+    public TestID(String name, String imdb, int tmdb, String other) {
+        this.name = name;
+        this.imdb = imdb;
+        this.tmdb = tmdb;
+        this.other = other;
     }
 
     public String getName() {

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.omertron.themoviedbapi.enumeration.MediaType;
-import com.omertron.themoviedbapi.model2.MediaBasic;
+import com.omertron.themoviedbapi.model2.media.MediaBasic;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.tv.TVBasic;
 import com.omertron.themoviedbapi.model2.tv.TVEpisodeBasic;

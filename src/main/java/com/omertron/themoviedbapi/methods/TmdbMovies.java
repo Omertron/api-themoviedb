@@ -20,16 +20,17 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
 import com.omertron.themoviedbapi.model.ReleaseInfo;
 import com.omertron.themoviedbapi.model.Translation;
 import com.omertron.themoviedbapi.model.Video;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model2.media.MediaState;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
+import com.omertron.themoviedbapi.model2.media.MediaCreditList;
+import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -42,7 +43,6 @@ import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieList;
 import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
@@ -150,14 +150,19 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public String getMovieAccountState(int movieId, String sessionId) throws MovieDbException {
+    public MediaState getMovieAccountState(int movieId, String sessionId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.ACCOUNT_STATES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-        return null;
+
+        try {
+            return MAPPER.readValue(webpage, MediaState.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info", url, ex);
+        }
     }
 
     /**
@@ -196,41 +201,17 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public String getMovieCredits(int movieId, String... appendToResponse) throws MovieDbException {
+    public MediaCreditList getMovieCredits(int movieId, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-        return null;
-    }
-
-    /**
-     * Get the cast information for a specific movie id.
-     *
-     * TODO: Add a function to enrich the data with the people methods
-     *
-     * @param movieId
-     * @param appendToResponse
-     * @return
-     * @throws MovieDbException
-     */
-    public TmdbResultsList<Person> getMovieCasts(int movieId, String... appendToResponse) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, movieId);
-        parameters.add(Param.APPEND, appendToResponse);
-
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.CASTS).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
         try {
-            WrapperMovieCasts wrapper = MAPPER.readValue(webpage, WrapperMovieCasts.class);
-            TmdbResultsList<Person> results = new TmdbResultsList<Person>(wrapper.getAll());
-            results.copyWrapper(wrapper);
-            return results;
+            return MAPPER.readValue(webpage, MediaCreditList.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie casts", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie credits", url, ex);
         }
     }
 

@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.model2.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model2.MediaBasic;
+import com.omertron.themoviedbapi.model2.media.MediaBasic;
 import java.util.List;
 
 /**

@@ -42,7 +42,6 @@ import com.omertron.themoviedbapi.methods.TmdbPeople;
 import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
-import com.omertron.themoviedbapi.model.AlternativeTitle;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.MovieDb;
 import com.omertron.themoviedbapi.model.MovieList;
@@ -52,7 +51,7 @@ import com.omertron.themoviedbapi.model.Video;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.model2.FindResults;
-import com.omertron.themoviedbapi.model2.MediaBasic;
+import com.omertron.themoviedbapi.model2.media.MediaBasic;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
@@ -69,11 +68,10 @@ import com.omertron.themoviedbapi.model2.discover.Discover;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.model2.network.Network;
 import com.omertron.themoviedbapi.model2.person.CreditInfo;
-import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
-import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
 import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonCredits;
@@ -1225,7 +1223,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonMovieCredits(personId, language, appendToResponse);
     }
 
@@ -1244,7 +1242,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonTVCredits(personId, language, appendToResponse);
     }
 
@@ -1263,7 +1261,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits<CreditTVBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonCombinedCredits(personId, language, appendToResponse);
     }
 

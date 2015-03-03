@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum MethodSub {
 
+    ACCOUNT_STATES("account_states"),
     ADD_ITEM("add_item"),
     ALT_TITLES("alternative_titles"),
     CASTS("casts"),

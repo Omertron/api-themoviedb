@@ -19,14 +19,15 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.omertron.themoviedbapi.model2.artwork.Artwork;
-import com.omertron.themoviedbapi.model2.review.Review;
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model2.collection.Collection;
-import com.omertron.themoviedbapi.model2.keyword.Keyword;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.person.PersonCast;
 import com.omertron.themoviedbapi.model.person.PersonCrew;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model2.artwork.Artwork;
+import com.omertron.themoviedbapi.model2.collection.Collection;
+import com.omertron.themoviedbapi.model2.keyword.Keyword;
+import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;

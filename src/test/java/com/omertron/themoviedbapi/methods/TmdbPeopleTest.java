@@ -27,9 +27,6 @@ import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model2.change.ChangeListItem;
-import com.omertron.themoviedbapi.model2.person.CreditBasic;
-import com.omertron.themoviedbapi.model2.person.CreditMovieBasic;
-import com.omertron.themoviedbapi.model2.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model2.person.ExternalID;
 import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonCredits;
@@ -121,7 +118,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
@@ -141,7 +138,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
@@ -161,7 +158,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<? extends CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
