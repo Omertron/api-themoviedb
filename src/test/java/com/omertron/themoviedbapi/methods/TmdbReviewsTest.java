@@ -38,7 +38,6 @@ import org.junit.Test;
  */
 public class TmdbReviewsTest extends AbstractTests {
 
-    // API
     private static TmdbReviews instance;
 
     public TmdbReviewsTest() {

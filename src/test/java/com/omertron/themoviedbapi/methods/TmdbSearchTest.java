@@ -22,11 +22,11 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
-import com.omertron.themoviedbapi.model.media.MediaBasic;
-import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
+import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
@@ -75,7 +75,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchCompanies() throws MovieDbException {
         LOG.info("searchCompanies");
         TmdbResultsList<Company> result = instance.searchCompanies(COMPANY_NAME, 0);
@@ -89,7 +89,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchCollection() throws MovieDbException {
         LOG.info("searchCollection");
         String query = "batman";
@@ -105,7 +105,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchKeyword() throws MovieDbException {
         LOG.info("searchKeyword");
         String query = "action";
@@ -121,7 +121,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchList() throws MovieDbException {
         LOG.info("searchList");
         String query = "watch";
@@ -137,7 +137,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchMovie() throws MovieDbException {
         LOG.info("searchMovie");
 
@@ -177,7 +177,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchPeople() throws MovieDbException {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
@@ -192,7 +192,7 @@ public class TmdbSearchTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testSearchTV() throws MovieDbException {
         System.out.println("searchTV");
         String query = "The Walking Dead";

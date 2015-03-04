@@ -32,7 +32,6 @@ import org.junit.BeforeClass;
  */
 public class TmdbTVTest extends AbstractTests {
 
-    // API
     private static TmdbTV instance;
     // IDs
     private static final int ID_BIG_BANG_THEORY = 1418;

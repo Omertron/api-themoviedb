@@ -36,7 +36,6 @@ import org.junit.Test;
  */
 public class TmdbChangesTest extends AbstractTests {
 
-    // API
     private static TmdbChanges instance;
 
     public TmdbChangesTest() {

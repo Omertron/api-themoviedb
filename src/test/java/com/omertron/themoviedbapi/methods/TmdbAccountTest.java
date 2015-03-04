@@ -78,7 +78,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetAccount() throws MovieDbException {
         LOG.info("getAccount");
         Account result = instance.getAccount(getSessionId());
@@ -92,7 +92,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         List<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
@@ -108,7 +108,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
         List<MovieBasic> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
@@ -124,7 +124,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetFavoriteTv() throws MovieDbException {
         LOG.info("getFavoriteTv");
         List<TVBasic> results = instance.getFavoriteTv(getSessionId(), getAccountId());
@@ -140,7 +140,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testModifyFavoriteStatus() throws MovieDbException {
         LOG.info("modifyFavoriteStatus");
 
@@ -170,7 +170,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetRatedMovies() throws MovieDbException {
         LOG.info("getRatedMovies");
         List<MovieBasic> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
@@ -183,7 +183,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetRatedTV() throws MovieDbException {
         LOG.info("getRatedTV");
         List<TVBasic> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
@@ -199,7 +199,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetWatchListMovie() throws MovieDbException {
         LOG.info("getWatchListMovie");
         List<MovieBasic> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
@@ -215,7 +215,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetWatchListTV() throws MovieDbException {
         LOG.info("getWatchListTV");
         List<TVBasic> results = instance.getWatchListTV(getSessionId(), getAccountId(), null, null, null);
@@ -231,7 +231,7 @@ public class TmdbAccountTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testModifyWatchList() throws MovieDbException {
         LOG.info("modifyWatchList");
 
