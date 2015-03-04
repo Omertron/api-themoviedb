@@ -19,26 +19,26 @@
  */
 package com.omertron.themoviedbapi.model2.movie;
 
-import com.omertron.themoviedbapi.model2.Language;
-import com.omertron.themoviedbapi.model2.Genre;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.person.PersonCast;
-import com.omertron.themoviedbapi.model.person.PersonCrew;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model2.Genre;
+import com.omertron.themoviedbapi.model2.Language;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.media.MediaCreditCast;
+import com.omertron.themoviedbapi.model2.media.MediaCreditCrew;
+import com.omertron.themoviedbapi.model2.media.MediaCreditList;
 import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovie;
-import com.omertron.themoviedbapi.wrapper.WrapperMovieCasts;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
-import com.omertron.themoviedbapi.wrapper.WrapperUserList;
 import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
 import com.omertron.themoviedbapi.wrapper.WrapperReviews;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
+import com.omertron.themoviedbapi.wrapper.WrapperUserList;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -106,7 +106,7 @@ public class MovieDb extends AbstractJsonMapping {
     @JsonProperty("alternative_titles")
     private WrapperAlternativeTitles alternativeTitles;
     @JsonProperty("casts")
-    private WrapperMovieCasts casts;
+    private MediaCreditList casts;
     @JsonProperty("images")
     private WrapperImages images;
     @JsonProperty("keywords")
@@ -343,11 +343,11 @@ public class MovieDb extends AbstractJsonMapping {
         return alternativeTitles.getTitles();
     }
 
-    public List<PersonCast> getCast() {
+    public List<MediaCreditCast> getCast() {
         return casts.getCast();
     }
 
-    public List<PersonCrew> getCrew() {
+    public List<MediaCreditCrew> getCrew() {
         return casts.getCrew();
     }
 
@@ -389,8 +389,8 @@ public class MovieDb extends AbstractJsonMapping {
         this.alternativeTitles = alternativeTitles;
     }
 
-    public void setCasts(WrapperMovieCasts casts) {
-        this.casts = casts;
+    public void setCasts(MediaCreditList credits) {
+        this.casts = credits;
     }
 
     public void setImages(WrapperImages images) {
