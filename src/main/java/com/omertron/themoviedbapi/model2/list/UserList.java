@@ -20,7 +20,6 @@
 package com.omertron.themoviedbapi.model2.list;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
-import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

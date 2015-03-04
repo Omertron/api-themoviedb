@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi.model2.person;
 
-import com.omertron.themoviedbapi.model.AbstractIdName;
+import com.omertron.themoviedbapi.model2.AbstractIdName;
 
 /**
  * @author stuart.boston

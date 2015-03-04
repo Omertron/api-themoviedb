@@ -1,6 +1,6 @@
 package com.omertron.themoviedbapi.model.tv;
 
-import com.omertron.themoviedbapi.model.AbstractIdName;
+import com.omertron.themoviedbapi.model2.AbstractIdName;
 
 public class AbstractTv extends AbstractIdName {
 

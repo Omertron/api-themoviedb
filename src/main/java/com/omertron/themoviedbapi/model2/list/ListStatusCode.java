@@ -17,12 +17,12 @@
  *      along with TheMovieDB API.  If not;private see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.list;
 
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MovieDbListStatus extends StatusCode {
+public class ListStatusCode extends StatusCode {
 
     @JsonProperty("list_id")
     private String listId;

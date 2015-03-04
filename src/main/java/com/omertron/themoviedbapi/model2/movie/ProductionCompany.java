@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.model2.movie;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.omertron.themoviedbapi.model.AbstractIdName;
+import com.omertron.themoviedbapi.model2.AbstractIdName;
 
 /**
  * @author stuart.boston

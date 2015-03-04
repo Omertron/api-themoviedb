@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model.MovieDbListStatus;
+import com.omertron.themoviedbapi.model2.list.ListStatusCode;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model2.list.ListItemStatus;
@@ -123,7 +123,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
-            return MAPPER.readValue(webpage, MovieDbListStatus.class).getListId();
+            return MAPPER.readValue(webpage, ListStatusCode.class).getListId();
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to create list", url, ex);
         }
