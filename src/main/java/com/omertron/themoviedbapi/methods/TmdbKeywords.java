@@ -93,19 +93,6 @@ public class TmdbKeywords extends AbstractMethod {
         TmdbResultsList<MovieBasic> results = new TmdbResultsList<MovieBasic>(wrapper.getResults());
         results.copyWrapper(wrapper);
         return results;
-
-
-
-//        String webpage = httpTools.getRequest(url);
-//
-//        try {
-//            WrapperKeywordMovies wrapper = MAPPER.readValue(webpage, WrapperKeywordMovies.class);
-//            TmdbResultsList<KeywordMovie> results = new TmdbResultsList<KeywordMovie>(wrapper.getResults());
-//            results.copyWrapper(wrapper);
-//            return results;
-//        } catch (IOException ex) {
-//            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get keyword movies", url, ex);
-//        }
     }
 
 }

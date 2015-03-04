@@ -42,7 +42,9 @@ public class PersonCreditsMixIn {
         @JsonSubTypes.Type(value = CreditTVBasic.class, name = "tv")
     })
     @JsonSetter("cast")
-    public void setCast(List<CreditBasic> cast){}
+    public void setCast(List<CreditBasic> cast) {
+        // Mixin empty class
+    }
 
     @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,
@@ -55,6 +57,8 @@ public class PersonCreditsMixIn {
         @JsonSubTypes.Type(value = CreditTVBasic.class, name = "tv")
     })
     @JsonSetter("crew")
-    public void setCrew(List<CreditBasic> crew){}
+    public void setCrew(List<CreditBasic> crew) {
+        // Mixin empty class
+    }
 
 }

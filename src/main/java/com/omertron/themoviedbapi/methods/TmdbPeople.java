@@ -106,7 +106,8 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            TypeReference tr = new TypeReference<PersonCredits<CreditMovieBasic>>(){};
+            TypeReference tr = new TypeReference<PersonCredits<CreditMovieBasic>>() {
+            };
             return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
@@ -138,7 +139,8 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            TypeReference tr = new TypeReference<PersonCredits<CreditTVBasic>>(){};
+            TypeReference tr = new TypeReference<PersonCredits<CreditTVBasic>>() {
+            };
             return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person TV credits", url, ex);
@@ -172,8 +174,8 @@ public class TmdbPeople extends AbstractMethod {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.addMixIn(PersonCredits.class, PersonCreditsMixIn.class);
-            TypeReference tr = new TypeReference<PersonCredits<CreditBasic>>(){};
-//            return mapper.readValue(webpage, PersonCredits.class);
+            TypeReference tr = new TypeReference<PersonCredits<CreditBasic>>() {
+            };
             return mapper.readValue(webpage, tr);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person combined credits", url, ex);
