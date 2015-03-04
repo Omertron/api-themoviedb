@@ -23,10 +23,14 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
+import com.omertron.themoviedbapi.model.person.CreditBasic;
+import com.omertron.themoviedbapi.model.person.CreditMovieBasic;
+import com.omertron.themoviedbapi.model.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
@@ -67,7 +71,7 @@ public class TmdbPeopleTest extends AbstractTests {
         doConfiguration();
         instance = new TmdbPeople(getApiKey(), getHttpTools());
         testIDs.add(new TestID("Bruce Willis", "nm0000246", 62));
-        testIDs.add(new TestID("Will Smith", "nm0000226", 2888));
+//        testIDs.add(new TestID("Will Smith", "nm0000226", 2888));
     }
 
     @AfterClass
@@ -118,11 +122,15 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
             assertFalse("No crew", result.getCrew().isEmpty());
+
+            // Check that we have the movie specific fields
+            assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getTitle()));
+            assertTrue("No title", StringUtils.isNotBlank(result.getCrew().get(0).getTitle()));
         }
     }
 
@@ -138,11 +146,15 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
             assertFalse("No crew", result.getCrew().isEmpty());
+
+            // Check that we have the TV specific fields
+            assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getName()));
+            assertTrue("No title", StringUtils.isNotBlank(result.getCrew().get(0).getName()));
         }
     }
 
@@ -158,11 +170,33 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
+            PersonCredits<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             assertFalse("No cast", result.getCast().isEmpty());
             assertFalse("No crew", result.getCrew().isEmpty());
+
+            boolean checkedMovie = false;
+            boolean checkedTV = false;
+
+            for (CreditBasic p : result.getCast()) {
+                if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
+                    CreditMovieBasic c = (CreditMovieBasic) p;
+                    assertTrue("No title", StringUtils.isNotBlank(c.getTitle()));
+                    checkedMovie = true;
+                }
+
+                if (!checkedTV && p.getMediaType() == MediaType.TV) {
+                    CreditTVBasic c = (CreditTVBasic) p;
+                    assertTrue("No name", StringUtils.isNotBlank(c.getName()));
+                    checkedTV = true;
+                }
+
+                if (checkedMovie && checkedTV) {
+                    break;
+                }
+            }
+
         }
     }
 

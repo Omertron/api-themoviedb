@@ -20,13 +20,18 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model.person.CreditBasic;
+import com.omertron.themoviedbapi.model.person.CreditMovieBasic;
+import com.omertron.themoviedbapi.model.person.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.person.PersonCreditsMixIn;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -91,7 +96,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
@@ -101,7 +106,8 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonCredits.class);
+            TypeReference tr = new TypeReference<PersonCredits<CreditMovieBasic>>(){};
+            return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person movie credits", url, ex);
         }
@@ -122,7 +128,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
@@ -132,7 +138,8 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonCredits.class);
+            TypeReference tr = new TypeReference<PersonCredits<CreditTVBasic>>(){};
+            return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person TV credits", url, ex);
         }
@@ -153,7 +160,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCredits<CreditBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
@@ -163,7 +170,11 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, PersonCredits.class);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.addMixIn(PersonCredits.class, PersonCreditsMixIn.class);
+            TypeReference tr = new TypeReference<PersonCredits<CreditBasic>>(){};
+//            return mapper.readValue(webpage, PersonCredits.class);
+            return mapper.readValue(webpage, tr);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person combined credits", url, ex);
         }
