@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
-import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
+import com.omertron.themoviedbapi.model2.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -29,7 +29,7 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperKeywordMovies;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -82,23 +82,30 @@ public class TmdbKeywords extends AbstractMethod {
      * @return List of movies with the keyword
      * @throws MovieDbException
      */
-    public TmdbResultsList<KeywordMovie> getKeywordMovies(String keywordId, String language, int page) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getKeywordMovies(String keywordId, String language, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, keywordId);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.KEYWORD).subMethod(MethodSub.MOVIES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "keyword movies");
+        TmdbResultsList<MovieBasic> results = new TmdbResultsList<MovieBasic>(wrapper.getResults());
+        results.copyWrapper(wrapper);
+        return results;
 
-        try {
-            WrapperKeywordMovies wrapper = MAPPER.readValue(webpage, WrapperKeywordMovies.class);
-            TmdbResultsList<KeywordMovie> results = new TmdbResultsList<KeywordMovie>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get keyword movies", url, ex);
-        }
+
+
+//        String webpage = httpTools.getRequest(url);
+//
+//        try {
+//            WrapperKeywordMovies wrapper = MAPPER.readValue(webpage, WrapperKeywordMovies.class);
+//            TmdbResultsList<KeywordMovie> results = new TmdbResultsList<KeywordMovie>(wrapper.getResults());
+//            results.copyWrapper(wrapper);
+//            return results;
+//        } catch (IOException ex) {
+//            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get keyword movies", url, ex);
+//        }
     }
 
 }
