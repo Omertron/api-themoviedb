@@ -37,7 +37,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
 import com.omertron.themoviedbapi.wrapper.WrapperReleaseInfo;
-import com.omertron.themoviedbapi.wrapper.WrapperReviews;
 import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.util.List;
@@ -118,8 +117,7 @@ public class MovieDb extends AbstractJsonMapping {
     @JsonProperty("translations")
     private WrapperTranslations translations;
     private List<MovieDb> similarMovies;
-    @JsonProperty("reviews")
-    private WrapperReviews reviews;
+    private List<Review> reviews;
     private List<UserList> lists;
     @JsonProperty("video")
     private Boolean video = null;
@@ -378,7 +376,7 @@ public class MovieDb extends AbstractJsonMapping {
     }
 
     public List<Review> getReviews() {
-        return reviews.getReviews();
+        return reviews;
     }
     // </editor-fold>
 
@@ -421,8 +419,9 @@ public class MovieDb extends AbstractJsonMapping {
         this.lists = lists.getResults();
     }
 
-    public void setReviews(WrapperReviews reviews) {
-        this.reviews = reviews;
+    @JsonSetter("reviews")
+    public void setReviews(WrapperGenericList<Review> reviews) {
+        this.reviews = reviews.getResults();
     }
     // </editor-fold>
 
