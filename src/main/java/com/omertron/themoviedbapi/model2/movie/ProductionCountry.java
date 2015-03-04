@@ -17,72 +17,53 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model;
+package com.omertron.themoviedbapi.model2.movie;
 
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * Trailer specific information from the "Append to Response" method
- *
- * @author Stuart
+ * @author stuart.boston
  */
-public class Trailer extends AbstractJsonMapping {
+@JsonRootName("production_country")
+public class ProductionCountry extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
+    /*
+     * Properties
+     */
+    @JsonProperty("iso_3166_1")
+    private String isoCode;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("size")
-    private String size;
-    @JsonProperty("source")
-    private String source;
-    @JsonProperty("type")
-    private String type;
+
+    public String getIsoCode() {
+        return isoCode;
+    }
 
     public String getName() {
         return name;
+    }
+
+    public void setIsoCode(String isoCode) {
+        this.isoCode = isoCode;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Trailer) {
-            final Trailer other = (Trailer) obj;
+        if (obj instanceof ProductionCountry) {
+            final ProductionCountry other = (ProductionCountry) obj;
             return new EqualsBuilder()
                     .append(name, other.name)
-                    .append(size, other.size)
-                    .append(source, other.source)
-                    .append(type, other.type)
+                    .append(isoCode, other.isoCode)
                     .isEquals();
         } else {
             return false;
@@ -92,10 +73,8 @@ public class Trailer extends AbstractJsonMapping {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(isoCode)
                 .append(name)
-                .append(size)
-                .append(source)
-                .append(type)
                 .toHashCode();
     }
 }

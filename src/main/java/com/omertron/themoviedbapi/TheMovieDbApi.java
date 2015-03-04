@@ -42,7 +42,7 @@ import com.omertron.themoviedbapi.methods.TmdbPeople;
 import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
-import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model2.Genre;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.model2.FindResults;

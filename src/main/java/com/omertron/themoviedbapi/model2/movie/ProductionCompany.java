@@ -17,23 +17,15 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.model2.movie;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.omertron.themoviedbapi.model.AbstractIdName;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.change.ChangedMovie;
-
-public class WrapperMovieChanges extends AbstractWrapperAll {
-
-    @JsonProperty("results")
-    private List<ChangedMovie> results;
-
-    public List<ChangedMovie> getResults() {
-        return results;
-    }
-
-    public void setResults(List<ChangedMovie> results) {
-        this.results = results;
-    }
+/**
+ * @author stuart.boston
+ */
+@JsonRootName("production_company")
+public class ProductionCompany extends AbstractIdName {
+    // Nothing to override from the base class.
 }

@@ -17,33 +17,36 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.change;
+package com.omertron.themoviedbapi.model2.list;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ChangedMedia extends AbstractJsonMapping {
+/**
+ * @author Holger Brandl
+ */
+public class ListItemStatus extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("id")
-    private String id;
-    @JsonProperty("adult")
-    private boolean adult;
+    @JsonProperty("status_code")
+    private int statusCode;
+    @JsonProperty("item_present")
+    private boolean itemPresent;
 
-    public String getId() {
-        return id;
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public boolean isAdult() {
-        return adult;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public boolean isItemPresent() {
+        return itemPresent;
     }
 
-    public void setAdult(boolean adult) {
-        this.adult = adult;
+    public void setItemPresent(boolean itemPresent) {
+        this.itemPresent = itemPresent;
     }
 }

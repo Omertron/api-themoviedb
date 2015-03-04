@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi.model2.movie;
 
+import com.omertron.themoviedbapi.model2.Language;
+import com.omertron.themoviedbapi.model2.Genre;
 import com.omertron.themoviedbapi.model.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.person.PersonCast;

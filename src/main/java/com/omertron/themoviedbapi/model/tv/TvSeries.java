@@ -1,7 +1,7 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model2.Genre;
 import com.omertron.themoviedbapi.model.person.Person;
 import java.util.List;
 
