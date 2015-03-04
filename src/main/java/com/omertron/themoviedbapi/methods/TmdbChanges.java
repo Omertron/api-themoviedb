@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.methods;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -28,7 +27,6 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.net.URL;
 import java.util.List;
 
@@ -69,9 +67,7 @@ public class TmdbChanges extends AbstractMethod {
         params.add(Param.END_DATE, endDate);
 
         URL url = new ApiUrl(apiKey, method).subMethod(MethodSub.CHANGES).buildUrl(params);
-        TypeReference tr = new TypeReference<WrapperGenericList<ChangeListItem>>() {
-        };
-        return processWrapperList(tr, url, "changes");
+        return processWrapperList(getTypeReference(ChangeListItem.class), url, "changes");
     }
 
 }

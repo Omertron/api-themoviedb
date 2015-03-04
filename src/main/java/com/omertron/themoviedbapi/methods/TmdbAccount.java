@@ -301,7 +301,6 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.ID, guestSessionId);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
-        //TODO: Test this works
         if (sortBy != null) {
             // Only created_at is supported
             parameters.add(Param.SORT_BY, "created_at");

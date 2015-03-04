@@ -52,7 +52,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -409,10 +408,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.REVIEWS).buildUrl(parameters);
         WrapperGenericList<Review> wrapper = processWrapper(getTypeReference(Review.class), url, "review");
-        TmdbResultsList<Review> results = new TmdbResultsList<Review>(null);
-        results.getResults().addAll(wrapper.getResults());
-        results.copyWrapper(wrapper);
-        return results;
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -433,10 +429,8 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.LISTS).buildUrl(parameters);
-        List<UserList> wrapper = processWrapperList(getTypeReference(UserList.class), url, "movie lists");
-        TmdbResultsList<UserList> results = new TmdbResultsList<UserList>(null);
-        results.getResults().addAll(wrapper);
-        return results;
+        WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "movie lists");
+        return wrapper.getTmdbResultsList();
     }
 
     /**

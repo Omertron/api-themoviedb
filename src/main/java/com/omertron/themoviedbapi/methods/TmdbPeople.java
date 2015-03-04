@@ -246,21 +246,8 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.TAGGED_IMAGES).buildUrl(parameters);
-
-        WrapperGenericList<ArtworkMedia> wrapper;
-
-        String webpage = httpTools.getRequest(url);
-        try {
-            TypeReference tr = new TypeReference<WrapperGenericList<ArtworkMedia>>() {
-            };
-            wrapper = MAPPER.readValue(webpage, tr);
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get tagged images", url, ex);
-        }
-
-        TmdbResultsList<ArtworkMedia> results = new TmdbResultsList<ArtworkMedia>(wrapper.getResults());
-        results.copyWrapper(wrapper);
-        return results;
+        WrapperGenericList<ArtworkMedia> wrapper = processWrapper(getTypeReference(ArtworkMedia.class), url, "tagged images");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -311,19 +298,8 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.POPULAR).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        WrapperGenericList<PersonFind> wrapper;
-        try {
-            TypeReference tr = new TypeReference<WrapperGenericList<PersonFind>>() {
-            };
-            wrapper = MAPPER.readValue(webpage, tr);
-            TmdbResultsList<PersonFind> results = new TmdbResultsList<PersonFind>(wrapper.getResults());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person popular", url, ex);
-        }
+        WrapperGenericList<PersonFind> wrapper = processWrapper(getTypeReference(PersonFind.class), url, "person popular");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
