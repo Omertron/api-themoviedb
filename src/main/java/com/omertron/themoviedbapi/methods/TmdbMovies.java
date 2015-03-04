@@ -384,7 +384,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.SIMILAR_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.SIMILAR).buildUrl(parameters);
         WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "similar movies");
         return wrapper.getTmdbResultsList();
     }

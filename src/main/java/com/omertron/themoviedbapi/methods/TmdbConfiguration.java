@@ -103,6 +103,12 @@ public class TmdbConfiguration extends AbstractMethod {
         }
     }
 
+    /**
+     * Get the list of supported timezones for the API methods that support them
+     *
+     * @return
+     * @throws MovieDbException
+     */
     public Map<String, List<String>> getTimezones() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.TIMEZONES).subMethod(MethodSub.LIST).buildUrl();
         String webpage = httpTools.getRequest(url);

@@ -50,6 +50,7 @@ public enum Param {
     SEARCH_TYPE("search_type="),
     SESSION("session_id="),
     START_DATE("start_date="),
+    TIMEZONE("timezone="),
     TOKEN("request_token="),
     USERNAME("username="),
     VALUE("value="),

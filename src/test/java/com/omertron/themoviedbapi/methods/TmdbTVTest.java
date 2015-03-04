@@ -21,9 +21,12 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import org.junit.AfterClass;
+import com.omertron.themoviedbapi.TestID;
+import java.util.ArrayList;
+import java.util.List;
 import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Test for the TV Method
@@ -33,8 +36,7 @@ import org.junit.BeforeClass;
 public class TmdbTVTest extends AbstractTests {
 
     private static TmdbTV instance;
-    // IDs
-    private static final int ID_BIG_BANG_THEORY = 1418;
+    private static final List<TestID> TV_IDS = new ArrayList<TestID>();
 
     public TmdbTVTest() {
     }
@@ -43,14 +45,330 @@ public class TmdbTVTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbTV(getApiKey(), getHttpTools());
+
+        TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402));
+        TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622));
+        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418));
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    /**
+     * Test of getTVInfo method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVInfo() throws MovieDbException {
+        LOG.info("getTVInfo");
+
+        String language = LANGUAGE_DEFAULT;
+        String[] appendToResponse = null;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVInfo(test.getTmdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
-    //@Test
-    public void testGetTv() throws MovieDbException {
+    /**
+     * Test of getTVAccountState method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVAccountState() throws MovieDbException {
+        LOG.info("getTVAccountState");
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVAccountState(test.getTmdb(), getSessionId());
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVAlternativeTitles method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVAlternativeTitles() throws MovieDbException {
+        LOG.info("getTVAlternativeTitles");
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVAlternativeTitles(test.getTmdb());
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVChanges method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVChanges() throws MovieDbException {
+        LOG.info("getTVChanges");
+
+        String startDate = "";
+        String endDate = "";
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVChanges(test.getTmdb(), startDate, endDate);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVContentRatings method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVContentRatings() throws MovieDbException {
+        LOG.info("getTVContentRatings");
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVContentRatings(test.getTmdb());
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVCredits method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVCredits() throws MovieDbException {
+        LOG.info("getTVCredits");
+
+        String language = LANGUAGE_DEFAULT;
+        String[] appendToResponse = null;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVCredits(test.getTmdb(), language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVExternalIDs method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVExternalIDs() throws MovieDbException {
+        LOG.info("getTVExternalIDs");
+
+        String language = LANGUAGE_DEFAULT;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVExternalIDs(test.getTmdb(), language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVImages method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVImages() throws MovieDbException {
+        LOG.info("getTVImages");
+
+        String language = LANGUAGE_DEFAULT;
+        String[] includeImageLanguage = null;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVImages(test.getTmdb(), language, includeImageLanguage);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVKeywords method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVKeywords() throws MovieDbException {
+        LOG.info("getTVKeywords");
+
+        String[] appendToResponse = null;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVKeywords(test.getTmdb(), appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of postTVRating method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testPostTVRating() throws MovieDbException {
+        LOG.info("postTVRating");
+
+        int rating = 0;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.postTVRating(test.getTmdb(), rating, getSessionId(), null);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVSimilar method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVSimilar() throws MovieDbException {
+        LOG.info("getTVSimilar");
+
+        Integer page = null;
+        String language = LANGUAGE_DEFAULT;
+        String[] appendToResponse = null;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVSimilar(test.getTmdb(), page, language, appendToResponse);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVTranslations method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVTranslations() throws MovieDbException {
+        LOG.info("getTVTranslations");
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVTranslations(test.getTmdb());
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVVideos method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVVideos() throws MovieDbException {
+        LOG.info("getTVVideos");
+
+        String language = LANGUAGE_DEFAULT;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVVideos(test.getTmdb(), language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVLatest method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVLatest() throws MovieDbException {
+        LOG.info("getTVLatest");
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVLatest();
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVOnTheAir method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVOnTheAir() throws MovieDbException {
+        LOG.info("getTVOnTheAir");
+        Integer page = null;
+        String language = LANGUAGE_DEFAULT;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVOnTheAir(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVAiringToday method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVAiringToday() throws MovieDbException {
+        LOG.info("getTVAiringToday");
+        Integer page = null;
+        String language = LANGUAGE_DEFAULT;
+        String timezone = "";
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVAiringToday(page, language, timezone);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVTopRated method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVTopRated() throws MovieDbException {
+        LOG.info("getTVTopRated");
+        Integer page = null;
+        String language = LANGUAGE_DEFAULT;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVTopRated(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getTVPopular method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetTVPopular() throws MovieDbException {
+        LOG.info("getTVPopular");
+        Integer page = null;
+        String language = LANGUAGE_DEFAULT;
+
+        for (TestID test : TV_IDS) {
+            String result = instance.getTVPopular(page, language);
+        }
+        // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
