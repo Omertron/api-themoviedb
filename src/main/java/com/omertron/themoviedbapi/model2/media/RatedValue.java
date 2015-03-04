@@ -20,54 +20,22 @@
 package com.omertron.themoviedbapi.model2.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class MediaState extends AbstractJsonMapping {
+public class RatedValue extends AbstractJsonMapping {
 
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("favorite")
-    private boolean favorite;
-    @JsonProperty("watchlist")
-    private boolean watchlist;
-    private float rated;
+    @JsonProperty("value")
+    private float value = -1f;
 
-    public int getId() {
-        return id;
+    public float getValue() {
+        return value;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setValue(float value) {
+        this.value = value;
     }
-
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
-
-    public boolean isWatchlist() {
-        return watchlist;
-    }
-
-    public void setWatchlist(boolean watchlist) {
-        this.watchlist = watchlist;
-    }
-
-    public float getRated() {
-        return rated;
-    }
-
-    @JsonSetter("rated")
-    public void setRated(RatedValue rated) {
-        this.rated = rated.getValue();
-    }
-
 }

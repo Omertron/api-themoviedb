@@ -22,12 +22,12 @@ package com.omertron.themoviedbapi.methods;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model2.collection.Collection;
 import com.omertron.themoviedbapi.model2.company.Company;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model2.person.Person;
 import com.omertron.themoviedbapi.model2.person.PersonFind;
 import com.omertron.themoviedbapi.model2.review.Review;
@@ -39,8 +39,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -56,9 +54,6 @@ public class AbstractMethod {
     protected final HttpTools httpTools;
     // Jackson JSON configuration
     protected static final ObjectMapper MAPPER = new ObjectMapper();
-    // Logger
-    protected static final Logger LOG = LoggerFactory.getLogger(AbstractMethod.class);
-
     private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<Class, TypeReference>();
 
     static {
@@ -120,7 +115,7 @@ public class AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public <T> List<T> processWrapperList(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
+    protected <T> List<T> processWrapperList(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
         WrapperGenericList<T> val = processWrapper(typeRef, url, errorMessageSuffix);
         return val.getResults();
     }
@@ -135,7 +130,7 @@ public class AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public <T> WrapperGenericList<T> processWrapper(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
+    protected <T> WrapperGenericList<T> processWrapper(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
         String webpage = httpTools.getRequest(url);
         try {
             // Due to type erasure, this doesn't work
