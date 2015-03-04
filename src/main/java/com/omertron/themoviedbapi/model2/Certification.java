@@ -19,7 +19,6 @@
  */
 package com.omertron.themoviedbapi.model2;
 
-import com.omertron.themoviedbapi.model2.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -29,18 +28,18 @@ public class Certification extends AbstractJsonMapping {
     private static final long serialVersionUID = 1L;
     // Properties
     @JsonProperty("certification")
-    private String certification;
+    private String value;
     @JsonProperty("meaning")
     private String meaning;
     @JsonProperty("order")
     private int order;
 
-    public String getCertification() {
-        return certification;
+    public String getValue() {
+        return value;
     }
 
-    public void setCertification(String certification) {
-        this.certification = certification;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getMeaning() {

@@ -147,22 +147,22 @@ public class TmdbAccountTest extends AbstractTests {
         // Add a movie as a favourite
         StatusCode result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, true);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 1 || result.getStatusCode() == 12);
+        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a movie as a favourite
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, false);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 13);
+        assertTrue("Incorrect status code", result.getCode() == 13);
 
         // Add a TV Show as a favourite
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, true);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 1 || result.getStatusCode() == 12);
+        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a TV Show as a favourite
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 13);
+        assertTrue("Incorrect status code", result.getCode() == 13);
     }
 
     /**
@@ -238,22 +238,22 @@ public class TmdbAccountTest extends AbstractTests {
         // Add a movie to the watch list
         StatusCode result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, true);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 1 || result.getStatusCode() == 12);
+        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a movie from the watch list
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, false);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 13);
+        assertTrue("Incorrect status code", result.getCode() == 13);
 
         // Add a TV Show to the watch list
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, true);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 1 || result.getStatusCode() == 12);
+        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a TV Show from the watch list
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
         LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getStatusCode() == 13);
+        assertTrue("Incorrect status code", result.getCode() == 13);
     }
 
     /**

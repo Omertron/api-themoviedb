@@ -28,27 +28,24 @@ public class StatusCode extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("status_code")
-    private int statusCode;
+    private int code;
     @JsonProperty("status_message")
-    private String statusMessage;
+    private String message;
 
-    public int getStatusCode() {
-        return statusCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

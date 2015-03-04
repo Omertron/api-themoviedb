@@ -392,7 +392,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             StatusCode result = instance.postMovieRating(test.getTmdb(), rating, getSessionId(), null);
-            assertEquals("failed to post rating", 12, result.getStatusCode());
+            assertEquals("failed to post rating", 12, result.getCode());
         }
     }
 
