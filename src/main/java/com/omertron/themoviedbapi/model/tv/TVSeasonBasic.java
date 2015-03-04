@@ -29,12 +29,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class TVSeasonBasic extends AbstractJsonMapping {
 
+    @JsonProperty("id")
+    private int id = -1;
     @JsonProperty("air_date")
     private String airDate;
     @JsonProperty("poster_path")
     private String posterPath;
     @JsonProperty("season_number")
     private int seasonNumber;
+    @JsonProperty("episode_count")
+    private int episodeCount = -1;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getAirDate() {
         return airDate;
@@ -59,4 +71,13 @@ public class TVSeasonBasic extends AbstractJsonMapping {
     public void setSeasonNumber(int seasonNumber) {
         this.seasonNumber = seasonNumber;
     }
+
+    public int getEpisodeCount() {
+        return episodeCount;
+    }
+
+    public void setEpisodeCount(int episodeCount) {
+        this.episodeCount = episodeCount;
+    }
+
 }

@@ -47,8 +47,6 @@ public class Person extends PersonBasic {
     private String placeOfBirth;
     @JsonProperty("popularity")
     private float popularity;
-    @JsonProperty("profile_path")
-    private String profilePath;
 
     public boolean isAdult() {
         return adult;
@@ -120,14 +118,6 @@ public class Person extends PersonBasic {
 
     public void setPopularity(float popularity) {
         this.popularity = popularity;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
     }
 
 }

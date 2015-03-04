@@ -20,13 +20,22 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import com.omertron.themoviedbapi.model.media.MediaState;
+import com.omertron.themoviedbapi.model.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model.tv.TVInfo;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import java.io.IOException;
 import java.net.URL;
+import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  * Class to hold the TV Methods
@@ -54,14 +63,20 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVInfo(int tvID, String language, String... appendToResponse) throws MovieDbException {
+    public TVInfo getTVInfo(int tvID, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, TVInfo.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV Info", url, ex);
+        }
     }
 
     /**
@@ -75,13 +90,19 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVAccountState(int tvID, String sessionID) throws MovieDbException {
+    public MediaState getTVAccountState(int tvID, String sessionID) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.SESSION, sessionID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.ACCOUNT_STATES).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, MediaState.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get account state", url, ex);
+        }
     }
 
     /**
@@ -91,12 +112,20 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVAlternativeTitles(int tvID) throws MovieDbException {
+    public TmdbResultsList<AlternativeTitle> getTVAlternativeTitles(int tvID) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.ALT_TITLES).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+        try {
+            WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
+            TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get alternative titles", url, ex);
+        }
     }
 
     /**
@@ -108,14 +137,20 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVChanges(int tvID, String startDate, String endDate) throws MovieDbException {
+    public WrapperChanges getTVChanges(int tvID, String startDate, String endDate) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.START_DATE, startDate);
         parameters.add(Param.END_DATE, endDate);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.CHANGES).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, WrapperChanges.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie changes", url, ex);
+        }
     }
 
     /**

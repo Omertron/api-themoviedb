@@ -190,7 +190,7 @@ public class TmdbMovies extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie alternative titles", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get alternative titles", url, ex);
         }
     }
 

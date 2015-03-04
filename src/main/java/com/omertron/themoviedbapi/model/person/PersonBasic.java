@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model.person;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractIdName;
 
 /**
@@ -27,4 +28,14 @@ import com.omertron.themoviedbapi.model.AbstractIdName;
 public class PersonBasic extends AbstractIdName {
 
     private static final long serialVersionUID = 1L;
+    @JsonProperty("profile_path")
+    private String profilePath;
+
+    public String getProfilePath() {
+        return profilePath;
+    }
+
+    public void setProfilePath(String profilePath) {
+        this.profilePath = profilePath;
+    }
 }

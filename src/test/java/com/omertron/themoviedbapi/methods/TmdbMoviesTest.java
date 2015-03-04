@@ -363,8 +363,8 @@ public class TmdbMoviesTest extends AbstractTests {
         int maxCheck = 5;
 
         TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
-        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
-        LOG.info("Found {} person changes to check", changeList.size());
+        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.MOVIE, null, null, null);
+        LOG.info("Found {} changes to check, will check maximum of {}", changeList.size(), maxCheck);
 
         int count = 1;
         WrapperChanges result;
