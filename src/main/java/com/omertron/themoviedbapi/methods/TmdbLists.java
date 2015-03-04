@@ -91,7 +91,7 @@ public class TmdbLists extends AbstractMethod {
         parameters.add(Param.ID, listId);
         parameters.add(Param.MOVIE_ID, mediaId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(MethodSub.ITEM_STATUS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).subMethod(MethodSub.ITEM_STATUS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -173,7 +173,7 @@ public class TmdbLists extends AbstractMethod {
                 .add(PostBody.MEDIA_ID, movieId)
                 .build();
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(operation).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).subMethod(operation).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -232,7 +232,7 @@ public class TmdbLists extends AbstractMethod {
         parameters.add(Param.ID, listId);
         parameters.add(Param.CONFIRM, confirm);
 
-        URL url = new ApiUrl(apiKey, MethodBase.LIST).setSubMethod(MethodSub.CLEAR).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.LIST).subMethod(MethodSub.CLEAR).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, "");
 
         try {

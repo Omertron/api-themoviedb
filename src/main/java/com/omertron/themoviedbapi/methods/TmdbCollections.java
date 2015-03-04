@@ -92,7 +92,7 @@ public class TmdbCollections extends AbstractMethod {
         parameters.add(Param.ID, collectionId);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.COLLECTION).setSubMethod(MethodSub.IMAGES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.COLLECTION).subMethod(MethodSub.IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {

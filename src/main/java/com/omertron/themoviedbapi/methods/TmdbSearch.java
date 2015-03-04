@@ -78,7 +78,7 @@ public class TmdbSearch extends AbstractMethod {
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.COMPANY).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.COMPANY).buildUrl(parameters);
         WrapperGenericList<Company> wrapper = processWrapper(getTypeReference(Company.class), url, "company");
         TmdbResultsList<Company> results = new TmdbResultsList<Company>(wrapper.getResults());
         results.copyWrapper(wrapper);
@@ -100,7 +100,7 @@ public class TmdbSearch extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.COLLECTION).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.COLLECTION).buildUrl(parameters);
         WrapperGenericList<Collection> wrapper = processWrapper(getTypeReference(Collection.class), url, "collection");
         TmdbResultsList<Collection> results = new TmdbResultsList<Collection>(wrapper.getResults());
         results.copyWrapper(wrapper);
@@ -120,7 +120,7 @@ public class TmdbSearch extends AbstractMethod {
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.KEYWORD).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.KEYWORD).buildUrl(parameters);
         WrapperGenericList<Keyword> wrapper = processWrapper(getTypeReference(Keyword.class), url, "keyword");
         TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getResults());
         results.copyWrapper(wrapper);
@@ -142,7 +142,7 @@ public class TmdbSearch extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         parameters.add(Param.INCLUDE_ADULT, includeAdult);
 
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.LIST).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.LIST).buildUrl(parameters);
         WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "list");
         TmdbResultsList<UserList> results = new TmdbResultsList<UserList>(wrapper.getResults());
         results.copyWrapper(wrapper);
@@ -179,7 +179,7 @@ public class TmdbSearch extends AbstractMethod {
         if (searchType != null) {
             parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
         }
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MOVIE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.MOVIE).buildUrl(parameters);
 
         WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "movie");
         TmdbResultsList<MovieDb> results = new TmdbResultsList<MovieDb>(wrapper.getResults());
@@ -208,7 +208,7 @@ public class TmdbSearch extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.ADULT, includeAdult);
 
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MULTI).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.MULTI).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -241,7 +241,7 @@ public class TmdbSearch extends AbstractMethod {
         if (searchType != null) {
             parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
         }
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.PERSON).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.PERSON).buildUrl(parameters);
 
         WrapperGenericList<PersonFind> wrapper = processWrapper(getTypeReference(PersonFind.class), url, "person");
         TmdbResultsList<PersonFind> results = new TmdbResultsList<PersonFind>(wrapper.getResults());
@@ -269,7 +269,7 @@ public class TmdbSearch extends AbstractMethod {
         if (searchType != null) {
             parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
         }
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).setSubMethod(MethodSub.MOVIE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.MOVIE).buildUrl(parameters);
 
         WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "TV Show");
         TmdbResultsList<TVBasic> results = new TmdbResultsList<TVBasic>(wrapper.getResults());

@@ -85,7 +85,7 @@ public class TmdbGenres extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.GENRE).setSubMethod(sub).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.GENRE).subMethod(sub).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -119,7 +119,7 @@ public class TmdbGenres extends AbstractMethod {
         parameters.add(Param.INCLUDE_ALL_MOVIES, includeAllMovies);
         parameters.add(Param.INCLUDE_ADULT, includeAdult);
 
-        URL url = new ApiUrl(apiKey, MethodBase.GENRE).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.GENRE).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);

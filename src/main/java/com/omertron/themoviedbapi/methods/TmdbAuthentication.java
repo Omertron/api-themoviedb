@@ -63,7 +63,7 @@ public class TmdbAuthentication extends AbstractMethod {
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.TOKEN_NEW).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.AUTH).subMethod(MethodSub.TOKEN_NEW).buildUrl(parameters);
 
         String webpage = httpTools.getRequest(url);
 
@@ -91,7 +91,7 @@ public class TmdbAuthentication extends AbstractMethod {
         }
 
         parameters.add(Param.TOKEN, token.getRequestToken());
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.SESSION_NEW).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.AUTH).subMethod(MethodSub.SESSION_NEW).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -123,7 +123,7 @@ public class TmdbAuthentication extends AbstractMethod {
         parameters.add(Param.USERNAME, username);
         parameters.add(Param.PASSWORD, password);
 
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.TOKEN_VALIDATE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.AUTH).subMethod(MethodSub.TOKEN_VALIDATE).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -149,7 +149,7 @@ public class TmdbAuthentication extends AbstractMethod {
      * @throws MovieDbException
      */
     public TokenSession getGuestSessionToken() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.AUTH).setSubMethod(MethodSub.GUEST_SESSION).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.AUTH).subMethod(MethodSub.GUEST_SESSION).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {

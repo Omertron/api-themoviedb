@@ -91,7 +91,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.LISTS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.LISTS).buildUrl(parameters);
         return processWrapperList(getTypeReference(UserList.class), url, "user list");
     }
 
@@ -108,7 +108,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
         return processWrapperList(getTypeReference(MovieBasic.class), url, "favorite movies");
     }
 
@@ -125,7 +125,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.ID, accountId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
         return processWrapperList(getTypeReference(TVBasic.class), url, "favorite TV shows");
     }
 
@@ -151,7 +151,7 @@ public class TmdbAccount extends AbstractMethod {
                 .add(PostBody.FAVORITE, setFavorite)
                 .build();
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.FAVORITE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -180,7 +180,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SORT_BY, sortBy);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
         return processWrapperList(getTypeReference(MovieBasic.class), url, "rated movies");
     }
 
@@ -203,7 +203,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SORT_BY, sortBy);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.RATED_TV).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.RATED_TV).buildUrl(parameters);
         return processWrapperList(getTypeReference(TVBasic.class), url, "rated TV shows");
     }
 
@@ -226,7 +226,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SORT_BY, sortBy);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
         return processWrapperList(getTypeReference(MovieBasic.class), url, "movie watch list");
     }
 
@@ -249,7 +249,7 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.SORT_BY, sortBy);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
         return processWrapperList(getTypeReference(TVBasic.class), url, "TV watch list");
     }
 
@@ -275,7 +275,7 @@ public class TmdbAccount extends AbstractMethod {
                 .add(PostBody.WATCHLIST, addToWatchlist)
                 .build();
 
-        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).setSubMethod(MethodSub.WATCHLIST).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST).buildUrl(parameters);
         String webpage = httpTools.postRequest(url, jsonBody);
 
         try {
@@ -305,7 +305,7 @@ public class TmdbAccount extends AbstractMethod {
             parameters.add(Param.SORT_BY, sortBy.getPropertyString());
         }
 
-        URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).setSubMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).subMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);
         return processWrapperList(getTypeReference(MovieBasic.class), url, "Guest Session Movies");
     }
 }

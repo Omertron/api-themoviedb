@@ -88,7 +88,7 @@ public class TmdbKeywords extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.KEYWORD).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.KEYWORD).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {

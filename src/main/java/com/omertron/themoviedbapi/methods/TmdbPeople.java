@@ -97,7 +97,7 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.MOVIE_CREDITS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.MOVIE_CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -128,7 +128,7 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.TV_CREDITS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.TV_CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -159,7 +159,7 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.COMBINED_CREDITS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.COMBINED_CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -180,7 +180,7 @@ public class TmdbPeople extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.EXTERNAL_IDS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.EXTERNAL_IDS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -201,7 +201,7 @@ public class TmdbPeople extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.IMAGES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -232,7 +232,7 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.TAGGED_IMAGES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.TAGGED_IMAGES).buildUrl(parameters);
 
         WrapperGenericList<ArtworkMedia> wrapper;
 
@@ -274,7 +274,7 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.START_DATE, startDate);
         parameters.add(Param.END_DATE, endDate);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.CHANGES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.CHANGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -297,7 +297,7 @@ public class TmdbPeople extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.POPULAR).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.POPULAR).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         WrapperGenericList<PersonFind> wrapper;
@@ -320,7 +320,7 @@ public class TmdbPeople extends AbstractMethod {
      * @throws MovieDbException
      */
     public Person getPersonLatest() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.LATEST).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.LATEST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {

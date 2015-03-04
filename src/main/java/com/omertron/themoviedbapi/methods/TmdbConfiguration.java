@@ -90,7 +90,7 @@ public class TmdbConfiguration extends AbstractMethod {
      * @throws MovieDbException
      */
     public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.JOB).setSubMethod(MethodSub.LIST).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.JOB).subMethod(MethodSub.LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -104,7 +104,7 @@ public class TmdbConfiguration extends AbstractMethod {
     }
 
     public Map<String, List<String>> getTimezones() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.TIMEZONES).setSubMethod(MethodSub.LIST).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.TIMEZONES).subMethod(MethodSub.LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         List<Map<String, List<String>>> tzList;

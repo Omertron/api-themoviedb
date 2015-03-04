@@ -88,7 +88,7 @@ public class TmdbCompanies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.COMPANY).setSubMethod(MethodSub.MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.COMPANY).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);
     }

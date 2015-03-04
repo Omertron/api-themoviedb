@@ -58,7 +58,7 @@ public class TmdbCertifications extends AbstractMethod {
      * @throws MovieDbException
      */
     public TmdbResultsMap<String, List<Certification>> getMoviesCertification() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.CERTIFICATION).setSubMethod(MethodSub.MOVIE_LIST).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.CERTIFICATION).subMethod(MethodSub.MOVIE_LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -78,7 +78,7 @@ public class TmdbCertifications extends AbstractMethod {
      * @throws MovieDbException
      */
     public TmdbResultsMap<String, List<Certification>> getTvCertification() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.CERTIFICATION).setSubMethod(MethodSub.TV_LIST).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.CERTIFICATION).subMethod(MethodSub.TV_LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {

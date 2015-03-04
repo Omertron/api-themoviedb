@@ -156,7 +156,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.ID, movieId);
         parameters.add(Param.SESSION, sessionId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.ACCOUNT_STATES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.ACCOUNT_STATES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -181,7 +181,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.COUNTRY, country);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.ALT_TITLES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.ALT_TITLES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
@@ -206,7 +206,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.ID, movieId);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.CREDITS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
             return MAPPER.readValue(webpage, MediaCreditList.class);
@@ -230,7 +230,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.IMAGES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -258,7 +258,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.ID, movieId);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.KEYWORDS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.KEYWORDS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -286,7 +286,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.RELEASES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.RELEASES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -316,7 +316,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.VIDEOS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.VIDEOS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -342,7 +342,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.ID, movieId);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.TRANSLATIONS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.TRANSLATIONS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -376,7 +376,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.SIMILAR_MOVIES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.SIMILAR_MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -406,7 +406,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.REVIEWS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.REVIEWS).buildUrl(parameters);
         WrapperGenericList<Review> wrapper = processWrapper(getTypeReference(Review.class), url, "review");
         TmdbResultsList<Review> results = new TmdbResultsList<Review>(null);
         results.getResults().addAll(wrapper.getResults());
@@ -431,7 +431,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         parameters.add(Param.APPEND, appendToResponse);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.LISTS).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.LISTS).buildUrl(parameters);
         List<UserList> wrapper = processWrapperList(getTypeReference(UserList.class), url, "movie lists");
         TmdbResultsList<UserList> results = new TmdbResultsList<UserList>(null);
         results.getResults().addAll(wrapper);
@@ -461,7 +461,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.START_DATE, startDate);
         parameters.add(Param.END_DATE, endDate);
 
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).setSubMethod(MethodSub.CHANGES).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.CHANGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -493,7 +493,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.SESSION, sessionId);
         parameters.add(Param.GUEST_SESSION_ID, guestSessionId);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.RATING).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.RATING).buildUrl(parameters);
 
         String jsonBody = new PostTools()
                 .add(PostBody.VALUE, rating)
@@ -514,7 +514,7 @@ public class TmdbMovies extends AbstractMethod {
      * @throws MovieDbException
      */
     public MovieDb getLatestMovie() throws MovieDbException {
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl();
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -541,7 +541,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.UPCOMING).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.UPCOMING).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -570,7 +570,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.NOW_PLAYING).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.NOW_PLAYING).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -598,7 +598,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.POPULAR).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.POPULAR).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
@@ -626,7 +626,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
-        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).setSubMethod(MethodSub.TOP_RATED).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.TOP_RATED).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {

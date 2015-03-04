@@ -40,7 +40,6 @@ public class ApiUrl {
     private static final Logger LOG = LoggerFactory.getLogger(ApiUrl.class);
     // TheMovieDbApi API Base URL
     private static final String TMDB_API_BASE = "http://api.themoviedb.org/3/";
-//    private static final String TMDB_API_BASE = "http://private-639f-themoviedb.apiary-proxy.com/3/";
     // Parameter configuration
     private static final String DELIMITER_FIRST = "?";
     private static final String DELIMITER_SUBSEQUENT = "&";
@@ -66,7 +65,7 @@ public class ApiUrl {
      * @param submethod
      * @return
      */
-    public ApiUrl setSubMethod(MethodSub submethod) {
+    public ApiUrl subMethod(MethodSub submethod) {
         this.submethod = submethod.getValue();
         return this;
     }
@@ -95,48 +94,95 @@ public class ApiUrl {
         // Get the start of the URL
         urlString.append(method);
 
-        // We have either a queury, or a direct request
+        // We have either a queury, or a ID request
         if (params.has(Param.QUERY)) {
-            // Append the suffix of the API URL
-            if (StringUtils.isNotBlank(submethod)) {
-                urlString.append("/").append(submethod);
-            }
-
-            // Append the key information
-            urlString.append(DELIMITER_FIRST)
-                    .append(Param.API_KEY.getValue())
-                    .append(apiKey);
-
-            // Append the search term
-            urlString.append(DELIMITER_SUBSEQUENT);
-            urlString.append(Param.QUERY.getValue());
-
-            String query = (String) params.get(Param.QUERY);
-
-            try {
-                urlString.append(URLEncoder.encode(query, "UTF-8"));
-            } catch (UnsupportedEncodingException ex) {
-                LOG.trace("Unable to encode query: '{}' trying raw.", query, ex);
-                // If we can't encode it, try it raw
-                urlString.append(query);
-            }
+            urlString.append(queryProcessing(params));
         } else {
-            // Append the ID if provided
-            if (params.has(Param.ID)) {
-                urlString.append("/").append(params.get(Param.ID));
-            }
-
-            if (StringUtils.isNotBlank(submethod)) {
-                urlString.append("/").append(submethod);
-            }
-
-            // Append the key information
-            urlString.append(DELIMITER_FIRST)
-                    .append(Param.API_KEY.getValue())
-                    .append(apiKey);
+            urlString.append(idProcessing(params));
         }
 
-        // Append remaining parameters
+        urlString.append(otherProcessing(params));
+
+        try {
+            LOG.trace("URL: {}", urlString.toString());
+            return new URL(urlString.toString());
+        } catch (MalformedURLException ex) {
+            LOG.warn("Failed to create URL {} - {}", urlString.toString(), ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Create the query based URL portion
+     *
+     * @param params
+     * @return
+     */
+    private StringBuilder queryProcessing(TmdbParameters params) {
+        StringBuilder urlString = new StringBuilder();
+
+        // Append the suffix of the API URL
+        if (StringUtils.isNotBlank(submethod)) {
+            urlString.append("/").append(submethod);
+        }
+
+        // Append the key information
+        urlString.append(DELIMITER_FIRST)
+                .append(Param.API_KEY.getValue())
+                .append(apiKey);
+
+        // Append the search term
+        urlString.append(DELIMITER_SUBSEQUENT);
+        urlString.append(Param.QUERY.getValue());
+
+        String query = (String) params.get(Param.QUERY);
+
+        try {
+            urlString.append(URLEncoder.encode(query, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            LOG.trace("Unable to encode query: '{}' trying raw.", query, ex);
+            // If we can't encode it, try it raw
+            urlString.append(query);
+        }
+
+        return urlString;
+    }
+
+    /**
+     * Create the ID based URL portion
+     *
+     * @param params
+     * @return
+     */
+    private StringBuilder idProcessing(final TmdbParameters params) {
+        StringBuilder urlString = new StringBuilder();
+
+        // Append the ID
+        if (params.has(Param.ID)) {
+            urlString.append("/").append(params.get(Param.ID));
+        }
+
+        if (StringUtils.isNotBlank(submethod)) {
+            urlString.append("/").append(submethod);
+        }
+
+        // Append the key information
+        urlString.append(DELIMITER_FIRST)
+                .append(Param.API_KEY.getValue())
+                .append(apiKey);
+
+        return urlString;
+    }
+
+    /**
+     * Create a string of the remaining parameters
+     *
+     * @param params
+     * @return
+     */
+    private StringBuilder otherProcessing(final TmdbParameters params) {
+        StringBuilder urlString = new StringBuilder();
+
         for (Map.Entry<Param, String> argEntry : params.getEntries()) {
             // Skip the ID an QUERY params
             if (argEntry.getKey() == Param.ID || argEntry.getKey() == Param.QUERY) {
@@ -147,13 +193,6 @@ public class ApiUrl {
                     .append(argEntry.getKey().getValue())
                     .append(argEntry.getValue());
         }
-
-        try {
-            LOG.trace("URL: {}", urlString.toString());
-            return new URL(urlString.toString());
-        } catch (MalformedURLException ex) {
-            LOG.warn("Failed to create URL {} - {}", urlString.toString(), ex.getMessage());
-            return null;
-        }
+        return urlString;
     }
 }
