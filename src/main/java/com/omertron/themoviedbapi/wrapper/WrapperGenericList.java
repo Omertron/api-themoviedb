@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.io.Serializable;
 import java.util.List;
 
@@ -42,5 +43,11 @@ public class WrapperGenericList<T> extends AbstractWrapperAll implements Seriali
     @JsonCreator
     public void setResults(List<T> results) {
         this.results = results;
+    }
+
+    public TmdbResultsList<T> getTmdbResultsList() {
+        TmdbResultsList<T> resultsList = new TmdbResultsList<T>(results);
+        resultsList.copyWrapper(this);
+        return resultsList;
     }
 }
