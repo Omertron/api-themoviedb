@@ -66,6 +66,7 @@ public enum Param {
     RELEASE_DATE_GTE("release_date.gte="),
     RELEASE_DATE_LTE("release_date.lte="),
     SORT_BY("sort_by="),
+    SORT_ORDER("sort_order="),
     VOTE_AVERAGE_GTE("vote_average.gte="),
     VOTE_AVERAGE_LTE("vote_average.lte="),
     VOTE_COUNT_GTE("vote_count.gte="),

@@ -26,10 +26,6 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model.StatusCode;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
-import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
-import com.omertron.themoviedbapi.model.movie.Translation;
-import com.omertron.themoviedbapi.model.movie.Video;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
@@ -39,6 +35,10 @@ import com.omertron.themoviedbapi.model.media.MediaCreditCast;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
+import com.omertron.themoviedbapi.model.movie.Translation;
+import com.omertron.themoviedbapi.model.movie.Video;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -85,7 +85,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieInfo() throws MovieDbException {
         LOG.info("getMovieInfo");
 
@@ -105,7 +105,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieInfoImdb() throws MovieDbException {
         LOG.info("getMovieInfoImdb");
         String language = LANGUAGE_DEFAULT;
@@ -123,7 +123,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieAccountState() throws MovieDbException {
         LOG.info("getMovieAccountState");
 
@@ -139,7 +139,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieAlternativeTitles() throws MovieDbException {
         LOG.info("getMovieAlternativeTitles");
 
@@ -157,7 +157,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieCredits() throws MovieDbException {
         LOG.info("getMovieCredits");
 
@@ -187,7 +187,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieImages() throws MovieDbException {
         LOG.info("getMovieImages");
 
@@ -222,7 +222,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieKeywords() throws MovieDbException {
         LOG.info("getMovieKeywords");
 
@@ -239,7 +239,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieReleaseInfo() throws MovieDbException {
         LOG.info("getMovieReleaseInfo");
 
@@ -257,7 +257,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieVideos() throws MovieDbException {
         LOG.info("getMovieVideos");
 
@@ -275,7 +275,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieTranslations() throws MovieDbException {
         LOG.info("getMovieTranslations");
 
@@ -292,7 +292,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetSimilarMovies() throws MovieDbException {
         LOG.info("getSimilarMovies");
 
@@ -334,7 +334,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieLists() throws MovieDbException {
         LOG.info("getMovieLists");
 
@@ -354,7 +354,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetMovieChanges() throws MovieDbException {
         LOG.info("getMovieChanges");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -385,7 +385,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testPostMovieRating() throws MovieDbException {
         LOG.info("postMovieRating");
         Integer rating = new Random().nextInt(10) + 1;
@@ -401,7 +401,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetLatestMovie() throws MovieDbException {
         LOG.info("getLatestMovie");
 
@@ -416,7 +416,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetUpcoming() throws MovieDbException {
         LOG.info("getUpcoming");
         Integer page = null;
@@ -431,7 +431,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetNowPlayingMovies() throws MovieDbException {
         LOG.info("getNowPlayingMovies");
         Integer page = null;
@@ -446,7 +446,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPopularMovieList() throws MovieDbException {
         LOG.info("getPopularMovieList");
         Integer page = null;
@@ -461,7 +461,7 @@ public class TmdbMoviesTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTopRatedMovies() throws MovieDbException {
         LOG.info("getTopRatedMovies");
         Integer page = null;

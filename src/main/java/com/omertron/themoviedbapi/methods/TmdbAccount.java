@@ -58,7 +58,8 @@ public class TmdbAccount extends AbstractMethod {
     }
 
     /**
-     * Get the basic information for an account. You will need to have a valid session id.
+     * Get the basic information for an account. You will need to have a valid
+     * session id.
      *
      * @param sessionId
      * @return
@@ -302,7 +303,14 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.PAGE, page);
         //TODO: Test this works
         if (sortBy != null) {
-            parameters.add(Param.SORT_BY, sortBy.getPropertyString());
+            // Only created_at is supported
+            parameters.add(Param.SORT_BY, "created_at");
+
+            if (sortBy.getPropertyString().endsWith("asc")) {
+                parameters.add(Param.SORT_ORDER, "asc");
+            } else {
+                parameters.add(Param.SORT_ORDER, "desc");
+            }
         }
 
         URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).subMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);

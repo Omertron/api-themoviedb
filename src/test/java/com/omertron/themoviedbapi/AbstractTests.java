@@ -76,6 +76,7 @@ public class AbstractTests {
                 props.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
                 props.setProperty("Username", "INSERT_YOUR_USERNAME_HERE");
                 props.setProperty("Password", "INSERT_YOUR_PASSWORD_HERE");
+                props.setProperty("GuestSession", "INSERT_YOUR_GUEST_SESSION_ID_HERE");
 
                 TestLogger.saveProperties(props, f, "Properties file for tests");
                 fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
@@ -241,6 +242,15 @@ public class AbstractTests {
      */
     public static String getPassword() {
         return props.getProperty("Password");
+    }
+
+    /**
+     * Get the Guest Session ID
+     *
+     * @return
+     */
+    public static String getGuestSession() {
+        return props.getProperty("GuestSession");
     }
 
     /**
