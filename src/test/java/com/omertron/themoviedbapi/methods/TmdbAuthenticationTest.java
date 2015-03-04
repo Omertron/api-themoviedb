@@ -21,8 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
-import com.omertron.themoviedbapi.model2.authentication.TokenSession;
+import com.omertron.themoviedbapi.model.authentication.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.authentication.TokenSession;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;

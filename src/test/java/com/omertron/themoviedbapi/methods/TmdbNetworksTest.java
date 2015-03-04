@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
-import com.omertron.themoviedbapi.model2.network.Network;
+import com.omertron.themoviedbapi.model.network.Network;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.AfterClass;

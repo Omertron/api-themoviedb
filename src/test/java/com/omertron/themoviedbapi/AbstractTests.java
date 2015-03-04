@@ -21,9 +21,9 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
-import com.omertron.themoviedbapi.model2.account.Account;
-import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
-import com.omertron.themoviedbapi.model2.authentication.TokenSession;
+import com.omertron.themoviedbapi.model.account.Account;
+import com.omertron.themoviedbapi.model.authentication.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.authentication.TokenSession;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import java.io.File;
 import java.io.IOException;

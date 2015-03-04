@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.change.ChangeListItem;
+import com.omertron.themoviedbapi.model.change.ChangeListItem;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import java.util.List;
 import org.junit.AfterClass;

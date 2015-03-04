@@ -21,8 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.StatusCode;
-import com.omertron.themoviedbapi.model2.list.ListItem;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.list.ListItem;
 import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;

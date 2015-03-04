@@ -5,7 +5,7 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model2.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieDb;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;

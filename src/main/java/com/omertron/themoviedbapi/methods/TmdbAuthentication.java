@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.authentication.TokenAuthorisation;
-import com.omertron.themoviedbapi.model2.authentication.TokenSession;
+import com.omertron.themoviedbapi.model.authentication.TokenAuthorisation;
+import com.omertron.themoviedbapi.model.authentication.TokenSession;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;

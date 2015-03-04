@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model2.change.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import java.util.ArrayList;
 import java.util.List;
 

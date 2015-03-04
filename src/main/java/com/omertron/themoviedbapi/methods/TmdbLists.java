@@ -21,11 +21,11 @@ package com.omertron.themoviedbapi.methods;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.omertron.themoviedbapi.MovieDbException;
-import com.omertron.themoviedbapi.model2.list.ListStatusCode;
-import com.omertron.themoviedbapi.model2.StatusCode;
-import com.omertron.themoviedbapi.model2.list.ListItem;
-import com.omertron.themoviedbapi.model2.list.ListItemStatus;
-import com.omertron.themoviedbapi.model2.movie.MovieDb;
+import com.omertron.themoviedbapi.model.list.ListStatusCode;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.list.ListItem;
+import com.omertron.themoviedbapi.model.list.ListItemStatus;
+import com.omertron.themoviedbapi.model.movie.MovieDb;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
