@@ -76,8 +76,6 @@ public class TmdbCompanies extends AbstractMethod {
      *
      * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
      *
-     * TODO: Implement more than 20 movies
-     *
      * @param companyId
      * @param language
      * @param page

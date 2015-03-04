@@ -21,17 +21,17 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
-import com.omertron.themoviedbapi.model2.movie.MovieDb;
-import com.omertron.themoviedbapi.model2.movie.ReleaseInfo;
-import com.omertron.themoviedbapi.model2.movie.Translation;
-import com.omertron.themoviedbapi.model2.movie.Video;
-import com.omertron.themoviedbapi.model2.media.MediaState;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.UserList;
 import com.omertron.themoviedbapi.model2.media.MediaCreditList;
+import com.omertron.themoviedbapi.model2.media.MediaState;
 import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model2.movie.MovieDb;
+import com.omertron.themoviedbapi.model2.movie.ReleaseInfo;
+import com.omertron.themoviedbapi.model2.movie.Translation;
+import com.omertron.themoviedbapi.model2.movie.Video;
 import com.omertron.themoviedbapi.model2.review.Review;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -136,7 +136,7 @@ public class TmdbMovies extends AbstractMethod {
             }
             return movie;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info (IMDB)", url, ex);
         }
     }
 
@@ -162,7 +162,7 @@ public class TmdbMovies extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, MediaState.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get account state", url, ex);
         }
     }
 
@@ -560,8 +560,6 @@ public class TmdbMovies extends AbstractMethod {
      *
      * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
      *
-     * TODO: Implement more than 20 movies
-     *
      * @param language
      * @param page
      * @return
@@ -590,8 +588,6 @@ public class TmdbMovies extends AbstractMethod {
      *
      * This list is updated daily. The default response will return 20 movies.
      *
-     * TODO: Implement more than 20 movies
-     *
      * @param language
      * @param page
      * @return
@@ -619,8 +615,6 @@ public class TmdbMovies extends AbstractMethod {
      * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
      *
      * The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
      *
      * @param language
      * @param page

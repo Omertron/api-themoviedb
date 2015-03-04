@@ -43,11 +43,9 @@ import com.omertron.themoviedbapi.methods.TmdbReviews;
 import com.omertron.themoviedbapi.methods.TmdbSearch;
 import com.omertron.themoviedbapi.methods.TmdbTV;
 import com.omertron.themoviedbapi.model.Genre;
-import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model.keyword.KeywordMovie;
 import com.omertron.themoviedbapi.model2.Certification;
 import com.omertron.themoviedbapi.model2.FindResults;
-import com.omertron.themoviedbapi.model2.media.MediaBasic;
 import com.omertron.themoviedbapi.model2.StatusCode;
 import com.omertron.themoviedbapi.model2.account.Account;
 import com.omertron.themoviedbapi.model2.artwork.Artwork;
@@ -64,10 +62,12 @@ import com.omertron.themoviedbapi.model2.discover.Discover;
 import com.omertron.themoviedbapi.model2.keyword.Keyword;
 import com.omertron.themoviedbapi.model2.list.ListItem;
 import com.omertron.themoviedbapi.model2.list.UserList;
+import com.omertron.themoviedbapi.model2.media.MediaBasic;
 import com.omertron.themoviedbapi.model2.media.MediaCreditList;
 import com.omertron.themoviedbapi.model2.media.MediaState;
 import com.omertron.themoviedbapi.model2.movie.AlternativeTitle;
 import com.omertron.themoviedbapi.model2.movie.MovieBasic;
+import com.omertron.themoviedbapi.model2.movie.MovieDb;
 import com.omertron.themoviedbapi.model2.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model2.movie.Translation;
 import com.omertron.themoviedbapi.model2.movie.Video;
@@ -616,8 +616,6 @@ public class TheMovieDbApi {
      *
      * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
      *
-     * TODO: Implement more than 20 movies
-     *
      * @param companyId
      * @param language
      * @param page
@@ -1150,8 +1148,6 @@ public class TheMovieDbApi {
      *
      * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
      *
-     * TODO: Implement more than 20 movies
-     *
      * @param language
      * @param page
      * @return
@@ -1166,8 +1162,6 @@ public class TheMovieDbApi {
      *
      * This list is updated daily. The default response will return 20 movies.
      *
-     * TODO: Implement more than 20 movies
-     *
      * @param language
      * @param page
      * @return
@@ -1181,8 +1175,6 @@ public class TheMovieDbApi {
      * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
      *
      * The default response will return 20 movies.
-     *
-     * TODO: Implement more than 20 movies
      *
      * @param language
      * @param page
