@@ -76,8 +76,8 @@ public class TmdbTVTest extends AbstractTests {
         instance = new TmdbTV(getApiKey(), getHttpTools());
 
         TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
-//        TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622,"Misha Collins"));
-//        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418,"Kaley Cuoco"));
+        TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622, "Misha Collins"));
+        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418,"Kaley Cuoco"));
     }
 
     /**

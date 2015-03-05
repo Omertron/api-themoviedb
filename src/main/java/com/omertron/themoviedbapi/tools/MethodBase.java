@@ -32,6 +32,7 @@ public enum MethodBase {
     CONFIGURATION("configuration"),
     CREDIT("credit"),
     DISCOVER("discover"),
+    EPISODE("episode"),
     FIND("find"),
     GENRE("genre"),
     GUEST_SESSION("guest_session"),
@@ -43,6 +44,7 @@ public enum MethodBase {
     PERSON("person"),
     REVIEW("review"),
     SEARCH("search"),
+    SEASON("season"),
     TIMEZONES("timezones"),
     TV("tv");
 
