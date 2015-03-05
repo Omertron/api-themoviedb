@@ -67,7 +67,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public Account getAccount(String sessionId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -89,7 +89,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.LISTS).buildUrl(parameters);
@@ -106,7 +106,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
@@ -123,7 +123,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
@@ -143,7 +143,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public StatusCode modifyFavoriteStatus(String sessionId, int accountId, MediaType mediaType, int mediaId, boolean setFavorite) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         String jsonBody = new PostTools()
@@ -175,7 +175,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.SORT_BY, sortBy);
@@ -198,7 +198,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.SORT_BY, sortBy);
@@ -221,7 +221,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.SORT_BY, sortBy);
@@ -244,7 +244,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public List<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.SORT_BY, sortBy);
@@ -267,7 +267,7 @@ public class TmdbAccount extends AbstractMethod {
      */
     public StatusCode modifyWatchList(String sessionId, int accountId, MediaType mediaType, Integer movieId, boolean addToWatchlist) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         String jsonBody = new PostTools()

@@ -102,7 +102,7 @@ public class TmdbMovies extends AbstractMethod {
             }
             return movie;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get info", url, ex);
         }
     }
 
@@ -136,7 +136,7 @@ public class TmdbMovies extends AbstractMethod {
             }
             return movie;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie info (IMDB)", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get info (IMDB)", url, ex);
         }
     }
 
@@ -154,7 +154,7 @@ public class TmdbMovies extends AbstractMethod {
     public MediaState getMovieAccountState(int movieId, String sessionId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.ACCOUNT_STATES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -212,7 +212,7 @@ public class TmdbMovies extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, MediaCreditList.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie credits", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get credits", url, ex);
         }
     }
 
@@ -241,7 +241,7 @@ public class TmdbMovies extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie images", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get images", url, ex);
         }
     }
 
@@ -270,7 +270,7 @@ public class TmdbMovies extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie keywords", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get keywords", url, ex);
         }
     }
 
@@ -299,7 +299,7 @@ public class TmdbMovies extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie release information", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get release information", url, ex);
         }
     }
 
@@ -330,7 +330,7 @@ public class TmdbMovies extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie trailers", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get videos", url, ex);
         }
     }
 
@@ -357,7 +357,7 @@ public class TmdbMovies extends AbstractMethod {
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie tranlations", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get translations", url, ex);
         }
     }
 
@@ -463,7 +463,7 @@ public class TmdbMovies extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperChanges.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie changes", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
         }
     }
 
@@ -486,7 +486,7 @@ public class TmdbMovies extends AbstractMethod {
 
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.GUEST_SESSION_ID, guestSessionId);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.RATING).buildUrl(parameters);
@@ -499,7 +499,7 @@ public class TmdbMovies extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, StatusCode.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to post movie rating", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to post rating", url, ex);
         }
     }
 

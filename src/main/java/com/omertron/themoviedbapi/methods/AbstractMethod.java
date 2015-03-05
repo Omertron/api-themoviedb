@@ -30,10 +30,12 @@ import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
+import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
@@ -83,6 +85,11 @@ public class AbstractMethod {
         });
         TYPE_REFS.put(ArtworkMedia.class, new TypeReference<WrapperGenericList<ArtworkMedia>>() {
         });
+        TYPE_REFS.put(ContentRating.class, new TypeReference<WrapperGenericList<ContentRating>>() {
+        });
+        TYPE_REFS.put(TVInfo.class, new TypeReference<WrapperGenericList<TVInfo>>() {
+        });
+
     }
 
     /**

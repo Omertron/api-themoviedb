@@ -21,8 +21,14 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model.person.ContentRating;
+import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -30,9 +36,13 @@ import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.PostBody;
+import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
+import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -43,6 +53,8 @@ import org.yamj.api.common.exception.ApiExceptionType;
  * @author stuart.boston
  */
 public class TmdbTV extends AbstractMethod {
+
+    private static final int RATING_MAX = 10;
 
     /**
      * Constructor
@@ -80,8 +92,8 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * This method lets users get the status of whether or not the TV show has been rated or added to their favourite or watch
-     * lists.
+     * This method lets users get the status of whether or not the TV show has
+     * been rated or added to their favourite or watch lists.
      *
      * A valid session id is required.
      *
@@ -93,7 +105,7 @@ public class TmdbTV extends AbstractMethod {
     public MediaState getTVAccountState(int tvID, String sessionID) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
-        parameters.add(Param.SESSION, sessionID);
+        parameters.add(Param.SESSION_ID, sessionID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.ACCOUNT_STATES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -160,12 +172,13 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVContentRatings(int tvID) throws MovieDbException {
+    public TmdbResultsList<ContentRating> getTVContentRatings(int tvID) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.CONTENT_RATINGS).buildUrl(parameters);
-        return null;
+        WrapperGenericList<ContentRating> wrapper = processWrapper(getTypeReference(ContentRating.class), url, "content rating");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -177,14 +190,19 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVCredits(int tvID, String language, String... appendToResponse) throws MovieDbException {
+    public MediaCreditList getTVCredits(int tvID, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.CREDITS).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+        try {
+            return MAPPER.readValue(webpage, MediaCreditList.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie credits", url, ex);
+        }
     }
 
     /**
@@ -195,13 +213,19 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVExternalIDs(int tvID, String language) throws MovieDbException {
+    public ExternalID getTVExternalIDs(int tvID, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.EXTERNAL_IDS).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, ExternalID.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get external IDs", url, ex);
+        }
     }
 
     /**
@@ -213,13 +237,22 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVImages(int tvID, String language, String... includeImageLanguage) throws MovieDbException {
+    public TmdbResultsList<Artwork> getTVImages(int tvID, String language, String... includeImageLanguage) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.IMAGES).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
+            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get images", url, ex);
+        }
     }
 
     /**
@@ -230,13 +263,14 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVKeywords(int tvID, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<Keyword> getTVKeywords(int tvID, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.KEYWORDS).buildUrl(parameters);
-        return null;
+        WrapperGenericList<Keyword> wrapper = processWrapper(getTypeReference(Keyword.class), url, "keywords");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -251,14 +285,27 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String postTVRating(int tvID, int rating, String sessionID, String guestSessionID) throws MovieDbException {
+    public StatusCode postTVRating(int tvID, int rating, String sessionID, String guestSessionID) throws MovieDbException {
+        if (rating < 0 || rating > RATING_MAX) {
+            throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Rating out of range");
+        }
+
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
-        parameters.add(Param.SESSION, sessionID);
+        parameters.add(Param.SESSION_ID, sessionID);
         parameters.add(Param.GUEST_SESSION_ID, guestSessionID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.RATING).buildUrl(parameters);
-        return null;
+        String jsonBody = new PostTools()
+                .add(PostBody.VALUE, rating)
+                .build();
+        String webpage = httpTools.postRequest(url, jsonBody);
+
+        try {
+            return MAPPER.readValue(webpage, StatusCode.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to post rating", url, ex);
+        }
     }
 
     /**
@@ -271,7 +318,7 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVSimilar(int tvID, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<TVInfo> getTVSimilar(int tvID, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.PAGE, page);
@@ -279,11 +326,13 @@ public class TmdbTV extends AbstractMethod {
         parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.SIMILAR).buildUrl(parameters);
-        return null;
+        WrapperGenericList<TVInfo> wrapper = processWrapper(getTypeReference(TVInfo.class), url, "similar TV shows");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
-     * Get the list of translations that exist for a TV series. These translations cascade down to the episode level.
+     * Get the list of translations that exist for a TV series. These
+     * translations cascade down to the episode level.
      *
      * @param tvID
      * @return
@@ -298,7 +347,8 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * Get the videos that have been added to a TV series (trailers, opening credits, etc...)
+     * Get the videos that have been added to a TV series (trailers, opening
+     * credits, etc...)
      *
      * @param tvID
      * @param language
@@ -328,7 +378,8 @@ public class TmdbTV extends AbstractMethod {
     /**
      * Get the list of TV shows that are currently on the air.
      *
-     * This query looks for any TV show that has an episode with an air date in the next 7 days.
+     * This query looks for any TV show that has an episode with an air date in
+     * the next 7 days.
      *
      * @param page
      * @param language
@@ -368,7 +419,8 @@ public class TmdbTV extends AbstractMethod {
     /**
      * Get the list of top rated TV shows.
      *
-     * By default, this list will only include TV shows that have 2 or more votes.
+     * By default, this list will only include TV shows that have 2 or more
+     * votes.
      *
      * This list refreshes every day.
      *

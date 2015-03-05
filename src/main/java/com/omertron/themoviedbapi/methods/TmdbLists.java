@@ -112,7 +112,7 @@ public class TmdbLists extends AbstractMethod {
      */
     public String createList(String sessionId, String name, String description) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
 
         String jsonBody = new PostTools()
                 .add(PostBody.NAME, StringUtils.trimToEmpty(name))
@@ -140,7 +140,7 @@ public class TmdbLists extends AbstractMethod {
     public StatusCode deleteList(String sessionId, String listId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, listId);
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
 
         URL url = new ApiUrl(apiKey, MethodBase.LIST).buildUrl(parameters);
         String webpage = httpTools.deleteRequest(url);
@@ -166,7 +166,7 @@ public class TmdbLists extends AbstractMethod {
      */
     private StatusCode modifyMovieList(String sessionId, String listId, int movieId, MethodSub operation) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, listId);
 
         String jsonBody = new PostTools()
@@ -228,7 +228,7 @@ public class TmdbLists extends AbstractMethod {
      */
     public StatusCode clear(String sessionId, String listId, boolean confirm) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.SESSION, sessionId);
+        parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, listId);
         parameters.add(Param.CONFIRM, confirm);
 
