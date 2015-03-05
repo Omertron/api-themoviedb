@@ -17,12 +17,9 @@ But anyone can use it for other projects as well.
 TMDB TV Support
 ===============
 
-TheMovieDb has recently added TV shows to their site.
-I am working on an update to this API to support that, but it will require a re-write of the API to support the new models and ensure that it is simple to understand.
+Release 4.0 of the API now includes TV shows.
 
-Therefore TV support will be added to *v4.0* of the API, major version change because of the large change to the API.  I will release a stable version of 3.9 in the next week before releaseing 4.0 SNAPSHOT.
-
-If you are interested in the current level of TV support checkout the `tv` branch where all the changes are being done.
+This has resulted in a complete re-write of the API and many of the methods and models have been re-written to support the new TV calls.
 
 
 ***
