@@ -146,12 +146,12 @@ public class TmdbTVTest extends AbstractTests {
         int maxCheck = 5;
 
         TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
-        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.TV, null, null, null);
-        LOG.info("Found {} changes to check, will check maximum of {}", changeList.size(), maxCheck);
+        TmdbResultsList<ChangeListItem> changeList = chgs.getChangeList(MethodBase.TV, null, null, null);
+        LOG.info("Found {} changes to check, will check maximum of {}", changeList.getResults().size(), maxCheck);
 
         int count = 1;
         WrapperChanges result;
-        for (ChangeListItem item : changeList) {
+        for (ChangeListItem item : changeList.getResults()) {
             result = instance.getTVChanges(item.getId(), startDate, endDate);
             for (ChangeKeyItem ci : result.getChangedItems()) {
                 assertNotNull("Null changes", ci);

@@ -266,12 +266,12 @@ public class TmdbPeopleTest extends AbstractTests {
         int maxCheck = 5;
 
         TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
-        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
-        LOG.info("Found {} person changes to check", changeList.size());
+        TmdbResultsList<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
+        LOG.info("Found {} person changes to check", changeList.getResults().size());
 
         int count = 1;
         WrapperChanges result;
-        for (ChangeListItem item : changeList) {
+        for (ChangeListItem item : changeList.getResults()) {
             result = instance.getPersonChanges(item.getId(), startDate, endDate);
             for (ChangeKeyItem ci : result.getChangedItems()) {
                 assertNotNull("Null changes", ci);

@@ -206,7 +206,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteMovies(sessionId, accountId);
     }
 
@@ -236,7 +236,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getRatedMovies(sessionId, accountId, page, sortBy, language);
     }
 
@@ -251,7 +251,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getRatedTV(sessionId, accountId, page, sortBy, language);
     }
 
@@ -266,7 +266,7 @@ public class TheMovieDbApi {
      * @return The watchlist of the user
      * @throws MovieDbException
      */
-    public List<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getWatchListMovie(sessionId, accountId, page, sortBy, language);
     }
 
@@ -281,7 +281,7 @@ public class TheMovieDbApi {
      * @return The watchlist of the user
      * @throws MovieDbException
      */
-    public List<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getWatchListTV(sessionId, accountId, page, sortBy, language);
     }
 
@@ -321,7 +321,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteTv(sessionId, accountId);
     }
 
@@ -335,7 +335,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
         return tmdbAccount.getGuestRatedMovies(guestSessionId, language, page, sortBy);
     }
     //</editor-fold>
@@ -449,7 +449,7 @@ public class TheMovieDbApi {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public List<ChangeListItem> getMovieChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
+    public TmdbResultsList<ChangeListItem> getMovieChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.MOVIE, page, startDate, endDate);
     }
 
@@ -465,7 +465,7 @@ public class TheMovieDbApi {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public List<ChangeListItem> getTvChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
+    public TmdbResultsList<ChangeListItem> getTvChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.TV, page, startDate, endDate);
     }
 
@@ -481,7 +481,7 @@ public class TheMovieDbApi {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public List<ChangeListItem> getPersonChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
+    public TmdbResultsList<ChangeListItem> getPersonChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.PERSON, page, startDate, endDate);
     }
     //</editor-fold>

@@ -21,14 +21,15 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.net.URL;
-import java.util.List;
 
 /**
  * Class to hold the Change Methods
@@ -50,8 +51,7 @@ public class TmdbChanges extends AbstractMethod {
     /**
      * Get a list of Media IDs that have been edited.
      *
-     * You can then use the movie/TV/person changes API to get the actual data
-     * that has been changed.
+     * You can then use the movie/TV/person changes API to get the actual data that has been changed.
      *
      * @param method The method base to get
      * @param page
@@ -60,14 +60,15 @@ public class TmdbChanges extends AbstractMethod {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public List<ChangeListItem> getChangeList(MethodBase method, Integer page, String startDate, String endDate) throws MovieDbException {
+    public TmdbResultsList<ChangeListItem> getChangeList(MethodBase method, Integer page, String startDate, String endDate) throws MovieDbException {
         TmdbParameters params = new TmdbParameters();
         params.add(Param.PAGE, page);
         params.add(Param.START_DATE, startDate);
         params.add(Param.END_DATE, endDate);
 
         URL url = new ApiUrl(apiKey, method).subMethod(MethodSub.CHANGES).buildUrl(params);
-        return processWrapperList(getTypeReference(ChangeListItem.class), url, "changes");
+        WrapperGenericList<ChangeListItem> wrapper = processWrapper(getTypeReference(ChangeListItem.class), url, "changes");
+        return wrapper.getTmdbResultsList();
     }
 
 }
