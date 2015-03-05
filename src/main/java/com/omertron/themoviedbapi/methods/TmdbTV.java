@@ -26,9 +26,9 @@ import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
-import com.omertron.themoviedbapi.model.movie.AlternativeTitle;
-import com.omertron.themoviedbapi.model.movie.Translation;
-import com.omertron.themoviedbapi.model.movie.Video;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
+import com.omertron.themoviedbapi.model.media.Translation;
+import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
@@ -158,7 +158,7 @@ public class TmdbTV extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, WrapperChanges.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie changes", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
         }
     }
 
@@ -198,7 +198,7 @@ public class TmdbTV extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, MediaCreditList.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie credits", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get credits", url, ex);
         }
     }
 
@@ -393,7 +393,7 @@ public class TmdbTV extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TVInfo.class);
         } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest movie", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest TV show", url, ex);
         }
     }
 

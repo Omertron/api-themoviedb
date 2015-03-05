@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.movie;
+package com.omertron.themoviedbapi.model.media;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,64 +25,95 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
- * Trailer specific information from the "Append to Response" method
+ * Video specific information
  *
  * @author Stuart
  */
-public class Trailer extends AbstractJsonMapping {
+public class Video extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("id")
+    private String id;
+    @JsonProperty("iso_639_1")
+    private String language;
+    @JsonProperty("key")
+    private String key;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("site")
+    private String site;
     @JsonProperty("size")
-    private String size;
-    @JsonProperty("source")
-    private String source;
+    private int size;
     @JsonProperty("type")
     private String type;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public String getKey() {
+        return key;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
+    public String getSite() {
+        return site;
     }
 
     public String getType() {
         return type;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
 
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Trailer) {
-            final Trailer other = (Trailer) obj;
+        if (obj instanceof Video) {
+            final Video other = (Video) obj;
             return new EqualsBuilder()
+                    .append(id, other.id)
                     .append(name, other.name)
                     .append(size, other.size)
-                    .append(source, other.source)
-                    .append(type, other.type)
+                    .append(key, other.key)
+                    .append(language, other.language)
                     .isEquals();
         } else {
             return false;
@@ -92,10 +123,12 @@ public class Trailer extends AbstractJsonMapping {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(id)
                 .append(name)
                 .append(size)
-                .append(source)
-                .append(type)
+                .append(key)
+                .append(site)
+                .append(language)
                 .toHashCode();
     }
 }

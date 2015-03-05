@@ -17,28 +17,47 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.media.AlternativeTitle;
-import java.io.Serializable;
 import java.util.List;
 
 /**
+ * TV Season information
  *
- * @author Stuart
+ * @author stuart.boston
  */
-public class WrapperAlternativeTitles extends AbstractWrapperId implements Serializable {
+public class TVSeasonInfo extends TVSeasonBasic {
 
-    private static final long serialVersionUID = 1L;
-    @JsonProperty("titles")
-    private List<AlternativeTitle> titles;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("overview")
+    private String overview;
+    @JsonProperty("episodes")
+    private List<TVEpisodeInfo> episodes;
 
-    public List<AlternativeTitle> getTitles() {
-        return titles;
+    public String getName() {
+        return name;
     }
 
-    public void setTitles(List<AlternativeTitle> titles) {
-        this.titles = titles;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public List<TVEpisodeInfo> getEpisodes() {
+        return episodes;
+    }
+
+    public void setEpisodes(List<TVEpisodeInfo> episodes) {
+        this.episodes = episodes;
+    }
+
 }

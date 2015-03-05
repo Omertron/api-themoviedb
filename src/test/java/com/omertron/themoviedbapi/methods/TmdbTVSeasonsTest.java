@@ -25,11 +25,31 @@ import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
 import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.change.ChangeListItem;
+import com.omertron.themoviedbapi.model.media.MediaCreditCast;
+import com.omertron.themoviedbapi.model.media.MediaCreditList;
+import com.omertron.themoviedbapi.model.media.MediaState;
+import com.omertron.themoviedbapi.model.media.Video;
+import com.omertron.themoviedbapi.model.person.ExternalID;
+import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -75,17 +95,19 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonInfo() throws MovieDbException {
-        System.out.println("getSeasonInfo");
-        int tvID = 0;
-        int seasonNumber = 0;
+        LOG.info("getSeasonInfo");
+
+        int seasonNumber = 1;
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getSeasonInfo(tvID, seasonNumber, language, appendToResponse);
+            TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
+            assertTrue("No ID", result.getId() > 0);
+            assertTrue("No name", StringUtils.isNotBlank(result.getName()));
+            assertTrue("No overview", StringUtils.isNotBlank(result.getOverview()));
+            assertTrue("No episodes", result.getEpisodes().size() > 0);
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -95,16 +117,30 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonChanges() throws MovieDbException {
-        System.out.println("getSeasonChanges");
-        int tvID = 0;
-        String startDate = "";
-        String endDate = "";
+        LOG.info("getSeasonChanges");
 
-        for (TestID test : TV_IDS) {
-            String result = instance.getSeasonChanges(tvID, startDate, endDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startDate = sdf.format(DateUtils.addDays(new Date(), -14));
+        String endDate = "";
+        int maxCheck = 5;
+
+        TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
+        List<ChangeListItem> changeList = chgs.getChangeList(MethodBase.TV, null, null, null);
+        LOG.info("Found {} changes to check, will check maximum of {}", changeList.size(), maxCheck);
+
+        int count = 1;
+        WrapperChanges result;
+        for (ChangeListItem item : changeList) {
+            result = instance.getSeasonChanges(item.getId(), startDate, endDate);
+            for (ChangeKeyItem ci : result.getChangedItems()) {
+                assertNotNull("Null changes", ci);
+            }
+
+            if (count++ > maxCheck) {
+                break;
+            }
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -114,15 +150,13 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonAccountState() throws MovieDbException {
-        System.out.println("getSeasonAccountState");
-        int tvID = 0;
-        String sessionID = "";
+        LOG.info("getSeasonAccountState");
 
         for (TestID test : TV_IDS) {
-            String result = instance.getSeasonAccountState(tvID, sessionID);
+            MediaState result = instance.getSeasonAccountState(test.getTmdb(), getSessionId());
+            assertNotNull("Null result", result);
+            assertTrue("Invalid rating", result.getRated() > -2f);
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -132,15 +166,27 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonCredits() throws MovieDbException {
-        System.out.println("getSeasonCredits");
-        int tvID = 0;
+        LOG.info("getSeasonCredits");
+
         int seasonNumber = 0;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getSeasonCredits(tvID, seasonNumber);
+            MediaCreditList result = instance.getSeasonCredits(test.getTmdb(), seasonNumber);
+            assertNotNull(result);
+            assertFalse(result.getCast().isEmpty());
+
+            boolean found = false;
+            for (MediaCreditCast p : result.getCast()) {
+                if (test.getOther().equals(p.getName())) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(test.getOther() + " not found in cast!", found);
+
+            assertFalse(result.getCrew().isEmpty());
+            break;
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -150,16 +196,15 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonExternalID() throws MovieDbException {
-        System.out.println("getSeasonExternalID");
-        int tvID = 0;
+        LOG.info("getSeasonExternalID");
+
         int seasonNumber = 0;
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getSeasonExternalID(tvID, seasonNumber, language);
+            ExternalID result = instance.getSeasonExternalID(test.getTmdb(), seasonNumber, language);
+            assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -169,17 +214,33 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonImages() throws MovieDbException {
-        System.out.println("getSeasonImages");
-        int tvID = 0;
+        LOG.info("getSeasonImages");
+
         int seasonNumber = 0;
         String language = LANGUAGE_DEFAULT;
         String[] includeImageLanguage = null;
 
+        boolean foundBackdrop = false;
+        boolean foundPoster = false;
+        boolean foundOther = false;
+
         for (TestID test : TV_IDS) {
-            String result = instance.getSeasonImages(tvID, seasonNumber, language, includeImageLanguage);
+            TmdbResultsList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
+            assertFalse("No artwork", result.isEmpty());
+            for (Artwork artwork : result.getResults()) {
+                if (artwork.getArtworkType() == ArtworkType.BACKDROP) {
+                    foundBackdrop = true;
+                    continue;
+                } else if (artwork.getArtworkType() == ArtworkType.POSTER) {
+                    foundPoster = true;
+                    continue;
+                }
+                foundOther = true;
+            }
+            assertTrue("No backdrops", foundBackdrop);
+            assertTrue("No posters", foundPoster);
+            assertFalse("Something else found!", foundOther);
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -189,16 +250,15 @@ public class TmdbTVSeasonsTest extends AbstractTests {
      */
     @Test
     public void testGetSeasonVideos() throws MovieDbException {
-        System.out.println("getSeasonVideos");
-        int tvID = 0;
+        LOG.info("getSeasonVideos");
+
         int seasonNumber = 0;
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getSeasonVideos(tvID, seasonNumber, language);
+            TmdbResultsList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
+            assertFalse("No videos", result.isEmpty());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }

@@ -17,55 +17,72 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.movie;
+package com.omertron.themoviedbapi.model.media;
 
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
+ * Trailer specific information from the "Append to Response" method
+ *
  * @author Stuart
  */
-public class AlternativeTitle implements Serializable {
+public class Trailer extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
-    @JsonProperty("iso_3166_1")
-    private String country;
-    @JsonProperty("title")
-    private String title;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("size")
+    private String size;
+    @JsonProperty("source")
+    private String source;
+    @JsonProperty("type")
+    private String type;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
-    public String getCountry() {
-        return country;
+    public String getName() {
+        return name;
     }
 
-    public String getTitle() {
-        return title;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setCountry(String country) {
-        this.country = country;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getSize() {
+        return size;
     }
-    // </editor-fold>
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof AlternativeTitle) {
-            final AlternativeTitle other = (AlternativeTitle) obj;
+        if (obj instanceof Trailer) {
+            final Trailer other = (Trailer) obj;
             return new EqualsBuilder()
-                    .append(country, other.country)
-                    .append(title, other.title)
+                    .append(name, other.name)
+                    .append(size, other.size)
+                    .append(source, other.source)
+                    .append(type, other.type)
                     .isEquals();
         } else {
             return false;
@@ -75,8 +92,10 @@ public class AlternativeTitle implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(country)
-                .append(title)
+                .append(name)
+                .append(size)
+                .append(source)
+                .append(type)
                 .toHashCode();
     }
 }

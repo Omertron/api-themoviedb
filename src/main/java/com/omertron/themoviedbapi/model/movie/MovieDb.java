@@ -19,6 +19,9 @@
  */
 package com.omertron.themoviedbapi.model.movie;
 
+import com.omertron.themoviedbapi.model.media.Video;
+import com.omertron.themoviedbapi.model.media.Translation;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;

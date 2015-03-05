@@ -72,7 +72,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeInfo() throws MovieDbException {
-        System.out.println("getEpisodeInfo");
+        LOG.info("getEpisodeInfo");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;
@@ -93,7 +93,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeChanges() throws MovieDbException {
-        System.out.println("getEpisodeChanges");
+        LOG.info("getEpisodeChanges");
         int episodeID = 0;
         String startDate = "";
         String endDate = "";
@@ -112,7 +112,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeAccountState() throws MovieDbException {
-        System.out.println("getEpisodeAccountState");
+        LOG.info("getEpisodeAccountState");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;
@@ -132,7 +132,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeCredits() throws MovieDbException {
-        System.out.println("getEpisodeCredits");
+        LOG.info("getEpisodeCredits");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;
@@ -151,7 +151,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeExternalID() throws MovieDbException {
-        System.out.println("getEpisodeExternalID");
+        LOG.info("getEpisodeExternalID");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;
@@ -171,7 +171,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeImages() throws MovieDbException {
-        System.out.println("getEpisodeImages");
+        LOG.info("getEpisodeImages");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;
@@ -190,7 +190,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testPostEpisodeRating() throws MovieDbException {
-        System.out.println("postEpisodeRating");
+        LOG.info("postEpisodeRating");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;
@@ -212,7 +212,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
      */
     @Test
     public void testGetEpisodeVideos() throws MovieDbException {
-        System.out.println("getEpisodeVideos");
+        LOG.info("getEpisodeVideos");
         int tvID = 0;
         int seasonNumber = 0;
         int episodeNumber = 0;

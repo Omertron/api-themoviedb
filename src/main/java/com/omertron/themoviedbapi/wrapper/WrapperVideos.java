@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.omertron.themoviedbapi.model.movie.Trailer;
-import com.omertron.themoviedbapi.model.movie.Video;
+import com.omertron.themoviedbapi.model.media.Trailer;
+import com.omertron.themoviedbapi.model.media.Video;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

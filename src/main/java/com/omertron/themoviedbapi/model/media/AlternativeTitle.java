@@ -17,64 +17,55 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.movie;
+package com.omertron.themoviedbapi.model.media;
 
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Stuart
  */
-public class Translation extends AbstractJsonMapping {
+public class AlternativeTitle implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /*
      * Properties
      */
-    @JsonProperty("english_name")
-    private String englishName;
-    @JsonProperty("iso_639_1")
-    private String isoCode;
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("iso_3166_1")
+    private String country;
+    @JsonProperty("title")
+    private String title;
 
-    public String getEnglishName() {
-        return englishName;
+    // <editor-fold defaultstate="collapsed" desc="Getter methods">
+    public String getCountry() {
+        return country;
     }
 
-    public String getIsoCode() {
-        return isoCode;
+    public String getTitle() {
+        return title;
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Setter methods">
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getName() {
-        return name;
+    public void setTitle(String title) {
+        this.title = title;
     }
-
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
-
-    public void setIsoCode(String isoCode) {
-        this.isoCode = isoCode;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    // </editor-fold>
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Translation) {
-            final Translation other = (Translation) obj;
+        if (obj instanceof AlternativeTitle) {
+            final AlternativeTitle other = (AlternativeTitle) obj;
             return new EqualsBuilder()
-                    .append(name, other.name)
-                    .append(englishName, other.englishName)
-                    .append(isoCode, other.isoCode)
+                    .append(country, other.country)
+                    .append(title, other.title)
                     .isEquals();
         } else {
             return false;
@@ -84,14 +75,8 @@ public class Translation extends AbstractJsonMapping {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(englishName)
-                .append(isoCode)
-                .append(name)
+                .append(country)
+                .append(title)
                 .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 }
