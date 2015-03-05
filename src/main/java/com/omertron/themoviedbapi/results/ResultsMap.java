@@ -29,11 +29,11 @@ import java.util.Map;
  * @param <K>
  * @param <V>
  */
-public final class TmdbResultsMap<K, V> extends AbstractResults {
+public final class ResultsMap<K, V> extends AbstractResults {
 
     private Map<K, V> results;
 
-    public TmdbResultsMap(Map<K, V> resultsMap) {
+    public ResultsMap(Map<K, V> resultsMap) {
         results = new HashMap<K, V>(resultsMap);
     }
 

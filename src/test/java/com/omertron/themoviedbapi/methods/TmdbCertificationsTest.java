@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Certification;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
+import com.omertron.themoviedbapi.results.ResultsMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.AfterClass;
@@ -60,7 +60,7 @@ public class TmdbCertificationsTest extends AbstractTests {
     @Test
     public void testGetMovieCertifications() throws MovieDbException {
         LOG.info("getMovieCertifications");
-        TmdbResultsMap<String, List<Certification>> result = instance.getMoviesCertification();
+        ResultsMap<String, List<Certification>> result = instance.getMoviesCertification();
         assertFalse("No movie certifications.", result.getResults().isEmpty());
         for (Map.Entry<String, List<Certification>> entry : result.getResults().entrySet()) {
             LOG.info("{} = {} entries", entry.getKey(), entry.getValue().size());
@@ -76,7 +76,7 @@ public class TmdbCertificationsTest extends AbstractTests {
     @Test
     public void testGetTvCertifications() throws MovieDbException {
         LOG.info("getTvCertifications");
-        TmdbResultsMap<String, List<Certification>> result = instance.getTvCertification();
+        ResultsMap<String, List<Certification>> result = instance.getTvCertification();
         assertFalse("No tv certifications.", result.getResults().isEmpty());
         for (Map.Entry<String, List<Certification>> entry : result.getResults().entrySet()) {
             LOG.info("{} = {} entries", entry.getKey(), entry.getValue().size());

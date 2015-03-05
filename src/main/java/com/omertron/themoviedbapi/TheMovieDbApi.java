@@ -81,7 +81,7 @@ import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.ResultList;
-import com.omertron.themoviedbapi.results.TmdbResultsMap;
+import com.omertron.themoviedbapi.results.ResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
@@ -421,7 +421,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsMap<String, List<Certification>> getMoviesCertification() throws MovieDbException {
+    public ResultsMap<String, List<Certification>> getMoviesCertification() throws MovieDbException {
         return tmdbCertifications.getMoviesCertification();
     }
 
@@ -431,7 +431,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsMap<String, List<Certification>> getTvCertification() throws MovieDbException {
+    public ResultsMap<String, List<Certification>> getTvCertification() throws MovieDbException {
         return tmdbCertifications.getTvCertification();
     }
     //</editor-fold>
