@@ -27,7 +27,7 @@ import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -142,7 +142,7 @@ public class TmdbSearchTest extends AbstractTests {
         LOG.info("searchMovie");
 
         // Try a movie with less than 1 page of results
-        TmdbResultsList<MovieDb> movieList = instance.searchMovie("Blade Runner", 0, "", null, 0, 0, SearchType.PHRASE);
+        TmdbResultsList<MovieInfo> movieList = instance.searchMovie("Blade Runner", 0, "", null, 0, 0, SearchType.PHRASE);
         assertTrue("No movies found, should be at least 1", movieList.getResults().size() > 0);
 
         // Try a russian langugage movie

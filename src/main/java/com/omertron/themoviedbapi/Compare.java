@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -46,7 +46,7 @@ public class Compare {
      * @param year The year of the movie to compare exact match
      * @return True if there is a match, False otherwise.
      */
-    public static boolean movies(final MovieDb moviedb, final String title, final String year) {
+    public static boolean movies(final MovieInfo moviedb, final String title, final String year) {
         return movies(moviedb, title, year, 0, true);
     }
 
@@ -61,7 +61,7 @@ public class Compare {
      * @param caseSensitive true if the comparison is to be case sensitive
      * @return True if there is a match, False otherwise.
      */
-    public static boolean movies(final MovieDb moviedb, final String title, final String year, int maxDistance, boolean caseSensitive) {
+    public static boolean movies(final MovieInfo moviedb, final String title, final String year, int maxDistance, boolean caseSensitive) {
         if ((moviedb == null) || (StringUtils.isBlank(title))) {
             return false;
         }
@@ -115,7 +115,7 @@ public class Compare {
      * @param maxDistance
      * @return
      */
-    public static boolean movies(final MovieDb moviedb, final String title, final String year, int maxDistance) {
+    public static boolean movies(final MovieInfo moviedb, final String title, final String year, int maxDistance) {
         return Compare.movies(moviedb, title, year, maxDistance, true);
     }
 

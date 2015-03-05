@@ -66,7 +66,7 @@ import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
@@ -92,7 +92,7 @@ import org.apache.http.client.HttpClient;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
 
 /**
- * The MovieDb API
+ * The MovieInfo API
  * <p>
  * This is for version 3 of the API as specified here:
  * http://help.themoviedb.org/kb/api/about-3
@@ -749,7 +749,7 @@ public class TheMovieDbApi {
      * @return The list and its items
      * @throws MovieDbException
      */
-    public ListItem<MovieDb> getList(String listId) throws MovieDbException {
+    public ListItem<MovieInfo> getList(String listId) throws MovieDbException {
         return tmdbList.getList(listId);
     }
 
@@ -837,7 +837,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public MovieInfo getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getMovieInfo(movieId, language, appendToResponse);
     }
 
@@ -855,7 +855,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
+    public MovieInfo getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getMovieInfoImdb(imdbId, language, appendToResponse);
     }
 
@@ -988,7 +988,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getSimilarMovies(movieId, page, language, appendToResponse);
     }
 
@@ -1064,7 +1064,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getLatestMovie() throws MovieDbException {
+    public MovieInfo getLatestMovie() throws MovieDbException {
         return tmdbMovies.getLatestMovie();
     }
 
@@ -1080,7 +1080,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getUpcoming(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getUpcoming(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getUpcoming(page, language);
     }
 
@@ -1095,7 +1095,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getNowPlayingMovies(page, language);
     }
 
@@ -1109,7 +1109,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getPopularMovieList(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getPopularMovieList(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getPopularMovieList(page, language);
     }
 
@@ -1124,7 +1124,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getTopRatedMovies(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getTopRatedMovies(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getTopRatedMovies(page, language);
     }
     //</editor-fold>
@@ -1375,7 +1375,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> searchMovie(String query,
+    public TmdbResultsList<MovieInfo> searchMovie(String query,
             Integer page,
             String language,
             Boolean includeAdult,

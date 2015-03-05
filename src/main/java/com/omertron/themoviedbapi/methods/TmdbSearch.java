@@ -27,7 +27,7 @@ import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
@@ -154,7 +154,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> searchMovie(String query,
+    public TmdbResultsList<MovieInfo> searchMovie(String query,
             Integer page,
             String language,
             Boolean includeAdult,
@@ -173,7 +173,7 @@ public class TmdbSearch extends AbstractMethod {
         }
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.MOVIE).buildUrl(parameters);
 
-        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "movie");
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "movie");
         return wrapper.getTmdbResultsList();
     }
 

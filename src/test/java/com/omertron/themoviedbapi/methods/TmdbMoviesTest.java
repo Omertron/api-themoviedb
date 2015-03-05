@@ -36,7 +36,7 @@ import com.omertron.themoviedbapi.model.media.MediaCreditCast;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.AlternativeTitle;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
@@ -94,7 +94,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            MovieDb result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
+            MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
             assertEquals("Wrong title", test.getName(), result.getTitle());
 
@@ -113,7 +113,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            MovieDb result = instance.getMovieInfoImdb(test.getImdb(), language, appendToResponse);
+            MovieInfo result = instance.getMovieInfoImdb(test.getImdb(), language, appendToResponse);
             assertEquals("Wrong TMDB ID", test.getTmdb(), result.getId());
             assertEquals("Wrong title", test.getName(), result.getTitle());
         }
@@ -295,7 +295,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<MovieDb> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
+            TmdbResultsList<MovieInfo> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
             assertFalse("No similar movies", result.isEmpty());
         }
     }
@@ -399,7 +399,7 @@ public class TmdbMoviesTest extends AbstractTests {
     public void testGetLatestMovie() throws MovieDbException {
         LOG.info("getLatestMovie");
 
-        MovieDb result = instance.getLatestMovie();
+        MovieInfo result = instance.getLatestMovie();
         assertNotNull("Null movie returned", result);
         assertTrue("No ID", result.getId() > 0);
         assertTrue("No title", StringUtils.isNotBlank(result.getTitle()));
@@ -416,7 +416,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieDb> result = instance.getUpcoming(page, language);
+        TmdbResultsList<MovieInfo> result = instance.getUpcoming(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 
@@ -431,7 +431,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieDb> result = instance.getNowPlayingMovies(page, language);
+        TmdbResultsList<MovieInfo> result = instance.getNowPlayingMovies(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 
@@ -446,7 +446,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieDb> result = instance.getPopularMovieList(page, language);
+        TmdbResultsList<MovieInfo> result = instance.getPopularMovieList(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 
@@ -461,7 +461,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieDb> result = instance.getTopRatedMovies(page, language);
+        TmdbResultsList<MovieInfo> result = instance.getTopRatedMovies(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 

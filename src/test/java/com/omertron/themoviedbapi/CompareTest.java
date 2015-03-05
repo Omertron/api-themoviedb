@@ -5,7 +5,7 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,7 +24,7 @@ public class CompareTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompareTest.class);
 
-    private static MovieDb moviedb;
+    private static MovieInfo moviedb;
     private static final String TITLE_MAIN = "Blade Runner";
     private static final String TITLE_OTHER = "Blade Runner Directors Cut";
     private static final String YEAR_FULL = "1982-01-01";
@@ -41,7 +41,7 @@ public class CompareTest {
         TestLogger.Configure();
 
         // Set the default comparison movie
-        moviedb = new MovieDb();
+        moviedb = new MovieInfo();
         moviedb.setTitle(TITLE_MAIN);
         moviedb.setOriginalTitle(TITLE_OTHER);
         moviedb.setReleaseDate(YEAR_FULL);

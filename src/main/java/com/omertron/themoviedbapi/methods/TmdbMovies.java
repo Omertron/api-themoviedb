@@ -28,7 +28,7 @@ import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.AlternativeTitle;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
@@ -87,7 +87,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public MovieInfo getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -96,7 +96,7 @@ public class TmdbMovies extends AbstractMethod {
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         try {
-            MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
+            MovieInfo movie = MAPPER.readValue(webpage, MovieInfo.class);
             if (movie == null || movie.getId() == 0) {
                 throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for ID: " + movieId, url);
             }
@@ -120,7 +120,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
+    public MovieInfo getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, imdbId);
         parameters.add(Param.LANGUAGE, language);
@@ -130,7 +130,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            MovieDb movie = MAPPER.readValue(webpage, MovieDb.class);
+            MovieInfo movie = MAPPER.readValue(webpage, MovieInfo.class);
             if (movie == null || movie.getId() == 0) {
                 throw new MovieDbException(ApiExceptionType.ID_NOT_FOUND, "No movie found for IMDB ID: " + imdbId, url);
             }
@@ -377,7 +377,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -385,7 +385,7 @@ public class TmdbMovies extends AbstractMethod {
         parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.SIMILAR).buildUrl(parameters);
-        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "similar movies");
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "similar movies");
         return wrapper.getTmdbResultsList();
     }
 
@@ -509,12 +509,12 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public MovieDb getLatestMovie() throws MovieDbException {
+    public MovieInfo getLatestMovie() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, MovieDb.class);
+            return MAPPER.readValue(webpage, MovieInfo.class);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest movie", url, ex);
         }
@@ -532,13 +532,13 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getUpcoming(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getUpcoming(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.UPCOMING).buildUrl(parameters);
-        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "upcoming movies");
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "upcoming movies");
         return wrapper.getTmdbResultsList();
     }
 
@@ -553,13 +553,13 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.NOW_PLAYING).buildUrl(parameters);
-        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "now playing movies");
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "now playing movies");
         return wrapper.getTmdbResultsList();
     }
 
@@ -573,13 +573,13 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getPopularMovieList(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getPopularMovieList(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.POPULAR).buildUrl(parameters);
-        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "popular movie list");
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "popular movie list");
         return wrapper.getTmdbResultsList();
     }
 
@@ -594,13 +594,13 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieDb> getTopRatedMovies(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<MovieInfo> getTopRatedMovies(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.TOP_RATED).buildUrl(parameters);
-        WrapperGenericList<MovieDb> wrapper = processWrapper(getTypeReference(MovieDb.class), url, "top rated movies");
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "top rated movies");
         return wrapper.getTmdbResultsList();
     }
 

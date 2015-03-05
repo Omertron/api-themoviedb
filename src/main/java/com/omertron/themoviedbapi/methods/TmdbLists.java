@@ -25,7 +25,7 @@ import com.omertron.themoviedbapi.model.list.ListStatusCode;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.list.ListItem;
 import com.omertron.themoviedbapi.model.list.ListItemStatus;
-import com.omertron.themoviedbapi.model.movie.MovieDb;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -63,7 +63,7 @@ public class TmdbLists extends AbstractMethod {
      * @return The list and its items
      * @throws MovieDbException
      */
-    public ListItem<MovieDb> getList(String listId) throws MovieDbException {
+    public ListItem<MovieInfo> getList(String listId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, listId);
 
@@ -71,7 +71,7 @@ public class TmdbLists extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, new TypeReference<ListItem<MovieDb>>() {
+            return MAPPER.readValue(webpage, new TypeReference<ListItem<MovieInfo>>() {
             });
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get list", url, ex);

@@ -51,7 +51,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author stuart.boston
  */
-public class MovieDb extends AbstractJsonMapping {
+public class MovieInfo extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("backdrop_path")
@@ -119,7 +119,7 @@ public class MovieDb extends AbstractJsonMapping {
     private WrapperVideos trailers;
     @JsonProperty("translations")
     private WrapperTranslations translations;
-    private List<MovieDb> similarMovies;
+    private List<MovieInfo> similarMovies;
     private List<Review> reviews;
     private List<UserList> lists;
     @JsonProperty("video")
@@ -370,7 +370,7 @@ public class MovieDb extends AbstractJsonMapping {
         return translations.getTranslations();
     }
 
-    public List<MovieDb> getSimilarMovies() {
+    public List<MovieInfo> getSimilarMovies() {
         return similarMovies;
     }
 
@@ -413,7 +413,7 @@ public class MovieDb extends AbstractJsonMapping {
     }
 
     @JsonSetter("similar_movies")
-    public void setSimilarMovies(WrapperGenericList<MovieDb> similarMovies) {
+    public void setSimilarMovies(WrapperGenericList<MovieInfo> similarMovies) {
         this.similarMovies = similarMovies.getResults();
     }
 
@@ -431,8 +431,8 @@ public class MovieDb extends AbstractJsonMapping {
     //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MovieDb) {
-            final MovieDb other = (MovieDb) obj;
+        if (obj instanceof MovieInfo) {
+            final MovieInfo other = (MovieInfo) obj;
             return new EqualsBuilder()
                     .append(id, other.id)
                     .append(imdbID, other.imdbID)
