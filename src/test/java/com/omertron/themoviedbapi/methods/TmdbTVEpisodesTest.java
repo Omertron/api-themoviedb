@@ -20,13 +20,30 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
+import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
+import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model.StatusCode;
+import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.media.MediaCreditCast;
+import com.omertron.themoviedbapi.model.media.MediaCreditList;
+import com.omertron.themoviedbapi.model.media.MediaState;
+import com.omertron.themoviedbapi.model.media.Video;
+import com.omertron.themoviedbapi.model.person.ExternalID;
+import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -48,9 +65,9 @@ public class TmdbTVEpisodesTest extends AbstractTests {
         doConfiguration();
         instance = new TmdbTVEpisodes(getApiKey(), getHttpTools());
 
-        TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
-//        TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622,"Misha Collins"));
-//        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418,"Kaley Cuoco"));
+        TV_IDS.add(new TestID("The Walking Dead", "tt1589921", 1402, "Andrew Lincoln"));
+        TV_IDS.add(new TestID("Supernatural", "tt0713618", 1622, "Misha Collins"));
+        TV_IDS.add(new TestID("The Big Bang Theory", "tt0775431", 1418, "Kaley Cuoco"));
     }
 
     @AfterClass
@@ -73,17 +90,19 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeInfo() throws MovieDbException {
         LOG.info("getEpisodeInfo");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeInfo(tvID, seasonNumber, episodeNumber, language, appendToResponse);
+            TVEpisodeInfo result = instance.getEpisodeInfo(test.getTmdb(), seasonNumber, episodeNumber, language, appendToResponse);
+            assertTrue("No ID", result.getId() > 0);
+            assertTrue("No name", StringUtils.isNotBlank(result.getName()));
+            assertTrue("No crew", result.getCrew().size() > 0);
+            assertTrue("No guest stars", result.getGuestStars().size() > 0);
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -94,15 +113,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeChanges() throws MovieDbException {
         LOG.info("getEpisodeChanges");
-        int episodeID = 0;
-        String startDate = "";
-        String endDate = "";
-
-        for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeChanges(episodeID, startDate, endDate);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // This is too empherial to test
     }
 
     /**
@@ -113,16 +124,15 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeAccountState() throws MovieDbException {
         LOG.info("getEpisodeAccountState");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
-        String sessionID = "";
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeAccountState(tvID, seasonNumber, episodeNumber, sessionID);
+            MediaState result = instance.getEpisodeAccountState(test.getTmdb(), seasonNumber, episodeNumber, getSessionId());
+            assertNotNull("Null result", result);
+            assertTrue("Invalid rating", result.getRated() > -2f);
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -133,15 +143,27 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeCredits() throws MovieDbException {
         LOG.info("getEpisodeCredits");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeCredits(tvID, seasonNumber, episodeNumber);
+            MediaCreditList result = instance.getEpisodeCredits(test.getTmdb(), seasonNumber, episodeNumber);
+            assertNotNull(result);
+            assertFalse(result.getCast().isEmpty());
+
+            boolean found = false;
+            for (MediaCreditCast p : result.getCast()) {
+                if (test.getOther().equals(p.getName())) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(test.getOther() + " not found in cast!", found);
+
+            assertFalse(result.getCrew().isEmpty());
+            break;
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -152,16 +174,15 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeExternalID() throws MovieDbException {
         LOG.info("getEpisodeExternalID");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeExternalID(tvID, seasonNumber, episodeNumber, language);
+            ExternalID result = instance.getEpisodeExternalID(test.getTmdb(), seasonNumber, episodeNumber, language);
+            assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -172,15 +193,27 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeImages() throws MovieDbException {
         LOG.info("getEpisodeImages");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
+
+        boolean foundStill = false;
+        boolean foundOther = false;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeImages(tvID, seasonNumber, episodeNumber);
+            TmdbResultsList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
+            assertFalse("No artwork", result.isEmpty());
+            for (Artwork artwork : result.getResults()) {
+                if (artwork.getArtworkType() == ArtworkType.STILL) {
+                    foundStill = true;
+                    continue;
+                }
+                foundOther = true;
+            }
+            assertTrue("No stills", foundStill);
+            assertFalse("Something else found!", foundOther);
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -191,18 +224,16 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testPostEpisodeRating() throws MovieDbException {
         LOG.info("postEpisodeRating");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
-        int rating = 0;
-        String sessionID = "";
-        String guestSessionID = "";
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
+        String guestSessionID = null;
 
         for (TestID test : TV_IDS) {
-            String result = instance.postEpisodeRating(tvID, seasonNumber, episodeNumber, rating, sessionID, guestSessionID);
+            Integer rating = new Random().nextInt(10) + 1;
+            StatusCode result = instance.postEpisodeRating(test.getTmdb(), seasonNumber, episodeNumber, rating, getSessionId(), guestSessionID);
+            assertEquals("failed to post rating", 12, result.getCode());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -213,16 +244,15 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     @Test
     public void testGetEpisodeVideos() throws MovieDbException {
         LOG.info("getEpisodeVideos");
-        int tvID = 0;
-        int seasonNumber = 0;
-        int episodeNumber = 0;
+
+        int seasonNumber = 1;
+        int episodeNumber = 1;
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getEpisodeVideos(tvID, seasonNumber, episodeNumber, language);
+            TmdbResultsList<Video> result = instance.getEpisodeVideos(test.getTmdb(), seasonNumber, episodeNumber, language);
+            LOG.info("Found {} videos", result.getResults().size());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }

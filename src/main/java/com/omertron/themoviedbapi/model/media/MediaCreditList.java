@@ -34,6 +34,8 @@ public class MediaCreditList extends AbstractJsonMapping {
     private int id;
     @JsonProperty("cast")
     private List<MediaCreditCast> cast;
+    @JsonProperty("guest_stars")
+    private List<MediaCreditCast> guestStars;
     @JsonProperty("crew")
     private List<MediaCreditCrew> crew;
 
@@ -59,6 +61,14 @@ public class MediaCreditList extends AbstractJsonMapping {
 
     public void setCrew(List<MediaCreditCrew> crew) {
         this.crew = crew;
+    }
+
+    public List<MediaCreditCast> getGuestStars() {
+        return guestStars;
+    }
+
+    public void setGuestStars(List<MediaCreditCast> guestStars) {
+        this.guestStars = guestStars;
     }
 
 }

@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.model.artwork.Artwork;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +41,8 @@ public class WrapperImages extends AbstractWrapperAll implements Serializable {
     private List<Artwork> posters = Collections.emptyList();
     @JsonProperty("profiles")
     private List<Artwork> profiles = Collections.emptyList();
+    @JsonProperty("stills")
+    private List<Artwork> stills = Collections.emptyList();
 
     public List<Artwork> getBackdrops() {
         return backdrops;
@@ -64,6 +66,10 @@ public class WrapperImages extends AbstractWrapperAll implements Serializable {
 
     public void setProfiles(List<Artwork> profiles) {
         this.profiles = profiles;
+    }
+
+    public void setStills(List<Artwork> stills) {
+        this.stills = stills;
     }
 
     /**
@@ -100,6 +106,12 @@ public class WrapperImages extends AbstractWrapperAll implements Serializable {
         if (types.contains(ArtworkType.PROFILE)) {
             updateArtworkType(profiles, ArtworkType.PROFILE);
             artwork.addAll(profiles);
+        }
+
+        // Add all the stills to the list
+        if (types.contains(ArtworkType.STILL)) {
+            updateArtworkType(stills, ArtworkType.STILL);
+            artwork.addAll(stills);
         }
 
         return artwork;

@@ -36,6 +36,8 @@ public class ExternalID extends AbstractJsonMapping {
     private String freebaseMid;
     @JsonProperty("freebase_id")
     private String freebaseId;
+    @JsonProperty("tvdb_id")
+    private String tvdbId;
     @JsonProperty("tvrage_id")
     private String tvrageId;
 
@@ -77,6 +79,14 @@ public class ExternalID extends AbstractJsonMapping {
 
     public void setTvrageId(String tvrageId) {
         this.tvrageId = tvrageId;
+    }
+
+    public String getTvdbId() {
+        return tvdbId;
+    }
+
+    public void setTvdbId(String tvdbId) {
+        this.tvdbId = tvdbId;
     }
 
 }

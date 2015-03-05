@@ -39,7 +39,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
-import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -48,8 +47,6 @@ import org.yamj.api.common.exception.ApiExceptionType;
  * @author stuart.boston
  */
 public class TmdbTVSeasons extends AbstractMethod {
-
-    private static final int RATING_MAX = 10;
 
     /**
      * Constructor
@@ -84,8 +81,7 @@ public class TmdbTVSeasons extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TVSeasonInfo.class);
         } catch (IOException ex) {
-            LoggerFactory.getLogger("test").warn("{}", ex);
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV SeasonInfo", url, ex);
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV Season Info", url, ex);
         }
     }
 
