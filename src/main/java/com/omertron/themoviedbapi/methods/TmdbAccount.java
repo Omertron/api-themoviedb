@@ -27,6 +27,7 @@ import com.omertron.themoviedbapi.model.account.Account;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -35,6 +36,7 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -58,8 +60,7 @@ public class TmdbAccount extends AbstractMethod {
     }
 
     /**
-     * Get the basic information for an account. You will need to have a valid
-     * session id.
+     * Get the basic information for an account. You will need to have a valid session id.
      *
      * @param sessionId
      * @return
@@ -104,13 +105,14 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
-        return processWrapperList(getTypeReference(MovieBasic.class), url, "favorite movies");
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "favorite movies");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -121,13 +123,14 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
-        return processWrapperList(getTypeReference(TVBasic.class), url, "favorite TV shows");
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "favorite TV shows");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -173,7 +176,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -182,7 +185,8 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
-        return processWrapperList(getTypeReference(MovieBasic.class), url, "rated movies");
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "rated movies");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -196,7 +200,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -205,7 +209,8 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.RATED_TV).buildUrl(parameters);
-        return processWrapperList(getTypeReference(TVBasic.class), url, "rated TV shows");
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "rated TV shows");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -219,7 +224,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public List<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -228,7 +233,8 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
-        return processWrapperList(getTypeReference(MovieBasic.class), url, "movie watch list");
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "movie watch list");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -242,7 +248,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public List<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -251,7 +257,8 @@ public class TmdbAccount extends AbstractMethod {
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
-        return processWrapperList(getTypeReference(TVBasic.class), url, "TV watch list");
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "TV watch list");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -296,7 +303,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
+    public TmdbResultsList<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, guestSessionId);
         parameters.add(Param.LANGUAGE, language);
@@ -313,6 +320,7 @@ public class TmdbAccount extends AbstractMethod {
         }
 
         URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).subMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);
-        return processWrapperList(getTypeReference(MovieBasic.class), url, "Guest Session Movies");
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "Guest Session Movies");
+        return wrapper.getTmdbResultsList();
     }
 }

@@ -4,16 +4,16 @@
  *      This file is part of TheMovieDB API.
  *
  *      TheMovieDB API is free software: you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
+ *      it under the terms of the GNU General protected License as published by
  *      the Free Software Foundation, either version 3 of the License, or
  *      any later version.
  *
  *      TheMovieDB API is distributed in the hope that it will be useful,
  *      but WITHOUT ANY WARRANTY; without even the implied warranty of
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *      GNU General protected License for more details.
  *
- *      You should have received a copy of the GNU General Public License
+ *      You should have received a copy of the GNU General protected License
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
@@ -60,7 +60,7 @@ public class AbstractTests {
      *
      * @throws MovieDbException
      */
-    public static final void doConfiguration() throws MovieDbException {
+    protected static final void doConfiguration() throws MovieDbException {
         TestLogger.Configure();
         httpClient = new SimpleHttpClientBuilder().build();
         httpTools = new HttpTools(httpClient);
@@ -149,7 +149,7 @@ public class AbstractTests {
      * @return
      * @throws MovieDbException
      */
-    public static final String getSessionId() throws MovieDbException {
+    protected static final String getSessionId() throws MovieDbException {
         if (tokenSession == null) {
             LOG.info("Create a session token for the rest of the tests");
             String filename = TokenSession.class.getSimpleName();
@@ -180,7 +180,7 @@ public class AbstractTests {
      * @return
      * @throws MovieDbException
      */
-    public static final int getAccountId() throws MovieDbException {
+    protected static final int getAccountId() throws MovieDbException {
         if (account == null) {
             LOG.info("Getting account information");
             String filename = Account.class.getSimpleName();
@@ -204,7 +204,7 @@ public class AbstractTests {
      *
      * @return
      */
-    public static HttpClient getHttpClient() {
+    protected static HttpClient getHttpClient() {
         return httpClient;
     }
 
@@ -213,7 +213,7 @@ public class AbstractTests {
      *
      * @return
      */
-    public static HttpTools getHttpTools() {
+    protected static HttpTools getHttpTools() {
         return httpTools;
     }
 
@@ -222,7 +222,7 @@ public class AbstractTests {
      *
      * @return
      */
-    public static String getApiKey() {
+    protected static String getApiKey() {
         return props.getProperty("API_Key");
     }
 
@@ -231,7 +231,7 @@ public class AbstractTests {
      *
      * @return
      */
-    public static String getUsername() {
+    protected static String getUsername() {
         return props.getProperty("Username");
     }
 
@@ -240,7 +240,7 @@ public class AbstractTests {
      *
      * @return
      */
-    public static String getPassword() {
+    protected static String getPassword() {
         return props.getProperty("Password");
     }
 
@@ -249,7 +249,7 @@ public class AbstractTests {
      *
      * @return
      */
-    public static String getGuestSession() {
+    protected static String getGuestSession() {
         return props.getProperty("GuestSession");
     }
 
@@ -259,7 +259,7 @@ public class AbstractTests {
      * @param property
      * @return
      */
-    public static String getProperty(String property) {
+    protected static String getProperty(String property) {
         return props.getProperty(property);
     }
 }

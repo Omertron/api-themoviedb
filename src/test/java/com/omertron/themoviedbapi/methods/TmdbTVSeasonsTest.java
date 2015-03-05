@@ -20,9 +20,6 @@
 package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
-import static com.omertron.themoviedbapi.AbstractTests.doConfiguration;
-import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
-import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
 import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;

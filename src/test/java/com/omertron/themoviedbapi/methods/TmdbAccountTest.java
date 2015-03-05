@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.enumeration.SortBy;
 import com.omertron.themoviedbapi.model.StatusCode;
@@ -28,6 +29,7 @@ import com.omertron.themoviedbapi.model.account.Account;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
+import com.omertron.themoviedbapi.results.TmdbResultsList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -98,8 +100,8 @@ public class TmdbAccountTest extends AbstractTests {
         List<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
         assertNotNull("No list found", results);
         assertFalse("No entries found", results.isEmpty());
-        for (UserList r : results) {
-            LOG.info("    {}", r.toString());
+        for (UserList result : results) {
+            TestSuite.test(result);
         }
     }
 
@@ -111,11 +113,10 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
-        List<MovieBasic> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
-        assertNotNull("No list found", results);
+        TmdbResultsList<MovieBasic> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
         assertFalse("No entries found", results.isEmpty());
-        for (MovieBasic r : results) {
-            LOG.info("    {}", r.toString());
+        for (MovieBasic result : results.getResults()) {
+            TestSuite.test(result);
         }
     }
 
@@ -127,11 +128,10 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetFavoriteTv() throws MovieDbException {
         LOG.info("getFavoriteTv");
-        List<TVBasic> results = instance.getFavoriteTv(getSessionId(), getAccountId());
-        assertNotNull("No list found", results);
+        TmdbResultsList<TVBasic> results = instance.getFavoriteTv(getSessionId(), getAccountId());
         assertFalse("No entries found", results.isEmpty());
-        for (TVBasic r : results) {
-            LOG.info("    {}", r.toString());
+        for (TVBasic result : results.getResults()) {
+            TestSuite.test(result);
         }
     }
 
@@ -173,8 +173,7 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetRatedMovies() throws MovieDbException {
         LOG.info("getRatedMovies");
-        List<MovieBasic> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
-        assertNotNull("No rated list found", results);
+        TmdbResultsList<MovieBasic> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
         assertFalse("No entries found", results.isEmpty());
     }
 
@@ -186,11 +185,10 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetRatedTV() throws MovieDbException {
         LOG.info("getRatedTV");
-        List<TVBasic> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
-        assertNotNull("No rated list found", results);
+        TmdbResultsList<TVBasic> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
         assertFalse("No entries found", results.isEmpty());
-        for (TVBasic r : results) {
-            LOG.info("    {}", r.toString());
+        for (TVBasic result : results.getResults()) {
+            TestSuite.test(result);
         }
     }
 
@@ -202,11 +200,11 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetWatchListMovie() throws MovieDbException {
         LOG.info("getWatchListMovie");
-        List<MovieBasic> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
+        TmdbResultsList<MovieBasic> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
         assertNotNull("No rated list found", results);
         assertFalse("No entries found", results.isEmpty());
-        for (MovieBasic r : results) {
-            LOG.info("    {}", r.toString());
+        for (MovieBasic result : results.getResults()) {
+            TestSuite.test(result);
         }
     }
 
@@ -218,11 +216,11 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetWatchListTV() throws MovieDbException {
         LOG.info("getWatchListTV");
-        List<TVBasic> results = instance.getWatchListTV(getSessionId(), getAccountId(), null, null, null);
+        TmdbResultsList<TVBasic> results = instance.getWatchListTV(getSessionId(), getAccountId(), null, null, null);
         assertNotNull("No rated list found", results);
         assertFalse("No entries found", results.isEmpty());
-        for (TVBasic r : results) {
-            LOG.info("    {}", r.toString());
+        for (TVBasic result : results.getResults()) {
+            TestSuite.test(result);
         }
     }
 
@@ -271,7 +269,7 @@ public class TmdbAccountTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
         Integer page = null;
         SortBy sortBy = SortBy.CREATED_AT_ASC;
-        List<MovieBasic> result = instance.getGuestRatedMovies(guestSession, language, page, sortBy);
+        TmdbResultsList<MovieBasic> result = instance.getGuestRatedMovies(guestSession, language, page, sortBy);
 
         // Check and post some ratings if required
         if (result.isEmpty()) {
@@ -287,10 +285,6 @@ public class TmdbAccountTest extends AbstractTests {
 
             // Get the movie list again
             result = instance.getGuestRatedMovies(guestSession, language, page, sortBy);
-        }
-
-        for (MovieBasic mb : result) {
-            LOG.info("{}", mb);
         }
 
         assertFalse("No movies found!", result.isEmpty());
