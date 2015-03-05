@@ -71,6 +71,7 @@ import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.movie.Translation;
 import com.omertron.themoviedbapi.model.movie.Video;
 import com.omertron.themoviedbapi.model.network.Network;
+import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.CreditInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
@@ -78,6 +79,7 @@ import com.omertron.themoviedbapi.model.person.PersonCredits;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
+import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.results.TmdbResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
@@ -1436,6 +1438,247 @@ public class TheMovieDbApi {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="TV">
+    //<editor-fold defaultstate="collapsed" desc="TV Shows">
+    /**
+     * Get the primary information about a TV series by id.
+     *
+     * @param tvID
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TVInfo getTVInfo(int tvID, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbTv.getTVInfo(tvID, language, appendToResponse);
+    }
+
+    /**
+     * This method lets users get the status of whether or not the TV show has
+     * been rated or added to their favourite or watch lists.
+     *
+     * A valid session id is required.
+     *
+     * @param tvID
+     * @param sessionID
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public MediaState getTVAccountState(int tvID, String sessionID) throws MovieDbException {
+        return tmdbTv.getTVAccountState(tvID, sessionID);
+    }
+
+    /**
+     * Get the alternative titles for a specific show ID.
+     *
+     * @param tvID
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<AlternativeTitle> getTVAlternativeTitles(int tvID) throws MovieDbException {
+        return tmdbTv.getTVAlternativeTitles(tvID);
+    }
+
+    /**
+     * Get the changes for a specific TV show id.
+     *
+     * @param tvID
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public WrapperChanges getTVChanges(int tvID, String startDate, String endDate) throws MovieDbException {
+        return tmdbTv.getTVChanges(tvID, startDate, endDate);
+    }
+
+    /**
+     * Get the content ratings for a specific TV show id.
+     *
+     * @param tvID
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<ContentRating> getTVContentRatings(int tvID) throws MovieDbException {
+        return tmdbTv.getTVContentRatings(tvID);
+    }
+
+    /**
+     * Get the cast & crew information about a TV series.
+     *
+     * @param tvID
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public MediaCreditList getTVCredits(int tvID, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbTv.getTVCredits(tvID, language, appendToResponse);
+    }
+
+    /**
+     * Get the external ids that we have stored for a TV series.
+     *
+     * @param tvID
+     * @param language
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public ExternalID getTVExternalIDs(int tvID, String language) throws MovieDbException {
+        return tmdbTv.getTVExternalIDs(tvID, language);
+    }
+
+    /**
+     * Get the images (posters and backdrops) for a TV series.
+     *
+     * @param tvID
+     * @param language
+     * @param includeImageLanguage
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<Artwork> getTVImages(int tvID, String language, String... includeImageLanguage) throws MovieDbException {
+        return tmdbTv.getTVImages(tvID, language, includeImageLanguage);
+    }
+
+    /**
+     * Get the plot keywords for a specific TV show id.
+     *
+     * @param tvID
+     * @param appendToResponse
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<Keyword> getTVKeywords(int tvID, String... appendToResponse) throws MovieDbException {
+        return tmdbTv.getTVKeywords(tvID, appendToResponse);
+    }
+
+    /**
+     * This method lets users rate a TV show.
+     *
+     * A valid session id or guest session id is required.
+     *
+     * @param tvID
+     * @param rating
+     * @param sessionID
+     * @param guestSessionID
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public StatusCode postTVRating(int tvID, int rating, String sessionID, String guestSessionID) throws MovieDbException {
+        return tmdbTv.postTVRating(tvID, rating, sessionID, guestSessionID);
+    }
+
+    /**
+     * Get the similar TV shows for a specific tv id.
+     *
+     * @param tvID
+     * @param page
+     * @param language
+     * @param appendToResponse
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVInfo> getTVSimilar(int tvID, Integer page, String language, String... appendToResponse) throws MovieDbException {
+        return tmdbTv.getTVSimilar(tvID, page, language, appendToResponse);
+    }
+
+    /**
+     * Get the list of translations that exist for a TV series. These
+     * translations cascade down to the episode level.
+     *
+     * @param tvID
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<Translation> getTVTranslations(int tvID) throws MovieDbException {
+        return tmdbTv.getTVTranslations(tvID);
+    }
+
+    /**
+     * Get the videos that have been added to a TV series (trailers, opening
+     * credits, etc...)
+     *
+     * @param tvID
+     * @param language
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<Video> getTVVideos(int tvID, String language) throws MovieDbException {
+        return tmdbTv.getTVVideos(tvID, language);
+    }
+
+    /**
+     * Get the latest TV show id.
+     *
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TVInfo getLatestTV() throws MovieDbException {
+        return tmdbTv.getLatestTV();
+    }
+
+    /**
+     * Get the list of TV shows that are currently on the air.
+     *
+     * This query looks for any TV show that has an episode with an air date in
+     * the next 7 days.
+     *
+     * @param page
+     * @param language
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVBasic> getTVOnTheAir(Integer page, String language) throws MovieDbException {
+        return tmdbTv.getTVOnTheAir(page, language);
+    }
+
+    /**
+     * Get the list of TV shows that air today.
+     *
+     * Without a specified timezone, this query defaults to EST
+     *
+     * @param page
+     * @param language
+     * @param timezone
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVBasic> getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
+        return tmdbTv.getTVAiringToday(page, language, timezone);
+    }
+
+    /**
+     * Get the list of top rated TV shows.
+     *
+     * By default, this list will only include TV shows that have 2 or more
+     * votes.
+     *
+     * This list refreshes every day.
+     *
+     * @param page
+     * @param language
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVBasic> getTVTopRated(Integer page, String language) throws MovieDbException {
+        return tmdbTv.getTVTopRated(page, language);
+    }
+
+    /**
+     * Get the list of popular TV shows. This list refreshes every day.
+     *
+     * @param page
+     * @param language
+     * @return
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    public TmdbResultsList<TVBasic> getTVPopular(Integer page, String language) throws MovieDbException {
+        return tmdbTv.getTVPopular(page, language);
+    }
+
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="TV Seasons">
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="TV Episodes">
     //</editor-fold>
 }

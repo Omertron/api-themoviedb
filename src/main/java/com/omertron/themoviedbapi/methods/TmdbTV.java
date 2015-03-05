@@ -246,6 +246,7 @@ public class TmdbTV extends AbstractMethod {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
+        parameters.add(Param.INCLUDE_IMAGE_LANGUAGE, includeImageLanguage);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
