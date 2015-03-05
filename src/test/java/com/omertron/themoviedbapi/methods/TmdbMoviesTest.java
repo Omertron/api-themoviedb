@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
 import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
+import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
@@ -194,26 +195,17 @@ public class TmdbMoviesTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
-        boolean foundBackdrop = false;
-        boolean foundPoster = false;
-        boolean foundOther = false;
+        ArtworkResults results = new ArtworkResults();
 
         for (TestID test : FILM_IDS) {
             TmdbResultsList<Artwork> result = instance.getMovieImages(test.getTmdb(), language, appendToResponse);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
-                if (artwork.getArtworkType() == ArtworkType.BACKDROP) {
-                    foundBackdrop = true;
-                    continue;
-                } else if (artwork.getArtworkType() == ArtworkType.POSTER) {
-                    foundPoster = true;
-                    continue;
-                }
-                foundOther = true;
+                results.found(artwork.getArtworkType());
             }
-            assertTrue("No backdrops", foundBackdrop);
-            assertTrue("No posters", foundPoster);
-            assertFalse("Something else found!", foundOther);
+
+            // We should only have posters & backdrops
+            results.validateResults(ArtworkType.POSTER, ArtworkType.BACKDROP);
         }
     }
 
@@ -263,11 +255,13 @@ public class TmdbMoviesTest extends AbstractTests {
 
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
+        boolean found = false;
 
         for (TestID test : FILM_IDS) {
             TmdbResultsList<Video> result = instance.getMovieVideos(test.getTmdb(), language, appendToResponse);
-            assertFalse("No videos", result.isEmpty());
+            found = found || !result.isEmpty();
         }
+        assertTrue("No videos", found);
     }
 
     /**

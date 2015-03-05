@@ -23,6 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import static com.omertron.themoviedbapi.AbstractTests.doConfiguration;
 import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
 import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
+import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
@@ -191,26 +192,17 @@ public class TmdbTVSeasonsTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
         String[] includeImageLanguage = null;
 
-        boolean foundBackdrop = false;
-        boolean foundPoster = false;
-        boolean foundOther = false;
+        ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
             TmdbResultsList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
-                if (artwork.getArtworkType() == ArtworkType.BACKDROP) {
-                    foundBackdrop = true;
-                    continue;
-                } else if (artwork.getArtworkType() == ArtworkType.POSTER) {
-                    foundPoster = true;
-                    continue;
-                }
-                foundOther = true;
+                results.found(artwork.getArtworkType());
             }
-            assertTrue("No backdrops", foundBackdrop);
-            assertTrue("No posters", foundPoster);
-            assertFalse("Something else found!", foundOther);
+
+            // We should only have posters
+            results.validateResults(ArtworkType.POSTER);
         }
     }
 
@@ -225,11 +217,14 @@ public class TmdbTVSeasonsTest extends AbstractTests {
 
         int seasonNumber = 0;
         String language = LANGUAGE_DEFAULT;
+        boolean found = false;
 
         for (TestID test : TV_IDS) {
             TmdbResultsList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
-            assertFalse("No videos", result.isEmpty());
+            found = found || !result.isEmpty();
         }
+
+        assertTrue("No videos", found);
     }
 
 }

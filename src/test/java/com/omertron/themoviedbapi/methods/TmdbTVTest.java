@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
 import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
+import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
@@ -77,7 +78,7 @@ public class TmdbTVTest extends AbstractTests {
 
         TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
         TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622, "Misha Collins"));
-        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418,"Kaley Cuoco"));
+        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418, "Kaley Cuoco"));
     }
 
     /**
@@ -238,26 +239,17 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
         String[] includeImageLanguage = null;
 
-        boolean foundBackdrop = false;
-        boolean foundPoster = false;
-        boolean foundOther = false;
+        ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
             TmdbResultsList<Artwork> result = instance.getTVImages(test.getTmdb(), language, includeImageLanguage);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
-                if (artwork.getArtworkType() == ArtworkType.BACKDROP) {
-                    foundBackdrop = true;
-                    continue;
-                } else if (artwork.getArtworkType() == ArtworkType.POSTER) {
-                    foundPoster = true;
-                    continue;
-                }
-                foundOther = true;
+                results.found(artwork.getArtworkType());
             }
-            assertTrue("No backdrops", foundBackdrop);
-            assertTrue("No posters", foundPoster);
-            assertFalse("Something else found!", foundOther);
+
+            // We should only have posters & backdrops
+            results.validateResults(ArtworkType.POSTER, ArtworkType.BACKDROP);
         }
 
     }
@@ -339,11 +331,13 @@ public class TmdbTVTest extends AbstractTests {
         LOG.info("getTVVideos");
 
         String language = LANGUAGE_DEFAULT;
+        boolean found = false;
 
         for (TestID test : TV_IDS) {
             TmdbResultsList<Video> result = instance.getTVVideos(test.getTmdb(), language);
-            assertFalse("No videos", result.isEmpty());
+            found = found || !result.isEmpty();
         }
+        assertTrue("No videos", found);
     }
 
     /**

@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import static com.omertron.themoviedbapi.AbstractTests.getApiKey;
 import static com.omertron.themoviedbapi.AbstractTests.getHttpTools;
+import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
@@ -197,21 +198,17 @@ public class TmdbTVEpisodesTest extends AbstractTests {
         int seasonNumber = 1;
         int episodeNumber = 1;
 
-        boolean foundStill = false;
-        boolean foundOther = false;
+        ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
             TmdbResultsList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
-                if (artwork.getArtworkType() == ArtworkType.STILL) {
-                    foundStill = true;
-                    continue;
-                }
-                foundOther = true;
+                results.found(artwork.getArtworkType());
             }
-            assertTrue("No stills", foundStill);
-            assertFalse("Something else found!", foundOther);
+
+            // We should only have posters & backdrops
+            results.validateResults(ArtworkType.STILL);
         }
 
     }
