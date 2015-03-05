@@ -22,15 +22,16 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -82,7 +83,7 @@ public class TmdbCompanies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
+    public ResultList<MovieBasic> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, companyId);
         parameters.add(Param.LANGUAGE, language);
@@ -90,7 +91,8 @@ public class TmdbCompanies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.COMPANY).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
-        return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, webpage);
+        return wrapper.getTmdbResultsList();
     }
 
 }
