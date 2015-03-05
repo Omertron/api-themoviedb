@@ -92,7 +92,7 @@ public class TmdbCompanies extends AbstractMethod {
         URL url = new ApiUrl(apiKey, MethodBase.COMPANY).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
         WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, webpage);
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
 }

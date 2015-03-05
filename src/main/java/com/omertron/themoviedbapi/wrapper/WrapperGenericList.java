@@ -45,7 +45,7 @@ public class WrapperGenericList<T> extends AbstractWrapperAll implements Seriali
         this.results = results;
     }
 
-    public ResultList<T> getTmdbResultsList() {
+    public ResultList<T> getResultsList() {
         ResultList<T> resultsList = new ResultList<T>(results);
         resultsList.copyWrapper(this);
         return resultsList;

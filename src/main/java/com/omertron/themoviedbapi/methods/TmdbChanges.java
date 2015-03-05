@@ -68,7 +68,7 @@ public class TmdbChanges extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, method).subMethod(MethodSub.CHANGES).buildUrl(params);
         WrapperGenericList<ChangeListItem> wrapper = processWrapper(getTypeReference(ChangeListItem.class), url, "changes");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
 }

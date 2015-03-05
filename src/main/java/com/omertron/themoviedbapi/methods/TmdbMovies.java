@@ -386,7 +386,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.SIMILAR).buildUrl(parameters);
         WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "similar movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -408,7 +408,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.REVIEWS).buildUrl(parameters);
         WrapperGenericList<Review> wrapper = processWrapper(getTypeReference(Review.class), url, "review");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -430,7 +430,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.LISTS).buildUrl(parameters);
         WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "movie lists");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -539,7 +539,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.UPCOMING).buildUrl(parameters);
         WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "upcoming movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -560,7 +560,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.NOW_PLAYING).buildUrl(parameters);
         WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "now playing movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -580,7 +580,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.POPULAR).buildUrl(parameters);
         WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "popular movie list");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -601,7 +601,7 @@ public class TmdbMovies extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.TOP_RATED).buildUrl(parameters);
         WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "top rated movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
 }

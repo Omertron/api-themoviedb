@@ -112,7 +112,7 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_MOVIES).buildUrl(parameters);
         WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "favorite movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -130,7 +130,7 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.FAVORITE_TV).buildUrl(parameters);
         WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "favorite TV shows");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -186,7 +186,7 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.RATED_MOVIES).buildUrl(parameters);
         WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "rated movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -210,7 +210,7 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.RATED_TV).buildUrl(parameters);
         WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "rated TV shows");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -234,7 +234,7 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST_MOVIES).buildUrl(parameters);
         WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "movie watch list");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -258,7 +258,7 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.WATCHLIST_TV).buildUrl(parameters);
         WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "TV watch list");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -321,6 +321,6 @@ public class TmdbAccount extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.GUEST_SESSION).subMethod(MethodSub.RATED_MOVIES_GUEST).buildUrl(parameters);
         WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "Guest Session Movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 }

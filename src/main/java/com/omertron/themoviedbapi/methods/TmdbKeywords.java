@@ -90,7 +90,7 @@ public class TmdbKeywords extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.KEYWORD).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "keyword movies");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
 }

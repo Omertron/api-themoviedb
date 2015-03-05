@@ -247,7 +247,7 @@ public class TmdbPeople extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.TAGGED_IMAGES).buildUrl(parameters);
         WrapperGenericList<ArtworkMedia> wrapper = processWrapper(getTypeReference(ArtworkMedia.class), url, "tagged images");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
@@ -299,7 +299,7 @@ public class TmdbPeople extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.POPULAR).buildUrl(parameters);
         WrapperGenericList<PersonFind> wrapper = processWrapper(getTypeReference(PersonFind.class), url, "person popular");
-        return wrapper.getTmdbResultsList();
+        return wrapper.getResultsList();
     }
 
     /**
