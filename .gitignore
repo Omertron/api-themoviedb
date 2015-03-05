@@ -3,6 +3,7 @@
 *.jar
 *.war
 *.ear
+*.bin
 /target/
 /nbactions.xml
 testing.properties
