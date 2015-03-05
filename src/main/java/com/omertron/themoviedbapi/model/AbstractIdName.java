@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model;
 
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -31,9 +32,6 @@ public class AbstractIdName extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 2L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")

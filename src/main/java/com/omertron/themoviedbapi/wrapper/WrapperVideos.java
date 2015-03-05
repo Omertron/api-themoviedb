@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.omertron.themoviedbapi.model.Trailer;
-import com.omertron.themoviedbapi.model.Video;
+import com.omertron.themoviedbapi.model.media.Trailer;
+import com.omertron.themoviedbapi.model.media.Video;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class WrapperVideos extends AbstractWrapperId implements Serializable {
 
         video.setId("");
         video.setLanguage("");
-        video.setSize("");
+        video.setSize(0);
         video.setName(trailer.getName());
         video.setKey(trailer.getSource());
         video.setType(trailer.getType());

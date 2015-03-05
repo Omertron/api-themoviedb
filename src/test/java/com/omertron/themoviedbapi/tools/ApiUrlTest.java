@@ -86,7 +86,7 @@ public class ApiUrlTest {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, "query");
 
-        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl(parameters);
         String expResult = "http://api.themoviedb.org/3/movie/latest?api_key=APIKEY&query=query";
         assertEquals("Wrong Query-Sub URL", expResult, result.toString());
     }
@@ -99,7 +99,7 @@ public class ApiUrlTest {
         parameters.add(Param.PAGE, 1);
         parameters.add(Param.LANGUAGE, "lang");
 
-        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl(parameters);
         String expResult = "http://api.themoviedb.org/3/movie/latest?api_key=APIKEY&query=query&language=lang&page=1";
         assertEquals("Wrong Query Extra URL", expResult, result.toString());
     }
@@ -121,7 +121,7 @@ public class ApiUrlTest {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, "ID");
 
-        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl(parameters);
         String expResult = "http://api.themoviedb.org/3/movie/ID/latest?api_key=APIKEY";
         assertEquals("Wrong ID-Sub URL", expResult, result.toString());
     }
@@ -134,9 +134,45 @@ public class ApiUrlTest {
         parameters.add(Param.PAGE, 1);
         parameters.add(Param.LANGUAGE, "lang");
 
-        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).setSubMethod(MethodSub.LATEST).buildUrl(parameters);
+        URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl(parameters);
         String expResult = "http://api.themoviedb.org/3/movie/ID/latest?api_key=APIKEY&language=lang&page=1";
         assertEquals("Wrong Query Extra URL", expResult, result.toString());
+    }
+
+    @Test
+    public void testTV() {
+        LOG.info("TV test");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, "ID");
+
+        URL result = new ApiUrl(APIKEY, MethodBase.TV).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/tv/ID?api_key=APIKEY";
+        assertEquals("Wrong TV URL", expResult, result.toString());
+    }
+
+    @Test
+    public void testTVSeason() {
+        LOG.info("TV Season test");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, "ID");
+        parameters.add(Param.SEASON_NUMBER, "SEASON");
+
+        URL result = new ApiUrl(APIKEY, MethodBase.SEASON).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/tv/ID/season/SEASON?api_key=APIKEY";
+        assertEquals("Wrong TV Season URL", expResult, result.toString());
+    }
+
+    @Test
+    public void testTVEpsiode() {
+        LOG.info("TV Episode test");
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, "ID");
+        parameters.add(Param.SEASON_NUMBER, "SEASON");
+        parameters.add(Param.EPISODE_NUMBER, "EPISODE");
+
+        URL result = new ApiUrl(APIKEY, MethodBase.EPISODE).buildUrl(parameters);
+        String expResult = "http://api.themoviedb.org/3/tv/ID/season/SEASON/episode/EPISODE?api_key=APIKEY";
+        assertEquals("Wrong TV Episode URL", expResult, result.toString());
     }
 
 }

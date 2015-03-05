@@ -26,17 +26,27 @@ public enum MethodBase {
 
     ACCOUNT("account"),
     AUTH("authentication"),
+    CERTIFICATION("certification"),
     COLLECTION("collection"),
     COMPANY("company"),
     CONFIGURATION("configuration"),
+    CREDIT("credit"),
     DISCOVER("discover"),
+    EPISODE("episode"),
+    FIND("find"),
     GENRE("genre"),
+    GUEST_SESSION("guest_session"),
     JOB("job"),
     KEYWORD("keyword"),
     LIST("list"),
     MOVIE("movie"),
+    NETWORK("network"),
     PERSON("person"),
-    SEARCH("search");
+    REVIEW("review"),
+    SEARCH("search"),
+    SEASON("season"),
+    TIMEZONES("timezones"),
+    TV("tv");
 
     private final String value;
 

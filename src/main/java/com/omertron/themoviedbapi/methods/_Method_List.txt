@@ -1,0 +1,157 @@
+Account (Done)
+/account Get the basic information for an account. You will need to have a valid session id.
+/account/{id}/lists Get the lists that you have created and marked as a favorite.
+/account/{id}/favorite/movies Get the list of favorite movies for an account.
+/account/{id}/favorite/tv Get the list of favorite TV series for an account
+/account/{id}/favorite Add or remove a movie to an accounts favorite list
+/account/{id}/rated/movies Get the list of rated movies (and associated rating) for an account
+/account/{id}/rated/tv Get the list of rated TV shows (and associated rating) for an account.
+/account/{id}/watchlist/movies Get the list of movies on an accounts watchlist
+/account/{id}/watchlist/tv Get the list of TV series on an accounts watchlist
+/account/{id}/watchlist Add or remove a movie to an accounts watch list
+
+Authentication (Done)
+/authentication/token/new This method is used to generate a valid request token for user based authentication
+/authentication/token/validate_with_login Once you have a valid request token you can use this method to authenticate a user with a TMDb username and password.
+/authentication/session/new This method is used to generate a session id for user based authentication. A session id is required in order to use any of the write methods.
+/authentication/guest_session/new This method is used to generate a guest session id.A guest session can be used to rate movies without having a registered TMDb user account.
+
+Certifications (Done)
+/certification/movie/list Get the list of supported certifications for movies.
+/certification/tv/list Get the list of supported certifications for tv shows
+
+Changes (Done)
+/movie/changes Get a list of movie ids that have been edited.
+/person/changes Get a list of people ids that have been edited.
+/tv/changes Get a list of TV show ids that have been edited
+
+Collections (Done)
+/collection/{id} Get the basic collection information for a specific collection id.
+/collection/{id}/images Get all of the images for a particular collection by collection id.
+
+Companies (Done)
+/company/{id} This method is used to retrieve all of the basic information about a company
+/company/{id}/movies Get the list of movies associated with a particular company.
+
+Credits (Done)
+/credit/{credit_id} Get the detailed information about a particular credit record.
+
+Discover (Done)
+/discover/movie Discover movies by different types of data like average rating, number of votes, genres and certifications.
+/discover/tv Discover TV shows by different types of data like average rating, number of votes, genres, the network they aired on and air dates.
+
+Find (Done)
+/find/{id} The find method makes it easy to search for objects in our database by an external id.
+
+Genres (Done)
+/genre/movie/list Get the list of movie genres.
+/genre/tv/list Get the list of TV genres.
+/genre/{id}/movies Get the list of movies for a particular genre by id.
+
+Guest Sessions (Partial - in Account)
+/guest_session/{guest_session_id}/rated_movies Get a list of rated movies for a specific guest session id.
+
+Jobs (Done - part of configuration)
+/job/list Get a list of valid jobs.
+
+Keyword (Done)
+/keyword/{id} Get the basic information for a specific keyword id
+/keyword/{id}/movies Get the list of movies for a particular keyword by id
+
+Lists (Done)
+/list/{id} Get a list by id.
+/list/{id}/item_status Check to see if a movie ID is already added to a list.
+/list This method lets users create a new list. A valid session id is required.
+/list/{id}/add_item This method lets users add new movies to a list that they created. A valid session id is required.
+/list/{id}/remove_item This method lets users delete movies from a list that they created. A valid session id is required.
+/list/{id}/clear Clear all of the items within a list. This is a irreversible action and should be treated with caution. A valid session id is required.
+
+Movies (Done)
+/movie/{id} Get the basic movie information for a specific movie id.
+/movie/{id}/account_states This method lets a TMDb user account get the status of whether or not the movie has been rated or added to their favourite or movie watch list
+/movie/{id}/alternative_titles Get the alternative titles for a specific movie id.
+/movie/{id}/credits Get the cast and crew information for a specific movie id.
+/movie/{id}/images Get the images (posters and backdrops) for a specific movie id.
+/movie/{id}/keywords Get the plot keywords for a specific movie id.
+/movie/{id}/releases Get the release date and certification information by country for a specific movie id.
+/movie/{id}/videos Get the videos (trailers, teasers, clips, etc...) for a specific movie id.
+/movie/{id}/translations Get the translations for a specific movie id.
+/movie/{id}/similar Get the similar movies for a specific movie id.
+/movie/{id}/reviews Get the reviews for a particular movie id.
+/movie/{id}/lists Get the lists that the movie belongs to.
+/movie/{id}/changes Get the changes for a specific movie id.
+/movie/{id}/rating This method lets users rate a movie. A valid session id or guest session id is required.
+/movie/latest Get the latest movie id.
+/movie/upcoming Get the list of upcoming movies by release date. This list refreshes every day.
+/movie/now_playing Get the list of movies playing that have been, or are being released this week. This list refreshes every day.
+/movie/popular Get the list of popular movies on The Movie Database. This list refreshes every day.
+/movie/top_rated Get the list of top rated movies. By default, this list will only include movies that have 10 or more votes. This list refreshes every day.
+
+Networks (Done)
+/network/{id} This method is used to retrieve the basic information about a TV network.
+
+People (Done)
+/person/{id} Get the general person information for a specific id
+/person/{id}/movie_credits Get the movie credits for a specific person id.
+/person/{id}/tv_credits Get the TV credits for a specific person id.
+/person/{id}/combined_credits Get the combined (movie and TV) credits for a specific person id.
+/person/{id}/external_ids Get the external ids for a specific person id.
+/person/{id}/images Get the images for a specific person id.
+/person/{id}/tagged_images Get the images that have been tagged with a specific person id
+/person/{id}/changes Get the changes for a specific person id.
+/person/popular Get the list of popular people on The Movie Database. This list refreshes every day.
+/person/latest Get the latest person id.
+
+Reviews (Done)
+/review/{id} Get the full details of a review by ID.
+
+Search (Done)
+/search/company Search for companies by name.
+/search/collection Search for collections by name.
+/search/keyword Search for keywords by name.
+/search/list Search for lists by name and description.
+/search/movie Search for movies by title.
+/search/multi Search the movie, tv show and person collections with a single query.
+/search/person Search for people by name.
+/search/tv Search for TV shows by title.
+
+Timezones (Done - part of configuration)
+/timezones/list Get the list of supported timezones for the API methods that support them.
+
+TV (Done)
+/tv/{id} Get the primary information about a TV series by id.
+/tv/{id}/account_states This method lets users get the status of whether or not the TV show has been rated or added to their favourite or watch lists. A valid session id is required.
+/tv/{id}/alternative_titles Get the alternative titles for a specific show ID.
+/tv/{id}/changes Get the changes for a specific TV show id.
+/tv/{id}/content_ratings Get the content ratings for a specific TV show id.
+/tv/{id}/credits Get the cast & crew information about a TV series.
+/tv/{id}/external_ids Get the external ids that we have stored for a TV series.
+/tv/{id}/images Get the images (posters and backdrops) for a TV series.
+/tv/{id}/keywords Get the plot keywords for a specific TV show id.
+/tv/{id}/rating This method lets users rate a TV show. A valid session id or guest session id is required.
+/tv/{id}/similar Get the similar TV shows for a specific tv id.
+/tv/{id}/translations Get the list of translations that exist for a TV series. These translations cascade down to the episode level.
+/tv/{id}/videos Get the videos that have been added to a TV series (trailers, opening credits, etc...)
+/tv/latest Get the latest TV show id.
+/tv/on_the_air Get the list of TV shows that are currently on the air. This query looks for any TV show that has an episode with an air date in the next 7 days.
+/tv/airing_today Get the list of TV shows that air today. Without a specified timezone, this query defaults to EST
+/tv/top_rated Get the list of top rated TV shows. By default, this list will only include TV shows that have 2 or more votes. This list refreshes every day.
+/tv/popular Get the list of popular TV shows. This list refreshes every day.
+
+TV Seasons
+/tv/{id}/season/{season_number} Get the primary information about a TV season by its season number.
+/tv/season/{id}/changes Look up a TV season's changes by season ID.
+/tv/{id}/season/{season_number}/credits Get the cast & crew credits for a TV season by season number.
+/tv/{id}/season/{season_number}/external_ids Get the external ids that we have stored for a TV season by season number.
+/tv/{id}/season/{season_number}/images Get the images (posters) that we have stored for a TV season by season number.
+/tv/{id}/season/{season_number}/videos Get the videos that have been added to a TV season (trailers, teasers, etc...)
+
+TV Episodes
+/tv/{id}/season/{season_number}/episode/{episode_number} Get the primary information about a TV episode by combination of a season and episode number.
+/tv/episode/{id}/changes Look up a TV episode's changes by episode ID
+/tv/{id}/season/{season_number}/episode/{episode_number}/account_states This method lets users get the status of whether or not the TV episode has been rated. A valid session id is required.
+/tv/{id}/season/{season_number}/episode/{episode_number}/credits Get the TV episode credits by combination of season and episode number.
+/tv/{id}/season/{season_number}/episode/{episode_number}/external_ids Get the external ids for a TV episode by comabination of a season and episode number.
+/tv/{id}/season/{season_number}/episode/{episode_number}/images Get the images (episode stills) for a TV episode by combination of a season and episode number.
+/tv/{id}/season/{season_number}/episode/{episode_number}/rating This method lets users rate a TV episode. A valid session id or guest session id is required.
+/tv/{id}/season/{season_number}/episode/{episode_number}/videos Get the videos that have been added to a TV episode (teasers, clips, etc...)

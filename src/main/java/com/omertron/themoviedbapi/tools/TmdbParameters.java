@@ -56,8 +56,10 @@ public class TmdbParameters {
      * @param key Parameter to add
      * @param value The array value to use (will be converted into a comma separated list)
      */
-    public void add(Param key, String[] value) {
-        parameters.put(key, toList(value));
+    public void add(final Param key, final String[] value) {
+        if (value != null && value.length > 0) {
+            parameters.put(key, toList(value));
+        }
     }
 
     /**
@@ -66,7 +68,7 @@ public class TmdbParameters {
      * @param key Parameter to add
      * @param value The value to add (will be checked to ensure it's valid)
      */
-    public void add(Param key, String value) {
+    public void add(final Param key, final String value) {
         if (StringUtils.isNotBlank(value)) {
             parameters.put(key, value);
         }
@@ -78,8 +80,8 @@ public class TmdbParameters {
      * @param key Parameter to add
      * @param value The value to add (will be checked to ensure >0)
      */
-    public void add(Param key, int value) {
-        if (value > 0f) {
+    public void add(final Param key, final Integer value) {
+        if (value != null && value > 0) {
             parameters.put(key, String.valueOf(value));
         }
     }
@@ -90,8 +92,8 @@ public class TmdbParameters {
      * @param key Parameter to add
      * @param value The value to add (will be checked to ensure >0)
      */
-    public void add(Param key, float value) {
-        if (value > 0) {
+    public void add(final Param key, final Float value) {
+        if (value != null && value > 0f) {
             parameters.put(key, String.valueOf(value));
         }
     }
@@ -102,8 +104,10 @@ public class TmdbParameters {
      * @param key Parameter to add
      * @param value The value to add (will be checked to ensure >0)
      */
-    public void add(Param key, boolean value) {
-        parameters.put(key, String.valueOf(value));
+    public void add(final Param key, final Boolean value) {
+        if (value != null) {
+            parameters.put(key, String.valueOf(value));
+        }
     }
 
     /**
@@ -112,7 +116,7 @@ public class TmdbParameters {
      * @param key The Parameter to check
      * @return
      */
-    public boolean has(Param key) {
+    public boolean has(final Param key) {
         return parameters.containsKey(key);
     }
 
@@ -122,7 +126,7 @@ public class TmdbParameters {
      * @param key The parameter to get
      * @return
      */
-    public Object get(Param key) {
+    public Object get(final Param key) {
         return parameters.get(key);
     }
 
@@ -131,7 +135,7 @@ public class TmdbParameters {
      *
      * @param key
      */
-    public void remove(Param key) {
+    public void remove(final Param key) {
         parameters.remove(key);
     }
 
@@ -159,7 +163,7 @@ public class TmdbParameters {
      * @param appendToResponse
      * @return
      */
-    public String toList(String[] appendToResponse) {
+    public String toList(final String[] appendToResponse) {
         StringBuilder sb = new StringBuilder();
         if (appendToResponse.length > 0) {
             boolean first = Boolean.TRUE;
