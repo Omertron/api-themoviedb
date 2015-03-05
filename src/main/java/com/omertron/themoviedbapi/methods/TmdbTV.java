@@ -42,7 +42,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
@@ -134,15 +133,8 @@ public class TmdbTV extends AbstractMethod {
         parameters.add(Param.ID, tvID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.ALT_TITLES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-        try {
-            WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
-            TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
-            results.copyWrapper(wrapper);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get alternative titles", url, ex);
-        }
+        WrapperGenericList<AlternativeTitle> wrapper = processWrapper(getTypeReference(AlternativeTitle.class), url, "alternative titles");
+        return wrapper.getTmdbResultsList();
     }
 
     /**

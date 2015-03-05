@@ -118,7 +118,7 @@ Search (Done)
 Timezones (Done - part of configuration)
 /timezones/list Get the list of supported timezones for the API methods that support them.
 
-TV
+TV (Done)
 /tv/{id} Get the primary information about a TV series by id.
 /tv/{id}/account_states This method lets users get the status of whether or not the TV show has been rated or added to their favourite or watch lists. A valid session id is required.
 /tv/{id}/alternative_titles Get the alternative titles for a specific show ID.
