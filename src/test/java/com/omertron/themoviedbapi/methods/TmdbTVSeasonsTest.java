@@ -31,7 +31,7 @@ import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -192,7 +192,7 @@ public class TmdbTVSeasonsTest extends AbstractTests {
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
-            TmdbResultsList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
+            ResultList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
@@ -217,7 +217,7 @@ public class TmdbTVSeasonsTest extends AbstractTests {
         boolean found = false;
 
         for (TestID test : TV_IDS) {
-            TmdbResultsList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
+            ResultList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
             found = found || !result.isEmpty();
         }
 

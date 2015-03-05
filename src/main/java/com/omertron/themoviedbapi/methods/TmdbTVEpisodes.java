@@ -28,7 +28,7 @@ import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -212,7 +212,7 @@ public class TmdbTVEpisodes extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Artwork> getEpisodeImages(int tvID, int seasonNumber, int episodeNumber) throws MovieDbException {
+    public ResultList<Artwork> getEpisodeImages(int tvID, int seasonNumber, int episodeNumber) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.SEASON_NUMBER, seasonNumber);
@@ -223,7 +223,7 @@ public class TmdbTVEpisodes extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -280,7 +280,7 @@ public class TmdbTVEpisodes extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Video> getEpisodeVideos(int tvID, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
+    public ResultList<Video> getEpisodeVideos(int tvID, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.SEASON_NUMBER, seasonNumber);
@@ -292,7 +292,7 @@ public class TmdbTVEpisodes extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            TmdbResultsList<Video> results = new TmdbResultsList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {

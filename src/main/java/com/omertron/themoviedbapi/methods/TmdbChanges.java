@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -60,7 +60,7 @@ public class TmdbChanges extends AbstractMethod {
      * @return List of changed movie
      * @throws MovieDbException
      */
-    public TmdbResultsList<ChangeListItem> getChangeList(MethodBase method, Integer page, String startDate, String endDate) throws MovieDbException {
+    public ResultList<ChangeListItem> getChangeList(MethodBase method, Integer page, String startDate, String endDate) throws MovieDbException {
         TmdbParameters params = new TmdbParameters();
         params.add(Param.PAGE, page);
         params.add(Param.START_DATE, startDate);

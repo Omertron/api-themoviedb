@@ -33,7 +33,7 @@ import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
 import com.omertron.themoviedbapi.model.person.PersonCreditsMixIn;
 import com.omertron.themoviedbapi.model.person.PersonFind;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -210,7 +210,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Artwork> getPersonImages(int personId) throws MovieDbException {
+    public ResultList<Artwork> getPersonImages(int personId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
 
@@ -219,7 +219,7 @@ public class TmdbPeople extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.PROFILE));
+            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll(ArtworkType.PROFILE));
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -239,7 +239,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public TmdbResultsList<ArtworkMedia> getPersonTaggedImages(int personId, Integer page, String language) throws MovieDbException {
+    public ResultList<ArtworkMedia> getPersonTaggedImages(int personId, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.PAGE, page);
@@ -293,7 +293,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonFind> getPersonPopular(Integer page) throws MovieDbException {
+    public ResultList<PersonFind> getPersonPopular(Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
 

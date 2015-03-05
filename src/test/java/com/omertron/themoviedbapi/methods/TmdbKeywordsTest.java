@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -83,7 +83,7 @@ public class TmdbKeywordsTest extends AbstractTests{
     public void testGetKeywordMovies() throws MovieDbException {
         LOG.info("getKeywordMovies");
         int page = 0;
-        TmdbResultsList<MovieBasic> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
+        ResultList<MovieBasic> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
         assertFalse("No keyword movies found", result.isEmpty());
     }
 

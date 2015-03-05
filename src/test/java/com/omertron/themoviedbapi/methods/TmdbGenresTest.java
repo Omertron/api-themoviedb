@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -71,7 +71,7 @@ public class TmdbGenresTest extends AbstractTests {
     @Test
     public void testGetGenreMovieList() throws MovieDbException {
         LOG.info("getGenreMovieList");
-        TmdbResultsList<Genre> result = instance.getGenreMovieList(LANGUAGE_DEFAULT);
+        ResultList<Genre> result = instance.getGenreMovieList(LANGUAGE_DEFAULT);
         assertNotNull("List is null", result.getResults());
         assertFalse("List is empty", result.getResults().isEmpty());
     }
@@ -84,7 +84,7 @@ public class TmdbGenresTest extends AbstractTests {
     @Test
     public void testGetGenreTVList() throws MovieDbException {
         LOG.info("getGenreTVList");
-        TmdbResultsList<Genre> result = instance.getGenreTVList(LANGUAGE_DEFAULT);
+        ResultList<Genre> result = instance.getGenreTVList(LANGUAGE_DEFAULT);
         assertNotNull("List is null", result.getResults());
         assertFalse("List is empty", result.getResults().isEmpty());
     }

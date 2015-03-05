@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.collection.CollectionInfo;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import org.junit.BeforeClass;
@@ -72,7 +72,7 @@ public class TmdbCollectionsTest extends AbstractTests {
     @Test
     public void testGetCollectionImages() throws MovieDbException {
         LOG.info("getCollectionImages");
-        TmdbResultsList<Artwork> result = instance.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
+        ResultList<Artwork> result = instance.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
         assertFalse("No artwork found", result.getResults().isEmpty());
     }
 

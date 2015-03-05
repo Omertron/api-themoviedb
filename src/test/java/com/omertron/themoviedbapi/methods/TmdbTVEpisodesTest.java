@@ -32,7 +32,7 @@ import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -199,7 +199,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
-            TmdbResultsList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
+            ResultList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
@@ -245,7 +245,7 @@ public class TmdbTVEpisodesTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            TmdbResultsList<Video> result = instance.getEpisodeVideos(test.getTmdb(), seasonNumber, episodeNumber, language);
+            ResultList<Video> result = instance.getEpisodeVideos(test.getTmdb(), seasonNumber, episodeNumber, language);
             LOG.info("Found {} videos", result.getResults().size());
         }
     }

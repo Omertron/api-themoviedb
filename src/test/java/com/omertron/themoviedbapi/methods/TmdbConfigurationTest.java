@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.config.Configuration;
 import com.omertron.themoviedbapi.model.config.JobDepartment;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -105,7 +105,7 @@ public class TmdbConfigurationTest extends AbstractTests {
     @Test
     public void testGetJobs() throws MovieDbException {
         LOG.info("getJobs");
-        TmdbResultsList<JobDepartment> result = instance.getJobs();
+        ResultList<JobDepartment> result = instance.getJobs();
         assertNotNull("Null results", result);
         assertFalse("Empty results", result.getResults().isEmpty());
         assertTrue("No results", result.getResults().size() > 0);

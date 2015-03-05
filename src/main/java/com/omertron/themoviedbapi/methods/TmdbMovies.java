@@ -33,7 +33,7 @@ import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.review.Review;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -176,7 +176,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
+    public ResultList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.COUNTRY, country);
@@ -186,7 +186,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
-            TmdbResultsList<AlternativeTitle> results = new TmdbResultsList<AlternativeTitle>(wrapper.getTitles());
+            ResultList<AlternativeTitle> results = new ResultList<AlternativeTitle>(wrapper.getTitles());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -226,7 +226,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -237,7 +237,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -256,7 +256,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
+    public ResultList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.APPEND, appendToResponse);
@@ -266,7 +266,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperMovieKeywords wrapper = MAPPER.readValue(webpage, WrapperMovieKeywords.class);
-            TmdbResultsList<Keyword> results = new TmdbResultsList<Keyword>(wrapper.getKeywords());
+            ResultList<Keyword> results = new ResultList<Keyword>(wrapper.getKeywords());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -284,7 +284,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -295,7 +295,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperReleaseInfo wrapper = MAPPER.readValue(webpage, WrapperReleaseInfo.class);
-            TmdbResultsList<ReleaseInfo> results = new TmdbResultsList<ReleaseInfo>(wrapper.getCountries());
+            ResultList<ReleaseInfo> results = new ResultList<ReleaseInfo>(wrapper.getCountries());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -315,7 +315,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Video> getMovieVideos(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<Video> getMovieVideos(int movieId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -326,7 +326,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            TmdbResultsList<Video> results = new TmdbResultsList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -343,7 +343,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
+    public ResultList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.APPEND, appendToResponse);
@@ -353,7 +353,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
-            TmdbResultsList<Translation> results = new TmdbResultsList<Translation>(wrapper.getTranslations());
+            ResultList<Translation> results = new ResultList<Translation>(wrapper.getTranslations());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {
@@ -377,7 +377,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -399,7 +399,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Review> getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<Review> getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.PAGE, page);
@@ -421,7 +421,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<UserList> getMovieLists(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<UserList> getMovieLists(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
@@ -532,7 +532,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieInfo> getUpcoming(Integer page, String language) throws MovieDbException {
+    public ResultList<MovieInfo> getUpcoming(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
@@ -553,7 +553,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieInfo> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
+    public ResultList<MovieInfo> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
@@ -573,7 +573,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieInfo> getPopularMovieList(Integer page, String language) throws MovieDbException {
+    public ResultList<MovieInfo> getPopularMovieList(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
@@ -594,7 +594,7 @@ public class TmdbMovies extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieInfo> getTopRatedMovies(Integer page, String language) throws MovieDbException {
+    public ResultList<MovieInfo> getTopRatedMovies(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);

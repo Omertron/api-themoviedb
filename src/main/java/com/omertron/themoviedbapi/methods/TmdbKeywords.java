@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -82,7 +82,7 @@ public class TmdbKeywords extends AbstractMethod {
      * @return List of movies with the keyword
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieBasic> getKeywordMovies(String keywordId, String language, Integer page) throws MovieDbException {
+    public ResultList<MovieBasic> getKeywordMovies(String keywordId, String language, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, keywordId);
         parameters.add(Param.LANGUAGE, language);

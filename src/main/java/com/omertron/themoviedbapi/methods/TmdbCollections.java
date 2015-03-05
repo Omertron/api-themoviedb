@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model.collection.CollectionInfo;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -87,7 +87,7 @@ public class TmdbCollections extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
+    public ResultList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, collectionId);
         parameters.add(Param.LANGUAGE, language);
@@ -97,7 +97,7 @@ public class TmdbCollections extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            TmdbResultsList<Artwork> results = new TmdbResultsList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
+            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {

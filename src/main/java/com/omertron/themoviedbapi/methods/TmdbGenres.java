@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -59,7 +59,7 @@ public class TmdbGenres extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Genre> getGenreMovieList(String language) throws MovieDbException {
+    public ResultList<Genre> getGenreMovieList(String language) throws MovieDbException {
         return getGenreList(language, MethodSub.MOVIE_LIST);
     }
 
@@ -70,7 +70,7 @@ public class TmdbGenres extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Genre> getGenreTVList(String language) throws MovieDbException {
+    public ResultList<Genre> getGenreTVList(String language) throws MovieDbException {
         return getGenreList(language, MethodSub.TV_LIST);
     }
 
@@ -81,7 +81,7 @@ public class TmdbGenres extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    private TmdbResultsList<Genre> getGenreList(String language, MethodSub sub) throws MovieDbException {
+    private ResultList<Genre> getGenreList(String language, MethodSub sub) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.LANGUAGE, language);
 
@@ -90,7 +90,7 @@ public class TmdbGenres extends AbstractMethod {
 
         try {
             WrapperGenres wrapper = MAPPER.readValue(webpage, WrapperGenres.class);
-            TmdbResultsList<Genre> results = new TmdbResultsList<Genre>(wrapper.getGenres());
+            ResultList<Genre> results = new ResultList<Genre>(wrapper.getGenres());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {

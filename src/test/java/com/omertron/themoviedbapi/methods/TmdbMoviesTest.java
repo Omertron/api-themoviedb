@@ -39,7 +39,7 @@ import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.review.Review;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import java.text.SimpleDateFormat;
@@ -146,7 +146,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<AlternativeTitle> result = instance.getMovieAlternativeTitles(test.getTmdb(), country, appendToResponse);
+            ResultList<AlternativeTitle> result = instance.getMovieAlternativeTitles(test.getTmdb(), country, appendToResponse);
             assertFalse("No alt titles", result.isEmpty());
         }
     }
@@ -196,7 +196,7 @@ public class TmdbMoviesTest extends AbstractTests {
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<Artwork> result = instance.getMovieImages(test.getTmdb(), language, appendToResponse);
+            ResultList<Artwork> result = instance.getMovieImages(test.getTmdb(), language, appendToResponse);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
@@ -219,7 +219,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<Keyword> result = instance.getMovieKeywords(test.getTmdb(), appendToResponse);
+            ResultList<Keyword> result = instance.getMovieKeywords(test.getTmdb(), appendToResponse);
             assertFalse("No keywords", result.isEmpty());
         }
     }
@@ -237,7 +237,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<ReleaseInfo> result = instance.getMovieReleaseInfo(test.getTmdb(), language, appendToResponse);
+            ResultList<ReleaseInfo> result = instance.getMovieReleaseInfo(test.getTmdb(), language, appendToResponse);
             assertFalse("No release info", result.isEmpty());
         }
     }
@@ -256,7 +256,7 @@ public class TmdbMoviesTest extends AbstractTests {
         boolean found = false;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<Video> result = instance.getMovieVideos(test.getTmdb(), language, appendToResponse);
+            ResultList<Video> result = instance.getMovieVideos(test.getTmdb(), language, appendToResponse);
             found = found || !result.isEmpty();
         }
         assertTrue("No videos", found);
@@ -274,7 +274,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<Translation> result = instance.getMovieTranslations(test.getTmdb(), appendToResponse);
+            ResultList<Translation> result = instance.getMovieTranslations(test.getTmdb(), appendToResponse);
             assertFalse("No translations", result.isEmpty());
         }
     }
@@ -293,7 +293,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<MovieInfo> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
+            ResultList<MovieInfo> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
             assertFalse("No similar movies", result.isEmpty());
         }
     }
@@ -316,7 +316,7 @@ public class TmdbMoviesTest extends AbstractTests {
                 // Has no reviews
                 continue;
             }
-            TmdbResultsList<Review> result = instance.getMovieReviews(test.getTmdb(), page, language, appendToResponse);
+            ResultList<Review> result = instance.getMovieReviews(test.getTmdb(), page, language, appendToResponse);
             assertFalse("No reviews", result.isEmpty());
         }
     }
@@ -335,7 +335,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            TmdbResultsList<UserList> result = instance.getMovieLists(test.getTmdb(), page, language, appendToResponse);
+            ResultList<UserList> result = instance.getMovieLists(test.getTmdb(), page, language, appendToResponse);
             assertFalse("Empty list", result.isEmpty());
             assertTrue(result.getTotalResults() > 0);
         }
@@ -355,7 +355,7 @@ public class TmdbMoviesTest extends AbstractTests {
         int maxCheck = 5;
 
         TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
-        TmdbResultsList<ChangeListItem> changeList = chgs.getChangeList(MethodBase.MOVIE, null, null, null);
+        ResultList<ChangeListItem> changeList = chgs.getChangeList(MethodBase.MOVIE, null, null, null);
         LOG.info("Found {} changes to check, will check maximum of {}", changeList.getResults().size(), maxCheck);
 
         int count = 1;
@@ -414,7 +414,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieInfo> result = instance.getUpcoming(page, language);
+        ResultList<MovieInfo> result = instance.getUpcoming(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 
@@ -429,7 +429,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieInfo> result = instance.getNowPlayingMovies(page, language);
+        ResultList<MovieInfo> result = instance.getNowPlayingMovies(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 
@@ -444,7 +444,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieInfo> result = instance.getPopularMovieList(page, language);
+        ResultList<MovieInfo> result = instance.getPopularMovieList(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 
@@ -459,7 +459,7 @@ public class TmdbMoviesTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        TmdbResultsList<MovieInfo> result = instance.getTopRatedMovies(page, language);
+        ResultList<MovieInfo> result = instance.getTopRatedMovies(page, language);
         assertFalse("No results found", result.isEmpty());
     }
 

@@ -24,7 +24,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.config.Configuration;
 import com.omertron.themoviedbapi.model.config.JobDepartment;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -89,13 +89,13 @@ public class TmdbConfiguration extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<JobDepartment> getJobs() throws MovieDbException {
+    public ResultList<JobDepartment> getJobs() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.JOB).subMethod(MethodSub.LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
             WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
-            TmdbResultsList<JobDepartment> results = new TmdbResultsList<JobDepartment>(wrapper.getJobs());
+            ResultList<JobDepartment> results = new ResultList<JobDepartment>(wrapper.getJobs());
             results.copyWrapper(wrapper);
             return results;
         } catch (IOException ex) {

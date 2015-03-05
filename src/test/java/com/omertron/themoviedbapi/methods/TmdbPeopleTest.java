@@ -35,7 +35,7 @@ import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.person.PersonCredits;
 import com.omertron.themoviedbapi.model.person.PersonFind;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import java.text.SimpleDateFormat;
@@ -225,7 +225,7 @@ public class TmdbPeopleTest extends AbstractTests {
         LOG.info("getPersonImages");
 
         for (TestID test : testIDs) {
-            TmdbResultsList<Artwork> result = instance.getPersonImages(test.getTmdb());
+            ResultList<Artwork> result = instance.getPersonImages(test.getTmdb());
             assertFalse("No artwork", result.isEmpty());
             assertEquals("Wrong artwork type", ArtworkType.PROFILE, result.getResults().get(0).getArtworkType());
         }
@@ -243,7 +243,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : testIDs) {
-            TmdbResultsList<ArtworkMedia> result = instance.getPersonTaggedImages(test.getTmdb(), page, language);
+            ResultList<ArtworkMedia> result = instance.getPersonTaggedImages(test.getTmdb(), page, language);
             assertFalse("No images", result.isEmpty());
             for (ArtworkMedia am : result.getResults()) {
                 assertTrue("No ID", StringUtils.isNotBlank(am.getId()));
@@ -266,7 +266,7 @@ public class TmdbPeopleTest extends AbstractTests {
         int maxCheck = 5;
 
         TmdbChanges chgs = new TmdbChanges(getApiKey(), getHttpTools());
-        TmdbResultsList<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
+        ResultList<ChangeListItem> changeList = chgs.getChangeList(MethodBase.PERSON, null, null, null);
         LOG.info("Found {} person changes to check", changeList.getResults().size());
 
         int count = 1;
@@ -292,7 +292,7 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         Integer page = null;
-        TmdbResultsList<PersonFind> result = instance.getPersonPopular(page);
+        ResultList<PersonFind> result = instance.getPersonPopular(page);
         assertFalse("No results", result.isEmpty());
         assertTrue("No results", result.getResults().size() > 0);
         for (PersonFind p : result.getResults()) {

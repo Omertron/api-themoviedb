@@ -30,7 +30,7 @@ import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -73,7 +73,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Company> searchCompanies(String query, Integer page) throws MovieDbException {
+    public ResultList<Company> searchCompanies(String query, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
@@ -92,7 +92,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
+    public ResultList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
@@ -111,7 +111,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<Keyword> searchKeyword(String query, Integer page) throws MovieDbException {
+    public ResultList<Keyword> searchKeyword(String query, Integer page) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
@@ -130,7 +130,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<UserList> searchList(String query, Integer page, Boolean includeAdult) throws MovieDbException {
+    public ResultList<UserList> searchList(String query, Integer page, Boolean includeAdult) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
@@ -154,7 +154,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieInfo> searchMovie(String query,
+    public ResultList<MovieInfo> searchMovie(String query,
             Integer page,
             String language,
             Boolean includeAdult,
@@ -191,7 +191,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MediaBasic> searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
+    public ResultList<MediaBasic> searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
@@ -203,7 +203,7 @@ public class TmdbSearch extends AbstractMethod {
 
         try {
             WrapperMultiSearch wrapper = MAPPER.readValue(webpage, WrapperMultiSearch.class);
-            TmdbResultsList<MediaBasic> results = new TmdbResultsList<MediaBasic>(null);
+            ResultList<MediaBasic> results = new ResultList<MediaBasic>(null);
             results.getResults().addAll(wrapper.getResults());
             results.copyWrapper(wrapper);
             return results;
@@ -223,7 +223,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<PersonFind> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
+    public ResultList<PersonFind> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.ADULT, includeAdult);
@@ -247,7 +247,7 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public TmdbResultsList<TVBasic> searchTV(String query, Integer page, String language, Integer firstAirDateYear, SearchType searchType) throws MovieDbException {
+    public ResultList<TVBasic> searchTV(String query, Integer page, String language, Integer firstAirDateYear, SearchType searchType) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);

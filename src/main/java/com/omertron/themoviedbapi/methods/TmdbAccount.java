@@ -27,7 +27,7 @@ import com.omertron.themoviedbapi.model.account.Account;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
-import com.omertron.themoviedbapi.results.TmdbResultsList;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -105,7 +105,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
+    public ResultList<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -123,7 +123,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
+    public ResultList<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -176,7 +176,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public ResultList<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -200,7 +200,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public ResultList<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -224,7 +224,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public ResultList<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -248,7 +248,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return The watch list of the user
      * @throws MovieDbException
      */
-    public TmdbResultsList<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
+    public ResultList<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
@@ -303,7 +303,7 @@ public class TmdbAccount extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public TmdbResultsList<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
+    public ResultList<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, guestSessionId);
         parameters.add(Param.LANGUAGE, language);

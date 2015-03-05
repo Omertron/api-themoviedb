@@ -28,11 +28,11 @@ import java.util.List;
  * @author Stuart
  * @param <T>
  */
-public final class TmdbResultsList<T> extends AbstractResults {
+public final class ResultList<T> extends AbstractResults {
 
     private List<T> results;
 
-    public TmdbResultsList(List<T> resultList) {
+    public ResultList(List<T> resultList) {
         if (resultList != null) {
             results = new ArrayList<T>(resultList);
         } else {
