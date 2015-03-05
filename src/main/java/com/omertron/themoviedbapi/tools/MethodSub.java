@@ -69,7 +69,7 @@ public enum MethodSub {
     TAGGED_IMAGES("tagged_images"),
     TOKEN_NEW("token/new"),
     TOKEN_VALIDATE("token/validate_with_login"),
-    TOP_RATED("top-rated"),
+    TOP_RATED("top_rated"),
     TRANSLATIONS("translations"),
     TV("tv"),
     TV_CREDITS("tv_credits"),

@@ -34,8 +34,11 @@ import com.omertron.themoviedbapi.model.media.MediaCreditCast;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model.movie.Translation;
+import com.omertron.themoviedbapi.model.movie.Video;
 import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.ExternalID;
+import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -51,7 +54,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -83,7 +85,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVInfo() throws MovieDbException {
         LOG.info("getTVInfo");
 
@@ -105,7 +107,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVAccountState() throws MovieDbException {
         LOG.info("getTVAccountState");
 
@@ -121,7 +123,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVAlternativeTitles() throws MovieDbException {
         LOG.info("getTVAlternativeTitles");
 
@@ -136,7 +138,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVChanges() throws MovieDbException {
         LOG.info("getTVChanges");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -167,7 +169,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVContentRatings() throws MovieDbException {
         LOG.info("getTVContentRatings");
 
@@ -184,7 +186,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVCredits() throws MovieDbException {
         LOG.info("getTVCredits");
 
@@ -212,7 +214,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVExternalIDs() throws MovieDbException {
         LOG.info("getTVExternalIDs");
 
@@ -229,7 +231,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVImages() throws MovieDbException {
         LOG.info("getTVImages");
 
@@ -265,7 +267,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testGetTVKeywords() throws MovieDbException {
         LOG.info("getTVKeywords");
 
@@ -282,7 +284,7 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-//    @Test
+    @Test
     public void testPostTVRating() throws MovieDbException {
         LOG.info("postTVRating");
 
@@ -317,15 +319,14 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVTranslations() throws MovieDbException {
         LOG.info("getTVTranslations");
 
         for (TestID test : TV_IDS) {
-            String result = instance.getTVTranslations(test.getTmdb());
+            TmdbResultsList<Translation> result = instance.getTVTranslations(test.getTmdb());
+            assertFalse("No translations", result.isEmpty());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -333,33 +334,31 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVVideos() throws MovieDbException {
         LOG.info("getTVVideos");
 
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            String result = instance.getTVVideos(test.getTmdb(), language);
+            TmdbResultsList<Video> result = instance.getTVVideos(test.getTmdb(), language);
+            assertFalse("No videos", result.isEmpty());
         }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getTVLatest method, of class TmdbTV.
+     * Test of getLatestTV method, of class TmdbTV.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVLatest() throws MovieDbException {
         LOG.info("getTVLatest");
 
-        for (TestID test : TV_IDS) {
-            String result = instance.getTVLatest();
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TVInfo result = instance.getLatestTV();
+        assertNotNull("Null TV returned", result);
+        assertTrue("No ID", result.getId() > 0);
+        assertTrue("No title", StringUtils.isNotBlank(result.getName()));
     }
 
     /**
@@ -367,17 +366,14 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVOnTheAir() throws MovieDbException {
         LOG.info("getTVOnTheAir");
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : TV_IDS) {
-            String result = instance.getTVOnTheAir(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<TVBasic> result = instance.getTVOnTheAir(page, language);
+        assertFalse("No results", result.isEmpty());
     }
 
     /**
@@ -385,18 +381,15 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVAiringToday() throws MovieDbException {
         LOG.info("getTVAiringToday");
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
         String timezone = "";
 
-        for (TestID test : TV_IDS) {
-            String result = instance.getTVAiringToday(page, language, timezone);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<TVBasic> result = instance.getTVAiringToday(page, language, timezone);
+        assertFalse("No results", result.isEmpty());
     }
 
     /**
@@ -404,17 +397,14 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVTopRated() throws MovieDbException {
         LOG.info("getTVTopRated");
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : TV_IDS) {
-            String result = instance.getTVTopRated(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<TVBasic> result = instance.getTVTopRated(page, language);
+        assertFalse("No results", result.isEmpty());
     }
 
     /**
@@ -422,17 +412,14 @@ public class TmdbTVTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetTVPopular() throws MovieDbException {
         LOG.info("getTVPopular");
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : TV_IDS) {
-            String result = instance.getTVPopular(page, language);
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TmdbResultsList<TVBasic> result = instance.getTVPopular(page, language);
+        assertFalse("No results", result.isEmpty());
     }
 
 }

@@ -27,8 +27,11 @@ import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.movie.AlternativeTitle;
+import com.omertron.themoviedbapi.model.movie.Translation;
+import com.omertron.themoviedbapi.model.movie.Video;
 import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.ExternalID;
+import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.TmdbResultsList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
@@ -43,6 +46,8 @@ import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
 import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.wrapper.WrapperTranslations;
+import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -338,12 +343,21 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVTranslations(int tvID) throws MovieDbException {
+    public TmdbResultsList<Translation> getTVTranslations(int tvID) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.TRANSLATIONS).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
+            TmdbResultsList<Translation> results = new TmdbResultsList<Translation>(wrapper.getTranslations());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get translations", url, ex);
+        }
     }
 
     /**
@@ -355,13 +369,22 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVVideos(int tvID, String language) throws MovieDbException {
+    public TmdbResultsList<Video> getTVVideos(int tvID, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.VIDEOS).buildUrl(parameters);
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
+            TmdbResultsList<Video> results = new TmdbResultsList<Video>(wrapper.getVideos());
+            results.copyWrapper(wrapper);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get videos", url, ex);
+        }
     }
 
     /**
@@ -370,9 +393,15 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVLatest() throws MovieDbException {
+    public TVInfo getLatestTV() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.LATEST).buildUrl();
-        return null;
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            return MAPPER.readValue(webpage, TVInfo.class);
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest movie", url, ex);
+        }
     }
 
     /**
@@ -386,13 +415,14 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVOnTheAir(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getTVOnTheAir(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.ON_THE_AIR).buildUrl(parameters);
-        return null;
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "on the air");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -406,14 +436,15 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.TIMEZONE, timezone);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.AIRING_TODAY).buildUrl(parameters);
-        return null;
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "airing today");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -429,13 +460,14 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVTopRated(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getTVTopRated(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.TOP_RATED).buildUrl(parameters);
-        return null;
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "top rated TV shows");
+        return wrapper.getTmdbResultsList();
     }
 
     /**
@@ -446,12 +478,13 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public String getTVPopular(Integer page, String language) throws MovieDbException {
+    public TmdbResultsList<TVBasic> getTVPopular(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.POPULAR).buildUrl(parameters);
-        return null;
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "popular TV shows");
+        return wrapper.getTmdbResultsList();
     }
 }
