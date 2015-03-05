@@ -39,8 +39,6 @@ public class PersonFind extends PersonBasic {
     private Boolean adult;
     @JsonProperty("popularity")
     private Float popularity;
-    @JsonProperty("profile_path")
-    private String profilePath;
     private List<? extends MediaBasic> knownFor;
 
     public Boolean getAdult() {
@@ -57,14 +55,6 @@ public class PersonFind extends PersonBasic {
 
     public void setPopularity(Float popularity) {
         this.popularity = popularity;
-    }
-
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
     }
 
     public List<? extends MediaBasic> getKnownFor() {
