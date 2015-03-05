@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum MethodSub {
 
+    NONE(""),
     ACCOUNT_STATES("account_states"),
     ADD_ITEM("add_item"),
     AIRING_TODAY("airing_today"),

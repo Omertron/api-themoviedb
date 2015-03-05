@@ -23,8 +23,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -45,8 +46,16 @@ public class ApiUrl {
     private static final String DELIMITER_SUBSEQUENT = "&";
     // Properties
     private final String apiKey;
-    private final String method;
-    private String submethod = StringUtils.EMPTY;
+    private final MethodBase method;
+    private MethodSub submethod = MethodSub.NONE;
+    private static final List<Param> IGNORE_PARAMS = new ArrayList<Param>();
+
+    static {
+        IGNORE_PARAMS.add(Param.ID);
+        IGNORE_PARAMS.add(Param.QUERY);
+        IGNORE_PARAMS.add(Param.SEASON_NUMBER);
+        IGNORE_PARAMS.add(Param.EPISODE_NUMBER);
+    }
 
     /**
      * Constructor for the simple API URL method without a sub-method
@@ -56,7 +65,7 @@ public class ApiUrl {
      */
     public ApiUrl(String apiKey, MethodBase method) {
         this.apiKey = apiKey;
-        this.method = method.getValue();
+        this.method = method;
     }
 
     /**
@@ -66,7 +75,9 @@ public class ApiUrl {
      * @return
      */
     public ApiUrl subMethod(MethodSub submethod) {
-        this.submethod = submethod.getValue();
+        if (submethod != MethodSub.NONE) {
+            this.submethod = submethod;
+        }
         return this;
     }
 
@@ -88,11 +99,15 @@ public class ApiUrl {
     public URL buildUrl(final TmdbParameters params) {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
 
-        LOG.trace("Method: '{}', Sub-method: '{}', Params: {}", method, submethod,
+        LOG.trace("Method: '{}', Sub-method: '{}', Params: {}", method.getValue(), submethod.getValue(),
                 ToStringBuilder.reflectionToString(params, ToStringStyle.SHORT_PREFIX_STYLE));
 
-        // Get the start of the URL
-        urlString.append(method);
+        // Get the start of the URL, substituting TV for the season or episode methods
+        if (method == MethodBase.SEASON || method == MethodBase.EPISODE) {
+            urlString.append(MethodBase.TV.getValue());
+        } else {
+            urlString.append(method.getValue());
+        }
 
         // We have either a queury, or a ID request
         if (params.has(Param.QUERY)) {
@@ -122,8 +137,8 @@ public class ApiUrl {
         StringBuilder urlString = new StringBuilder();
 
         // Append the suffix of the API URL
-        if (StringUtils.isNotBlank(submethod)) {
-            urlString.append("/").append(submethod);
+        if (submethod != MethodSub.NONE) {
+            urlString.append("/").append(submethod.getValue());
         }
 
         // Append the key information
@@ -162,8 +177,16 @@ public class ApiUrl {
             urlString.append("/").append(params.get(Param.ID));
         }
 
-        if (StringUtils.isNotBlank(submethod)) {
-            urlString.append("/").append(submethod);
+        if (params.has(Param.SEASON_NUMBER)) {
+            urlString.append("/season/").append(params.get(Param.SEASON_NUMBER));
+        }
+
+        if (params.has(Param.EPISODE_NUMBER)) {
+            urlString.append("/episode/").append(params.get(Param.EPISODE_NUMBER));
+        }
+
+        if (submethod != MethodSub.NONE) {
+            urlString.append("/").append(submethod.getValue());
         }
 
         // Append the key information
@@ -185,7 +208,7 @@ public class ApiUrl {
 
         for (Map.Entry<Param, String> argEntry : params.getEntries()) {
             // Skip the ID an QUERY params
-            if (argEntry.getKey() == Param.ID || argEntry.getKey() == Param.QUERY) {
+            if (IGNORE_PARAMS.contains(argEntry.getKey())) {
                 continue;
             }
 
