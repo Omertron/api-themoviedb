@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Language;
@@ -51,7 +52,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author stuart.boston
  */
-public class MovieInfo extends AbstractJsonMapping {
+public class MovieInfo extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("backdrop_path")
@@ -130,6 +131,7 @@ public class MovieInfo extends AbstractJsonMapping {
         return backdropPath;
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -236,6 +238,7 @@ public class MovieInfo extends AbstractJsonMapping {
         this.backdropPath = backdropPath;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

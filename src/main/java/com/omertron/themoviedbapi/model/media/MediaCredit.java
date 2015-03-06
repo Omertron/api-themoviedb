@@ -20,13 +20,14 @@
 package com.omertron.themoviedbapi.model.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class MediaCredit extends AbstractJsonMapping {
+public class MediaCredit extends AbstractJsonMapping implements IIdentification {
 
     @JsonProperty("credit_id")
     private String creditId;
@@ -45,10 +46,12 @@ public class MediaCredit extends AbstractJsonMapping {
         this.creditId = creditId;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

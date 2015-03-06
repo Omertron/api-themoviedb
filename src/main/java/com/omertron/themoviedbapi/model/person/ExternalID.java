@@ -20,16 +20,17 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
  *
  * @author Stuart
  */
-public class ExternalID extends AbstractJsonMapping {
+public class ExternalID extends AbstractJsonMapping implements IIdentification {
 
     @JsonProperty("id")
-    private String id;
+    private int id;
     @JsonProperty("imdb_id")
     private String imdbId;
     @JsonProperty("freebase_mid")
@@ -41,11 +42,13 @@ public class ExternalID extends AbstractJsonMapping {
     @JsonProperty("tvrage_id")
     private String tvrageId;
 
-    public String getId() {
+    @Override
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    @Override
+    public void setId(int id) {
         this.id = id;
     }
 

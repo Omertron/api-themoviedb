@@ -27,13 +27,12 @@ import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeBasic;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
 import java.util.List;
 
 /**
  * @author stuart.boston
  */
-public class PersonFind extends PersonBasic implements IIdentification {
+public class PersonFind extends PersonBasic {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("adult")

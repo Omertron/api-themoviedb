@@ -21,11 +21,12 @@ package com.omertron.themoviedbapi.model.network;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 
 /**
  * @author stuart.boston
  */
-public class Network extends AbstractJsonMapping {
+public class Network extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,10 +35,12 @@ public class Network extends AbstractJsonMapping {
     @JsonProperty("name")
     private String name;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

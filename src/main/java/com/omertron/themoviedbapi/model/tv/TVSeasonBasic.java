@@ -21,13 +21,14 @@ package com.omertron.themoviedbapi.model.tv;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 
 /**
  * TV Favorite information
  *
  * @author stuart.boston
  */
-public class TVSeasonBasic extends AbstractJsonMapping {
+public class TVSeasonBasic extends AbstractJsonMapping implements IIdentification {
 
     @JsonProperty("id")
     private int id = -1;
@@ -40,10 +41,12 @@ public class TVSeasonBasic extends AbstractJsonMapping {
     @JsonProperty("episode_count")
     private int episodeCount = -1;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

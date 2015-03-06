@@ -31,9 +31,6 @@ public class ReleaseInfo extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("iso_3166_1")
     private String country;
     @JsonProperty("certification")

@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
  * @author stuart.boston
  * @param <T>
  */
-public class PersonCredits<T extends CreditBasic> extends AbstractJsonMapping {
+public class PersonCredits<T extends CreditBasic> extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,10 +38,12 @@ public class PersonCredits<T extends CreditBasic> extends AbstractJsonMapping {
     private List<T> cast;
     private List<T> crew;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

@@ -23,12 +23,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.CreditType;
 import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
  * @author stuart.boston
  */
-public class CreditBasic extends AbstractJsonMapping {
+public class CreditBasic extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 1L;
 
@@ -80,10 +81,12 @@ public class CreditBasic extends AbstractJsonMapping {
         this.creditId = creditId;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

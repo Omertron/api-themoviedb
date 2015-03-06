@@ -21,13 +21,14 @@ package com.omertron.themoviedbapi.model.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class MediaState extends AbstractJsonMapping {
+public class MediaState extends AbstractJsonMapping implements IIdentification {
 
     @JsonProperty("id")
     private int id;
@@ -37,10 +38,12 @@ public class MediaState extends AbstractJsonMapping {
     private boolean watchlist;
     private float rated;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

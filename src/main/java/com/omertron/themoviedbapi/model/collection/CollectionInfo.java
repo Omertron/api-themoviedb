@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model.collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * @author Stuart
  */
-public class CollectionInfo extends AbstractJsonMapping {
+public class CollectionInfo extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,6 +50,7 @@ public class CollectionInfo extends AbstractJsonMapping {
         return backdropPath;
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -73,6 +75,7 @@ public class CollectionInfo extends AbstractJsonMapping {
         this.backdropPath = backdropPath;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

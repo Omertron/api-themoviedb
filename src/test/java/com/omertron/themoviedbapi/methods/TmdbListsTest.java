@@ -36,7 +36,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-//@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TmdbListsTest extends AbstractTests {
 
     private static TmdbLists instance;

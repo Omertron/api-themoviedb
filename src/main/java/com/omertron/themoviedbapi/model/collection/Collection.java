@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model.collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -30,7 +31,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author stuart.boston
  */
 @JsonRootName("collection")
-public class Collection extends AbstractJsonMapping {
+public class Collection extends AbstractJsonMapping implements IIdentification{
 
     private static final long serialVersionUID = 1L;
 
@@ -51,6 +52,7 @@ public class Collection extends AbstractJsonMapping {
         return backdropPath;
     }
 
+    @Override
     public int getId() {
         return id;
     }
@@ -81,6 +83,7 @@ public class Collection extends AbstractJsonMapping {
         this.backdropPath = backdropPath;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

@@ -31,15 +31,11 @@ public class AlternativeTitle implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("iso_3166_1")
     private String country;
     @JsonProperty("title")
     private String title;
 
-    // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getCountry() {
         return country;
     }
@@ -47,9 +43,7 @@ public class AlternativeTitle implements Serializable {
     public String getTitle() {
         return title;
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Setter methods">
     public void setCountry(String country) {
         this.country = country;
     }
@@ -57,7 +51,6 @@ public class AlternativeTitle implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
-    // </editor-fold>
 
     @Override
     public boolean equals(Object obj) {
