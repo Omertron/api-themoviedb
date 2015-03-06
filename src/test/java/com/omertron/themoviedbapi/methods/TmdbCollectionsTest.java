@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.collection.CollectionInfo;
 import com.omertron.themoviedbapi.results.ResultList;
@@ -73,7 +74,7 @@ public class TmdbCollectionsTest extends AbstractTests {
     public void testGetCollectionImages() throws MovieDbException {
         LOG.info("getCollectionImages");
         ResultList<Artwork> result = instance.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
-        assertFalse("No artwork found", result.getResults().isEmpty());
+        TestSuite.test(result);
     }
 
 }

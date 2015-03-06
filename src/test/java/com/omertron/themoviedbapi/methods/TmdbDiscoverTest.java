@@ -21,13 +21,13 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -73,7 +73,7 @@ public class TmdbDiscoverTest extends AbstractTests {
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
         ResultList<MovieBasic> result = instance.getDiscoverMovies(discover);
-        assertFalse("No movies discovered", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -88,7 +88,7 @@ public class TmdbDiscoverTest extends AbstractTests {
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
         ResultList<TVBasic> result = instance.getDiscoverTV(discover);
-        assertFalse("No TV shows discovered", result.isEmpty());
+        TestSuite.test(result);
     }
 
 }

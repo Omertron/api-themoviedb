@@ -23,6 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.media.MediaCreditCast;
@@ -34,11 +35,9 @@ import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -94,10 +93,7 @@ public class TmdbSeasonsTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
-            assertTrue("No ID", result.getId() > 0);
-            assertTrue("No name", StringUtils.isNotBlank(result.getName()));
-            assertTrue("No overview", StringUtils.isNotBlank(result.getOverview()));
-            assertTrue("No episodes", result.getEpisodes().size() > 0);
+            TestSuite.test(result);
         }
     }
 
@@ -142,7 +138,9 @@ public class TmdbSeasonsTest extends AbstractTests {
         for (TestID test : TV_IDS) {
             MediaCreditList result = instance.getSeasonCredits(test.getTmdb(), seasonNumber);
             assertNotNull(result);
-            assertFalse(result.getCast().isEmpty());
+            TestSuite.test(result.getCast());
+            TestSuite.test(result.getCrew());
+            TestSuite.test(result.getGuestStars());
 
             boolean found = false;
             for (MediaCreditCast p : result.getCast()) {
@@ -152,9 +150,6 @@ public class TmdbSeasonsTest extends AbstractTests {
                 }
             }
             assertTrue(test.getOther() + " not found in cast!", found);
-
-            assertFalse(result.getCrew().isEmpty());
-            break;
         }
     }
 
@@ -193,7 +188,7 @@ public class TmdbSeasonsTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
-            assertFalse("No artwork", result.isEmpty());
+            TestSuite.test(result);
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
             }

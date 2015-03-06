@@ -22,18 +22,14 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ExternalSource;
 import com.omertron.themoviedbapi.model.FindResults;
-import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.model.person.PersonFind;
-import com.omertron.themoviedbapi.model.tv.TVBasic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -91,16 +87,10 @@ public class TmdbFindTest extends AbstractTests {
         FindResults result;
 
         for (TestID test : FILM_IDS) {
+            LOG.info("Testing {}", test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            assertFalse("No movie for ID " + test.getName(), result.getMovieResults().isEmpty());
-            boolean found = false;
-            for (MovieBasic m : result.getMovieResults()) {
-                if (m.getId() == test.getTmdb()) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue("No movie found: " + test.getName(), found);
+            TestSuite.test(result.getMovieResults());
+            TestSuite.testId(result.getMovieResults(), test.getTmdb(), "Movie");
         }
     }
 
@@ -116,19 +106,10 @@ public class TmdbFindTest extends AbstractTests {
         FindResults result;
 
         for (TestID test : PERSON_IDS) {
+            LOG.info("Testing {}", test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            assertFalse("No person for ID: " + test.getName(), result.getPersonResults().isEmpty());
-            boolean found = false;
-            for (PersonFind p : result.getPersonResults()) {
-                for (Object x : p.getKnownFor()) {
-                    LOG.info("  {}", x.toString());
-                }
-                if (p.getId() == test.getTmdb()) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue("No person found for ID: " + test.getName(), found);
+            TestSuite.test(result.getPersonResults());
+            TestSuite.testId(result.getPersonResults(), test.getTmdb(), "Person");
         }
     }
 
@@ -143,16 +124,10 @@ public class TmdbFindTest extends AbstractTests {
         FindResults result;
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing {}", test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            assertFalse("No TV Show info for ID: " + test.getName(), result.getTvResults().isEmpty());
-            boolean found = false;
-            for (TVBasic tv : result.getTvResults()) {
-                if (tv.getId() == test.getTmdb()) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue("No TV Show found for ID: " + test.getName(), found);
+            TestSuite.test(result.getTvResults());
+            TestSuite.testId(result.getTvResults(), test.getTmdb(), "TV");
         }
     }
 

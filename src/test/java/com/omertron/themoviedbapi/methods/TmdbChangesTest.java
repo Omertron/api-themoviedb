@@ -21,11 +21,11 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertFalse;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -59,7 +59,7 @@ public class TmdbChangesTest extends AbstractTests {
     public void testGetMovieChangesList() throws MovieDbException {
         LOG.info("getMovieChangesList");
         ResultList<ChangeListItem> result = instance.getChangeList(MethodBase.MOVIE, null, null, null);
-        assertFalse("No Movie changes.", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -71,7 +71,7 @@ public class TmdbChangesTest extends AbstractTests {
     public void testGetPersonChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
         ResultList<ChangeListItem> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
-        assertFalse("No Person changes.", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -83,6 +83,6 @@ public class TmdbChangesTest extends AbstractTests {
     public void testGetTVChangesList() throws MovieDbException {
         LOG.info("getTVChangesList");
         ResultList<ChangeListItem> result = instance.getChangeList(MethodBase.TV, null, null, null);
-        assertFalse("No TV changes.", result.isEmpty());
+        TestSuite.test(result);
     }
 }

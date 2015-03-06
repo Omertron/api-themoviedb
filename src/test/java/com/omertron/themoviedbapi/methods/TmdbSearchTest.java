@@ -79,16 +79,7 @@ public class TmdbSearchTest extends AbstractTests {
         int page = 0;
         ResultList<Collection> result = instance.searchCollection(query, page, LANGUAGE_DEFAULT);
         TestSuite.test(result);
-
-        // Make sure we find at least the "Dark Knight" collection, ID: 263
-        boolean found = false;
-        for (Collection c : result.getResults()) {
-            if (c.getId() == 263) {
-                found = true;
-                break;
-            }
-        }
-        assertTrue("Collection not found", found);
+        TestSuite.testId(result, 263, "Collection");
     }
 
     /**

@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.config.Configuration;
 import com.omertron.themoviedbapi.model.config.JobDepartment;
 import com.omertron.themoviedbapi.results.ResultList;
@@ -106,9 +107,7 @@ public class TmdbConfigurationTest extends AbstractTests {
     public void testGetJobs() throws MovieDbException {
         LOG.info("getJobs");
         ResultList<JobDepartment> result = instance.getJobs();
-        assertNotNull("Null results", result);
-        assertFalse("Empty results", result.getResults().isEmpty());
-        assertTrue("No results", result.getResults().size() > 0);
+        TestSuite.test(result);
     }
 
     /**

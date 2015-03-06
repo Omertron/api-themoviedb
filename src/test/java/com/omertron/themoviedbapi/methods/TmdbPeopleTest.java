@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
@@ -70,7 +71,7 @@ public class TmdbPeopleTest extends AbstractTests {
         doConfiguration();
         instance = new TmdbPeople(getApiKey(), getHttpTools());
         testIDs.add(new TestID("Bruce Willis", "nm0000246", 62));
-//        testIDs.add(new TestID("Will Smith", "nm0000226", 2888));
+        testIDs.add(new TestID("Will Smith", "nm0000226", 2888));
     }
 
     @AfterClass
@@ -98,14 +99,8 @@ public class TmdbPeopleTest extends AbstractTests {
         for (TestID test : testIDs) {
             result = instance.getPersonInfo(test.getTmdb());
             assertEquals("Wrong actor returned", test.getTmdb(), result.getId());
-            assertTrue("Missing bio", StringUtils.isNotBlank(result.getBiography()));
-            assertTrue("Missing birthday", StringUtils.isNotBlank(result.getBirthday()));
-            assertTrue("Missing homepage", StringUtils.isNotBlank(result.getHomepage()));
             assertEquals("Missing IMDB", test.getImdb(), result.getImdbId());
-            assertTrue("Missing name", StringUtils.isNotBlank(result.getName()));
-            assertTrue("Missing birth place", StringUtils.isNotBlank(result.getPlaceOfBirth()));
-            assertTrue("Missing artwork", StringUtils.isNotBlank(result.getProfilePath()));
-            assertTrue("Missing bio", result.getPopularity() > 0F);
+            TestSuite.test(result);
         }
     }
 
@@ -124,8 +119,8 @@ public class TmdbPeopleTest extends AbstractTests {
             PersonCredits<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
-            assertFalse("No cast", result.getCast().isEmpty());
-            assertFalse("No crew", result.getCrew().isEmpty());
+            TestSuite.test(result.getCast());
+            TestSuite.test(result.getCrew());
 
             // Check that we have the movie specific fields
             assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getTitle()));
@@ -148,8 +143,8 @@ public class TmdbPeopleTest extends AbstractTests {
             PersonCredits<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
-            assertFalse("No cast", result.getCast().isEmpty());
-            assertFalse("No crew", result.getCrew().isEmpty());
+            TestSuite.test(result.getCast());
+            TestSuite.test(result.getCrew());
 
             // Check that we have the TV specific fields
             assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getName()));
@@ -172,8 +167,8 @@ public class TmdbPeopleTest extends AbstractTests {
             PersonCredits<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
-            assertFalse("No cast", result.getCast().isEmpty());
-            assertFalse("No crew", result.getCrew().isEmpty());
+            TestSuite.test(result.getCast());
+            TestSuite.test(result.getCrew());
 
             boolean checkedMovie = false;
             boolean checkedTV = false;
@@ -225,7 +220,7 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : testIDs) {
             ResultList<Artwork> result = instance.getPersonImages(test.getTmdb());
-            assertFalse("No artwork", result.isEmpty());
+            TestSuite.test(result);
             assertEquals("Wrong artwork type", ArtworkType.PROFILE, result.getResults().get(0).getArtworkType());
         }
     }
@@ -243,7 +238,7 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : testIDs) {
             ResultList<ArtworkMedia> result = instance.getPersonTaggedImages(test.getTmdb(), page, language);
-            assertFalse("No images", result.isEmpty());
+            TestSuite.test(result);
             for (ArtworkMedia am : result.getResults()) {
                 assertTrue("No ID", StringUtils.isNotBlank(am.getId()));
                 assertTrue("No file path", StringUtils.isNotBlank(am.getFilePath()));
@@ -292,8 +287,7 @@ public class TmdbPeopleTest extends AbstractTests {
         LOG.info("getPersonPopular");
         Integer page = null;
         ResultList<PersonFind> result = instance.getPersonPopular(page);
-        assertFalse("No results", result.isEmpty());
-        assertTrue("No results", result.getResults().size() > 0);
+        TestSuite.test(result);
         for (PersonFind p : result.getResults()) {
             assertFalse("No known for entries", p.getKnownFor().isEmpty());
             LOG.info("{} ({}) = {}", p.getName(), p.getId(), p.getKnownFor().size());
@@ -308,10 +302,8 @@ public class TmdbPeopleTest extends AbstractTests {
     @Test
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
-
         Person result = instance.getPersonLatest();
-        assertTrue("No ID", result.getId() > 0);
-        assertTrue("No name!", StringUtils.isNotBlank(result.getName()));
+        TestSuite.test(result);
     }
 
 }

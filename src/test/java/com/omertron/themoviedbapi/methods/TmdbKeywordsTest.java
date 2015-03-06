@@ -21,13 +21,13 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.ResultList;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,7 +36,7 @@ import org.junit.Test;
  *
  * @author stuart.boston
  */
-public class TmdbKeywordsTest extends AbstractTests{
+public class TmdbKeywordsTest extends AbstractTests {
 
     private static TmdbKeywords tmdb;
     private static final String ID_KEYWORD = "1721";
@@ -47,7 +47,7 @@ public class TmdbKeywordsTest extends AbstractTests{
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
-        tmdb = new TmdbKeywords(getApiKey(),getHttpTools());
+        tmdb = new TmdbKeywords(getApiKey(), getHttpTools());
     }
 
     @AfterClass
@@ -84,7 +84,7 @@ public class TmdbKeywordsTest extends AbstractTests{
         LOG.info("getKeywordMovies");
         int page = 0;
         ResultList<MovieBasic> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
-        assertFalse("No keyword movies found", result.isEmpty());
+        TestSuite.test(result);
     }
 
 }

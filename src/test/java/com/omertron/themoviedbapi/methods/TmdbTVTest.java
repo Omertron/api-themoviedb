@@ -23,6 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
@@ -45,7 +46,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import static org.junit.Assert.assertEquals;
@@ -92,11 +92,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             TVInfo result = instance.getTVInfo(test.getTmdb(), language, appendToResponse);
-            assertTrue("No ID", result.getId() > 0);
-            assertFalse("No runtime", result.getEpisodeRunTime().isEmpty());
-            assertFalse("No genres", result.getGenres().isEmpty());
-            assertTrue("No season count", result.getNumberOfSeasons() > 0);
-            assertTrue("No episode count", result.getNumberOfEpisodes() > 0);
+            TestSuite.test(result);
         }
     }
 
@@ -127,7 +123,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<AlternativeTitle> result = instance.getTVAlternativeTitles(test.getTmdb());
-            assertFalse("No alt titles", result.isEmpty());
+            TestSuite.test(result);
         }
     }
 
@@ -173,7 +169,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<ContentRating> result = instance.getTVContentRatings(test.getTmdb());
-            assertFalse("No ratings", result.isEmpty());
+            TestSuite.test(result);
             assertTrue("No language", StringUtils.isNotBlank(result.getResults().get(0).getLanguage()));
             assertTrue("No rating", StringUtils.isNotBlank(result.getResults().get(0).getRating()));
         }
@@ -240,7 +236,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Artwork> result = instance.getTVImages(test.getTmdb(), language, includeImageLanguage);
-            assertFalse("No artwork", result.isEmpty());
+            TestSuite.test(result);
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
             }
@@ -264,7 +260,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Keyword> result = instance.getTVKeywords(test.getTmdb(), appendToResponse);
-            assertFalse("No keywords", result.isEmpty());
+            TestSuite.test(result);
         }
     }
 
@@ -278,7 +274,7 @@ public class TmdbTVTest extends AbstractTests {
         LOG.info("postTVRating");
 
         for (TestID test : TV_IDS) {
-            Integer rating = new Random().nextInt(10) + 1;
+            int rating = TestSuite.randomRating();
             StatusCode result = instance.postTVRating(test.getTmdb(), rating, getSessionId(), null);
             assertEquals("failed to post rating", 12, result.getCode());
         }
@@ -299,7 +295,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<TVInfo> result = instance.getTVSimilar(test.getTmdb(), page, language, appendToResponse);
-            assertFalse("No similar TV shows", result.isEmpty());
+            TestSuite.test(result);
         }
     }
 
@@ -314,7 +310,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Translation> result = instance.getTVTranslations(test.getTmdb());
-            assertFalse("No translations", result.isEmpty());
+            TestSuite.test(result);
         }
     }
 
@@ -347,9 +343,7 @@ public class TmdbTVTest extends AbstractTests {
         LOG.info("getTVLatest");
 
         TVInfo result = instance.getLatestTV();
-        assertNotNull("Null TV returned", result);
-        assertTrue("No ID", result.getId() > 0);
-        assertTrue("No title", StringUtils.isNotBlank(result.getName()));
+        TestSuite.test(result);
     }
 
     /**
@@ -364,7 +358,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<TVBasic> result = instance.getTVOnTheAir(page, language);
-        assertFalse("No results", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -380,7 +374,7 @@ public class TmdbTVTest extends AbstractTests {
         String timezone = "";
 
         ResultList<TVBasic> result = instance.getTVAiringToday(page, language, timezone);
-        assertFalse("No results", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -395,7 +389,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<TVBasic> result = instance.getTVTopRated(page, language);
-        assertFalse("No results", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -410,7 +404,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<TVBasic> result = instance.getTVPopular(page, language);
-        assertFalse("No results", result.isEmpty());
+        TestSuite.test(result);
     }
 
 }

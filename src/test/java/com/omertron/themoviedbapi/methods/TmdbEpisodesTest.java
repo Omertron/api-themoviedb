@@ -23,6 +23,7 @@ import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
+import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
@@ -35,8 +36,6 @@ import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -97,10 +96,7 @@ public class TmdbEpisodesTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             TVEpisodeInfo result = instance.getEpisodeInfo(test.getTmdb(), seasonNumber, episodeNumber, language, appendToResponse);
-            assertTrue("No ID", result.getId() > 0);
-            assertTrue("No name", StringUtils.isNotBlank(result.getName()));
-            assertTrue("No crew", result.getCrew().size() > 0);
-            assertTrue("No guest stars", result.getGuestStars().size() > 0);
+            TestSuite.test(result);
         }
     }
 
@@ -196,9 +192,8 @@ public class TmdbEpisodesTest extends AbstractTests {
         int seasonNumber = 1;
         int episodeNumber = 1;
 
-        ArtworkResults results = new ArtworkResults();
-
         for (TestID test : TV_IDS) {
+            ArtworkResults results = new ArtworkResults();
             ResultList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
@@ -225,7 +220,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         String guestSessionID = null;
 
         for (TestID test : TV_IDS) {
-            Integer rating = new Random().nextInt(10) + 1;
+            int rating = TestSuite.randomRating();
             StatusCode result = instance.postEpisodeRating(test.getTmdb(), seasonNumber, episodeNumber, rating, getSessionId(), guestSessionID);
             assertEquals("failed to post rating", 12, result.getCode());
         }
@@ -246,7 +241,7 @@ public class TmdbEpisodesTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Video> result = instance.getEpisodeVideos(test.getTmdb(), seasonNumber, episodeNumber, language);
-            LOG.info("Found {} videos", result.getResults().size());
+            TestSuite.test(result);
         }
     }
 
