@@ -17,7 +17,9 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.interfaces;
+
+import com.omertron.themoviedbapi.wrapper.ResultDates;
 
 public interface IWrapperDates {
 

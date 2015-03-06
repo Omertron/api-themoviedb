@@ -23,14 +23,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.wrapper.IWrapperId;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 
 /**
  * Basic media information
  *
  * @author stuart.boston
  */
-public class MediaBasic extends AbstractJsonMapping implements IWrapperId {
+public class MediaBasic extends AbstractJsonMapping implements IIdentification {
 
     @JsonProperty("id")
     private int id;
@@ -46,10 +46,12 @@ public class MediaBasic extends AbstractJsonMapping implements IWrapperId {
     @JsonProperty("vote_count")
     private int voteCount;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

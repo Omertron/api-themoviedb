@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.wrapper.IWrapperId;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -28,7 +28,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author Stuart.Boston
  */
-public class AbstractIdName extends AbstractJsonMapping implements IWrapperId {
+public class AbstractIdName extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 2L;
 
@@ -37,6 +37,7 @@ public class AbstractIdName extends AbstractJsonMapping implements IWrapperId {
     @JsonProperty("name")
     private String name;
 
+    @Override
     public int getId() {
         return id;
     }
@@ -45,6 +46,7 @@ public class AbstractIdName extends AbstractJsonMapping implements IWrapperId {
         return name;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

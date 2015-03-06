@@ -17,19 +17,11 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.interfaces;
 
-public interface IWrapperPages {
+public interface IIdentification {
 
-    int getPage();
+    int getId();
 
-    void setPage(int page);
-
-    int getTotalPages();
-
-    void setTotalPages(int totalPages);
-
-    int getTotalResults();
-
-    void setTotalResults(int totalResults);
+    void setId(int id);
 }

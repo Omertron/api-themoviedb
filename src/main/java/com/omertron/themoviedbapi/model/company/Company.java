@@ -21,14 +21,14 @@ package com.omertron.themoviedbapi.model.company;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.wrapper.IWrapperId;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 
 /**
  * Company information
  *
  * @author Stuart
  */
-public class Company extends AbstractJsonMapping implements IWrapperId {
+public class Company extends AbstractJsonMapping implements IIdentification {
 
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_STRING = "";
@@ -48,6 +48,7 @@ public class Company extends AbstractJsonMapping implements IWrapperId {
     @JsonProperty("parent_company")
     private Company parentCompany = null;
 
+    @Override
     public int getId() {
         return id;
     }
@@ -76,6 +77,7 @@ public class Company extends AbstractJsonMapping implements IWrapperId {
         return parentCompany;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

@@ -19,6 +19,9 @@
  */
 package com.omertron.themoviedbapi.wrapper;
 
+import com.omertron.themoviedbapi.interfaces.IWrapperDates;
+import com.omertron.themoviedbapi.interfaces.IWrapperPages;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.results.AbstractResults;
 
@@ -27,7 +30,7 @@ import com.omertron.themoviedbapi.results.AbstractResults;
  *
  * @author Stuart
  */
-public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId, IWrapperPages, IWrapperDates {
+public class AbstractWrapperAll extends AbstractWrapperId implements IIdentification, IWrapperPages, IWrapperDates {
 
     @JsonProperty("page")
     private int page;

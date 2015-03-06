@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
-import com.omertron.themoviedbapi.wrapper.IWrapperId;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import java.util.List;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.junit.Assert.assertFalse;
@@ -59,13 +59,13 @@ public class TestSuite {
         assertTrue("No first air date", isNotBlank(test.getFirstAirDate()));
     }
 
-    public static void testId(ResultList<? extends IWrapperId> result, int id, String message) {
+    public static void testId(ResultList<? extends IIdentification> result, int id, String message) {
         testId(result.getResults(), id, message);
     }
 
-    public static void testId(List<? extends IWrapperId> result, int id, String message) {
+    public static void testId(List<? extends IIdentification> result, int id, String message) {
         boolean found = false;
-        for (IWrapperId item : result) {
+        for (IIdentification item : result) {
             if (item.getId() == id) {
                 found = true;
                 break;

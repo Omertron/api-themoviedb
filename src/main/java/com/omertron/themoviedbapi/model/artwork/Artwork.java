@@ -136,8 +136,8 @@ public class Artwork extends AbstractJsonMapping {
     }
 
     @JsonSetter("image_type")
-    public void setArtworkType(String artworkType){
-        this.artworkType=ArtworkType.fromString(artworkType);
+    public void setArtworkType(String artworkType) {
+        this.artworkType = ArtworkType.fromString(artworkType);
     }
 
     @Override

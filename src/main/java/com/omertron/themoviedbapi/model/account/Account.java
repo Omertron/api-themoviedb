@@ -21,8 +21,9 @@ package com.omertron.themoviedbapi.model.account;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 
-public class Account extends AbstractJsonMapping {
+public class Account extends AbstractJsonMapping implements IIdentification{
 
     @JsonProperty("id")
     private int id;
@@ -37,10 +38,12 @@ public class Account extends AbstractJsonMapping {
     @JsonProperty("iso_3166_1")
     private String country;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

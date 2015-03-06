@@ -19,8 +19,8 @@
  */
 package com.omertron.themoviedbapi.results;
 
-import com.omertron.themoviedbapi.wrapper.IWrapperId;
-import com.omertron.themoviedbapi.wrapper.IWrapperPages;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.IWrapperPages;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -29,41 +29,49 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Stuart
  */
-public abstract class AbstractResults implements IWrapperId, IWrapperPages {
+public abstract class AbstractResults implements IIdentification, IWrapperPages {
 
     private int id = 0;
     private int page = 0;
     private int totalPages = 0;
     private int totalResults = 0;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public int getPage() {
         return page;
     }
 
+    @Override
     public int getTotalPages() {
         return totalPages;
     }
 
+    @Override
     public int getTotalResults() {
         return totalResults;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public void setPage(int page) {
         this.page = page;
     }
 
+    @Override
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
 
+    @Override
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
     }
