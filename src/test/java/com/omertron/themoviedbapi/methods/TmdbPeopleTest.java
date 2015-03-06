@@ -37,7 +37,6 @@ import com.omertron.themoviedbapi.model.person.PersonCredits;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
-import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -270,10 +269,10 @@ public class TmdbPeopleTest extends AbstractTests {
         LOG.info("Found {} person changes to check", changeList.getResults().size());
 
         int count = 1;
-        WrapperChanges result;
+        ResultList<ChangeKeyItem> result;
         for (ChangeListItem item : changeList.getResults()) {
             result = instance.getPersonChanges(item.getId(), startDate, endDate);
-            for (ChangeKeyItem ci : result.getChangedItems()) {
+            for (ChangeKeyItem ci : result.getResults()) {
                 assertNotNull("Null changes", ci);
             }
 

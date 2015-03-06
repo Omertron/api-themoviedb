@@ -23,8 +23,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.person.CreditBasic;
 import com.omertron.themoviedbapi.model.person.CreditMovieBasic;
 import com.omertron.themoviedbapi.model.person.CreditTVBasic;
@@ -268,7 +270,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public WrapperChanges getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+    public ResultList<ChangeKeyItem> getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.START_DATE, startDate);
@@ -278,7 +280,10 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, WrapperChanges.class);
+            WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
+            ResultList<ChangeKeyItem> results = new ResultList<ChangeKeyItem>(wrapper.getChangedItems());
+            wrapper.setResultProperties(results);
+            return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person changes", url, ex);
         }

@@ -41,7 +41,6 @@ import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
-import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -359,10 +358,10 @@ public class TmdbMoviesTest extends AbstractTests {
         LOG.info("Found {} changes to check, will check maximum of {}", changeList.getResults().size(), maxCheck);
 
         int count = 1;
-        WrapperChanges result;
+        ResultList<ChangeKeyItem> result;
         for (ChangeListItem item : changeList.getResults()) {
             result = instance.getMovieChanges(item.getId(), startDate, endDate);
-            for (ChangeKeyItem ci : result.getChangedItems()) {
+            for (ChangeKeyItem ci : result.getResults()) {
                 assertNotNull("Null changes", ci);
             }
 

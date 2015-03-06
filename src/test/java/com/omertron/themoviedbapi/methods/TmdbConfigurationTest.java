@@ -24,8 +24,8 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.config.Configuration;
 import com.omertron.themoviedbapi.model.config.JobDepartment;
 import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.results.ResultsMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -119,7 +119,7 @@ public class TmdbConfigurationTest extends AbstractTests {
     @Test
     public void testGetTimezones() throws MovieDbException {
         LOG.info("getTimezones");
-        Map<String, List<String>> result = instance.getTimezones();
+        ResultsMap<String, List<String>> result = instance.getTimezones();
         assertNotNull("Null results", result);
         assertFalse("Empty results", result.isEmpty());
         assertTrue("No US TZ",result.containsKey("US"));

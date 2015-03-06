@@ -25,6 +25,7 @@ import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.config.Configuration;
 import com.omertron.themoviedbapi.model.config.JobDepartment;
 import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.results.ResultsMap;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -33,7 +34,6 @@ import com.omertron.themoviedbapi.wrapper.WrapperConfig;
 import com.omertron.themoviedbapi.wrapper.WrapperJobList;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -109,7 +109,7 @@ public class TmdbConfiguration extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public Map<String, List<String>> getTimezones() throws MovieDbException {
+    public ResultsMap<String, List<String>> getTimezones() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.TIMEZONES).subMethod(MethodSub.LIST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
@@ -121,7 +121,7 @@ public class TmdbConfiguration extends AbstractMethod {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get timezone list", url, ex);
         }
 
-        Map<String, List<String>> timezones = new HashMap<String, List<String>>();
+        ResultsMap<String, List<String>> timezones = new ResultsMap<String, List<String>>();
 
         for (Map<String, List<String>> tzMap : tzList) {
             for (Map.Entry<String, List<String>> x : tzMap.entrySet()) {

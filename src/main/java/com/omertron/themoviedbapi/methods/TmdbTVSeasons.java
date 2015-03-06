@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.Video;
@@ -94,7 +95,7 @@ public class TmdbTVSeasons extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public WrapperChanges getSeasonChanges(int tvID, String startDate, String endDate) throws MovieDbException {
+    public ResultList<ChangeKeyItem> getSeasonChanges(int tvID, String startDate, String endDate) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.START_DATE, startDate);
@@ -104,7 +105,10 @@ public class TmdbTVSeasons extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, WrapperChanges.class);
+            WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
+            ResultList<ChangeKeyItem> results = new ResultList<ChangeKeyItem>(wrapper.getChangedItems());
+            wrapper.setResultProperties(results);
+            return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
         }

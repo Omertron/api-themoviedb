@@ -29,10 +29,10 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperGenres;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -112,7 +112,7 @@ public class TmdbGenres extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getGenreMovies(int genreId, String language, Integer page, Boolean includeAllMovies, Boolean includeAdult) throws MovieDbException {
+    public ResultList<MovieBasic> getGenreMovies(int genreId, String language, Integer page, Boolean includeAllMovies, Boolean includeAdult) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, genreId);
         parameters.add(Param.LANGUAGE, language);
@@ -123,6 +123,7 @@ public class TmdbGenres extends AbstractMethod {
         URL url = new ApiUrl(apiKey, MethodBase.GENRE).subMethod(MethodSub.MOVIES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
-        return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, webpage);
+        return wrapper.getResultsList();
     }
 }

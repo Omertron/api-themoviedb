@@ -23,12 +23,13 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
+import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
+import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.net.URL;
-import java.util.List;
 
 /**
  * Class to hold the Discover Methods
@@ -54,10 +55,11 @@ public class TmdbDiscover extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
+    public ResultList<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).subMethod(MethodSub.MOVIE).buildUrl(discover.getParams());
         String webpage = httpTools.getRequest(url);
-        return processWrapperList(getTypeReference(MovieBasic.class), url, webpage);
+        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, webpage);
+        return wrapper.getResultsList();
     }
 
     /**
@@ -67,9 +69,10 @@ public class TmdbDiscover extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public List<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
+    public ResultList<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.DISCOVER).subMethod(MethodSub.TV).buildUrl(discover.getParams());
         String webpage = httpTools.getRequest(url);
-        return processWrapperList(getTypeReference(TVBasic.class), url, webpage);
+        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, webpage);
+        return wrapper.getResultsList();
     }
 }

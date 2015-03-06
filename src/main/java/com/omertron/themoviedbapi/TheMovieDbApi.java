@@ -51,6 +51,7 @@ import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.authentication.TokenSession;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.collection.CollectionInfo;
@@ -84,10 +85,8 @@ import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.results.ResultsMap;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
-import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import org.apache.http.client.HttpClient;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
 
@@ -585,7 +584,7 @@ public class TheMovieDbApi {
      *
      * @return @throws MovieDbException
      */
-    public Map<String, List<String>> getTimezones() throws MovieDbException {
+    public ResultsMap<String, List<String>> getTimezones() throws MovieDbException {
         return tmdbConfiguration.getTimezones();
     }
     //</editor-fold>
@@ -624,7 +623,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
+    public ResultList<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
         return tmdbDiscover.getDiscoverMovies(discover);
     }
 
@@ -636,7 +635,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
+    public ResultList<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
         return tmdbDiscover.getDiscoverTV(discover);
     }
     //</editor-fold>
@@ -710,7 +709,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getGenreMovies(int genreId, String language, Integer page, Boolean includeAllMovies, Boolean includeAdult) throws MovieDbException {
+    public ResultList<MovieBasic> getGenreMovies(int genreId, String language, Integer page, Boolean includeAllMovies, Boolean includeAdult) throws MovieDbException {
         return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies, includeAdult);
     }
     //</editor-fold>
@@ -1038,7 +1037,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public WrapperChanges getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
+    public ResultList<ChangeKeyItem> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
         return tmdbMovies.getMovieChanges(movieId, startDate, endDate);
     }
 
@@ -1264,7 +1263,7 @@ public class TheMovieDbApi {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public WrapperChanges getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
+    public ResultList<ChangeKeyItem> getPersonChanges(int personId, String startDate, String endDate) throws MovieDbException {
         return tmdbPeople.getPersonChanges(personId, startDate, endDate);
     }
 
@@ -1487,7 +1486,7 @@ public class TheMovieDbApi {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public WrapperChanges getTVChanges(int tvID, String startDate, String endDate) throws MovieDbException {
+    public ResultList<ChangeKeyItem> getTVChanges(int tvID, String startDate, String endDate) throws MovieDbException {
         return tmdbTv.getTVChanges(tvID, startDate, endDate);
     }
 
@@ -1675,10 +1674,11 @@ public class TheMovieDbApi {
     public ResultList<TVBasic> getTVPopular(Integer page, String language) throws MovieDbException {
         return tmdbTv.getTVPopular(page, language);
     }
-
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="TV Seasons">
     //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="TV Episodes">
     //</editor-fold>
 }

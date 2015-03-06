@@ -48,8 +48,24 @@ public final class ResultsMap<K, V> extends AbstractResults {
         }
     }
 
+    public boolean isEmpty() {
+        return results.isEmpty();
+    }
+
     public Map<K, V> getResults() {
         return results;
+    }
+
+    public boolean containsKey(K key) {
+        return results.containsKey(key);
+    }
+
+    public V get(K key) {
+        return results.get(key);
+    }
+
+    public void put(K key, V value) {
+        this.results.put(key, value);
     }
 
     public void setResults(Map<K, V> results) {
