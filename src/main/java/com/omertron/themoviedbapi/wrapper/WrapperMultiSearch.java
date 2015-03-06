@@ -36,8 +36,8 @@ public class WrapperMultiSearch extends AbstractWrapperAll {
 
     private List<? extends MediaBasic> results;
 
-    public List<? extends MediaBasic> getResults() {
-        return results;
+    public List<MediaBasic> getResults() {
+        return (List<MediaBasic>) results;
     }
 
     @JsonTypeInfo(

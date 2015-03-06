@@ -22,13 +22,24 @@ package com.omertron.themoviedbapi;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
+import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.wrapper.IWrapperId;
+import java.util.List;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestSuite {
 
     private TestSuite() {
         throw new UnsupportedOperationException("Utility class");
+    }
+
+    public static void test(ResultList<?> result) {
+        assertNotNull("Null results", result);
+        assertNotNull("Null collection", result.getResults());
+        assertFalse("Empty results", result.isEmpty());
     }
 
     public static void test(MovieBasic test) {
@@ -48,12 +59,18 @@ public class TestSuite {
         assertTrue("No first air date", isNotBlank(test.getFirstAirDate()));
     }
 
-    public static void test(int test) {
+    public static void testId(ResultList<? extends IWrapperId> result, int id, String message) {
+        testId(result.getResults(), id, message);
     }
 
-    public static void test(float test) {
-    }
-
-    public static void test(boolean test) {
+    public static void testId(List<? extends IWrapperId> result, int id, String message) {
+        boolean found = false;
+        for (IWrapperId item : result) {
+            if (item.getId() == id) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue(message + " ID " + id + " not found in list", found);
     }
 }

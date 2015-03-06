@@ -21,6 +21,8 @@ package com.omertron.themoviedbapi.methods;
 
 import com.omertron.themoviedbapi.AbstractTests;
 import com.omertron.themoviedbapi.MovieDbException;
+import com.omertron.themoviedbapi.TestSuite;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
@@ -31,12 +33,7 @@ import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -47,7 +44,6 @@ import org.junit.Test;
 public class TmdbSearchTest extends AbstractTests {
 
     private static TmdbSearch instance;
-    private static final String COMPANY_NAME = "Marvel Studios";
 
     public TmdbSearchTest() {
     }
@@ -58,18 +54,6 @@ public class TmdbSearchTest extends AbstractTests {
         instance = new TmdbSearch(getApiKey(), getHttpTools());
     }
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
     /**
      * Test of searchCompanies method, of class TheMovieDbApi.
      *
@@ -78,10 +62,9 @@ public class TmdbSearchTest extends AbstractTests {
     @Test
     public void testSearchCompanies() throws MovieDbException {
         LOG.info("searchCompanies");
-        ResultList<Company> result = instance.searchCompanies(COMPANY_NAME, 0);
-        assertNotNull("Null results", result);
-        assertNotNull("Null company", result.getResults());
-        assertFalse("Empty company", result.isEmpty());
+        ResultList<Company> result = instance.searchCompanies("Marvel Studios", 0);
+        TestSuite.test(result);
+        TestSuite.testId(result, 420, "Company");
     }
 
     /**
@@ -95,9 +78,17 @@ public class TmdbSearchTest extends AbstractTests {
         String query = "batman";
         int page = 0;
         ResultList<Collection> result = instance.searchCollection(query, page, LANGUAGE_DEFAULT);
-        assertNotNull("Null results", result);
-        assertNotNull("Null collection", result.getResults());
-        assertFalse("Empty collection", result.isEmpty());
+        TestSuite.test(result);
+
+        // Make sure we find at least the "Dark Knight" collection, ID: 263
+        boolean found = false;
+        for (Collection c : result.getResults()) {
+            if (c.getId() == 263) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue("Collection not found", found);
     }
 
     /**
@@ -111,9 +102,8 @@ public class TmdbSearchTest extends AbstractTests {
         String query = "action";
         int page = 0;
         ResultList<Keyword> result = instance.searchKeyword(query, page);
-        assertNotNull("Null results", result);
-        assertNotNull("Null keyword", result.getResults());
-        assertFalse("Empty keyword", result.isEmpty());
+        TestSuite.test(result);
+        TestSuite.testId(result, 207600, "Keyword");
     }
 
     /**
@@ -127,9 +117,7 @@ public class TmdbSearchTest extends AbstractTests {
         String query = "watch";
         int page = 0;
         ResultList<UserList> result = instance.searchList(query, page, null);
-        assertNotNull("Null results", result);
-        assertNotNull("Null list", result.getResults());
-        assertFalse("Empty list", result.isEmpty());
+        TestSuite.test(result);
     }
 
     /**
@@ -143,14 +131,17 @@ public class TmdbSearchTest extends AbstractTests {
 
         // Try a movie with less than 1 page of results
         ResultList<MovieInfo> movieList = instance.searchMovie("Blade Runner", 0, "", null, 0, 0, SearchType.PHRASE);
+        TestSuite.test(movieList);
         assertTrue("No movies found, should be at least 1", movieList.getResults().size() > 0);
 
         // Try a russian langugage movie
         movieList = instance.searchMovie("О чём говорят мужчины", 0, LANGUAGE_RUSSIAN, null, 0, 0, SearchType.PHRASE);
+        TestSuite.test(movieList);
         assertTrue("No 'RU' movies found, should be at least 1", movieList.getResults().size() > 0);
 
         // Try a movie with more than 20 results
         movieList = instance.searchMovie("Star Wars", 0, LANGUAGE_ENGLISH, null, 0, 0, SearchType.PHRASE);
+        TestSuite.test(movieList);
         assertTrue("Not enough movies found, should be over 15, found " + movieList.getResults().size(), movieList.getResults().size() >= 15);
     }
 
@@ -161,15 +152,31 @@ public class TmdbSearchTest extends AbstractTests {
      */
     @Test
     public void testSearchMulti() throws MovieDbException {
-        System.out.println("searchMulti");
-        String query = "j";
+        LOG.info("searchMulti");
+        String query = "babylon";
         Integer page = null;
         String language = "";
         Boolean includeAdult = null;
         ResultList<MediaBasic> result = instance.searchMulti(query, page, language, includeAdult);
+        TestSuite.test(result);
+
+        boolean foundTV = false;
+        boolean foundMovie = false;
         for (MediaBasic item : result.getResults()) {
-            LOG.info("{}", item);
+            if (foundMovie && foundTV) {
+                break;
+            }
+
+            if (item.getMediaType() == MediaType.MOVIE) {
+                foundMovie = true;
+            }
+
+            if (item.getMediaType() == MediaType.TV) {
+                foundTV = true;
+            }
         }
+        assertTrue("Movies not found", foundMovie);
+        assertTrue("TV not found", foundTV);
     }
 
     /**
@@ -182,9 +189,8 @@ public class TmdbSearchTest extends AbstractTests {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
         ResultList<PersonFind> result = instance.searchPeople(personName, null, null, SearchType.PHRASE);
-        assertNotNull("Null results", result);
-        assertNotNull("Null people", result.getResults());
-        assertFalse("Empty people", result.isEmpty());
+        TestSuite.test(result);
+        TestSuite.testId(result.getResults(), 62, "People");
     }
 
     /**
@@ -194,16 +200,15 @@ public class TmdbSearchTest extends AbstractTests {
      */
     @Test
     public void testSearchTV() throws MovieDbException {
-        System.out.println("searchTV");
+        LOG.info("searchTV");
         String query = "The Walking Dead";
         Integer page = null;
         String language = LANGUAGE_ENGLISH;
         Integer firstAirDateYear = null;
         SearchType searchType = SearchType.PHRASE;
         ResultList<TVBasic> result = instance.searchTV(query, page, language, firstAirDateYear, searchType);
-        assertNotNull("Null results", result);
-        assertNotNull("Null TV", result.getResults());
-        assertFalse("Empty TV", result.isEmpty());
+        TestSuite.test(result);
+        TestSuite.testId(result, 1402, "TV Show");
     }
 
 }

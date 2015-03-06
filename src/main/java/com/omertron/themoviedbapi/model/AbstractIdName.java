@@ -19,8 +19,8 @@
  */
 package com.omertron.themoviedbapi.model;
 
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.wrapper.IWrapperId;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -28,7 +28,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author Stuart.Boston
  */
-public class AbstractIdName extends AbstractJsonMapping {
+public class AbstractIdName extends AbstractJsonMapping implements IWrapperId {
 
     private static final long serialVersionUID = 2L;
 

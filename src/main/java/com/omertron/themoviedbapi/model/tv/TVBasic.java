@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public class TVBasic extends MediaBasic {
     private List<String> originCountry;
     @JsonProperty("rating")
     private float rating = -1f;
+
+    public TVBasic() {
+        super.setMediaType(MediaType.TV);
+    }
 
     public String getName() {
         return name;

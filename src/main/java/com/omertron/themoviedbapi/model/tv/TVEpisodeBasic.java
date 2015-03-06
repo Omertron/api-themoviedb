@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
 
 /**
@@ -43,6 +44,10 @@ public class TVEpisodeBasic extends MediaBasic {
     private String stillPath;
     @JsonProperty("show_id")
     private String showId;
+
+    public TVEpisodeBasic() {
+        super.setMediaType(MediaType.EPISODE);
+    }
 
     public String getAirDate() {
         return airDate;

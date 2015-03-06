@@ -256,7 +256,7 @@ public class TmdbSearch extends AbstractMethod {
         if (searchType != null) {
             parameters.add(Param.SEARCH_TYPE, searchType.getPropertyString());
         }
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.MOVIE).buildUrl(parameters);
+        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.TV).buildUrl(parameters);
         WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "TV Show");
         return wrapper.getResultsList();
     }

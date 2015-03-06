@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
 
 /**
@@ -41,6 +42,10 @@ public class MovieBasic extends MediaBasic {
     private boolean video;
     @JsonProperty("rating")
     private float rating = -1f;
+
+    public MovieBasic() {
+        super.setMediaType(MediaType.MOVIE);
+    }
 
     public boolean isAdult() {
         return adult;

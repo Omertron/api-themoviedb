@@ -20,19 +20,21 @@
 package com.omertron.themoviedbapi.model.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.wrapper.IWrapperId;
 
 /**
  * Basic media information
  *
  * @author stuart.boston
  */
-public class MediaBasic extends AbstractJsonMapping {
+public class MediaBasic extends AbstractJsonMapping implements IWrapperId {
 
     @JsonProperty("id")
     private int id;
-    @JsonProperty("media_type")
-    private String mediaType;
+    private MediaType mediaType;
     @JsonProperty("backdrop_path")
     private String backdropPath;
     @JsonProperty("poster_path")
@@ -52,11 +54,16 @@ public class MediaBasic extends AbstractJsonMapping {
         this.id = id;
     }
 
-    public String getMediaType() {
+    public MediaType getMediaType() {
         return mediaType;
     }
 
+    @JsonSetter("media_type")
     public void setMediaType(String mediaType) {
+        this.mediaType = MediaType.fromString(mediaType);
+    }
+
+    public void setMediaType(MediaType mediaType) {
         this.mediaType = mediaType;
     }
 

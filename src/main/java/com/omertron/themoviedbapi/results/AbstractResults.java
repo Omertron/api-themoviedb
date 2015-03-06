@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi.results;
 
+import com.omertron.themoviedbapi.wrapper.IWrapperId;
+import com.omertron.themoviedbapi.wrapper.IWrapperPages;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -27,7 +29,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Stuart
  */
-public abstract class AbstractResults {
+public abstract class AbstractResults implements IWrapperId, IWrapperPages {
 
     private int id = 0;
     private int page = 0;

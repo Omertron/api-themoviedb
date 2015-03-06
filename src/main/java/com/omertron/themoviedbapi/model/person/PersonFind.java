@@ -27,12 +27,13 @@ import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeBasic;
+import com.omertron.themoviedbapi.wrapper.IWrapperId;
 import java.util.List;
 
 /**
  * @author stuart.boston
  */
-public class PersonFind extends PersonBasic {
+public class PersonFind extends PersonBasic implements IWrapperId {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("adult")
@@ -57,8 +58,8 @@ public class PersonFind extends PersonBasic {
         this.popularity = popularity;
     }
 
-    public List<? extends MediaBasic> getKnownFor() {
-        return knownFor;
+    public List<MediaBasic> getKnownFor() {
+        return (List<MediaBasic>) knownFor;
     }
 
     @JsonTypeInfo(

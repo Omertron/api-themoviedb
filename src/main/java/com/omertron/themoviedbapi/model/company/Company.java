@@ -21,19 +21,20 @@ package com.omertron.themoviedbapi.model.company;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.wrapper.IWrapperId;
 
 /**
  * Company information
  *
  * @author Stuart
  */
-public class Company extends AbstractJsonMapping {
+public class Company extends AbstractJsonMapping implements IWrapperId {
 
     private static final long serialVersionUID = 1L;
     private static final String DEFAULT_STRING = "";
     // Properties
     @JsonProperty("id")
-    private int companyId = 0;
+    private int id = 0;
     @JsonProperty("name")
     private String name = DEFAULT_STRING;
     @JsonProperty("description")
@@ -47,8 +48,8 @@ public class Company extends AbstractJsonMapping {
     @JsonProperty("parent_company")
     private Company parentCompany = null;
 
-    public int getCompanyId() {
-        return companyId;
+    public int getId() {
+        return id;
     }
 
     public String getDescription() {
@@ -75,8 +76,8 @@ public class Company extends AbstractJsonMapping {
         return parentCompany;
     }
 
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setDescription(String description) {
@@ -105,7 +106,7 @@ public class Company extends AbstractJsonMapping {
 
     public void setParentCompany(int id, String name, String logoPath) {
         Company parent = new Company();
-        parent.setCompanyId(id);
+        parent.setId(id);
         parent.setName(name);
         parent.setLogoPath(logoPath);
         this.parentCompany = parent;
