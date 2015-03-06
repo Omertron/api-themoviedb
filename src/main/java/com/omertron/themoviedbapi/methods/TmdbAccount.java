@@ -39,7 +39,6 @@ import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -88,13 +87,14 @@ public class TmdbAccount extends AbstractMethod {
      * @return The lists
      * @throws MovieDbException
      */
-    public List<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
+    public ResultList<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.SESSION_ID, sessionId);
         parameters.add(Param.ID, accountId);
 
         URL url = new ApiUrl(apiKey, MethodBase.ACCOUNT).subMethod(MethodSub.LISTS).buildUrl(parameters);
-        return processWrapperList(getTypeReference(UserList.class), url, "user list");
+        WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "user list");
+        return wrapper.getResultsList();
     }
 
     /**

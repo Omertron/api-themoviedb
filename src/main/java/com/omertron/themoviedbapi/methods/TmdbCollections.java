@@ -98,7 +98,7 @@ public class TmdbCollections extends AbstractMethod {
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
-            results.copyWrapper(wrapper);
+            wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get collection images", url, ex);

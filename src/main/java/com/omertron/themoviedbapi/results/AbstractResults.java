@@ -19,9 +19,6 @@
  */
 package com.omertron.themoviedbapi.results;
 
-import com.omertron.themoviedbapi.wrapper.AbstractWrapper;
-import com.omertron.themoviedbapi.wrapper.AbstractWrapperAll;
-import com.omertron.themoviedbapi.wrapper.AbstractWrapperId;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -37,7 +34,6 @@ public abstract class AbstractResults {
     private int totalPages = 0;
     private int totalResults = 0;
 
-    //<editor-fold defaultstate="collapsed" desc="Getters">
     public int getId() {
         return id;
     }
@@ -53,9 +49,7 @@ public abstract class AbstractResults {
     public int getTotalResults() {
         return totalResults;
     }
-    //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Setters">
     public void setId(int id) {
         this.id = id;
     }
@@ -70,36 +64,6 @@ public abstract class AbstractResults {
 
     public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
-    }
-    //</editor-fold>
-
-    /**
-     * This wrapper does not have anything to copy.
-     *
-     * @param wrapper
-     */
-    public void copyWrapper(AbstractWrapper wrapper) {
-    }
-
-    /**
-     * Copy the Id from the wrapper
-     *
-     * @param wrapper
-     */
-    public void copyWrapper(AbstractWrapperId wrapper) {
-        this.id = wrapper.getId();
-    }
-
-    /**
-     * Copy the Id and pages from the wrapper
-     *
-     * @param wrapper
-     */
-    public void copyWrapper(AbstractWrapperAll wrapper) {
-        this.id = wrapper.getId();
-        this.page = wrapper.getPage();
-        this.totalPages = wrapper.getTotalPages();
-        this.totalResults = wrapper.getTotalResults();
     }
 
     @Override

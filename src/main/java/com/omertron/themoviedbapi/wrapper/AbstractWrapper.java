@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.results.AbstractResults;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,5 +45,18 @@ public abstract class AbstractWrapper extends AbstractJsonMapping implements Ser
         } else {
             return new ArrayList<E>(EnumSet.allOf(clz));
         }
+    }
+
+    /**
+     * Copy the wrapper values to the results
+     *
+     * @param results
+     */
+    public void setResultProperties(AbstractResults results) {
+        // There are no values to copy
+        results.setId(0);
+        results.setPage(0);
+        results.setTotalPages(0);
+        results.setTotalResults(0);
     }
 }

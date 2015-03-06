@@ -96,7 +96,7 @@ public class TmdbConfiguration extends AbstractMethod {
         try {
             WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
             ResultList<JobDepartment> results = new ResultList<JobDepartment>(wrapper.getJobs());
-            results.copyWrapper(wrapper);
+            wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get job list", url, ex);

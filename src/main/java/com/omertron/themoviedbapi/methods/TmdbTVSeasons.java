@@ -207,7 +207,7 @@ public class TmdbTVSeasons extends AbstractMethod {
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
             ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
-            results.copyWrapper(wrapper);
+            wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get images", url, ex);
@@ -236,7 +236,7 @@ public class TmdbTVSeasons extends AbstractMethod {
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
             ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
-            results.copyWrapper(wrapper);
+            wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get videos", url, ex);

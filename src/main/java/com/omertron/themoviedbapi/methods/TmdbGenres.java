@@ -76,6 +76,7 @@ public class TmdbGenres extends AbstractMethod {
 
     /**
      * Get the list of genres for movies or TV
+     *
      * @param language
      * @param sub
      * @return
@@ -91,7 +92,7 @@ public class TmdbGenres extends AbstractMethod {
         try {
             WrapperGenres wrapper = MAPPER.readValue(webpage, WrapperGenres.class);
             ResultList<Genre> results = new ResultList<Genre>(wrapper.getGenres());
-            results.copyWrapper(wrapper);
+            wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get genre " + sub.toString(), url, ex);

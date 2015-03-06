@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.results.AbstractResults;
 
 /**
  * Base class for the wrappers
@@ -28,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class AbstractWrapperId extends AbstractWrapper implements IWrapperId {
 
-    private static final long serialVersionUID = 1L;
     @JsonProperty("id")
     private int id;
 
@@ -41,4 +41,16 @@ public class AbstractWrapperId extends AbstractWrapper implements IWrapperId {
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Copy the wrapper values to the results
+     *
+     * @param results
+     */
+    @Override
+    public void setResultProperties(AbstractResults results) {
+        super.setResultProperties(results);
+        results.setId(id);
+    }
+
 }

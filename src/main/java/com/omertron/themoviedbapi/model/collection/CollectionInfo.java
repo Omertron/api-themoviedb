@@ -32,9 +32,6 @@ public class CollectionInfo extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
-    /*
-     * Properties
-     */
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")

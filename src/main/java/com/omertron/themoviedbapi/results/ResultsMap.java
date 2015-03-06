@@ -25,6 +25,9 @@ import java.util.Map;
 /**
  * Map of the results from TheMovieDb
  *
+ * If the original request contains, or could contain, a page of results, this wrapper is returned to indicate what page was
+ * returned and how many are available
+ *
  * @author Stuart
  * @param <K>
  * @param <V>
@@ -33,8 +36,16 @@ public final class ResultsMap<K, V> extends AbstractResults {
 
     private Map<K, V> results;
 
+    public ResultsMap() {
+        this(null);
+    }
+
     public ResultsMap(Map<K, V> resultsMap) {
-        results = new HashMap<K, V>(resultsMap);
+        if (resultsMap == null) {
+            results = new HashMap<K, V>();
+        } else {
+            results = new HashMap<K, V>(resultsMap);
+        }
     }
 
     public Map<K, V> getResults() {

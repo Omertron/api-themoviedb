@@ -194,7 +194,7 @@ public class TheMovieDbApi {
      * @return The lists
      * @throws MovieDbException
      */
-    public List<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
+    public ResultList<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getUserLists(sessionId, accountId);
     }
 
@@ -541,7 +541,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public List<MovieBasic> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
+    public ResultList<MovieBasic> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
         return tmdbCompany.getCompanyMovies(companyId, language, page);
     }
     //</editor-fold>

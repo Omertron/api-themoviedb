@@ -203,9 +203,9 @@ public class TmdbSearch extends AbstractMethod {
 
         try {
             WrapperMultiSearch wrapper = MAPPER.readValue(webpage, WrapperMultiSearch.class);
-            ResultList<MediaBasic> results = new ResultList<MediaBasic>(null);
+            ResultList<MediaBasic> results = new ResultList<MediaBasic>();
             results.getResults().addAll(wrapper.getResults());
-            results.copyWrapper(wrapper);
+            wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get multi search", url, ex);

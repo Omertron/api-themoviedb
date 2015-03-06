@@ -30,7 +30,6 @@ import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.junit.After;
@@ -97,10 +96,10 @@ public class TmdbAccountTest extends AbstractTests {
     @Test
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
-        List<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
+        ResultList<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
         assertNotNull("No list found", results);
         assertFalse("No entries found", results.isEmpty());
-        for (UserList result : results) {
+        for (UserList result : results.getResults()) {
             TestSuite.test(result);
         }
     }

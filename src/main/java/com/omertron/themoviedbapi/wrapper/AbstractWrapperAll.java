@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.results.AbstractResults;
 
 /**
  * Base class for the wrappers
@@ -75,5 +76,18 @@ public class AbstractWrapperAll extends AbstractWrapperId implements IWrapperId,
     @Override
     public void setDates(ResultDates dates) {
         this.dates = dates;
+    }
+
+    /**
+     * Copy the wrapper values to the results
+     *
+     * @param results
+     */
+    @Override
+    public void setResultProperties(AbstractResults results) {
+        super.setResultProperties(results);
+        results.setPage(page);
+        results.setTotalPages(totalPages);
+        results.setTotalResults(totalResults);
     }
 }

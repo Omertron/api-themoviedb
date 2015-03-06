@@ -25,6 +25,9 @@ import java.util.List;
 /**
  * List of the results from TheMovieDb
  *
+ * If the original request contains, or could contain, a page of results, this wrapper is returned to indicate what page was
+ * returned and how many are available
+ *
  * @author Stuart
  * @param <T>
  */
@@ -32,11 +35,15 @@ public final class ResultList<T> extends AbstractResults {
 
     private List<T> results;
 
+    public ResultList() {
+        this(null);
+    }
+
     public ResultList(List<T> resultList) {
-        if (resultList != null) {
-            results = new ArrayList<T>(resultList);
+        if (resultList == null) {
+            results = new ArrayList<T>();
         } else {
-            results = new ArrayList<T>(0);
+            results = new ArrayList<T>(resultList);
         }
     }
 
