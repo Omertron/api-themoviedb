@@ -24,18 +24,16 @@ import com.omertron.themoviedbapi.ArtworkResults;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
-import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.media.MediaCreditCast;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
+import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -51,22 +49,22 @@ import org.junit.Test;
  *
  * @author Stuart.Boston
  */
-public class TmdbTVEpisodesTest extends AbstractTests {
+public class TmdbSeasonsTest extends AbstractTests {
 
-    private static TmdbTVEpisodes instance;
+    private static TmdbSeasons instance;
     private static final List<TestID> TV_IDS = new ArrayList<TestID>();
 
-    public TmdbTVEpisodesTest() {
+    public TmdbSeasonsTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
-        instance = new TmdbTVEpisodes(getApiKey(), getHttpTools());
+        instance = new TmdbSeasons(getApiKey(), getHttpTools());
 
-        TV_IDS.add(new TestID("The Walking Dead", "tt1589921", 1402, "Andrew Lincoln"));
-        TV_IDS.add(new TestID("Supernatural", "tt0713618", 1622, "Misha Collins"));
-        TV_IDS.add(new TestID("The Big Bang Theory", "tt0775431", 1418, "Kaley Cuoco"));
+        TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
+        TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622, "Misha Collins"));
+        TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418, "Kaley Cuoco"));
     }
 
     @AfterClass
@@ -82,72 +80,67 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     }
 
     /**
-     * Test of getEpisodeInfo method, of class TmdbTVEpisodes.
+     * Test of getSeasonInfo method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeInfo() throws MovieDbException {
-        LOG.info("getEpisodeInfo");
+    public void testGetSeasonInfo() throws MovieDbException {
+        LOG.info("getSeasonInfo");
 
         int seasonNumber = 1;
-        int episodeNumber = 1;
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
         for (TestID test : TV_IDS) {
-            TVEpisodeInfo result = instance.getEpisodeInfo(test.getTmdb(), seasonNumber, episodeNumber, language, appendToResponse);
+            TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
             assertTrue("No ID", result.getId() > 0);
             assertTrue("No name", StringUtils.isNotBlank(result.getName()));
-            assertTrue("No crew", result.getCrew().size() > 0);
-            assertTrue("No guest stars", result.getGuestStars().size() > 0);
+            assertTrue("No overview", StringUtils.isNotBlank(result.getOverview()));
+            assertTrue("No episodes", result.getEpisodes().size() > 0);
         }
     }
 
     /**
-     * Test of getEpisodeChanges method, of class TmdbTVEpisodes.
+     * Test of getSeasonChanges method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeChanges() throws MovieDbException {
-        LOG.info("getEpisodeChanges");
+    public void testGetSeasonChanges() throws MovieDbException {
+        LOG.info("getSeasonChanges");
         // This is too empherial to test
     }
 
     /**
-     * Test of getEpisodeAccountState method, of class TmdbTVEpisodes.
+     * Test of getSeasonAccountState method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeAccountState() throws MovieDbException {
-        LOG.info("getEpisodeAccountState");
-
-        int seasonNumber = 1;
-        int episodeNumber = 1;
+    public void testGetSeasonAccountState() throws MovieDbException {
+        LOG.info("getSeasonAccountState");
 
         for (TestID test : TV_IDS) {
-            MediaState result = instance.getEpisodeAccountState(test.getTmdb(), seasonNumber, episodeNumber, getSessionId());
+            MediaState result = instance.getSeasonAccountState(test.getTmdb(), getSessionId());
             assertNotNull("Null result", result);
             assertTrue("Invalid rating", result.getRated() > -2f);
         }
     }
 
     /**
-     * Test of getEpisodeCredits method, of class TmdbTVEpisodes.
+     * Test of getSeasonCredits method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeCredits() throws MovieDbException {
-        LOG.info("getEpisodeCredits");
+    public void testGetSeasonCredits() throws MovieDbException {
+        LOG.info("getSeasonCredits");
 
-        int seasonNumber = 1;
-        int episodeNumber = 1;
+        int seasonNumber = 0;
 
         for (TestID test : TV_IDS) {
-            MediaCreditList result = instance.getEpisodeCredits(test.getTmdb(), seasonNumber, episodeNumber);
+            MediaCreditList result = instance.getSeasonCredits(test.getTmdb(), seasonNumber);
             assertNotNull(result);
             assertFalse(result.getCast().isEmpty());
 
@@ -166,88 +159,69 @@ public class TmdbTVEpisodesTest extends AbstractTests {
     }
 
     /**
-     * Test of getEpisodeExternalID method, of class TmdbTVEpisodes.
+     * Test of getSeasonExternalID method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeExternalID() throws MovieDbException {
-        LOG.info("getEpisodeExternalID");
+    public void testGetSeasonExternalID() throws MovieDbException {
+        LOG.info("getSeasonExternalID");
 
-        int seasonNumber = 1;
-        int episodeNumber = 1;
+        int seasonNumber = 0;
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            ExternalID result = instance.getEpisodeExternalID(test.getTmdb(), seasonNumber, episodeNumber, language);
+            ExternalID result = instance.getSeasonExternalID(test.getTmdb(), seasonNumber, language);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
     }
 
     /**
-     * Test of getEpisodeImages method, of class TmdbTVEpisodes.
+     * Test of getSeasonImages method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeImages() throws MovieDbException {
-        LOG.info("getEpisodeImages");
+    public void testGetSeasonImages() throws MovieDbException {
+        LOG.info("getSeasonImages");
 
         int seasonNumber = 1;
-        int episodeNumber = 1;
+        String language = LANGUAGE_DEFAULT;
+        String[] includeImageLanguage = null;
 
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
-            ResultList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
+            ResultList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
             }
 
-            // We should only have posters & backdrops
-            results.validateResults(ArtworkType.STILL);
-        }
-
-    }
-
-    /**
-     * Test of postEpisodeRating method, of class TmdbTVEpisodes.
-     *
-     * @throws com.omertron.themoviedbapi.MovieDbException
-     */
-    @Test
-    public void testPostEpisodeRating() throws MovieDbException {
-        LOG.info("postEpisodeRating");
-
-        int seasonNumber = 1;
-        int episodeNumber = 1;
-        String guestSessionID = null;
-
-        for (TestID test : TV_IDS) {
-            Integer rating = new Random().nextInt(10) + 1;
-            StatusCode result = instance.postEpisodeRating(test.getTmdb(), seasonNumber, episodeNumber, rating, getSessionId(), guestSessionID);
-            assertEquals("failed to post rating", 12, result.getCode());
+            // We should only have posters
+            results.validateResults(ArtworkType.POSTER);
         }
     }
 
     /**
-     * Test of getEpisodeVideos method, of class TmdbTVEpisodes.
+     * Test of getSeasonVideos method, of class TmdbSeasons.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     @Test
-    public void testGetEpisodeVideos() throws MovieDbException {
-        LOG.info("getEpisodeVideos");
+    public void testGetSeasonVideos() throws MovieDbException {
+        LOG.info("getSeasonVideos");
 
-        int seasonNumber = 1;
-        int episodeNumber = 1;
+        int seasonNumber = 0;
         String language = LANGUAGE_DEFAULT;
+        boolean found = false;
 
         for (TestID test : TV_IDS) {
-            ResultList<Video> result = instance.getEpisodeVideos(test.getTmdb(), seasonNumber, episodeNumber, language);
-            LOG.info("Found {} videos", result.getResults().size());
+            ResultList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
+            found = found || !result.isEmpty();
         }
+
+        assertTrue("No videos", found);
     }
 
 }

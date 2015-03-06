@@ -51,7 +51,7 @@ import org.yamj.api.common.exception.ApiExceptionType;
  *
  * @author stuart.boston
  */
-public class TmdbTVEpisodes extends AbstractMethod {
+public class TmdbEpisodes extends AbstractMethod {
 
     private static final int RATING_MAX = 10;
 
@@ -61,7 +61,7 @@ public class TmdbTVEpisodes extends AbstractMethod {
      * @param apiKey
      * @param httpTools
      */
-    public TmdbTVEpisodes(String apiKey, HttpTools httpTools) {
+    public TmdbEpisodes(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
     }
 

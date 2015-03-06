@@ -47,7 +47,7 @@ import org.yamj.api.common.exception.ApiExceptionType;
  *
  * @author stuart.boston
  */
-public class TmdbTVSeasons extends AbstractMethod {
+public class TmdbSeasons extends AbstractMethod {
 
     /**
      * Constructor
@@ -55,7 +55,7 @@ public class TmdbTVSeasons extends AbstractMethod {
      * @param apiKey
      * @param httpTools
      */
-    public TmdbTVSeasons(String apiKey, HttpTools httpTools) {
+    public TmdbSeasons(String apiKey, HttpTools httpTools) {
         super(apiKey, httpTools);
     }
 
