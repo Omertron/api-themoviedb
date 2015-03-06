@@ -1,5 +1,6 @@
 com.omertron.themoviedbapi
 com.omertron.themoviedbapi.enumeration
+com.omertron.themoviedbapi.interfaces
 com.omertron.themoviedbapi.methods
 com.omertron.themoviedbapi.model
 com.omertron.themoviedbapi.model.account
