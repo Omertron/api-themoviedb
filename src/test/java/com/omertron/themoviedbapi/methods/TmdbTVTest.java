@@ -343,7 +343,8 @@ public class TmdbTVTest extends AbstractTests {
         LOG.info("getTVLatest");
 
         TVInfo result = instance.getLatestTV();
-        TestSuite.test(result);
+        assertTrue("Missing ID", result.getId() > 0);
+        assertTrue("Missing Name", StringUtils.isNotBlank(result.getName()));
     }
 
     /**
