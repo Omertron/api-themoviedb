@@ -119,8 +119,8 @@ public class TmdbPeopleTest extends AbstractTests {
             PersonCredits<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
-            TestSuite.test(result.getCast());
-            TestSuite.test(result.getCrew());
+            TestSuite.test(result.getCast(), "Cast");
+            TestSuite.test(result.getCrew(), "Crew");
 
             // Check that we have the movie specific fields
             assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getTitle()));
@@ -143,8 +143,8 @@ public class TmdbPeopleTest extends AbstractTests {
             PersonCredits<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
-            TestSuite.test(result.getCast());
-            TestSuite.test(result.getCrew());
+            TestSuite.test(result.getCast(), "Cast");
+            TestSuite.test(result.getCrew(), "Crew");
 
             // Check that we have the TV specific fields
             assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getName()));
@@ -167,8 +167,8 @@ public class TmdbPeopleTest extends AbstractTests {
             PersonCredits<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
-            TestSuite.test(result.getCast());
-            TestSuite.test(result.getCrew());
+            TestSuite.test(result.getCast(), "Cast");
+            TestSuite.test(result.getCrew(), "Crew");
 
             boolean checkedMovie = false;
             boolean checkedTV = false;
@@ -220,7 +220,7 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : testIDs) {
             ResultList<Artwork> result = instance.getPersonImages(test.getTmdb());
-            TestSuite.test(result);
+            TestSuite.test(result, "Images");
             assertEquals("Wrong artwork type", ArtworkType.PROFILE, result.getResults().get(0).getArtworkType());
         }
     }
@@ -238,7 +238,7 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : testIDs) {
             ResultList<ArtworkMedia> result = instance.getPersonTaggedImages(test.getTmdb(), page, language);
-            TestSuite.test(result);
+            TestSuite.test(result, "Tagged");
             for (ArtworkMedia am : result.getResults()) {
                 assertTrue("No ID", StringUtils.isNotBlank(am.getId()));
                 assertTrue("No file path", StringUtils.isNotBlank(am.getFilePath()));
@@ -287,7 +287,7 @@ public class TmdbPeopleTest extends AbstractTests {
         LOG.info("getPersonPopular");
         Integer page = null;
         ResultList<PersonFind> result = instance.getPersonPopular(page);
-        TestSuite.test(result);
+        TestSuite.test(result, "Popular");
         for (PersonFind p : result.getResults()) {
             assertFalse("No known for entries", p.getKnownFor().isEmpty());
             LOG.info("{} ({}) = {}", p.getName(), p.getId(), p.getKnownFor().size());

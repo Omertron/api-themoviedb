@@ -21,18 +21,17 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.tv.TVCredit;
 
 /**
  * @author stuart.boston
  */
-public class CreditInfo extends AbstractJsonMapping implements IIdentification {
+public class CreditInfo extends AbstractJsonMapping {
 
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
-    private int id;
+    private String id;
     @JsonProperty("credit_type")
     private String creditType;
     @JsonProperty("department")
@@ -46,13 +45,11 @@ public class CreditInfo extends AbstractJsonMapping implements IIdentification {
     @JsonProperty("media")
     private TVCredit media;
 
-    @Override
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    @Override
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -84,7 +84,7 @@ public class TmdbKeywordsTest extends AbstractTests {
         LOG.info("getKeywordMovies");
         int page = 0;
         ResultList<MovieBasic> result = tmdb.getKeywordMovies(ID_KEYWORD, LANGUAGE_DEFAULT, page);
-        TestSuite.test(result);
+        TestSuite.test(result, "Keyword");
     }
 
 }

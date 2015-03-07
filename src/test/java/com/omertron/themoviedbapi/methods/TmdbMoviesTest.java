@@ -146,7 +146,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             ResultList<AlternativeTitle> result = instance.getMovieAlternativeTitles(test.getTmdb(), country, appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Alt Titles");
         }
     }
 
@@ -165,8 +165,8 @@ public class TmdbMoviesTest extends AbstractTests {
             MediaCreditList result = instance.getMovieCredits(test.getTmdb(), appendToResponse);
             assertNotNull(result);
             assertFalse(result.getCast().isEmpty());
-            TestSuite.test(result.getCast());
-            TestSuite.test(result.getCrew());
+            TestSuite.test(result.getCast(), "Cast");
+            TestSuite.test(result.getCrew(), "Crew");
 
             boolean found = false;
             for (MediaCreditCast p : result.getCast()) {
@@ -220,7 +220,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             ResultList<Keyword> result = instance.getMovieKeywords(test.getTmdb(), appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Keywords");
         }
     }
 
@@ -238,7 +238,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             ResultList<ReleaseInfo> result = instance.getMovieReleaseInfo(test.getTmdb(), language, appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Rel Info");
         }
     }
 
@@ -275,7 +275,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             ResultList<Translation> result = instance.getMovieTranslations(test.getTmdb(), appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Translations");
         }
     }
 
@@ -294,7 +294,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             ResultList<MovieInfo> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Similar");
         }
     }
 
@@ -317,7 +317,7 @@ public class TmdbMoviesTest extends AbstractTests {
                 continue;
             }
             ResultList<Review> result = instance.getMovieReviews(test.getTmdb(), page, language, appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Reviews");
         }
     }
 
@@ -336,7 +336,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
         for (TestID test : FILM_IDS) {
             ResultList<UserList> result = instance.getMovieLists(test.getTmdb(), page, language, appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "Lists");
         }
     }
 
@@ -429,7 +429,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<MovieInfo> result = instance.getNowPlayingMovies(page, language);
-        TestSuite.test(result);
+        TestSuite.test(result, "Now Playing");
     }
 
     /**
@@ -444,7 +444,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<MovieInfo> result = instance.getPopularMovieList(page, language);
-        TestSuite.test(result);
+        TestSuite.test(result, "Popular");
     }
 
     /**
@@ -459,7 +459,7 @@ public class TmdbMoviesTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<MovieInfo> result = instance.getTopRatedMovies(page, language);
-        TestSuite.test(result);
+        TestSuite.test(result, "Top Rated");
     }
 
 }

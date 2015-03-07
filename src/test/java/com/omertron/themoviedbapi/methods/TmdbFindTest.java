@@ -89,7 +89,7 @@ public class TmdbFindTest extends AbstractTests {
         for (TestID test : FILM_IDS) {
             LOG.info("Testing {}", test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            TestSuite.test(result.getMovieResults());
+            TestSuite.test(result.getMovieResults(), "Movies IMDB");
             TestSuite.testId(result.getMovieResults(), test.getTmdb(), "Movie");
         }
     }
@@ -108,7 +108,7 @@ public class TmdbFindTest extends AbstractTests {
         for (TestID test : PERSON_IDS) {
             LOG.info("Testing {}", test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            TestSuite.test(result.getPersonResults());
+            TestSuite.test(result.getPersonResults(), "Person IMDB");
             TestSuite.testId(result.getPersonResults(), test.getTmdb(), "Person");
         }
     }
@@ -126,7 +126,7 @@ public class TmdbFindTest extends AbstractTests {
         for (TestID test : TV_IDS) {
             LOG.info("Testing {}", test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
-            TestSuite.test(result.getTvResults());
+            TestSuite.test(result.getTvResults(), "TV IMDB");
             TestSuite.testId(result.getTvResults(), test.getTmdb(), "TV");
         }
     }

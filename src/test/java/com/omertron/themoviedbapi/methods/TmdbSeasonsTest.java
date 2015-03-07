@@ -140,9 +140,13 @@ public class TmdbSeasonsTest extends AbstractTests {
         for (TestID test : TV_IDS) {
             LOG.info("Testing: {}", test);
             MediaCreditList result = instance.getSeasonCredits(test.getTmdb(), seasonNumber);
+
             assertNotNull(result);
-            TestSuite.test(result.getCast());
-            TestSuite.test(result.getCrew());
+            TestSuite.test(result.getCast(), "Cast " + test.getTmdb());
+            // No crew for 1418
+            if (test.getTmdb() != 1418) {
+                TestSuite.test(result.getCrew(), "Crew " + test.getTmdb());
+            }
 
             boolean found = false;
             for (MediaCreditCast p : result.getCast()) {
@@ -192,7 +196,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         for (TestID test : TV_IDS) {
             LOG.info("Testing: {}", test);
             ResultList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
-            TestSuite.test(result);
+            TestSuite.test(result, "Artwork");
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
             }

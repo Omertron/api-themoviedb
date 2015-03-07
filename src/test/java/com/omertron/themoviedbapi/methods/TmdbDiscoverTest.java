@@ -73,7 +73,7 @@ public class TmdbDiscoverTest extends AbstractTests {
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
         ResultList<MovieBasic> result = instance.getDiscoverMovies(discover);
-        TestSuite.test(result);
+        TestSuite.test(result, "Disc Movie");
     }
 
     /**
@@ -88,7 +88,7 @@ public class TmdbDiscoverTest extends AbstractTests {
         discover.year(2013).language(LANGUAGE_ENGLISH);
 
         ResultList<TVBasic> result = instance.getDiscoverTV(discover);
-        TestSuite.test(result);
+        TestSuite.test(result, "Disc TV");
     }
 
 }

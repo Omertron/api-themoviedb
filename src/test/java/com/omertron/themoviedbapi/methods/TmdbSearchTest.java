@@ -63,7 +63,7 @@ public class TmdbSearchTest extends AbstractTests {
     public void testSearchCompanies() throws MovieDbException {
         LOG.info("searchCompanies");
         ResultList<Company> result = instance.searchCompanies("Marvel Studios", 0);
-        TestSuite.test(result);
+        TestSuite.test(result, "Companies");
         TestSuite.testId(result, 420, "Company");
     }
 
@@ -78,7 +78,7 @@ public class TmdbSearchTest extends AbstractTests {
         String query = "batman";
         int page = 0;
         ResultList<Collection> result = instance.searchCollection(query, page, LANGUAGE_DEFAULT);
-        TestSuite.test(result);
+        TestSuite.test(result, "Collection");
         TestSuite.testId(result, 263, "Collection");
     }
 
@@ -93,7 +93,7 @@ public class TmdbSearchTest extends AbstractTests {
         String query = "action";
         int page = 0;
         ResultList<Keyword> result = instance.searchKeyword(query, page);
-        TestSuite.test(result);
+        TestSuite.test(result, "Keyword");
         TestSuite.testId(result, 207600, "Keyword");
     }
 
@@ -108,7 +108,7 @@ public class TmdbSearchTest extends AbstractTests {
         String query = "watch";
         int page = 0;
         ResultList<UserList> result = instance.searchList(query, page, null);
-        TestSuite.test(result);
+        TestSuite.test(result, "List");
     }
 
     /**
@@ -122,17 +122,17 @@ public class TmdbSearchTest extends AbstractTests {
 
         // Try a movie with less than 1 page of results
         ResultList<MovieInfo> movieList = instance.searchMovie("Blade Runner", 0, "", null, 0, 0, SearchType.PHRASE);
-        TestSuite.test(movieList);
+        TestSuite.test(movieList, "Movie 1");
         assertTrue("No movies found, should be at least 1", movieList.getResults().size() > 0);
 
         // Try a russian langugage movie
         movieList = instance.searchMovie("О чём говорят мужчины", 0, LANGUAGE_RUSSIAN, null, 0, 0, SearchType.PHRASE);
-        TestSuite.test(movieList);
+        TestSuite.test(movieList, "Movie 2");
         assertTrue("No 'RU' movies found, should be at least 1", movieList.getResults().size() > 0);
 
         // Try a movie with more than 20 results
         movieList = instance.searchMovie("Star Wars", 0, LANGUAGE_ENGLISH, null, 0, 0, SearchType.PHRASE);
-        TestSuite.test(movieList);
+        TestSuite.test(movieList, "Movie 3");
         assertTrue("Not enough movies found, should be over 15, found " + movieList.getResults().size(), movieList.getResults().size() >= 15);
     }
 
@@ -149,7 +149,7 @@ public class TmdbSearchTest extends AbstractTests {
         String language = "";
         Boolean includeAdult = null;
         ResultList<MediaBasic> result = instance.searchMulti(query, page, language, includeAdult);
-        TestSuite.test(result);
+        TestSuite.test(result, "Multi");
 
         boolean foundTV = false;
         boolean foundMovie = false;
@@ -180,7 +180,7 @@ public class TmdbSearchTest extends AbstractTests {
         LOG.info("searchPeople");
         String personName = "Bruce Willis";
         ResultList<PersonFind> result = instance.searchPeople(personName, null, null, SearchType.PHRASE);
-        TestSuite.test(result);
+        TestSuite.test(result, "People");
         TestSuite.testId(result.getResults(), 62, "People");
     }
 
@@ -198,7 +198,7 @@ public class TmdbSearchTest extends AbstractTests {
         Integer firstAirDateYear = null;
         SearchType searchType = SearchType.PHRASE;
         ResultList<TVBasic> result = instance.searchTV(query, page, language, firstAirDateYear, searchType);
-        TestSuite.test(result);
+        TestSuite.test(result, "TV");
         TestSuite.testId(result, 1402, "TV Show");
     }
 

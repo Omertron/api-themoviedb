@@ -95,7 +95,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         ResultList<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
-        TestSuite.test(results);
+        TestSuite.test(results,"UserLists");
 
         for (UserList result : results.getResults()) {
             TestSuite.test(result);
@@ -111,7 +111,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
         ResultList<MovieBasic> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
-        TestSuite.test(results);
+        TestSuite.test(results,"Fav Movies");
 
         for (MovieBasic result : results.getResults()) {
             TestSuite.test(result);
@@ -127,7 +127,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetFavoriteTv() throws MovieDbException {
         LOG.info("getFavoriteTv");
         ResultList<TVBasic> results = instance.getFavoriteTv(getSessionId(), getAccountId());
-        TestSuite.test(results);
+        TestSuite.test(results,"Fav TV");
 
         for (TVBasic result : results.getResults()) {
             TestSuite.test(result);
@@ -173,7 +173,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetRatedMovies() throws MovieDbException {
         LOG.info("getRatedMovies");
         ResultList<MovieBasic> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results);
+        TestSuite.test(results,"Rated Movies");
     }
 
     /**
@@ -185,7 +185,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetRatedTV() throws MovieDbException {
         LOG.info("getRatedTV");
         ResultList<TVBasic> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results);
+        TestSuite.test(results,"Rated TV");
         for (TVBasic result : results.getResults()) {
             TestSuite.test(result);
         }
@@ -200,7 +200,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetWatchListMovie() throws MovieDbException {
         LOG.info("getWatchListMovie");
         ResultList<MovieBasic> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results);
+        TestSuite.test(results,"Watch List Movie");
         for (MovieBasic result : results.getResults()) {
             TestSuite.test(result);
         }
@@ -215,7 +215,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetWatchListTV() throws MovieDbException {
         LOG.info("getWatchListTV");
         ResultList<TVBasic> results = instance.getWatchListTV(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results);
+        TestSuite.test(results,"Watch List TV");
         for (TVBasic result : results.getResults()) {
             TestSuite.test(result);
         }
@@ -284,7 +284,7 @@ public class TmdbAccountTest extends AbstractTests {
             result = instance.getGuestRatedMovies(guestSession, language, page, sortBy);
         }
 
-        TestSuite.test(result);
+        TestSuite.test(result,"Guest Reated Movies");
     }
 
     private void postGuestRating(String guestSessionId, int movieId) throws MovieDbException {

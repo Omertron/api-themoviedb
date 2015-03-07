@@ -107,7 +107,7 @@ public class TmdbConfigurationTest extends AbstractTests {
     public void testGetJobs() throws MovieDbException {
         LOG.info("getJobs");
         ResultList<JobDepartment> result = instance.getJobs();
-        TestSuite.test(result);
+        TestSuite.test(result, "Jobs");
     }
 
     /**

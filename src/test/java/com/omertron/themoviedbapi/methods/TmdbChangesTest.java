@@ -59,7 +59,7 @@ public class TmdbChangesTest extends AbstractTests {
     public void testGetMovieChangesList() throws MovieDbException {
         LOG.info("getMovieChangesList");
         ResultList<ChangeListItem> result = instance.getChangeList(MethodBase.MOVIE, null, null, null);
-        TestSuite.test(result);
+        TestSuite.test(result, "Movie Changes");
     }
 
     /**
@@ -71,7 +71,7 @@ public class TmdbChangesTest extends AbstractTests {
     public void testGetPersonChangesList() throws MovieDbException {
         LOG.info("getPersonChangesList");
         ResultList<ChangeListItem> result = instance.getChangeList(MethodBase.PERSON, null, null, null);
-        TestSuite.test(result);
+        TestSuite.test(result, "Person Changes");
     }
 
     /**
@@ -83,6 +83,6 @@ public class TmdbChangesTest extends AbstractTests {
     public void testGetTVChangesList() throws MovieDbException {
         LOG.info("getTVChangesList");
         ResultList<ChangeListItem> result = instance.getChangeList(MethodBase.TV, null, null, null);
-        TestSuite.test(result);
+        TestSuite.test(result, "TV Changes");
     }
 }

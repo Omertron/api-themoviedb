@@ -123,7 +123,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<AlternativeTitle> result = instance.getTVAlternativeTitles(test.getTmdb());
-            TestSuite.test(result);
+            TestSuite.test(result, "TV Alt Titles");
         }
     }
 
@@ -169,7 +169,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<ContentRating> result = instance.getTVContentRatings(test.getTmdb());
-            TestSuite.test(result);
+            TestSuite.test(result, "TV Content Rating");
             assertTrue("No language", StringUtils.isNotBlank(result.getResults().get(0).getLanguage()));
             assertTrue("No rating", StringUtils.isNotBlank(result.getResults().get(0).getRating()));
         }
@@ -236,7 +236,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Artwork> result = instance.getTVImages(test.getTmdb(), language, includeImageLanguage);
-            TestSuite.test(result);
+            TestSuite.test(result, "TV Images");
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
             }
@@ -260,7 +260,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Keyword> result = instance.getTVKeywords(test.getTmdb(), appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "TV Keyword");
         }
     }
 
@@ -295,7 +295,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<TVInfo> result = instance.getTVSimilar(test.getTmdb(), page, language, appendToResponse);
-            TestSuite.test(result);
+            TestSuite.test(result, "TV Similar");
         }
     }
 
@@ -310,7 +310,7 @@ public class TmdbTVTest extends AbstractTests {
 
         for (TestID test : TV_IDS) {
             ResultList<Translation> result = instance.getTVTranslations(test.getTmdb());
-            TestSuite.test(result);
+            TestSuite.test(result, "TV Translations");
         }
     }
 
@@ -358,7 +358,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<TVBasic> result = instance.getTVOnTheAir(page, language);
-        TestSuite.test(result);
+        TestSuite.test(result, "TV OTA");
     }
 
     /**
@@ -374,7 +374,7 @@ public class TmdbTVTest extends AbstractTests {
         String timezone = "";
 
         ResultList<TVBasic> result = instance.getTVAiringToday(page, language, timezone);
-        TestSuite.test(result);
+        TestSuite.test(result, "TV Airing");
     }
 
     /**
@@ -389,7 +389,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<TVBasic> result = instance.getTVTopRated(page, language);
-        TestSuite.test(result);
+        TestSuite.test(result, "TV Top");
     }
 
     /**
@@ -404,7 +404,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         ResultList<TVBasic> result = instance.getTVPopular(page, language);
-        TestSuite.test(result);
+        TestSuite.test(result, "tv Popular");
     }
 
 }

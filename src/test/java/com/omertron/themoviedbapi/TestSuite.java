@@ -46,64 +46,71 @@ public class TestSuite {
         return new Random().nextInt(10) + 1;
     }
 
-    public static void test(ResultList<?> result) {
-        assertNotNull("Null result list", result);
-        assertFalse("Empty result list", result.isEmpty());
-        test(result.getResults());
+    public static void test(ResultList<?> result, String message) {
+        assertNotNull(message + ": Null result list", result);
+        assertFalse(message + ": Empty result list", result.isEmpty());
+        test(result.getResults(), message);
     }
 
-    public static void test(List<?> result) {
-        assertNotNull("Null results", result);
-        assertFalse("Empty results", result.isEmpty());
+    public static void test(List<?> result, String message) {
+        assertNotNull(message + ": Null results", result);
+        assertFalse(message + ": Empty results", result.isEmpty());
     }
 
     public static void test(MovieBasic test) {
-        assertTrue("No title", isNotBlank(test.getTitle()));
-        assertTrue("No poster", isNotBlank(test.getPosterPath()));
-        assertTrue("No release date", isNotBlank(test.getReleaseDate()));
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing title", isNotBlank(test.getTitle()));
+        assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
+        assertTrue(message + ": Missing release date", isNotBlank(test.getReleaseDate()));
     }
 
     public static void test(UserList test) {
-        assertTrue("No ID", isNotBlank(test.getId()));
-        assertTrue("No Description", isNotBlank(test.getDescription()));
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing ID", isNotBlank(test.getId()));
+        assertTrue(message + ": Missing Description", isNotBlank(test.getDescription()));
     }
 
     public static void test(TVBasic test) {
-        assertTrue("No name", isNotBlank(test.getName()));
-        assertTrue("No poster", isNotBlank(test.getPosterPath()));
-        assertTrue("No first air date", isNotBlank(test.getFirstAirDate()));
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing name", isNotBlank(test.getName()));
+        assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
+        assertTrue(message + ": Missing first air date", isNotBlank(test.getFirstAirDate()));
     }
 
     public static void test(TVInfo test) {
-        assertTrue("No ID", test.getId() > 0);
-        assertFalse("No runtime", test.getEpisodeRunTime().isEmpty());
-        assertFalse("No genres", test.getGenres().isEmpty());
-        assertTrue("No season count", test.getNumberOfSeasons() > 0);
-        assertTrue("No episode count", test.getNumberOfEpisodes() > 0);
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing ID", test.getId() > 0);
+        assertFalse(message + ": Missing runtime", test.getEpisodeRunTime().isEmpty());
+        assertFalse(message + ": Missing genres", test.getGenres().isEmpty());
+        assertTrue(message + ": Missing season count", test.getNumberOfSeasons() > 0);
+        assertTrue(message + ": Missing episode count", test.getNumberOfEpisodes() > 0);
     }
 
     public static void test(TVEpisodeInfo test) {
-        assertTrue("No ID", test.getId() > 0);
-        assertTrue("No name", StringUtils.isNotBlank(test.getName()));
-        assertTrue("No crew", test.getCrew().size() > 0);
-        assertTrue("No guest stars", test.getGuestStars().size() > 0);
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing ID", test.getId() > 0);
+        assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
+        assertTrue(message + ": Missing crew", test.getCrew().size() > 0);
+        assertTrue(message + ": Missing guest stars", test.getGuestStars().size() > 0);
     }
 
     public static void test(Person test) {
-        assertTrue("Missing bio", StringUtils.isNotBlank(test.getBiography()));
-        assertTrue("Missing birthday", StringUtils.isNotBlank(test.getBirthday()));
-        assertTrue("Missing homepage", StringUtils.isNotBlank(test.getHomepage()));
-        assertTrue("Missing name", StringUtils.isNotBlank(test.getName()));
-        assertTrue("Missing birth place", StringUtils.isNotBlank(test.getPlaceOfBirth()));
-        assertTrue("Missing artwork", StringUtils.isNotBlank(test.getProfilePath()));
-        assertTrue("Missing bio", test.getPopularity() > 0F);
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing bio", StringUtils.isNotBlank(test.getBiography()));
+        assertTrue(message + ": Missing birthday", StringUtils.isNotBlank(test.getBirthday()));
+        assertTrue(message + ": Missing homepage", StringUtils.isNotBlank(test.getHomepage()));
+        assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
+        assertTrue(message + ": Missing birth place", StringUtils.isNotBlank(test.getPlaceOfBirth()));
+        assertTrue(message + ": Missing artwork", StringUtils.isNotBlank(test.getProfilePath()));
+        assertTrue(message + ": Missing bio", test.getPopularity() > 0F);
     }
 
     public static void test(TVSeasonInfo test) {
-        assertTrue("No ID", test.getId() > 0);
-        assertTrue("No name", StringUtils.isNotBlank(test.getName()));
-        assertTrue("No overview", StringUtils.isNotBlank(test.getOverview()));
-        assertTrue("No episodes", test.getEpisodes().size() > 0);
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing ID", test.getId() > 0);
+        assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
+        assertTrue(message + ": Missing overview", StringUtils.isNotBlank(test.getOverview()));
+        assertTrue(message + ": Missing episodes", test.getEpisodes().size() > 0);
     }
 
     public static void testId(ResultList<? extends IIdentification> result, int id, String message) {

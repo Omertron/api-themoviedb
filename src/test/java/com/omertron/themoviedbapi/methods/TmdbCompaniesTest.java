@@ -85,6 +85,6 @@ public class TmdbCompaniesTest extends AbstractTests {
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
         ResultList<MovieBasic> result = instance.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
-        TestSuite.test(result);
+        TestSuite.test(result,"Company Movies");
     }
 }

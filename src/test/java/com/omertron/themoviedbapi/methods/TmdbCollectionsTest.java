@@ -74,7 +74,7 @@ public class TmdbCollectionsTest extends AbstractTests {
     public void testGetCollectionImages() throws MovieDbException {
         LOG.info("getCollectionImages");
         ResultList<Artwork> result = instance.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
-        TestSuite.test(result);
+        TestSuite.test(result,"Collection Images");
     }
 
 }
