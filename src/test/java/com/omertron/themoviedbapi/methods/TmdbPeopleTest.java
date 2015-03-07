@@ -303,7 +303,9 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
         Person result = instance.getPersonLatest();
-        TestSuite.test(result);
+        // All we get on the latest person is usually id and name
+        assertTrue("No id", result.getId() > 0);
+        assertTrue("No name", StringUtils.isNotBlank(result.getName()));
     }
 
 }

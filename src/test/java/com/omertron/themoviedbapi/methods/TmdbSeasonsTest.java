@@ -92,6 +92,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing: {}", test);
             TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
             TestSuite.test(result);
         }
@@ -118,6 +119,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         LOG.info("getSeasonAccountState");
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing: {}", test);
             MediaState result = instance.getSeasonAccountState(test.getTmdb(), getSessionId());
             assertNotNull("Null result", result);
             assertTrue("Invalid rating", result.getRated() > -2f);
@@ -136,11 +138,11 @@ public class TmdbSeasonsTest extends AbstractTests {
         int seasonNumber = 0;
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing: {}", test);
             MediaCreditList result = instance.getSeasonCredits(test.getTmdb(), seasonNumber);
             assertNotNull(result);
             TestSuite.test(result.getCast());
             TestSuite.test(result.getCrew());
-            TestSuite.test(result.getGuestStars());
 
             boolean found = false;
             for (MediaCreditCast p : result.getCast()) {
@@ -166,6 +168,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing: {}", test);
             ExternalID result = instance.getSeasonExternalID(test.getTmdb(), seasonNumber, language);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
@@ -187,6 +190,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing: {}", test);
             ResultList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
             TestSuite.test(result);
             for (Artwork artwork : result.getResults()) {
@@ -212,6 +216,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         boolean found = false;
 
         for (TestID test : TV_IDS) {
+            LOG.info("Testing: {}", test);
             ResultList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
             found = found || !result.isEmpty();
         }

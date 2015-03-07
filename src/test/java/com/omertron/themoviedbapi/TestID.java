@@ -19,6 +19,9 @@
  */
 package com.omertron.themoviedbapi;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class TestID {
 
     private String name;
@@ -72,6 +75,11 @@ public class TestID {
 
     public void setOther(String other) {
         this.other = other;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }
