@@ -19,39 +19,16 @@
  */
 package com.omertron.themoviedbapi.model.network;
 
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.model.AbstractIdName;
 import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
-public class Network extends AbstractJsonMapping implements Serializable, IIdentification {
+public class Network extends AbstractIdName implements Serializable, IIdentification {
 
     private static final long serialVersionUID = 4L;
-
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("name")
-    private String name;
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    // Nothing to add to base class
 
 }
