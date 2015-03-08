@@ -22,7 +22,6 @@ package com.omertron.themoviedbapi.wrapper;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.model.media.Trailer;
 import com.omertron.themoviedbapi.model.media.Video;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +29,8 @@ import java.util.List;
  *
  * @author Stuart
  */
-public class WrapperVideos extends AbstractWrapperId implements Serializable {
+public class WrapperVideos extends AbstractWrapperId {
 
-    private static final long serialVersionUID = 1L;
     private List<Video> videos = null;
 
     public List<Video> getVideos() {

@@ -21,15 +21,12 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.results.AbstractResults;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-public abstract class AbstractWrapper extends AbstractJsonMapping implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractWrapper extends AbstractJsonMapping {
 
     /**
      * Get a list of the enums passed

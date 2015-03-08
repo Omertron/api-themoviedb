@@ -21,16 +21,14 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
-import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperReleaseInfo extends AbstractWrapperId implements Serializable {
+public class WrapperReleaseInfo extends AbstractWrapperId {
 
-    private static final long serialVersionUID = 1L;
     @JsonProperty("countries")
     private List<ReleaseInfo> countries;
 

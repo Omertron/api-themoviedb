@@ -21,16 +21,14 @@ package com.omertron.themoviedbapi.wrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.media.Translation;
-import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperTranslations extends AbstractWrapperId implements Serializable {
+public class WrapperTranslations extends AbstractWrapperId {
 
-    private static final long serialVersionUID = 1L;
     @JsonProperty("translations")
     private List<Translation> translations;
 
