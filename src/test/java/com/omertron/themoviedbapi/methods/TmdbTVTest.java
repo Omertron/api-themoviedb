@@ -170,7 +170,7 @@ public class TmdbTVTest extends AbstractTests {
         for (TestID test : TV_IDS) {
             ResultList<ContentRating> result = instance.getTVContentRatings(test.getTmdb());
             TestSuite.test(result, "TV Content Rating");
-            assertTrue("No language", StringUtils.isNotBlank(result.getResults().get(0).getLanguage()));
+            assertTrue("No language", StringUtils.isNotBlank(result.getResults().get(0).getCountry()));
             assertTrue("No rating", StringUtils.isNotBlank(result.getResults().get(0).getRating()));
         }
     }

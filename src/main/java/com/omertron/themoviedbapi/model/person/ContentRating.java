@@ -28,16 +28,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ContentRating {
 
     @JsonProperty("iso_3166_1")
-    private String language;
+    private String country;
     @JsonProperty("rating")
     private String rating;
 
-    public String getLanguage() {
-        return language;
+    public String getCountry() {
+        return country;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getRating() {

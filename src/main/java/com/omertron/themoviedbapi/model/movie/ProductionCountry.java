@@ -34,20 +34,20 @@ public class ProductionCountry extends AbstractJsonMapping {
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("iso_3166_1")
-    private String isoCode;
+    private String country;
     @JsonProperty("name")
     private String name;
 
-    public String getIsoCode() {
-        return isoCode;
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setIsoCode(String isoCode) {
-        this.isoCode = isoCode;
     }
 
     public void setName(String name) {
@@ -60,7 +60,7 @@ public class ProductionCountry extends AbstractJsonMapping {
             final ProductionCountry other = (ProductionCountry) obj;
             return new EqualsBuilder()
                     .append(name, other.name)
-                    .append(isoCode, other.isoCode)
+                    .append(country, other.country)
                     .isEquals();
         } else {
             return false;
@@ -70,7 +70,7 @@ public class ProductionCountry extends AbstractJsonMapping {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(isoCode)
+                .append(country)
                 .append(name)
                 .toHashCode();
     }
