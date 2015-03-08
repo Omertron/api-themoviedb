@@ -22,29 +22,30 @@ package com.omertron.themoviedbapi.model.company;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
+import java.io.Serializable;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Company information
  *
  * @author Stuart
  */
-public class Company extends AbstractJsonMapping implements IIdentification {
+public class Company extends AbstractJsonMapping implements Serializable, IIdentification {
 
-    private static final long serialVersionUID = 1L;
-    private static final String DEFAULT_STRING = "";
+    private static final long serialVersionUID = 4L;
     // Properties
     @JsonProperty("id")
     private int id = 0;
     @JsonProperty("name")
-    private String name = DEFAULT_STRING;
+    private String name = EMPTY;
     @JsonProperty("description")
-    private String description = DEFAULT_STRING;
+    private String description = EMPTY;
     @JsonProperty("headquarters")
-    private String headquarters = DEFAULT_STRING;
+    private String headquarters = EMPTY;
     @JsonProperty("homepage")
-    private String homepage = DEFAULT_STRING;
+    private String homepage = EMPTY;
     @JsonProperty("logo_path")
-    private String logoPath = DEFAULT_STRING;
+    private String logoPath = EMPTY;
     @JsonProperty("parent_company")
     private Company parentCompany = null;
 

@@ -24,13 +24,16 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
+import java.io.Serializable;
 
 /**
  * Basic media information
  *
  * @author stuart.boston
  */
-public class MediaBasic extends AbstractJsonMapping implements IIdentification {
+public class MediaBasic extends AbstractJsonMapping implements Serializable, IIdentification {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private int id;

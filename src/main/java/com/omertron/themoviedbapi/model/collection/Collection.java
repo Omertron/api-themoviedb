@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -31,9 +32,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author stuart.boston
  */
 @JsonRootName("collection")
-public class Collection extends AbstractJsonMapping implements IIdentification{
+public class Collection extends AbstractJsonMapping implements Serializable, IIdentification {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private int id;

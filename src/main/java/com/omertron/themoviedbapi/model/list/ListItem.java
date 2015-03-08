@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model.list;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,9 @@ import java.util.List;
  * @author stuart.boston
  * @param <T> Type of list
  */
-public class ListItem<T> extends AbstractJsonMapping {
+public class ListItem<T> extends AbstractJsonMapping implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private String id;

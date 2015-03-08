@@ -26,13 +26,14 @@ import com.omertron.themoviedbapi.enumeration.CreditType;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
-public class CreditBasic extends AbstractJsonMapping implements IIdentification {
+public class CreditBasic extends AbstractJsonMapping implements Serializable, IIdentification {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     private CreditType creditType;
     private MediaType mediaType;

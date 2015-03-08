@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model.tv;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.media.MediaCreditCast;
 import com.omertron.themoviedbapi.model.media.MediaCreditCrew;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +30,9 @@ import java.util.List;
  *
  * @author stuart.boston
  */
-public class TVEpisodeInfo extends TVEpisodeBasic {
+public class TVEpisodeInfo extends TVEpisodeBasic implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("crew")
     private List<MediaCreditCrew> crew;

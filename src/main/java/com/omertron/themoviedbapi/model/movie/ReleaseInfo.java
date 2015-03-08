@@ -21,15 +21,16 @@ package com.omertron.themoviedbapi.model.movie;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * @author Stuart
  */
-public class ReleaseInfo extends AbstractJsonMapping {
+public class ReleaseInfo extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("iso_3166_1")
     private String country;

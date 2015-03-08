@@ -22,13 +22,16 @@ package com.omertron.themoviedbapi.model.tv;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
+import java.io.Serializable;
 
 /**
  * TV Favorite information
  *
  * @author stuart.boston
  */
-public class TVSeasonBasic extends AbstractJsonMapping implements IIdentification {
+public class TVSeasonBasic extends AbstractJsonMapping implements Serializable, IIdentification {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private int id = -1;

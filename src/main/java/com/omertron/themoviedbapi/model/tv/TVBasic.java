@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model.tv;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +30,9 @@ import java.util.List;
  *
  * @author stuart.boston
  */
-public class TVBasic extends MediaBasic {
+public class TVBasic extends MediaBasic implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("name")
     private String name;

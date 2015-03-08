@@ -20,12 +20,15 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class ContentRating {
+public class ContentRating implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("iso_3166_1")
     private String country;

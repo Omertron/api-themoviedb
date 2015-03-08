@@ -21,13 +21,14 @@ package com.omertron.themoviedbapi.model.review;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 /**
  * @author Stuart
  */
-public class Review extends AbstractJsonMapping {
+public class Review extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private String id;

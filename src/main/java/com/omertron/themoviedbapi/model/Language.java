@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -28,12 +29,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author stuart.boston
  */
 @JsonRootName("spoken_language")
-public class Language extends AbstractJsonMapping {
+public class Language extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    /*
-     * Properties
-     */
+    private static final long serialVersionUID = 4L;
+
     @JsonProperty("iso_639_1")
     private String isoCode;
     @JsonProperty("name")

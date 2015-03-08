@@ -21,11 +21,12 @@ package com.omertron.themoviedbapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import java.io.Serializable;
 
 @JsonRootName("certification")
-public class Certification extends AbstractJsonMapping {
+public class Certification extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
     // Properties
     @JsonProperty("certification")
     private String value;

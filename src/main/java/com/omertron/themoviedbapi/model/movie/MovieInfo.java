@@ -43,6 +43,7 @@ import com.omertron.themoviedbapi.results.WrapperMovieKeywords;
 import com.omertron.themoviedbapi.results.WrapperReleaseInfo;
 import com.omertron.themoviedbapi.results.WrapperTranslations;
 import com.omertron.themoviedbapi.results.WrapperVideos;
+import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -52,9 +53,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author stuart.boston
  */
-public class MovieInfo extends AbstractJsonMapping implements IIdentification {
+public class MovieInfo extends AbstractJsonMapping implements Serializable, IIdentification {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
+
     @JsonProperty("backdrop_path")
     private String backdropPath;
     @JsonProperty("id")

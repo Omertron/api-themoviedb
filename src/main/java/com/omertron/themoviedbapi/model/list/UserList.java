@@ -21,13 +21,16 @@ package com.omertron.themoviedbapi.model.list;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 /**
  * Wrapper for the MovieDbList function
  *
  * @author stuart.boston
  */
-public class UserList extends AbstractJsonMapping {
+public class UserList extends AbstractJsonMapping implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private String id;

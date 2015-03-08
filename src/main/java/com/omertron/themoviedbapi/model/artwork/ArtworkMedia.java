@@ -28,6 +28,7 @@ import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeBasic;
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -35,7 +36,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author Stuart
  */
-public class ArtworkMedia extends Artwork {
+public class ArtworkMedia extends Artwork implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     private MediaType mediaType;
     @JsonTypeInfo(

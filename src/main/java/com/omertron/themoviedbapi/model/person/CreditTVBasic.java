@@ -21,13 +21,14 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.enumeration.MediaType;
+import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
-public class CreditTVBasic extends CreditBasic {
+public class CreditTVBasic extends CreditBasic implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("episode_count")
     private int episodeCount;

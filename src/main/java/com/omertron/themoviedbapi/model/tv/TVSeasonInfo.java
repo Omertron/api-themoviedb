@@ -20,6 +20,7 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +28,9 @@ import java.util.List;
  *
  * @author stuart.boston
  */
-public class TVSeasonInfo extends TVSeasonBasic {
+public class TVSeasonInfo extends TVSeasonBasic implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("name")
     private String name;

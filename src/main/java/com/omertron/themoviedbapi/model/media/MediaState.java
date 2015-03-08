@@ -23,12 +23,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class MediaState extends AbstractJsonMapping implements IIdentification {
+public class MediaState extends AbstractJsonMapping implements Serializable, IIdentification {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private int id;

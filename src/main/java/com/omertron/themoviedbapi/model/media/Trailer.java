@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model.media;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -29,9 +30,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author Stuart
  */
-public class Trailer extends AbstractJsonMapping {
+public class Trailer extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("name")
     private String name;

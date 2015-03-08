@@ -22,12 +22,15 @@ package com.omertron.themoviedbapi.model.person;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 
 /**
  *
  * @author Stuart
  */
-public class ExternalID extends AbstractJsonMapping implements IIdentification {
+public class ExternalID extends AbstractJsonMapping implements Serializable, IIdentification {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private int id;

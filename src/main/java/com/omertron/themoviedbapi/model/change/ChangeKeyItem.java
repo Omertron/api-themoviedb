@@ -21,12 +21,13 @@ package com.omertron.themoviedbapi.model.change;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChangeKeyItem extends AbstractJsonMapping {
+public class ChangeKeyItem extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
     @JsonProperty("key")
     private String key;
     @JsonProperty("items")

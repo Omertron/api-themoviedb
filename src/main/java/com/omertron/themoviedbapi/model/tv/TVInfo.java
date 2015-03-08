@@ -24,13 +24,16 @@ import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.movie.ProductionCompany;
 import com.omertron.themoviedbapi.model.network.Network;
 import com.omertron.themoviedbapi.model.person.PersonBasic;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class TVInfo extends TVBasic {
+public class TVInfo extends TVBasic implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("created_by")
     private List<PersonBasic> createdBy;

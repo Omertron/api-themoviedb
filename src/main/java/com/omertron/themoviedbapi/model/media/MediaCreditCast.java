@@ -20,12 +20,15 @@
 package com.omertron.themoviedbapi.model.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class MediaCreditCast extends MediaCredit {
+public class MediaCreditCast extends MediaCredit implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("cast_id")
     private int castId = 0;

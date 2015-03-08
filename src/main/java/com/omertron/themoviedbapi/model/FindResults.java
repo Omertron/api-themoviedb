@@ -25,14 +25,15 @@ import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeBasic;
 import com.omertron.themoviedbapi.model.tv.TVSeasonBasic;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author stuart.boston
  */
-public class FindResults extends AbstractJsonMapping {
+public class FindResults extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("movie_results")
     private List<MovieBasic> movieResults;

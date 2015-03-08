@@ -21,11 +21,14 @@ package com.omertron.themoviedbapi.model.keyword;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.omertron.themoviedbapi.model.AbstractIdName;
+import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
 @JsonRootName("keyword")
-public class Keyword extends AbstractIdName {
+public class Keyword extends AbstractIdName implements Serializable {
+
+    private static final long serialVersionUID = 4L;
     // Nothing to override from the base class.
 }

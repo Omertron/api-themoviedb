@@ -21,6 +21,7 @@ package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractIdName;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,7 +29,9 @@ import java.util.List;
  *
  * @author stuart.boston
  */
-public class TVCredit extends AbstractIdName {
+public class TVCredit extends AbstractIdName implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("original_name")
     private String originalName;

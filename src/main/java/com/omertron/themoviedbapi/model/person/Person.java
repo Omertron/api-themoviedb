@@ -20,14 +20,15 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author stuart.boston
  */
-public class Person extends PersonBasic {
+public class Person extends PersonBasic implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("adult")
     private boolean adult;

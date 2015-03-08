@@ -21,11 +21,14 @@ package com.omertron.themoviedbapi.model.movie;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.omertron.themoviedbapi.model.AbstractIdName;
+import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
 @JsonRootName("production_company")
-public class ProductionCompany extends AbstractIdName {
+public class ProductionCompany extends AbstractIdName implements Serializable {
+
+    private static final long serialVersionUID = 4L;
     // Nothing to override from the base class.
 }

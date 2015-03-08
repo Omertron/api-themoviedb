@@ -21,10 +21,11 @@ package com.omertron.themoviedbapi.model.authentication;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
-public class TokenSession extends AbstractJsonMapping {
+public class TokenSession extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 4L;
     @JsonProperty("session_id")
     private String sessionId;
     @JsonProperty("success")

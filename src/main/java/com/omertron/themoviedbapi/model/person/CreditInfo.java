@@ -22,13 +22,14 @@ package com.omertron.themoviedbapi.model.person;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.tv.TVCredit;
+import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
-public class CreditInfo extends AbstractJsonMapping {
+public class CreditInfo extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
     private String id;

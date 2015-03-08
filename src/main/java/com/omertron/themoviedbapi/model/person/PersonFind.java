@@ -27,14 +27,16 @@ import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeBasic;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author stuart.boston
  */
-public class PersonFind extends PersonBasic {
+public class PersonFind extends PersonBasic implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
+
     @JsonProperty("adult")
     private Boolean adult;
     @JsonProperty("popularity")

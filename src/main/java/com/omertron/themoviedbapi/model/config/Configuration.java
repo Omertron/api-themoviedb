@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model.config;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -31,12 +32,10 @@ import org.yamj.api.common.exception.ApiExceptionType;
 /**
  * @author stuart.boston
  */
-public class Configuration extends AbstractJsonMapping {
+public class Configuration extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    /*
-     * Properties
-     */
+    private static final long serialVersionUID = 4L;
+
     @JsonProperty("base_url")
     private String baseUrl;
     @JsonProperty("secure_base_url")

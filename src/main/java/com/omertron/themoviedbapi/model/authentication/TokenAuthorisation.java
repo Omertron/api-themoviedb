@@ -21,10 +21,11 @@ package com.omertron.themoviedbapi.model.authentication;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 
-public class TokenAuthorisation extends AbstractJsonMapping {
+public class TokenAuthorisation extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 4L;
     @JsonProperty("expires_at")
     private String expires;
     @JsonProperty("request_token")

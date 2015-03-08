@@ -22,12 +22,15 @@ package com.omertron.themoviedbapi.model.media;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class MediaCredit extends AbstractJsonMapping implements IIdentification {
+public class MediaCredit extends AbstractJsonMapping implements Serializable, IIdentification {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("credit_id")
     private String creditId;

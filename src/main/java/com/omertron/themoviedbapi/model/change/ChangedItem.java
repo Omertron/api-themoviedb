@@ -21,10 +21,11 @@ package com.omertron.themoviedbapi.model.change;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 
-public class ChangedItem extends AbstractJsonMapping {
+public class ChangedItem extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
     @JsonProperty("id")
     private String id;
     @JsonProperty("action")

@@ -21,11 +21,12 @@ package com.omertron.themoviedbapi.model.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 import java.util.List;
 
-public class JobDepartment extends AbstractJsonMapping {
+public class JobDepartment extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
     // Properties
     @JsonProperty("department")
     private String department;

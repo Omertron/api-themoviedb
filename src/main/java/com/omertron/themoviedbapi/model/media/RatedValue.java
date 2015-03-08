@@ -21,12 +21,15 @@ package com.omertron.themoviedbapi.model.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import java.io.Serializable;
 
 /**
  *
  * @author Stuart.Boston
  */
-public class RatedValue extends AbstractJsonMapping {
+public class RatedValue extends AbstractJsonMapping implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("value")
     private float value = -1f;

@@ -22,13 +22,16 @@ package com.omertron.themoviedbapi.model.tv;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
+import java.io.Serializable;
 
 /**
  * TV Favorite information
  *
  * @author stuart.boston
  */
-public class TVEpisodeBasic extends MediaBasic {
+public class TVEpisodeBasic extends MediaBasic implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     @JsonProperty("air_date")
     private String airDate;
