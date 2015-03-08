@@ -43,14 +43,4 @@ public class AbstractWrapperAll extends AbstractWrapperIdPages implements IIdent
     public void setDates(ResultDates dates) {
         this.dates = dates;
     }
-
-    /**
-     * Copy the wrapper values to the results
-     *
-     * @param results
-     */
-    @Override
-    public void setResultProperties(AbstractWrapperIdPages results) {
-        super.setResultProperties(results);
-    }
 }
