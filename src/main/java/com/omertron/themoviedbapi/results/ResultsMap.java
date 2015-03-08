@@ -32,7 +32,7 @@ import java.util.Map;
  * @param <K>
  * @param <V>
  */
-public final class ResultsMap<K, V> extends AbstractResults {
+public final class ResultsMap<K, V> extends AbstractWrapperIdPages {
 
     private Map<K, V> results;
 

@@ -17,35 +17,26 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
+import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class ResultDates extends AbstractJsonMapping {
+public class WrapperAlternativeTitles extends AbstractWrapperId {
 
-    @JsonProperty("minimum")
-    private String minimum = "";
-    @JsonProperty("maximum")
-    private String maximum = "";
+    @JsonProperty("titles")
+    private List<AlternativeTitle> titles;
 
-    public String getMinimum() {
-        return minimum;
+    public List<AlternativeTitle> getTitles() {
+        return titles;
     }
 
-    public String getMaximum() {
-        return maximum;
-    }
-
-    public void setMinimum(String minimum) {
-        this.minimum = minimum;
-    }
-
-    public void setMaximum(String maximum) {
-        this.maximum = maximum;
+    public void setTitles(List<AlternativeTitle> titles) {
+        this.titles = titles;
     }
 }

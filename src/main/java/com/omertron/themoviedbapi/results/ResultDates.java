@@ -17,41 +17,35 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
-import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.results.AbstractResults;
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
 /**
- * Base class for the wrappers
  *
  * @author Stuart
  */
-public class AbstractWrapperId extends AbstractWrapper implements IIdentification {
+public class ResultDates extends AbstractJsonMapping {
 
-    @JsonProperty("id")
-    private int id;
+    @JsonProperty("minimum")
+    private String minimum = "";
+    @JsonProperty("maximum")
+    private String maximum = "";
 
-    @Override
-    public int getId() {
-        return id;
+    public String getMinimum() {
+        return minimum;
     }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
+    public String getMaximum() {
+        return maximum;
     }
 
-    /**
-     * Copy the wrapper values to the results
-     *
-     * @param results
-     */
-    @Override
-    public void setResultProperties(AbstractResults results) {
-        super.setResultProperties(results);
-        results.setId(id);
+    public void setMinimum(String minimum) {
+        this.minimum = minimum;
     }
 
+    public void setMaximum(String maximum) {
+        this.maximum = maximum;
+    }
 }

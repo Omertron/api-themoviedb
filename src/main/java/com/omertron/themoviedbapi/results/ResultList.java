@@ -31,7 +31,7 @@ import java.util.List;
  * @author Stuart
  * @param <T>
  */
-public final class ResultList<T> extends AbstractResults {
+public final class ResultList<T> extends AbstractWrapperIdPages {
 
     private List<T> results;
 

@@ -17,26 +17,26 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.media.Translation;
+import com.omertron.themoviedbapi.model.config.JobDepartment;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperTranslations extends AbstractWrapperId {
+public class WrapperJobList extends AbstractWrapperBase {
 
-    @JsonProperty("translations")
-    private List<Translation> translations;
+    @JsonProperty("jobs")
+    private List<JobDepartment> jobs;
 
-    public void setTranslations(List<Translation> translations) {
-        this.translations = translations;
+    public List<JobDepartment> getJobs() {
+        return jobs;
     }
 
-    public List<Translation> getTranslations() {
-        return translations;
+    public void setJobs(List<JobDepartment> jobs) {
+        this.jobs = jobs;
     }
 }

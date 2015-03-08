@@ -17,24 +17,26 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
-import java.util.ArrayList;
+import com.omertron.themoviedbapi.model.media.Translation;
 import java.util.List;
 
-public class WrapperChanges extends AbstractWrapper {
+/**
+ *
+ * @author Stuart
+ */
+public class WrapperTranslations extends AbstractWrapperId {
 
-    @JsonProperty("changes")
-    private List<ChangeKeyItem> changedItems = new ArrayList<ChangeKeyItem>();
+    @JsonProperty("translations")
+    private List<Translation> translations;
 
-    public List<ChangeKeyItem> getChangedItems() {
-        return changedItems;
+    public void setTranslations(List<Translation> translations) {
+        this.translations = translations;
     }
 
-    public void setChangedItems(List<ChangeKeyItem> changes) {
-        this.changedItems = changes;
+    public List<Translation> getTranslations() {
+        return translations;
     }
-
 }

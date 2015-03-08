@@ -17,26 +17,37 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.media.AlternativeTitle;
+import com.omertron.themoviedbapi.model.config.Configuration;
+import java.util.Collections;
 import java.util.List;
 
 /**
  *
  * @author Stuart
  */
-public class WrapperAlternativeTitles extends AbstractWrapperId {
+public class WrapperConfig extends AbstractWrapperBase {
 
-    @JsonProperty("titles")
-    private List<AlternativeTitle> titles;
+    @JsonProperty("images")
+    private Configuration tmdbConfiguration;
+    @JsonProperty("change_keys")
+    private List<String> changeKeys = Collections.emptyList();
 
-    public List<AlternativeTitle> getTitles() {
-        return titles;
+    public Configuration getTmdbConfiguration() {
+        return tmdbConfiguration;
     }
 
-    public void setTitles(List<AlternativeTitle> titles) {
-        this.titles = titles;
+    public void setTmdbConfiguration(Configuration tmdbConfiguration) {
+        this.tmdbConfiguration = tmdbConfiguration;
+    }
+
+    public List<String> getChangeKeys() {
+        return changeKeys;
+    }
+
+    public void setChangeKeys(List<String> changeKeys) {
+        this.changeKeys = changeKeys;
     }
 }

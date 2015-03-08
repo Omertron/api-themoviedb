@@ -28,7 +28,7 @@ import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
-import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
 import java.net.URL;
 
 /**

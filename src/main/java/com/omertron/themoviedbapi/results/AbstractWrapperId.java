@@ -17,27 +17,40 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
+import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.Genre;
-import java.util.List;
 
 /**
- * Wrapper class for the Genres searches
+ * Base class for the wrappers
  *
  * @author Stuart
  */
-public class WrapperGenres extends AbstractWrapper {
+public class AbstractWrapperId extends AbstractWrapperBase implements IIdentification {
 
-    @JsonProperty("genres")
-    private List<Genre> genres;
+    @JsonProperty("id")
+    private int id;
 
-    public List<Genre> getGenres() {
-        return genres;
+    @Override
+    public int getId() {
+        return id;
     }
 
-    public void setGenres(List<Genre> genres) {
-        this.genres = genres;
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
+
+    /**
+     * Copy the wrapper values to the results
+     *
+     * @param results
+     */
+    @Override
+    public void setResultProperties(AbstractWrapperIdPages results) {
+        super.setResultProperties(results);
+        results.setId(id);
+    }
+
 }

@@ -17,26 +17,27 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.Genre;
 import java.util.List;
 
 /**
+ * Wrapper class for the Genres searches
  *
  * @author Stuart
  */
-public class WrapperMovieKeywords extends AbstractWrapperId {
+public class WrapperGenres extends AbstractWrapperBase {
 
-    @JsonProperty("keywords")
-    private List<Keyword> keywords;
+    @JsonProperty("genres")
+    private List<Genre> genres;
 
-    public List<Keyword> getKeywords() {
-        return keywords;
+    public List<Genre> getGenres() {
+        return genres;
     }
 
-    public void setKeywords(List<Keyword> keywords) {
-        this.keywords = keywords;
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 }

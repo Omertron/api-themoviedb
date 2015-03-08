@@ -30,7 +30,7 @@ import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperImages;
+import com.omertron.themoviedbapi.results.WrapperImages;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;

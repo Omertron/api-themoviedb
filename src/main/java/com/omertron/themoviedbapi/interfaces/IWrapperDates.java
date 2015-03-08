@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi.interfaces;
 
-import com.omertron.themoviedbapi.wrapper.ResultDates;
+import com.omertron.themoviedbapi.results.ResultDates;
 
 public interface IWrapperDates {
 

@@ -17,16 +17,15 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import com.omertron.themoviedbapi.results.AbstractResults;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-public abstract class AbstractWrapper extends AbstractJsonMapping {
+public abstract class AbstractWrapperBase extends AbstractJsonMapping {
 
     /**
      * Get a list of the enums passed
@@ -49,7 +48,7 @@ public abstract class AbstractWrapper extends AbstractJsonMapping {
      *
      * @param results
      */
-    public void setResultProperties(AbstractResults results) {
+    public void setResultProperties(AbstractWrapperIdPages results) {
         // There are no values to copy
         results.setId(0);
         results.setPage(0);

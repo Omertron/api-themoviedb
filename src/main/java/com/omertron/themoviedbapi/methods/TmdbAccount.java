@@ -36,7 +36,7 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;

@@ -17,63 +17,26 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
 import com.omertron.themoviedbapi.interfaces.IWrapperDates;
 import com.omertron.themoviedbapi.interfaces.IWrapperPages;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.results.AbstractResults;
 
 /**
  * Base class for the wrappers
  *
  * @author Stuart
  */
-public class AbstractWrapperAll extends AbstractWrapperId implements IIdentification, IWrapperPages, IWrapperDates {
+public class AbstractWrapperAll extends AbstractWrapperIdPages implements IIdentification, IWrapperPages, IWrapperDates {
 
-    @JsonProperty("page")
-    private int page;
-    @JsonProperty("total_pages")
-    private int totalPages;
-    @JsonProperty("total_results")
-    private int totalResults;
     @JsonProperty("dates")
     private ResultDates dates = new ResultDates();
 
     @Override
-    public int getPage() {
-        return page;
-    }
-
-    @Override
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    @Override
-    public int getTotalResults() {
-        return totalResults;
-    }
-
-    @Override
     public ResultDates getDates() {
         return dates;
-    }
-
-    @Override
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    @Override
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    @Override
-    public void setTotalResults(int totalResults) {
-        this.totalResults = totalResults;
     }
 
     @Override
@@ -87,10 +50,7 @@ public class AbstractWrapperAll extends AbstractWrapperId implements IIdentifica
      * @param results
      */
     @Override
-    public void setResultProperties(AbstractResults results) {
+    public void setResultProperties(AbstractWrapperIdPages results) {
         super.setResultProperties(results);
-        results.setPage(page);
-        results.setTotalPages(totalPages);
-        results.setTotalResults(totalResults);
     }
 }

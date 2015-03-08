@@ -17,26 +17,36 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.wrapper;
+package com.omertron.themoviedbapi.results;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.config.JobDepartment;
+import com.omertron.themoviedbapi.results.ResultList;
 import java.util.List;
 
 /**
+ * Generic wrapper for result lists
  *
  * @author Stuart
+ * @param <T>
  */
-public class WrapperJobList extends AbstractWrapper {
+public class WrapperGenericList<T> extends AbstractWrapperAll {
 
-    @JsonProperty("jobs")
-    private List<JobDepartment> jobs;
+    @JsonProperty("results")
+    private List<T> results;
 
-    public List<JobDepartment> getJobs() {
-        return jobs;
+    public List<T> getResults() {
+        return results;
     }
 
-    public void setJobs(List<JobDepartment> jobs) {
-        this.jobs = jobs;
+    @JsonCreator
+    public void setResults(List<T> results) {
+        this.results = results;
+    }
+
+    public ResultList<T> getResultsList() {
+        ResultList<T> resultsList = new ResultList<T>(results);
+        setResultProperties(resultsList);
+        return resultsList;
     }
 }
