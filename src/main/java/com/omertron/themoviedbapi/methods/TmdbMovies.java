@@ -44,7 +44,6 @@ import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.wrapper.WrapperAlternativeTitles;
-import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperMovieKeywords;
@@ -442,22 +441,7 @@ public class TmdbMovies extends AbstractMethod {
      * @throws MovieDbException
      */
     public ResultList<ChangeKeyItem> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, movieId);
-        parameters.add(Param.START_DATE, startDate);
-        parameters.add(Param.END_DATE, endDate);
-
-        URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.CHANGES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
-            ResultList<ChangeKeyItem> results = new ResultList<ChangeKeyItem>(wrapper.getChangedItems());
-            wrapper.setResultProperties(results);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
-        }
+        return getMediaChanges(movieId, startDate, endDate);
     }
 
     /**

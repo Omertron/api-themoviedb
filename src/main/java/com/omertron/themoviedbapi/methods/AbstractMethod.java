@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
@@ -37,7 +38,14 @@ import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
+import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
+import com.omertron.themoviedbapi.tools.MethodBase;
+import com.omertron.themoviedbapi.tools.MethodSub;
+import com.omertron.themoviedbapi.tools.Param;
+import com.omertron.themoviedbapi.tools.TmdbParameters;
+import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperGenericList;
 import java.io.IOException;
 import java.net.URL;
@@ -154,6 +162,35 @@ public class AbstractMethod {
             return MAPPER.readValue(webpage, typeRef);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get " + errorMessageSuffix, url, ex);
+        }
+    }
+
+    /**
+     *
+     * Look up the media's changes by ID
+     *
+     * @param mediaID
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws MovieDbException
+     */
+    protected ResultList<ChangeKeyItem> getMediaChanges(int mediaID, String startDate, String endDate) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, mediaID);
+        parameters.add(Param.START_DATE, startDate);
+        parameters.add(Param.END_DATE, endDate);
+
+        URL url = new ApiUrl(apiKey, MethodBase.EPISODE).subMethod(MethodSub.CHANGES).buildUrl(parameters);
+        String webpage = httpTools.getRequest(url);
+
+        try {
+            WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
+            ResultList<ChangeKeyItem> results = new ResultList<ChangeKeyItem>(wrapper.getChangedItems());
+            wrapper.setResultProperties(results);
+            return results;
+        } catch (IOException ex) {
+            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
         }
     }
 }

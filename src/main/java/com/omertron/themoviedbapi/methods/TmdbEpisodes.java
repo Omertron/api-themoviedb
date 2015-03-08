@@ -38,7 +38,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.wrapper.WrapperChanges;
 import com.omertron.themoviedbapi.wrapper.WrapperImages;
 import com.omertron.themoviedbapi.wrapper.WrapperVideos;
 import java.io.IOException;
@@ -66,8 +65,7 @@ public class TmdbEpisodes extends AbstractMethod {
     }
 
     /**
-     * Get the primary information about a TV episode by combination of a season
-     * and episode number.
+     * Get the primary information about a TV episode by combination of a season and episode number.
      *
      * @param tvID
      * @param seasonNumber
@@ -106,27 +104,11 @@ public class TmdbEpisodes extends AbstractMethod {
      * @throws MovieDbException
      */
     public ResultList<ChangeKeyItem> getEpisodeChanges(int episodeID, String startDate, String endDate) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.ID, episodeID);
-        parameters.add(Param.START_DATE, startDate);
-        parameters.add(Param.END_DATE, endDate);
-
-        URL url = new ApiUrl(apiKey, MethodBase.EPISODE).subMethod(MethodSub.CHANGES).buildUrl(parameters);
-        String webpage = httpTools.getRequest(url);
-
-        try {
-            WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
-            ResultList<ChangeKeyItem> results = new ResultList<ChangeKeyItem>(wrapper.getChangedItems());
-            wrapper.setResultProperties(results);
-            return results;
-        } catch (IOException ex) {
-            throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get changes", url, ex);
-        }
+        return getMediaChanges(episodeID, startDate, endDate);
     }
 
     /**
-     * This method lets users get the status of whether or not the TV episode
-     * has been rated.
+     * This method lets users get the status of whether or not the TV episode has been rated.
      *
      * A valid session id is required.
      *
@@ -179,8 +161,7 @@ public class TmdbEpisodes extends AbstractMethod {
     }
 
     /**
-     * Get the external ids for a TV episode by comabination of a season and
-     * episode number.
+     * Get the external ids for a TV episode by comabination of a season and episode number.
      *
      * @param tvID
      * @param seasonNumber
@@ -207,8 +188,7 @@ public class TmdbEpisodes extends AbstractMethod {
     }
 
     /**
-     * Get the images (episode stills) for a TV episode by combination of a
-     * season and episode number.
+     * Get the images (episode stills) for a TV episode by combination of a season and episode number.
      *
      * @param tvID
      * @param seasonNumber
@@ -236,8 +216,7 @@ public class TmdbEpisodes extends AbstractMethod {
     }
 
     /**
-     * This method lets users rate a TV episode. A valid session id or guest
-     * session id is required.
+     * This method lets users rate a TV episode. A valid session id or guest session id is required.
      *
      * @param tvID
      * @param seasonNumber
@@ -274,8 +253,7 @@ public class TmdbEpisodes extends AbstractMethod {
     }
 
     /**
-     * Get the videos that have been added to a TV episode (teasers, clips,
-     * etc...)
+     * Get the videos that have been added to a TV episode (teasers, clips, etc...)
      *
      * @param tvID
      * @param seasonNumber
