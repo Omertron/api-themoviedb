@@ -17,27 +17,37 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.person;
+package com.omertron.themoviedbapi.model.credits;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * @author stuart.boston
- * @param <T>
+ *
+ * @author Stuart.Boston
  */
-public class PersonCredits<T extends CreditBasic> extends AbstractJsonMapping implements Serializable, IIdentification {
+public class MediaCredit extends AbstractJsonMapping implements Serializable, IIdentification {
 
     private static final long serialVersionUID = 4L;
 
+    @JsonProperty("credit_id")
+    private String creditId;
     @JsonProperty("id")
     private int id;
-    private List<T> cast;
-    private List<T> crew;
+    @JsonProperty("profile_path")
+    private String artworkPath;
+    @JsonProperty("name")
+    private String name;
+
+    public String getCreditId() {
+        return creditId;
+    }
+
+    public void setCreditId(String creditId) {
+        this.creditId = creditId;
+    }
 
     @Override
     public int getId() {
@@ -49,21 +59,20 @@ public class PersonCredits<T extends CreditBasic> extends AbstractJsonMapping im
         this.id = id;
     }
 
-    public List<T> getCast() {
-        return cast;
+    public String getArtworkPath() {
+        return artworkPath;
     }
 
-    @JsonSetter("cast")
-    public void setCast(List<T> cast) {
-        this.cast = cast;
+    public void setArtworkPath(String artworkPath) {
+        this.artworkPath = artworkPath;
     }
 
-    public List<T> getCrew() {
-        return crew;
+    public String getName() {
+        return name;
     }
 
-    @JsonSetter("crew")
-    public void setCrew(List<T> crew) {
-        this.crew = crew;
+    public void setName(String name) {
+        this.name = name;
     }
+
 }

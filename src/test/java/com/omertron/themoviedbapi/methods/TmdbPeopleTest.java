@@ -29,12 +29,12 @@ import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
-import com.omertron.themoviedbapi.model.person.CreditBasic;
-import com.omertron.themoviedbapi.model.person.CreditMovieBasic;
-import com.omertron.themoviedbapi.model.person.CreditTVBasic;
+import com.omertron.themoviedbapi.model.credits.CreditBasic;
+import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
+import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -116,7 +116,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
+            PersonCreditList<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
@@ -140,7 +140,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
+            PersonCreditList<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
@@ -164,7 +164,7 @@ public class TmdbPeopleTest extends AbstractTests {
         String[] appendToResponse = null;
 
         for (TestID test : testIDs) {
-            PersonCredits<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
+            PersonCreditList<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");

@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.media;
+package com.omertron.themoviedbapi.model.credits;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;

@@ -18,7 +18,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.person;
+package com.omertron.themoviedbapi.model.credits;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -43,7 +43,7 @@ public class CreditBasic extends AbstractJsonMapping implements Serializable, II
     @JsonProperty("id")
     private int id;
     @JsonProperty("poster_path")
-    private String posterPath;
+    private String artworkPath;
 
     //cast
     @JsonProperty("character")
@@ -93,12 +93,12 @@ public class CreditBasic extends AbstractJsonMapping implements Serializable, II
         this.id = id;
     }
 
-    public String getPosterPath() {
-        return posterPath;
+    public String getArtworkPath() {
+        return artworkPath;
     }
 
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+    public void setArtworkPath(String artworkPath) {
+        this.artworkPath = artworkPath;
     }
 
     public String getCharacter() {

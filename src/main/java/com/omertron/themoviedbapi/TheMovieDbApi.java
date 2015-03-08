@@ -78,7 +78,7 @@ import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.CreditInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
@@ -1131,7 +1131,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonMovieCredits(personId, language, appendToResponse);
     }
 
@@ -1148,7 +1148,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonTVCredits(personId, language, appendToResponse);
     }
 
@@ -1165,7 +1165,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonCombinedCredits(personId, language, appendToResponse);
     }
 

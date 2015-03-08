@@ -17,7 +17,7 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.person;
+package com.omertron.themoviedbapi.model.credits;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.enumeration.MediaType;
@@ -26,53 +26,53 @@ import java.io.Serializable;
 /**
  * @author stuart.boston
  */
-public class CreditTVBasic extends CreditBasic implements Serializable {
+public class CreditMovieBasic extends CreditBasic implements Serializable {
 
     private static final long serialVersionUID = 4L;
 
-    @JsonProperty("episode_count")
-    private int episodeCount;
-    @JsonProperty("first_air_date")
-    private String firstAirDate;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("original_name")
-    private String originalName;
+    @JsonProperty("adult")
+    private boolean adult;
+    @JsonProperty("original_title")
+    private String originalTitle;
+    @JsonProperty("release_date")
+    private String releaseDate;
+    @JsonProperty("title")
+    private String title;
 
-    public CreditTVBasic() {
-        setMediaType(MediaType.TV);
+    public CreditMovieBasic() {
+        setMediaType(MediaType.MOVIE);
     }
 
-    public int getEpisodeCount() {
-        return episodeCount;
+    public boolean isAdult() {
+        return adult;
     }
 
-    public void setEpisodeCount(int episodeCount) {
-        this.episodeCount = episodeCount;
+    public void setAdult(boolean adult) {
+        this.adult = adult;
     }
 
-    public String getFirstAirDate() {
-        return firstAirDate;
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
-    public void setFirstAirDate(String firstAirDate) {
-        this.firstAirDate = firstAirDate;
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
     }
 
-    public String getName() {
-        return name;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
-    public String getOriginalName() {
-        return originalName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

@@ -19,60 +19,52 @@
  */
 package com.omertron.themoviedbapi.model.person;
 
+import com.omertron.themoviedbapi.model.credits.CreditBasic;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author stuart.boston
+ * @param <T>
  */
-public class CreditMovieBasic extends CreditBasic implements Serializable {
+public class PersonCreditList<T extends CreditBasic> extends AbstractJsonMapping implements Serializable, IIdentification {
 
     private static final long serialVersionUID = 4L;
 
-    @JsonProperty("adult")
-    private boolean adult;
-    @JsonProperty("original_title")
-    private String originalTitle;
-    @JsonProperty("release_date")
-    private String releaseDate;
-    @JsonProperty("title")
-    private String title;
+    @JsonProperty("id")
+    private int id;
+    private List<T> cast;
+    private List<T> crew;
 
-    public CreditMovieBasic() {
-        setMediaType(MediaType.MOVIE);
+    @Override
+    public int getId() {
+        return id;
     }
 
-    public boolean isAdult() {
-        return adult;
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setAdult(boolean adult) {
-        this.adult = adult;
+    public List<T> getCast() {
+        return cast;
     }
 
-    public String getOriginalTitle() {
-        return originalTitle;
+    @JsonSetter("cast")
+    public void setCast(List<T> cast) {
+        this.cast = cast;
     }
 
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
+    public List<T> getCrew() {
+        return crew;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    @JsonSetter("crew")
+    public void setCrew(List<T> crew) {
+        this.crew = crew;
     }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
 }

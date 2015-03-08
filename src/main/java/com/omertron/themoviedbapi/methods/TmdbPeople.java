@@ -27,12 +27,12 @@ import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
-import com.omertron.themoviedbapi.model.person.CreditBasic;
-import com.omertron.themoviedbapi.model.person.CreditMovieBasic;
-import com.omertron.themoviedbapi.model.person.CreditTVBasic;
+import com.omertron.themoviedbapi.model.credits.CreditBasic;
+import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
+import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
-import com.omertron.themoviedbapi.model.person.PersonCredits;
+import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonCreditsMixIn;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.results.ResultList;
@@ -97,7 +97,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
@@ -107,7 +107,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            TypeReference tr = new TypeReference<PersonCredits<CreditMovieBasic>>() {
+            TypeReference tr = new TypeReference<PersonCreditList<CreditMovieBasic>>() {
             };
             return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
@@ -130,7 +130,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
@@ -140,7 +140,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            TypeReference tr = new TypeReference<PersonCredits<CreditTVBasic>>() {
+            TypeReference tr = new TypeReference<PersonCreditList<CreditTVBasic>>() {
             };
             return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
@@ -163,7 +163,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public PersonCredits<CreditBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList<CreditBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
@@ -174,8 +174,8 @@ public class TmdbPeople extends AbstractMethod {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.addMixIn(PersonCredits.class, PersonCreditsMixIn.class);
-            TypeReference tr = new TypeReference<PersonCredits<CreditBasic>>() {
+            mapper.addMixIn(PersonCreditList.class, PersonCreditsMixIn.class);
+            TypeReference tr = new TypeReference<PersonCreditList<CreditBasic>>() {
             };
             return mapper.readValue(webpage, tr);
         } catch (IOException ex) {

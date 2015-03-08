@@ -19,6 +19,9 @@
  */
 package com.omertron.themoviedbapi.model.person;
 
+import com.omertron.themoviedbapi.model.credits.CreditBasic;
+import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
+import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

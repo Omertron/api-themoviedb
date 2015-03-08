@@ -17,54 +17,46 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.media;
+package com.omertron.themoviedbapi.model.credits;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
+import com.omertron.themoviedbapi.enumeration.MediaType;
 import java.io.Serializable;
 
 /**
- *
- * @author Stuart.Boston
+ * @author stuart.boston
  */
-public class MediaCredit extends AbstractJsonMapping implements Serializable, IIdentification {
+public class CreditTVBasic extends CreditBasic implements Serializable {
 
     private static final long serialVersionUID = 4L;
 
-    @JsonProperty("credit_id")
-    private String creditId;
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("profile_path")
-    private String profilePath;
+    @JsonProperty("episode_count")
+    private int episodeCount;
+    @JsonProperty("first_air_date")
+    private String firstAirDate;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("original_name")
+    private String originalName;
 
-    public String getCreditId() {
-        return creditId;
+    public CreditTVBasic() {
+        setMediaType(MediaType.TV);
     }
 
-    public void setCreditId(String creditId) {
-        this.creditId = creditId;
+    public int getEpisodeCount() {
+        return episodeCount;
     }
 
-    @Override
-    public int getId() {
-        return id;
+    public void setEpisodeCount(int episodeCount) {
+        this.episodeCount = episodeCount;
     }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
+    public String getFirstAirDate() {
+        return firstAirDate;
     }
 
-    public String getProfilePath() {
-        return profilePath;
-    }
-
-    public void setProfilePath(String profilePath) {
-        this.profilePath = profilePath;
+    public void setFirstAirDate(String firstAirDate) {
+        this.firstAirDate = firstAirDate;
     }
 
     public String getName() {
@@ -73,6 +65,14 @@ public class MediaCredit extends AbstractJsonMapping implements Serializable, II
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 
 }

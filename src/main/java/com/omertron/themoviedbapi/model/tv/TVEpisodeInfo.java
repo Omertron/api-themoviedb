@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.model.media.MediaCreditCast;
-import com.omertron.themoviedbapi.model.media.MediaCreditCrew;
+import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
+import com.omertron.themoviedbapi.model.credits.MediaCreditCrew;
 import java.io.Serializable;
 import java.util.List;
 
