@@ -10,6 +10,7 @@ com.omertron.themoviedbapi.model.change
 com.omertron.themoviedbapi.model.collection
 com.omertron.themoviedbapi.model.company
 com.omertron.themoviedbapi.model.config
+com.omertron.themoviedbapi.model.credits
 com.omertron.themoviedbapi.model.discover
 com.omertron.themoviedbapi.model.keyword
 com.omertron.themoviedbapi.model.list
