@@ -94,7 +94,7 @@ public class TmdbMoviesTest extends AbstractTests {
             MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
             assertEquals("Wrong title", test.getName(), result.getTitle());
-
+            TestSuite.test(result);
         }
     }
 
@@ -113,6 +113,7 @@ public class TmdbMoviesTest extends AbstractTests {
             MovieInfo result = instance.getMovieInfoImdb(test.getImdb(), language, appendToResponse);
             assertEquals("Wrong TMDB ID", test.getTmdb(), result.getId());
             assertEquals("Wrong title", test.getName(), result.getTitle());
+            TestSuite.test(result);
         }
     }
 

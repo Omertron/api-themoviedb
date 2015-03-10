@@ -24,6 +24,7 @@ import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
@@ -62,6 +63,21 @@ public class TestSuite {
         assertTrue(message + ": Missing title", isNotBlank(test.getTitle()));
         assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
         assertTrue(message + ": Missing release date", isNotBlank(test.getReleaseDate()));
+    }
+
+    public static void test(MovieInfo test) {
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing title", isNotBlank(test.getTitle()));
+        assertTrue(message + ": Missing original title", isNotBlank(test.getOriginalTitle()));
+        assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
+        assertTrue(message + ": Missing release date", isNotBlank(test.getReleaseDate()));
+        assertTrue(message + ": Missing backdrop", isNotBlank(test.getBackdropPath()));
+        assertTrue(message + ": Missing poster path", isNotBlank(test.getPosterPath()));
+        assertTrue(message + ": Missing overview", isNotBlank(test.getOverview()));
+        assertTrue(message + ": Missing Language", isNotBlank(test.getOriginalLanguage()));
+        test(test.getGenres(), "Genres");
+        test(test.getProductionCompanies(), "ProductionCompany");
+        test(test.getProductionCountries(), "ProductionCountries");
     }
 
     public static void test(UserList test) {

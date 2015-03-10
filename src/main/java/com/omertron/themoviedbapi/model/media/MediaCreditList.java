@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,13 +36,13 @@ public class MediaCreditList extends AbstractJsonMapping implements Serializable
     private static final long serialVersionUID = 4L;
 
     @JsonProperty("id")
-    private int id;
+    private int id = 0;
     @JsonProperty("cast")
-    private List<MediaCreditCast> cast;
+    private List<MediaCreditCast> cast = Collections.emptyList();
     @JsonProperty("guest_stars")
-    private List<MediaCreditCast> guestStars;
+    private List<MediaCreditCast> guestStars = Collections.emptyList();
     @JsonProperty("crew")
-    private List<MediaCreditCrew> crew;
+    private List<MediaCreditCrew> crew = Collections.emptyList();
 
     @Override
     public int getId() {

@@ -44,6 +44,7 @@ import com.omertron.themoviedbapi.results.WrapperReleaseInfo;
 import com.omertron.themoviedbapi.results.WrapperTranslations;
 import com.omertron.themoviedbapi.results.WrapperVideos;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -86,9 +87,9 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     @JsonProperty("overview")
     private String overview;
     @JsonProperty("production_companies")
-    private List<ProductionCompany> productionCompanies;
+    private List<ProductionCompany> productionCompanies = Collections.emptyList();
     @JsonProperty("production_countries")
-    private List<ProductionCountry> productionCountries;
+    private List<ProductionCountry> productionCountries = Collections.emptyList();
     @JsonProperty("revenue")
     private long revenue;
     @JsonProperty("runtime")
@@ -96,7 +97,7 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     @JsonProperty("original_language")
     private String originalLanguage;
     @JsonProperty("spoken_languages")
-    private List<Language> spokenLanguages;
+    private List<Language> spokenLanguages = Collections.emptyList();
     @JsonProperty("tagline")
     private String tagline;
     @JsonProperty("rating")
@@ -107,26 +108,20 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     private int voteCount;
     @JsonProperty("status")
     private String status;
-    // AppendToResponse Properties
-    @JsonProperty("alternative_titles")
-    private WrapperAlternativeTitles alternativeTitles;
-    @JsonProperty("casts")
-    private MediaCreditList casts;
-    @JsonProperty("images")
-    private WrapperImages images;
-    @JsonProperty("keywords")
-    private WrapperMovieKeywords keywords;
-    @JsonProperty("releases")
-    private WrapperReleaseInfo releases;
-    @JsonProperty("trailers")
-    private WrapperVideos trailers;
-    @JsonProperty("translations")
-    private WrapperTranslations translations;
-    private List<MovieInfo> similarMovies;
-    private List<Review> reviews;
-    private List<UserList> lists;
     @JsonProperty("video")
     private Boolean video = null;
+    // AppendToResponse Properties
+    private List<AlternativeTitle> alternativeTitles = Collections.emptyList();
+    @JsonProperty("casts")
+    private MediaCreditList credits;
+    private List<Artwork> images = Collections.emptyList();
+    private List<Keyword> keywords = Collections.emptyList();
+    private List<ReleaseInfo> releases = Collections.emptyList();
+    private List<Video> trailers = Collections.emptyList();
+    private List<Translation> translations = Collections.emptyList();
+    private List<MovieInfo> similarMovies = Collections.emptyList();
+    private List<Review> reviews = Collections.emptyList();
+    private List<UserList> lists = Collections.emptyList();
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
@@ -344,35 +339,35 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
 
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
     public List<AlternativeTitle> getAlternativeTitles() {
-        return alternativeTitles.getTitles();
+        return alternativeTitles;
     }
 
     public List<MediaCreditCast> getCast() {
-        return casts.getCast();
+        return credits.getCast();
     }
 
     public List<MediaCreditCrew> getCrew() {
-        return casts.getCrew();
+        return credits.getCrew();
     }
 
     public List<Artwork> getImages() {
-        return images.getAll();
+        return images;
     }
 
     public List<Keyword> getKeywords() {
-        return keywords.getKeywords();
+        return keywords;
     }
 
     public List<ReleaseInfo> getReleases() {
-        return releases.getCountries();
+        return releases;
     }
 
     public List<Video> getVideos() {
-        return trailers.getVideos();
+        return trailers;
     }
 
     public List<Translation> getTranslations() {
-        return translations.getTranslations();
+        return translations;
     }
 
     public List<MovieInfo> getSimilarMovies() {
@@ -389,32 +384,38 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
+    @JsonSetter("alternative_titles")
     public void setAlternativeTitles(WrapperAlternativeTitles alternativeTitles) {
-        this.alternativeTitles = alternativeTitles;
+        this.alternativeTitles = alternativeTitles.getTitles();
     }
 
-    public void setCasts(MediaCreditList credits) {
-        this.casts = credits;
+    public void setCredits(MediaCreditList credits) {
+        this.credits = credits;
     }
 
+    @JsonSetter("images")
     public void setImages(WrapperImages images) {
-        this.images = images;
+        this.images = images.getAll();
     }
 
+    @JsonSetter("keywords")
     public void setKeywords(WrapperMovieKeywords keywords) {
-        this.keywords = keywords;
+        this.keywords = keywords.getKeywords();
     }
 
+    @JsonSetter("releases")
     public void setReleases(WrapperReleaseInfo releases) {
-        this.releases = releases;
+        this.releases = releases.getCountries();
     }
 
+    @JsonSetter("trailers")
     public void setTrailers(WrapperVideos trailers) {
-        this.trailers = trailers;
+        this.trailers = trailers.getVideos();
     }
 
+    @JsonSetter("translations")
     public void setTranslations(WrapperTranslations translations) {
-        this.translations = translations;
+        this.translations = translations.getTranslations();
     }
 
     @JsonSetter("similar_movies")
