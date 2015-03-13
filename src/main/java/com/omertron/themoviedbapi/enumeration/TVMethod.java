@@ -28,7 +28,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum TVMethod {
 
-    ALTERNATIVE_TILES,
+    ALTERNATIVE_TITLES,
     CHANGES,
     CONTENT_RATINGS,
     CREDITS,

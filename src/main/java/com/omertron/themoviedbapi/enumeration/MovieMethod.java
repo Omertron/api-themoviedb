@@ -22,13 +22,13 @@ package com.omertron.themoviedbapi.enumeration;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * List of movie methods
+ * List of all "Append To Response" movie methods
  *
  * @author Stuart
  */
 public enum MovieMethod {
 
-    ALTERNATIVE_TILES,
+    ALTERNATIVE_TITLES,
     CHANGES,
     CREDITS,
     IMAGES,
