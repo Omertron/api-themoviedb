@@ -30,7 +30,7 @@ import java.util.List;
  * @author Stuart
  * @param <T>
  */
-public class WrapperGenericList<T> extends AbstractWrapperAll {
+public class WrapperGenericList<T> extends AbstractWrapperIdPages {
 
     @JsonProperty("results")
     private List<T> results;

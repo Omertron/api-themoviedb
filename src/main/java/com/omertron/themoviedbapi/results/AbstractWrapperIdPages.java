@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.results;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.interfaces.IWrapperPages;
 
 /**
@@ -28,8 +29,11 @@ import com.omertron.themoviedbapi.interfaces.IWrapperPages;
  */
 public abstract class AbstractWrapperIdPages extends AbstractWrapperId implements IWrapperPages {
 
+    @JsonProperty("page")
     private int page = 0;
+    @JsonProperty("total_pages")
     private int totalPages = 0;
+    @JsonProperty("total_results")
     private int totalResults = 0;
 
     @Override
