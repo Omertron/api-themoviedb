@@ -31,7 +31,7 @@ import com.omertron.themoviedbapi.model.credits.CreditBasic;
 import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
 import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonCreditsMixIn;
 import com.omertron.themoviedbapi.model.person.PersonFind;
@@ -73,7 +73,7 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+    public PersonInfo getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.APPEND, appendToResponse);
@@ -82,7 +82,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, Person.class);
+            return MAPPER.readValue(webpage, PersonInfo.class);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person info", url, ex);
         }
@@ -297,12 +297,12 @@ public class TmdbPeople extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public Person getPersonLatest() throws MovieDbException {
+    public PersonInfo getPersonLatest() throws MovieDbException {
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.LATEST).buildUrl();
         String webpage = httpTools.getRequest(url);
 
         try {
-            return MAPPER.readValue(webpage, Person.class);
+            return MAPPER.readValue(webpage, PersonInfo.class);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get latest person", url, ex);
         }

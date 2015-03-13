@@ -27,7 +27,7 @@ import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
@@ -112,7 +112,7 @@ public class TestSuite {
         assertTrue(message + ": Missing guest stars", test.getGuestStars().size() > 0);
     }
 
-    public static void test(Person test) {
+    public static void test(PersonInfo test) {
         String message = test.getClass().getSimpleName();
         assertTrue(message + ": Missing bio", StringUtils.isNotBlank(test.getBiography()));
         assertTrue(message + ": Missing birthday", StringUtils.isNotBlank(test.getBirthday()));

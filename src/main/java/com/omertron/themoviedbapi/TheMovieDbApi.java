@@ -77,7 +77,7 @@ import com.omertron.themoviedbapi.model.network.Network;
 import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.CreditInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.review.Review;
@@ -464,7 +464,7 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get a list of Person IDs that have been edited.
+     * Get a list of PersonInfo IDs that have been edited.
      *
      * You can then use the person changes API to get the actual data that has been changed.
      *
@@ -1118,7 +1118,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public Person getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
+    public PersonInfo getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonInfo(personId, appendToResponse);
     }
 
@@ -1246,7 +1246,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public Person getPersonLatest() throws MovieDbException {
+    public PersonInfo getPersonLatest() throws MovieDbException {
         return tmdbPeople.getPersonLatest();
     }
     //</editor-fold>

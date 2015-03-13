@@ -33,7 +33,7 @@ import com.omertron.themoviedbapi.model.credits.CreditBasic;
 import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
 import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.results.ResultList;
@@ -94,7 +94,7 @@ public class TmdbPeopleTest extends AbstractTests {
     @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
-        Person result;
+        PersonInfo result;
 
         for (TestID test : testIDs) {
             result = instance.getPersonInfo(test.getTmdb());
@@ -302,7 +302,7 @@ public class TmdbPeopleTest extends AbstractTests {
     @Test
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
-        Person result = instance.getPersonLatest();
+        PersonInfo result = instance.getPersonLatest();
         // All we get on the latest person is usually id and name
         assertTrue("No id", result.getId() > 0);
         assertTrue("No name", StringUtils.isNotBlank(result.getName()));

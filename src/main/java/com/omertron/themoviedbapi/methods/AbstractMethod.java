@@ -33,7 +33,7 @@ import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.ContentRating;
-import com.omertron.themoviedbapi.model.person.Person;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
@@ -84,7 +84,7 @@ public class AbstractMethod {
         });
         TYPE_REFS.put(MovieInfo.class, new TypeReference<WrapperGenericList<MovieInfo>>() {
         });
-        TYPE_REFS.put(Person.class, new TypeReference<WrapperGenericList<Person>>() {
+        TYPE_REFS.put(PersonInfo.class, new TypeReference<WrapperGenericList<PersonInfo>>() {
         });
         TYPE_REFS.put(PersonFind.class, new TypeReference<WrapperGenericList<PersonFind>>() {
         });

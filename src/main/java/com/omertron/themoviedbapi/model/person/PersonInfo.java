@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author stuart.boston
  */
-public class Person extends PersonBasic implements Serializable {
+public class PersonInfo extends PersonBasic implements Serializable {
 
     private static final long serialVersionUID = 4L;
 
