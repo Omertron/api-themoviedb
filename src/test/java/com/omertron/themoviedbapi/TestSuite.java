@@ -24,7 +24,9 @@ import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
+import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.Person;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
@@ -127,6 +129,27 @@ public class TestSuite {
         assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
         assertTrue(message + ": Missing overview", StringUtils.isNotBlank(test.getOverview()));
         assertTrue(message + ": Missing episodes", test.getEpisodes().size() > 0);
+    }
+
+    public static void test(ExternalID test) {
+        String message = test.getClass().getSimpleName();
+        assertTrue(message + ": Missing ID", test.getId() > 0);
+        assertTrue(message + ": Missing IMDB ID", StringUtils.isNotBlank(test.getImdbId()));
+        boolean found = false;
+        found |= StringUtils.isNotBlank(test.getFreebaseId());
+        found |= StringUtils.isNotBlank(test.getFreebaseMid());
+        found |= StringUtils.isNotBlank(test.getTvdbId());
+        found |= StringUtils.isNotBlank(test.getTvrageId());
+        assertTrue(message + ": Missing one of the other IDs", found);
+    }
+
+    public static void test(MediaCreditList test) {
+        String message = test.getClass().getSimpleName();
+        boolean found = false;
+        found |= test.getCast().isEmpty();
+        found |= test.getCrew().isEmpty();
+        found |= test.getGuestStars().isEmpty();
+        assertTrue(message + ": Missing cast/crew/guest stars information", found);
     }
 
     public static void testId(ResultList<? extends IIdentification> result, int id, String message) {

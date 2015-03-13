@@ -24,11 +24,13 @@ import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.enumeration.MovieMethod;
 import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Language;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
@@ -37,6 +39,7 @@ import com.omertron.themoviedbapi.model.credits.MediaCreditCrew;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.results.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.results.WrapperChanges;
 import com.omertron.themoviedbapi.results.WrapperGenericList;
 import com.omertron.themoviedbapi.results.WrapperImages;
 import com.omertron.themoviedbapi.results.WrapperMovieKeywords;
@@ -45,7 +48,9 @@ import com.omertron.themoviedbapi.results.WrapperTranslations;
 import com.omertron.themoviedbapi.results.WrapperVideos;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -110,18 +115,20 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     private String status;
     @JsonProperty("video")
     private Boolean video = null;
+    // AppendToResponse
+    private final Set<MovieMethod> methods = EnumSet.noneOf(MovieMethod.class);
     // AppendToResponse Properties
     private List<AlternativeTitle> alternativeTitles = Collections.emptyList();
-    @JsonProperty("casts")
-    private MediaCreditList credits;
+    private MediaCreditList credits = new MediaCreditList();
     private List<Artwork> images = Collections.emptyList();
     private List<Keyword> keywords = Collections.emptyList();
     private List<ReleaseInfo> releases = Collections.emptyList();
-    private List<Video> trailers = Collections.emptyList();
+    private List<Video> videos = Collections.emptyList();
     private List<Translation> translations = Collections.emptyList();
     private List<MovieInfo> similarMovies = Collections.emptyList();
     private List<Review> reviews = Collections.emptyList();
     private List<UserList> lists = Collections.emptyList();
+    private List<ChangeKeyItem> changes = Collections.emptyList();
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
     public String getBackdropPath() {
@@ -363,7 +370,7 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     }
 
     public List<Video> getVideos() {
-        return trailers;
+        return videos;
     }
 
     public List<Translation> getTranslations() {
@@ -381,56 +388,76 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
     public List<Review> getReviews() {
         return reviews;
     }
+
+    public List<ChangeKeyItem> getChanges() {
+        return changes;
+    }
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
     @JsonSetter("alternative_titles")
     public void setAlternativeTitles(WrapperAlternativeTitles alternativeTitles) {
         this.alternativeTitles = alternativeTitles.getTitles();
+        addMethod(MovieMethod.ALTERNATIVE_TITLES);
     }
 
+    @JsonSetter("credits")
     public void setCredits(MediaCreditList credits) {
         this.credits = credits;
+        addMethod(MovieMethod.CREDITS);
     }
 
     @JsonSetter("images")
     public void setImages(WrapperImages images) {
         this.images = images.getAll();
+        addMethod(MovieMethod.IMAGES);
     }
 
     @JsonSetter("keywords")
     public void setKeywords(WrapperMovieKeywords keywords) {
         this.keywords = keywords.getKeywords();
+        addMethod(MovieMethod.KEYWORDS);
     }
 
     @JsonSetter("releases")
     public void setReleases(WrapperReleaseInfo releases) {
         this.releases = releases.getCountries();
+        addMethod(MovieMethod.RELEASES);
     }
 
-    @JsonSetter("trailers")
-    public void setTrailers(WrapperVideos trailers) {
-        this.trailers = trailers.getVideos();
+    @JsonSetter("videos")
+    public void setVideos(WrapperVideos trailers) {
+        this.videos = trailers.getVideos();
+        addMethod(MovieMethod.VIDEOS);
     }
 
     @JsonSetter("translations")
     public void setTranslations(WrapperTranslations translations) {
         this.translations = translations.getTranslations();
+        addMethod(MovieMethod.TRANSLATIONS);
     }
 
-    @JsonSetter("similar_movies")
+    @JsonSetter("similar")
     public void setSimilarMovies(WrapperGenericList<MovieInfo> similarMovies) {
         this.similarMovies = similarMovies.getResults();
+        addMethod(MovieMethod.SIMILAR);
     }
 
     @JsonSetter("lists")
     public void setLists(WrapperGenericList<UserList> lists) {
         this.lists = lists.getResults();
+        addMethod(MovieMethod.LISTS);
     }
 
     @JsonSetter("reviews")
     public void setReviews(WrapperGenericList<Review> reviews) {
         this.reviews = reviews.getResults();
+        addMethod(MovieMethod.REVIEWS);
+    }
+
+    @JsonSetter("changes")
+    public void setChanges(WrapperChanges changes) {
+        this.changes = changes.getChangedItems();
     }
     // </editor-fold>
 
@@ -458,4 +485,12 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, IIde
                 .toHashCode();
     }
     // </editor-fold>
+
+    private void addMethod(MovieMethod method) {
+        methods.add(method);
+    }
+
+    public boolean hasMethod(MovieMethod method) {
+        return methods.contains(method);
+    }
 }

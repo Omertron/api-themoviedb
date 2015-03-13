@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.enumeration.MovieMethod;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
@@ -76,6 +77,53 @@ public class TmdbMoviesTest extends AbstractTests {
         FILM_IDS.add(new TestID("Jupiter Ascending", "tt1617661", 76757, "Mila Kunis"));
         FILM_IDS.add(new TestID("Lucy", "tt2872732", 240832, "Morgan Freeman"));
 
+    }
+
+    /**
+     * Test of Append_To_Response method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testAppendToResponse() throws MovieDbException {
+        LOG.info("appendToResponse");
+
+        String language = LANGUAGE_DEFAULT;
+
+        boolean first = true;
+        StringBuilder appendToResponse = new StringBuilder();
+        for (MovieMethod method : MovieMethod.values()) {
+            if (first) {
+                first = false;
+            } else {
+                appendToResponse.append(",");
+            }
+            appendToResponse.append(method.getPropertyString());
+        }
+
+        for (TestID test : FILM_IDS) {
+            // Just test Blade Runner
+            if (test.getTmdb() != 78) {
+                continue;
+            }
+
+            MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse.toString());
+            assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
+            assertEquals("Wrong title", test.getName(), result.getTitle());
+            TestSuite.test(result);
+            TestSuite.test(result.getAlternativeTitles(), "Alt titles");
+            TestSuite.test(result.getCast(), "Cast");
+            TestSuite.test(result.getCrew(), "Crew");
+            TestSuite.test(result.getImages(), "Images");
+            TestSuite.test(result.getKeywords(), "Keywords");
+            TestSuite.test(result.getReleases(), "Releases");
+            TestSuite.test(result.getVideos(), "Videos");
+            TestSuite.test(result.getTranslations(), "Translations");
+            TestSuite.test(result.getSimilarMovies(), "Similar");
+            TestSuite.test(result.getLists(), "Lists");
+            TestSuite.test(result.getReviews(), "Reviews");
+            // There are rarely any changes, so skip this test
+        }
     }
 
     /**
