@@ -133,7 +133,6 @@ public class TestSuite {
 
     public static void test(ExternalID test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing ID", test.getId() > 0);
         assertTrue(message + ": Missing IMDB ID", StringUtils.isNotBlank(test.getImdbId()));
         boolean found = false;
         found |= StringUtils.isNotBlank(test.getFreebaseId());

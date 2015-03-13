@@ -20,12 +20,30 @@
 package com.omertron.themoviedbapi.model.tv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.enumeration.TVMethod;
 import com.omertron.themoviedbapi.model.Genre;
+import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
+import com.omertron.themoviedbapi.model.media.MediaCreditList;
+import com.omertron.themoviedbapi.model.media.Translation;
+import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.movie.ProductionCompany;
 import com.omertron.themoviedbapi.model.network.Network;
+import com.omertron.themoviedbapi.model.person.ContentRating;
+import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.PersonBasic;
+import com.omertron.themoviedbapi.results.WrapperChanges;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperImages;
+import com.omertron.themoviedbapi.results.WrapperTranslations;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -67,7 +85,21 @@ public class TVInfo extends TVBasic implements Serializable {
     private String status;
     @JsonProperty("type")
     private String type;
+    // AppendToResponse
+    private final Set<TVMethod> methods = EnumSet.noneOf(TVMethod.class);
+    // AppendToResponse Properties
+    private List<AlternativeTitle> alternativeTitles = Collections.emptyList();
+    private List<ChangeKeyItem> changes = Collections.emptyList();
+    private List<ContentRating> contentRatings = Collections.emptyList();
+    private MediaCreditList credits = new MediaCreditList();
+    private ExternalID externalIDs = new ExternalID();
+    private List<Artwork> images = Collections.emptyList();
+    private List<Keyword> keywords = Collections.emptyList();
+    private List<Translation> translations = Collections.emptyList();
+    private List<TVInfo> similarTV = Collections.emptyList();
+    private List<Video> videos = Collections.emptyList();
 
+    //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
     public List<PersonBasic> getCreatedBy() {
         return createdBy;
     }
@@ -195,5 +227,117 @@ public class TVInfo extends TVBasic implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+    //</editor-fold>
 
+    private void addMethod(TVMethod method) {
+        methods.add(method);
+    }
+
+    public boolean hasMethod(TVMethod method) {
+        return methods.contains(method);
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
+    @JsonSetter("alternative_titles")
+    public void setAlternativeTitles(WrapperGenericList<AlternativeTitle> alternativeTitles) {
+        this.alternativeTitles = alternativeTitles.getResults();
+        addMethod(TVMethod.ALTERNATIVE_TITLES);
+    }
+
+    @JsonSetter("changes")
+    public void setChanges(WrapperChanges changes) {
+        this.changes = changes.getChangedItems();
+        addMethod(TVMethod.CHANGES);
+    }
+
+    @JsonSetter("content_ratings")
+    public void setContentRatings(WrapperGenericList<ContentRating> contentRatings) {
+        this.contentRatings = contentRatings.getResults();
+        addMethod(TVMethod.CONTENT_RATINGS);
+    }
+
+    @JsonSetter("credits")
+    public void setCredits(MediaCreditList credits) {
+        this.credits = credits;
+        addMethod(TVMethod.CREDITS);
+    }
+
+    @JsonSetter("external_ids")
+    public void setExternalIDs(ExternalID externalIDs) {
+        this.externalIDs = externalIDs;
+        addMethod(TVMethod.EXTERNAL_IDS);
+    }
+
+    @JsonSetter("images")
+    public void setImages(WrapperImages images) {
+        this.images = images.getAll();
+        addMethod(TVMethod.IMAGES);
+    }
+
+    @JsonSetter("keywords")
+    public void setKeywords(WrapperGenericList<Keyword> keywords) {
+        this.keywords = keywords.getResults();
+        addMethod(TVMethod.KEYWORDS);
+    }
+
+    @JsonSetter("translations")
+    public void setTranslations(WrapperTranslations translations) {
+        this.translations = translations.getTranslations();
+        addMethod(TVMethod.TRANSLATIONS);
+    }
+
+    @JsonSetter("similar")
+    public void setSimilarTV(WrapperGenericList<TVInfo> similarTV) {
+        this.similarTV = similarTV.getResults();
+        addMethod(TVMethod.SIMILAR);
+    }
+
+    @JsonSetter("videos")
+    public void setVideos(WrapperGenericList<Video> videos) {
+        this.videos = videos.getResults();
+        addMethod(TVMethod.VIDEOS);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
+    public List<AlternativeTitle> getAlternativeTitles() {
+        return alternativeTitles;
+    }
+
+    public List<ChangeKeyItem> getChanges() {
+        return changes;
+    }
+
+    public List<ContentRating> getContentRatings() {
+        return contentRatings;
+    }
+
+    public MediaCreditList getCredits() {
+        return credits;
+    }
+
+    public ExternalID getExternalIDs() {
+        return externalIDs;
+    }
+
+    public List<Artwork> getImages() {
+        return images;
+    }
+
+    public List<Keyword> getKeywords() {
+        return keywords;
+    }
+
+    public List<Translation> getTranslations() {
+        return translations;
+    }
+
+    public List<TVInfo> getSimilarTV() {
+        return similarTV;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+    //</editor-fold>
 }

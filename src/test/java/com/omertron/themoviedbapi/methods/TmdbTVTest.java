@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.enumeration.TVMethod;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
@@ -76,6 +77,49 @@ public class TmdbTVTest extends AbstractTests {
         TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
         TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622, "Misha Collins"));
         TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418, "Kaley Cuoco"));
+    }
+
+    /**
+     * Test of Append_To_Response method, of class TmdbTV.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testAppendToResponse() throws MovieDbException {
+        LOG.info("appendToResponse");
+
+        String language = LANGUAGE_DEFAULT;
+
+        boolean first = true;
+        StringBuilder appendToResponse = new StringBuilder();
+        for (TVMethod method : TVMethod.values()) {
+            if (first) {
+                first = false;
+            } else {
+                appendToResponse.append(",");
+            }
+            appendToResponse.append(method.getPropertyString());
+        }
+
+        for (TestID test : TV_IDS) {
+            // Just test Waling Dead
+            if (test.getTmdb() != 1402) {
+                continue;
+            }
+
+            TVInfo result = instance.getTVInfo(test.getTmdb(), language, appendToResponse.toString());
+            TestSuite.test(result);
+            TestSuite.test(result.getAlternativeTitles(), "Alt titles");
+            TestSuite.test(result.getContentRatings(), "Content Ratings");
+            TestSuite.test(result.getCredits());
+            TestSuite.test(result.getExternalIDs());
+            TestSuite.test(result.getImages(), "Images");
+            TestSuite.test(result.getKeywords(), "Keywords");
+            TestSuite.test(result.getVideos(), "Videos");
+            TestSuite.test(result.getTranslations(), "Translations");
+            TestSuite.test(result.getSimilarTV(), "Similar");
+            // There are rarely any changes, so skip this test
+        }
     }
 
     /**
