@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
 import com.omertron.themoviedbapi.enumeration.MediaType;
+import com.omertron.themoviedbapi.enumeration.PeopleMethod;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
@@ -61,7 +62,7 @@ import org.junit.Test;
 public class TmdbPeopleTest extends AbstractTests {
 
     private static TmdbPeople instance;
-    private static final List<TestID> testIDs = new ArrayList<TestID>();
+    private static final List<TestID> TEST_IDS = new ArrayList<TestID>();
 
     public TmdbPeopleTest() {
     }
@@ -70,8 +71,8 @@ public class TmdbPeopleTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbPeople(getApiKey(), getHttpTools());
-        testIDs.add(new TestID("Bruce Willis", "nm0000246", 62));
-        testIDs.add(new TestID("Will Smith", "nm0000226", 2888));
+        TEST_IDS.add(new TestID("Bruce Willis", "nm0000246", 62));
+        TEST_IDS.add(new TestID("Will Smith", "nm0000226", 2888));
     }
 
     @AfterClass
@@ -87,16 +88,48 @@ public class TmdbPeopleTest extends AbstractTests {
     }
 
     /**
+     * Test of Append_To_Response method, of class TmdbPeople.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testAppendToResponse() throws MovieDbException {
+        LOG.info("appendToResponse");
+
+        boolean first = true;
+        StringBuilder appendToResponse = new StringBuilder();
+        for (PeopleMethod method : PeopleMethod.values()) {
+            if (first) {
+                first = false;
+            } else {
+                appendToResponse.append(",");
+            }
+            appendToResponse.append(method.getPropertyString());
+        }
+
+        for (TestID test : TEST_IDS) {
+            PersonInfo result = instance.getPersonInfo(test.getTmdb(), appendToResponse.toString());
+            TestSuite.test(result);
+            TestSuite.test(result.getExternalIDs());
+            TestSuite.test(result.getImages(), "Images");
+            TestSuite.test(result.getMovieCredits(), "Movie Credits");
+            TestSuite.test(result.getTvCredits(), "TV Credits");
+            TestSuite.test(result.getTaggedImages(), "Tagged Images");
+            // There are rarely any changes, so skip this test
+        }
+    }
+
+    /**
      * Test of getPersonMovieOldInfo method, of class TheMovieDbApi.
      *
      * @throws MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
         PersonInfo result;
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             result = instance.getPersonInfo(test.getTmdb());
             assertEquals("Wrong actor returned", test.getTmdb(), result.getId());
             assertEquals("Missing IMDB", test.getImdb(), result.getImdbId());
@@ -109,13 +142,13 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonMovieCredits() throws MovieDbException {
         LOG.info("getPersonMovieCredits");
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             PersonCreditList<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
@@ -133,13 +166,13 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonTVCredits() throws MovieDbException {
         LOG.info("getPersonTVCredits");
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             PersonCreditList<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
@@ -157,13 +190,13 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonCombinedCredits() throws MovieDbException {
         LOG.info("getPersonCombinedCredits");
         String language = LANGUAGE_DEFAULT;
         String[] appendToResponse = null;
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             PersonCreditList<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
@@ -199,11 +232,11 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonExternalIds() throws MovieDbException {
         LOG.info("getPersonExternalIds");
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             ExternalID result = instance.getPersonExternalIds(test.getTmdb());
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
@@ -214,11 +247,11 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonImages() throws MovieDbException {
         LOG.info("getPersonImages");
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             ResultList<Artwork> result = instance.getPersonImages(test.getTmdb());
             TestSuite.test(result, "Images");
             assertEquals("Wrong artwork type", ArtworkType.PROFILE, result.getResults().get(0).getArtworkType());
@@ -230,13 +263,13 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonTaggedImages() throws MovieDbException {
         LOG.info("getPersonTaggedImages");
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : testIDs) {
+        for (TestID test : TEST_IDS) {
             ResultList<ArtworkMedia> result = instance.getPersonTaggedImages(test.getTmdb(), page, language);
             TestSuite.test(result, "Tagged");
             for (ArtworkMedia am : result.getResults()) {
@@ -251,7 +284,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonChanges() throws MovieDbException {
         LOG.info("getPersonChanges");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -282,7 +315,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         Integer page = null;
@@ -299,7 +332,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    @Test
+    //@Test
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
         PersonInfo result = instance.getPersonLatest();

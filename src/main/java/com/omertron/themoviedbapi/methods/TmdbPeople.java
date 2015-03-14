@@ -46,6 +46,7 @@ import com.omertron.themoviedbapi.results.WrapperGenericList;
 import com.omertron.themoviedbapi.results.WrapperImages;
 import java.io.IOException;
 import java.net.URL;
+import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -84,6 +85,7 @@ public class TmdbPeople extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, PersonInfo.class);
         } catch (IOException ex) {
+            LoggerFactory.getLogger("test").info("{}",ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person info", url, ex);
         }
     }

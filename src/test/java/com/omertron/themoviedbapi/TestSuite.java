@@ -27,6 +27,7 @@ import com.omertron.themoviedbapi.interfaces.IIdentification;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
+import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
@@ -145,10 +146,17 @@ public class TestSuite {
     public static void test(MediaCreditList test) {
         String message = test.getClass().getSimpleName();
         boolean found = false;
-        found |= test.getCast().isEmpty();
-        found |= test.getCrew().isEmpty();
-        found |= test.getGuestStars().isEmpty();
+        found |= !test.getCast().isEmpty();
+        found |= !test.getCrew().isEmpty();
+        found |= !test.getGuestStars().isEmpty();
         assertTrue(message + ": Missing cast/crew/guest stars information", found);
+    }
+
+    public static void test(PersonCreditList<?> test, String message) {
+        boolean found = false;
+        found |= !test.getCast().isEmpty();
+        found |= !test.getCrew().isEmpty();
+        assertTrue(message + ": Missing cast/crew information", found);
     }
 
     public static void testId(ResultList<? extends IIdentification> result, int id, String message) {

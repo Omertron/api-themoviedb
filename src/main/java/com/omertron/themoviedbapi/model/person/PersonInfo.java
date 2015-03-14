@@ -20,8 +20,21 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.enumeration.PeopleMethod;
+import com.omertron.themoviedbapi.model.artwork.Artwork;
+import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
+import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
+import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
+import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
+import com.omertron.themoviedbapi.results.WrapperChanges;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperImages;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author stuart.boston
@@ -48,7 +61,18 @@ public class PersonInfo extends PersonBasic implements Serializable {
     private String placeOfBirth;
     @JsonProperty("popularity")
     private float popularity;
+    // AppendToResponse
+    private final Set<PeopleMethod> methods = EnumSet.noneOf(PeopleMethod.class);
+    // AppendToResponse Properties
+    private List<ChangeKeyItem> changes = Collections.emptyList();
+    // TODO: Add COMBINED_CREDITS
+    private ExternalID externalIDs = new ExternalID();
+    private List<Artwork> images = Collections.emptyList();
+    private PersonCreditList<CreditMovieBasic> movieCredits = new PersonCreditList<CreditMovieBasic>();
+    private List<ArtworkMedia> taggedImages = Collections.emptyList();
+    private PersonCreditList<CreditTVBasic> tvCredits = new PersonCreditList<CreditTVBasic>();
 
+    //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
     public boolean isAdult() {
         return adult;
     }
@@ -120,5 +144,79 @@ public class PersonInfo extends PersonBasic implements Serializable {
     public void setPopularity(float popularity) {
         this.popularity = popularity;
     }
+    //</editor-fold>
+
+    private void addMethod(PeopleMethod method) {
+        methods.add(method);
+    }
+
+    public boolean hasMethod(PeopleMethod method) {
+        return methods.contains(method);
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="AppendToResponse Setters">
+    @JsonSetter("changes")
+    public void setChanges(WrapperChanges changes) {
+        this.changes = changes.getChangedItems();
+        addMethod(PeopleMethod.CHANGES);
+    }
+
+    @JsonSetter("external_ids")
+    public void setExternalIDs(ExternalID externalIDs) {
+        this.externalIDs = externalIDs;
+        addMethod(PeopleMethod.EXTERNAL_IDS);
+    }
+
+    @JsonSetter("images")
+    public void setImages(WrapperImages images) {
+        this.images = images.getAll();
+        addMethod(PeopleMethod.IMAGES);
+    }
+
+    @JsonSetter("movie_credits")
+    public void setMovieCredits(PersonCreditList<CreditMovieBasic> movieCredits) {
+        this.movieCredits = movieCredits;
+        addMethod(PeopleMethod.MOVIE_CREDITS);
+    }
+
+    @JsonSetter("tagged_images")
+    public void setTaggedImages(WrapperGenericList<ArtworkMedia> taggedImages) {
+        this.taggedImages = taggedImages.getResults();
+        addMethod(PeopleMethod.TAGGED_IMAGES);
+    }
+
+    @JsonSetter("tv_credits")
+    public void setTvCredits(PersonCreditList<CreditTVBasic> tvCredits) {
+        this.tvCredits = tvCredits;
+        addMethod(PeopleMethod.TV_CREDITS);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="AppendToResponse Getters">
+    public List<ChangeKeyItem> getChanges() {
+        return changes;
+    }
+
+    public ExternalID getExternalIDs() {
+        return externalIDs;
+    }
+
+    public List<Artwork> getImages() {
+        return images;
+    }
+
+    public PersonCreditList<CreditMovieBasic> getMovieCredits() {
+        return movieCredits;
+    }
+
+    public List<ArtworkMedia> getTaggedImages() {
+        return taggedImages;
+    }
+
+    public PersonCreditList<CreditTVBasic> getTvCredits() {
+        return tvCredits;
+    }
+    //</editor-fold>
+
 
 }
