@@ -21,10 +21,10 @@ package com.omertron.themoviedbapi.model.account;
 
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import java.io.Serializable;
 
-public class Account extends AbstractJsonMapping implements Serializable, IIdentification {
+public class Account extends AbstractJsonMapping implements Serializable, Identification {
 
     private static final long serialVersionUID = 4L;
 

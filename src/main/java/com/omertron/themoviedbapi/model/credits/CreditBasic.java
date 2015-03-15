@@ -24,14 +24,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.CreditType;
 import com.omertron.themoviedbapi.enumeration.MediaType;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
 
 /**
  * @author stuart.boston
  */
-public class CreditBasic extends AbstractJsonMapping implements Serializable, IIdentification {
+public class CreditBasic extends AbstractJsonMapping implements Serializable, Identification {
 
     private static final long serialVersionUID = 4L;
 

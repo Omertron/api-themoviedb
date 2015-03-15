@@ -23,7 +23,7 @@ import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
@@ -159,13 +159,13 @@ public class TestSuite {
         assertTrue(message + ": Missing cast/crew information", found);
     }
 
-    public static void testId(ResultList<? extends IIdentification> result, int id, String message) {
+    public static void testId(ResultList<? extends Identification> result, int id, String message) {
         testId(result.getResults(), id, message);
     }
 
-    public static void testId(List<? extends IIdentification> result, int id, String message) {
+    public static void testId(List<? extends Identification> result, int id, String message) {
         boolean found = false;
-        for (IIdentification item : result) {
+        for (Identification item : result) {
             if (item.getId() == id) {
                 found = true;
                 break;

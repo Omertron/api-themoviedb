@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.model.collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author stuart.boston
  */
 @JsonRootName("collection")
-public class Collection extends AbstractJsonMapping implements Serializable, IIdentification {
+public class Collection extends AbstractJsonMapping implements Serializable, Identification {
 
     private static final long serialVersionUID = 4L;
 

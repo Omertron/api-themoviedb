@@ -22,7 +22,7 @@ package com.omertron.themoviedbapi.model.person;
 import com.omertron.themoviedbapi.model.credits.CreditBasic;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
  * @author stuart.boston
  * @param <T>
  */
-public class PersonCreditList<T extends CreditBasic> extends AbstractJsonMapping implements Serializable, IIdentification {
+public class PersonCreditList<T extends CreditBasic> extends AbstractJsonMapping implements Serializable, Identification {
 
     private static final long serialVersionUID = 4L;
 

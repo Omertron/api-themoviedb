@@ -21,7 +21,7 @@ package com.omertron.themoviedbapi.interfaces;
 
 import com.omertron.themoviedbapi.results.ResultDates;
 
-public interface IWrapperDates {
+public interface WrapperDates {
 
     ResultDates getDates();
 

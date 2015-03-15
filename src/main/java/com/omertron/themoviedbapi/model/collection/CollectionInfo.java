@@ -20,7 +20,7 @@
 package com.omertron.themoviedbapi.model.collection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * @author Stuart
  */
-public class CollectionInfo extends AbstractJsonMapping implements Serializable, IIdentification {
+public class CollectionInfo extends AbstractJsonMapping implements Serializable, Identification {
 
     private static final long serialVersionUID = 4L;
 

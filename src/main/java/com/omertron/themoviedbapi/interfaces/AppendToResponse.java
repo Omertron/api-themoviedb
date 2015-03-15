@@ -19,9 +19,14 @@
  */
 package com.omertron.themoviedbapi.interfaces;
 
-public interface IIdentification {
+/**
+ * Interface to indicate that the object has append to response methods
+ *
+ * @author Stuart
+ * @param <T> Method for Append To Response
+ */
+public interface AppendToResponse<T> {
 
-    int getId();
+    boolean hasMethod(T method);
 
-    void setId(int id);
 }

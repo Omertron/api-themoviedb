@@ -17,18 +17,11 @@
  *      along with TheMovieDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.themoviedbapi.model.network;
+package com.omertron.themoviedbapi.interfaces;
 
-import com.omertron.themoviedbapi.interfaces.Identification;
-import com.omertron.themoviedbapi.model.AbstractIdName;
-import java.io.Serializable;
+public interface Identification {
 
-/**
- * @author stuart.boston
- */
-public class Network extends AbstractIdName implements Serializable, Identification {
+    int getId();
 
-    private static final long serialVersionUID = 4L;
-    // Nothing to add to base class
-
+    void setId(int id);
 }

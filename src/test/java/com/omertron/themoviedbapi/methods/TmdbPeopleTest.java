@@ -124,7 +124,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonInfo() throws MovieDbException {
         LOG.info("getPersonInfo");
         PersonInfo result;
@@ -142,7 +142,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonMovieCredits() throws MovieDbException {
         LOG.info("getPersonMovieCredits");
         String language = LANGUAGE_DEFAULT;
@@ -166,7 +166,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonTVCredits() throws MovieDbException {
         LOG.info("getPersonTVCredits");
         String language = LANGUAGE_DEFAULT;
@@ -190,7 +190,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonCombinedCredits() throws MovieDbException {
         LOG.info("getPersonCombinedCredits");
         String language = LANGUAGE_DEFAULT;
@@ -232,7 +232,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonExternalIds() throws MovieDbException {
         LOG.info("getPersonExternalIds");
 
@@ -247,7 +247,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonImages() throws MovieDbException {
         LOG.info("getPersonImages");
 
@@ -263,7 +263,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonTaggedImages() throws MovieDbException {
         LOG.info("getPersonTaggedImages");
         Integer page = null;
@@ -284,7 +284,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonChanges() throws MovieDbException {
         LOG.info("getPersonChanges");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -315,7 +315,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonPopular() throws MovieDbException {
         LOG.info("getPersonPopular");
         Integer page = null;
@@ -332,7 +332,7 @@ public class TmdbPeopleTest extends AbstractTests {
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    //@Test
+    @Test
     public void testGetPersonLatest() throws MovieDbException {
         LOG.info("getPersonLatest");
         PersonInfo result = instance.getPersonLatest();

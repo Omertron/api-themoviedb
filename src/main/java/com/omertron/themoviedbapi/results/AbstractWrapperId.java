@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi.results;
 
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author Stuart
  */
-public class AbstractWrapperId extends AbstractWrapperBase implements IIdentification {
+public class AbstractWrapperId extends AbstractWrapperBase implements Identification {
 
     @JsonProperty("id")
     private int id;

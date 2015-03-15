@@ -25,7 +25,7 @@ import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.MovieMethod;
-import com.omertron.themoviedbapi.interfaces.IIdentification;
+import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Language;
@@ -59,7 +59,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  *
  * @author stuart.boston
  */
-public class MovieInfo extends AbstractJsonMapping implements Serializable, IIdentification {
+public class MovieInfo extends AbstractJsonMapping implements Serializable, Identification {
 
     private static final long serialVersionUID = 4L;
 

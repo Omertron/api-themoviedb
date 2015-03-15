@@ -20,14 +20,14 @@
 package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.interfaces.IWrapperPages;
+import com.omertron.themoviedbapi.interfaces.WrapperPages;
 
 /**
  * Abstract class to return the results and the id/page info
  *
  * @author Stuart
  */
-public abstract class AbstractWrapperIdPages extends AbstractWrapperId implements IWrapperPages {
+public abstract class AbstractWrapperIdPages extends AbstractWrapperId implements WrapperPages {
 
     @JsonProperty("page")
     private int page = 0;

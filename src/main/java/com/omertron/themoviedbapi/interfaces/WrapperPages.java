@@ -19,7 +19,7 @@
  */
 package com.omertron.themoviedbapi.interfaces;
 
-public interface IWrapperPages {
+public interface WrapperPages {
 
     int getPage();
 
