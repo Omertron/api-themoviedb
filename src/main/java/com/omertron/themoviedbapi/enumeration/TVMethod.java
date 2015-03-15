@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.enumeration;
 
+import com.omertron.themoviedbapi.interfaces.AppendToResponseMethod;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -26,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Stuart
  */
-public enum TVMethod {
+public enum TVMethod implements AppendToResponseMethod {
 
     ALTERNATIVE_TITLES,
     CHANGES,
@@ -44,6 +45,7 @@ public enum TVMethod {
      *
      * @return
      */
+    @Override
     public String getPropertyString() {
         return this.name().toLowerCase();
     }

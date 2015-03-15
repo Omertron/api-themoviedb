@@ -42,9 +42,9 @@ public class MovieBasic extends MediaBasic implements Serializable {
     @JsonProperty("title")
     private String title;
     @JsonProperty("video")
-    private boolean video;
+    private Boolean video = null;
     @JsonProperty("rating")
-    private float rating = -1f;
+    private float userRating = -1f;
 
     public MovieBasic() {
         super.setMediaType(MediaType.MOVIE);
@@ -90,11 +90,11 @@ public class MovieBasic extends MediaBasic implements Serializable {
         this.video = video;
     }
 
-    public float getRating() {
-        return rating;
+    public float getUserRating() {
+        return userRating;
     }
 
-    public void setRating(float rating) {
-        this.rating = rating;
+    public void setUserRating(float userRating) {
+        this.userRating = userRating;
     }
 }

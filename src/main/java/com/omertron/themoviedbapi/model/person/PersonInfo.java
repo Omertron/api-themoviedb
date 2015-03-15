@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model.person;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.PeopleMethod;
+import com.omertron.themoviedbapi.interfaces.AppendToResponse;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
@@ -39,7 +40,7 @@ import java.util.Set;
 /**
  * @author stuart.boston
  */
-public class PersonInfo extends PersonBasic implements Serializable {
+public class PersonInfo extends PersonBasic implements Serializable, AppendToResponse<PeopleMethod> {
 
     private static final long serialVersionUID = 4L;
 
@@ -150,6 +151,7 @@ public class PersonInfo extends PersonBasic implements Serializable {
         methods.add(method);
     }
 
+    @Override
     public boolean hasMethod(PeopleMethod method) {
         return methods.contains(method);
     }
@@ -217,6 +219,5 @@ public class PersonInfo extends PersonBasic implements Serializable {
         return tvCredits;
     }
     //</editor-fold>
-
 
 }

@@ -22,6 +22,7 @@ package com.omertron.themoviedbapi.model.tv;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.TVMethod;
+import com.omertron.themoviedbapi.interfaces.AppendToResponse;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
@@ -49,7 +50,7 @@ import java.util.Set;
  *
  * @author Stuart
  */
-public class TVInfo extends TVBasic implements Serializable {
+public class TVInfo extends TVBasic implements Serializable, AppendToResponse<TVMethod> {
 
     private static final long serialVersionUID = 4L;
 
@@ -233,6 +234,7 @@ public class TVInfo extends TVBasic implements Serializable {
         methods.add(method);
     }
 
+    @Override
     public boolean hasMethod(TVMethod method) {
         return methods.contains(method);
     }

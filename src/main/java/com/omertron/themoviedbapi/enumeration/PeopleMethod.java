@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.enumeration;
 
+import com.omertron.themoviedbapi.interfaces.AppendToResponseMethod;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -26,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Stuart
  */
-public enum PeopleMethod {
+public enum PeopleMethod implements AppendToResponseMethod {
 
     CHANGES,
     COMBINED_CREDITS,
@@ -41,6 +42,7 @@ public enum PeopleMethod {
      *
      * @return
      */
+    @Override
     public String getPropertyString() {
         return this.name().toLowerCase();
     }

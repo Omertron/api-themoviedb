@@ -25,8 +25,8 @@ import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.enumeration.MovieMethod;
+import com.omertron.themoviedbapi.interfaces.AppendToResponse;
 import com.omertron.themoviedbapi.interfaces.Identification;
-import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Language;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
@@ -51,34 +51,16 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Movie Bean
  *
  * @author stuart.boston
  */
-public class MovieInfo extends AbstractJsonMapping implements Serializable, Identification {
+public class MovieInfo extends MovieBasic implements Serializable, Identification, AppendToResponse<MovieMethod> {
 
     private static final long serialVersionUID = 4L;
 
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
-    @JsonProperty("id")
-    private int id;
-    @JsonProperty("original_title")
-    private String originalTitle;
-    @JsonProperty("popularity")
-    private float popularity;
-    @JsonProperty("poster_path")
-    private String posterPath;
-    @JsonProperty("release_date")
-    private String releaseDate;
-    @JsonProperty("title")
-    private String title;
-    @JsonProperty("adult")
-    private boolean adult;
     @JsonProperty("belongs_to_collection")
     private Collection belongsToCollection;
     @JsonProperty("budget")
@@ -105,16 +87,8 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, Iden
     private List<Language> spokenLanguages = Collections.emptyList();
     @JsonProperty("tagline")
     private String tagline;
-    @JsonProperty("rating")
-    private float userRating;
-    @JsonProperty("vote_average")
-    private float voteAverage;
-    @JsonProperty("vote_count")
-    private int voteCount;
     @JsonProperty("status")
     private String status;
-    @JsonProperty("video")
-    private Boolean video = null;
     // AppendToResponse
     private final Set<MovieMethod> methods = EnumSet.noneOf(MovieMethod.class);
     // AppendToResponse Properties
@@ -131,39 +105,6 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, Iden
     private List<ChangeKeyItem> changes = Collections.emptyList();
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public float getPopularity() {
-        return popularity;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isAdult() {
-        return adult;
-    }
-
     public Collection getBelongsToCollection() {
         return belongsToCollection;
     }
@@ -212,24 +153,8 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, Iden
         return tagline;
     }
 
-    public float getVoteAverage() {
-        return voteAverage;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public float getUserRating() {
-        return userRating;
-    }
-
-    public Boolean getVideo() {
-        return video;
     }
 
     public String getOriginalLanguage() {
@@ -238,39 +163,6 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, Iden
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public void setPopularity(float popularity) {
-        this.popularity = popularity;
-    }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setAdult(boolean adult) {
-        this.adult = adult;
-    }
-
     public void setBelongsToCollection(Collection belongsToCollection) {
         this.belongsToCollection = belongsToCollection;
     }
@@ -319,24 +211,8 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, Iden
         this.tagline = tagline;
     }
 
-    public void setVoteAverage(float voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setUserRating(float userRating) {
-        this.userRating = userRating;
-    }
-
-    public void setVideo(Boolean video) {
-        this.video = video;
     }
 
     public void setOriginalLanguage(String originalLanguage) {
@@ -461,35 +337,11 @@ public class MovieInfo extends AbstractJsonMapping implements Serializable, Iden
     }
     // </editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Equals and HashCode">
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof MovieInfo) {
-            final MovieInfo other = (MovieInfo) obj;
-            return new EqualsBuilder()
-                    .append(id, other.id)
-                    .append(imdbID, other.imdbID)
-                    .append(runtime, other.runtime)
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(id)
-                .append(imdbID)
-                .append(runtime)
-                .toHashCode();
-    }
-    // </editor-fold>
-
     private void addMethod(MovieMethod method) {
         methods.add(method);
     }
 
+    @Override
     public boolean hasMethod(MovieMethod method) {
         return methods.contains(method);
     }
