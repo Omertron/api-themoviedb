@@ -19,19 +19,22 @@
  */
 package com.omertron.themoviedbapi;
 
-import com.omertron.themoviedbapi.model.list.UserList;
-import com.omertron.themoviedbapi.model.movie.MovieBasic;
-import com.omertron.themoviedbapi.model.tv.TVBasic;
-import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.interfaces.AppendToResponse;
+import com.omertron.themoviedbapi.interfaces.AppendToResponseMethod;
 import com.omertron.themoviedbapi.interfaces.Identification;
+import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
+import com.omertron.themoviedbapi.model.media.MediaState;
+import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonInfo;
+import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
+import com.omertron.themoviedbapi.results.ResultList;
 import java.util.List;
 import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
@@ -109,8 +112,8 @@ public class TestSuite {
         String message = test.getClass().getSimpleName();
         assertTrue(message + ": Missing ID", test.getId() > 0);
         assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
-        assertTrue(message + ": Missing crew", test.getCrew().size() > 0);
-        assertTrue(message + ": Missing guest stars", test.getGuestStars().size() > 0);
+        assertFalse(message + ": Missing crew", test.getCrew().isEmpty());
+        assertFalse(message + ": Missing guest stars", test.getGuestStars().isEmpty());
     }
 
     public static void test(PersonInfo test) {
@@ -134,13 +137,13 @@ public class TestSuite {
 
     public static void test(ExternalID test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing IMDB ID", StringUtils.isNotBlank(test.getImdbId()));
         boolean found = false;
+        found |= StringUtils.isNotBlank(test.getImdbId());
         found |= StringUtils.isNotBlank(test.getFreebaseId());
         found |= StringUtils.isNotBlank(test.getFreebaseMid());
         found |= StringUtils.isNotBlank(test.getTvdbId());
         found |= StringUtils.isNotBlank(test.getTvrageId());
-        assertTrue(message + ": Missing one of the other IDs", found);
+        assertTrue(message + ": Missing all of the External IDs", found);
     }
 
     public static void test(MediaCreditList test) {
@@ -150,6 +153,12 @@ public class TestSuite {
         found |= !test.getCrew().isEmpty();
         found |= !test.getGuestStars().isEmpty();
         assertTrue(message + ": Missing cast/crew/guest stars information", found);
+    }
+
+    public static void test(MediaState test) {
+        String message = test.getClass().getSimpleName();
+        assertNotNull(message + ": Null result", test);
+        assertTrue(message + ": Invalid rating", test.getRated() > -2f);
     }
 
     public static void test(PersonCreditList<?> test, String message) {
@@ -173,4 +182,12 @@ public class TestSuite {
         }
         assertTrue(message + " ID " + id + " not found in list", found);
     }
+
+    public static <T extends AppendToResponseMethod> void testATR(AppendToResponse<T> test, Class<T> methodClass) {
+        for (T method : methodClass.getEnumConstants()) {
+            assertTrue(test.getClass().getSimpleName() + ": Does not have " + method.getPropertyString(), test.hasMethod(method));
+        }
+
+    }
+
 }

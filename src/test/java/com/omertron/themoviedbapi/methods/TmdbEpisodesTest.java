@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.enumeration.TVEpisodeMethod;
 import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
@@ -92,12 +93,13 @@ public class TmdbEpisodesTest extends AbstractTests {
         int seasonNumber = 1;
         int episodeNumber = 1;
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
+        String appendToResponse = appendToResponseBuilder(TVEpisodeMethod.class);
 
         for (TestID test : TV_IDS) {
             LOG.info("Testing: {}", test);
             TVEpisodeInfo result = instance.getEpisodeInfo(test.getTmdb(), seasonNumber, episodeNumber, language, appendToResponse);
             TestSuite.test(result);
+            TestSuite.testATR(result, TVEpisodeMethod.class);
         }
     }
 
@@ -241,15 +243,14 @@ public class TmdbEpisodesTest extends AbstractTests {
     public void testGetEpisodeVideos() throws MovieDbException {
         LOG.info("getEpisodeVideos");
 
-        int seasonNumber = 1;
+        // Game of thrones S03E01 has videos
+        int tvID = 1399;
+        int seasonNumber = 3;
         int episodeNumber = 1;
         String language = LANGUAGE_DEFAULT;
 
-        for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
-            ResultList<Video> result = instance.getEpisodeVideos(test.getTmdb(), seasonNumber, episodeNumber, language);
-            // There are very few episodes that have videos
-        }
+        ResultList<Video> result = instance.getEpisodeVideos(tvID, seasonNumber, episodeNumber, language);
+        TestSuite.test(result, "Videos");
     }
 
 }

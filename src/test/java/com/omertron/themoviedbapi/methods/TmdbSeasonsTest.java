@@ -25,6 +25,7 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.enumeration.ArtworkType;
+import com.omertron.themoviedbapi.enumeration.TVSeasonMethod;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
@@ -89,12 +90,17 @@ public class TmdbSeasonsTest extends AbstractTests {
 
         int seasonNumber = 1;
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
+        String appendToResponse = appendToResponseBuilder(TVSeasonMethod.class);
 
         for (TestID test : TV_IDS) {
             LOG.info("Testing: {}", test);
             TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
             TestSuite.test(result);
+            TestSuite.testATR(result, TVSeasonMethod.class);
+            TestSuite.test(result.getCredits());
+            TestSuite.test(result.getExternalIDs());
+            TestSuite.test(result.getImages(), "Images");
+            // Videos is usually empty for seasons, so skip the test
         }
     }
 
@@ -121,8 +127,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         for (TestID test : TV_IDS) {
             LOG.info("Testing: {}", test);
             MediaState result = instance.getSeasonAccountState(test.getTmdb(), getSessionId());
-            assertNotNull("Null result", result);
-            assertTrue("Invalid rating", result.getRated() > -2f);
+            TestSuite.test(result);
         }
     }
 

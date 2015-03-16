@@ -99,9 +99,7 @@ public class TmdbTVTest extends AbstractTests {
 
             TVInfo result = instance.getTVInfo(test.getTmdb(), language, appendToResponse);
             TestSuite.test(result);
-            for (TVMethod method : TVMethod.values()) {
-                assertTrue("Does not have " + method.getPropertyString(), result.hasMethod(method));
-            }
+            TestSuite.testATR(result, TVMethod.class);
             TestSuite.test(result.getAlternativeTitles(), "Alt titles");
             TestSuite.test(result.getContentRatings(), "Content Ratings");
             TestSuite.test(result.getCredits());

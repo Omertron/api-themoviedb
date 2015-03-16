@@ -101,9 +101,7 @@ public class TmdbPeopleTest extends AbstractTests {
         for (TestID test : TEST_IDS) {
             PersonInfo result = instance.getPersonInfo(test.getTmdb(), appendToResponse);
             TestSuite.test(result);
-            for (PeopleMethod method : PeopleMethod.values()) {
-                assertTrue("Does not have " + method.getPropertyString(), result.hasMethod(method));
-            }
+            TestSuite.testATR(result, PeopleMethod.class);
             TestSuite.test(result.getExternalIDs());
             TestSuite.test(result.getImages(), "Images");
             TestSuite.test(result.getMovieCredits(), "Movie Credits");
