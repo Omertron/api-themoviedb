@@ -99,7 +99,7 @@ public class TmdbTVTest extends AbstractTests {
 
             TVInfo result = instance.getTVInfo(test.getTmdb(), language, appendToResponse);
             TestSuite.test(result);
-            TestSuite.testATR(result, TVMethod.class);
+            TestSuite.testATR(result, TVMethod.class, null);
             TestSuite.test(result.getAlternativeTitles(), "Alt titles");
             TestSuite.test(result.getContentRatings(), "Content Ratings");
             TestSuite.test(result.getCredits());

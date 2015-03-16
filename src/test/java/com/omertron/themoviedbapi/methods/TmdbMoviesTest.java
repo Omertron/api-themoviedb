@@ -101,7 +101,7 @@ public class TmdbMoviesTest extends AbstractTests {
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
             assertEquals("Wrong title", test.getName(), result.getTitle());
             TestSuite.test(result);
-            TestSuite.testATR(result, MovieMethod.class);
+            TestSuite.testATR(result, MovieMethod.class, MovieMethod.CHANGES);
             TestSuite.test(result.getAlternativeTitles(), "Alt titles");
             TestSuite.test(result.getCast(), "Cast");
             TestSuite.test(result.getCrew(), "Crew");

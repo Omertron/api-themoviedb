@@ -183,11 +183,12 @@ public class TestSuite {
         assertTrue(message + " ID " + id + " not found in list", found);
     }
 
-    public static <T extends AppendToResponseMethod> void testATR(AppendToResponse<T> test, Class<T> methodClass) {
+    public static <T extends AppendToResponseMethod> void testATR(AppendToResponse<T> test, Class<T> methodClass, T skip) {
         for (T method : methodClass.getEnumConstants()) {
-            assertTrue(test.getClass().getSimpleName() + ": Does not have " + method.getPropertyString(), test.hasMethod(method));
+            if (skip != null && method != skip) {
+                assertTrue(test.getClass().getSimpleName() + ": Does not have " + method.getPropertyString(), test.hasMethod(method));
+            }
         }
-
     }
 
 }

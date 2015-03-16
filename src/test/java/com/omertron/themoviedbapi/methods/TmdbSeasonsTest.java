@@ -96,7 +96,7 @@ public class TmdbSeasonsTest extends AbstractTests {
             LOG.info("Testing: {}", test);
             TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
             TestSuite.test(result);
-            TestSuite.testATR(result, TVSeasonMethod.class);
+            TestSuite.testATR(result, TVSeasonMethod.class, null);
             TestSuite.test(result.getCredits());
             TestSuite.test(result.getExternalIDs());
             TestSuite.test(result.getImages(), "Images");

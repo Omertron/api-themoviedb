@@ -99,7 +99,7 @@ public class TmdbEpisodesTest extends AbstractTests {
             LOG.info("Testing: {}", test);
             TVEpisodeInfo result = instance.getEpisodeInfo(test.getTmdb(), seasonNumber, episodeNumber, language, appendToResponse);
             TestSuite.test(result);
-            TestSuite.testATR(result, TVEpisodeMethod.class);
+            TestSuite.testATR(result, TVEpisodeMethod.class, null);
         }
     }
 
