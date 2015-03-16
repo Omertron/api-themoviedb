@@ -30,16 +30,16 @@ import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
+import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
-import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
-import com.omertron.themoviedbapi.model.media.AlternativeTitle;
-import com.omertron.themoviedbapi.model.movie.MovieInfo;
-import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
+import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -89,17 +89,7 @@ public class TmdbMoviesTest extends AbstractTests {
         LOG.info("appendToResponse");
 
         String language = LANGUAGE_DEFAULT;
-
-        boolean first = true;
-        StringBuilder appendToResponse = new StringBuilder();
-        for (MovieMethod method : MovieMethod.values()) {
-            if (first) {
-                first = false;
-            } else {
-                appendToResponse.append(",");
-            }
-            appendToResponse.append(method.getPropertyString());
-        }
+        String appendToResponse = appendToResponseBuilder(MovieMethod.class);
 
         for (TestID test : FILM_IDS) {
             // Just test Blade Runner
@@ -107,10 +97,13 @@ public class TmdbMoviesTest extends AbstractTests {
                 continue;
             }
 
-            MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse.toString());
+            MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
             assertEquals("Wrong title", test.getName(), result.getTitle());
             TestSuite.test(result);
+            for (MovieMethod method : MovieMethod.values()) {
+                assertTrue("Does not have " + method.getPropertyString(), result.hasMethod(method));
+            }
             TestSuite.test(result.getAlternativeTitles(), "Alt titles");
             TestSuite.test(result.getCast(), "Cast");
             TestSuite.test(result.getCrew(), "Crew");
@@ -191,10 +184,9 @@ public class TmdbMoviesTest extends AbstractTests {
         LOG.info("getMovieAlternativeTitles");
 
         String country = "";
-        String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            ResultList<AlternativeTitle> result = instance.getMovieAlternativeTitles(test.getTmdb(), country, appendToResponse);
+            ResultList<AlternativeTitle> result = instance.getMovieAlternativeTitles(test.getTmdb(), country);
             TestSuite.test(result, "Alt Titles");
         }
     }
@@ -208,10 +200,8 @@ public class TmdbMoviesTest extends AbstractTests {
     public void testGetMovieCredits() throws MovieDbException {
         LOG.info("getMovieCredits");
 
-        String[] appendToResponse = null;
-
         for (TestID test : FILM_IDS) {
-            MediaCreditList result = instance.getMovieCredits(test.getTmdb(), appendToResponse);
+            MediaCreditList result = instance.getMovieCredits(test.getTmdb());
             assertNotNull(result);
             assertFalse(result.getCast().isEmpty());
             TestSuite.test(result.getCast(), "Cast");
@@ -240,12 +230,11 @@ public class TmdbMoviesTest extends AbstractTests {
         LOG.info("getMovieImages");
 
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : FILM_IDS) {
-            ResultList<Artwork> result = instance.getMovieImages(test.getTmdb(), language, appendToResponse);
+            ResultList<Artwork> result = instance.getMovieImages(test.getTmdb(), language);
             assertFalse("No artwork", result.isEmpty());
             for (Artwork artwork : result.getResults()) {
                 results.found(artwork.getArtworkType());
@@ -265,10 +254,8 @@ public class TmdbMoviesTest extends AbstractTests {
     public void testGetMovieKeywords() throws MovieDbException {
         LOG.info("getMovieKeywords");
 
-        String[] appendToResponse = null;
-
         for (TestID test : FILM_IDS) {
-            ResultList<Keyword> result = instance.getMovieKeywords(test.getTmdb(), appendToResponse);
+            ResultList<Keyword> result = instance.getMovieKeywords(test.getTmdb());
             TestSuite.test(result, "Keywords");
         }
     }
@@ -283,10 +270,9 @@ public class TmdbMoviesTest extends AbstractTests {
         LOG.info("getMovieReleaseInfo");
 
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            ResultList<ReleaseInfo> result = instance.getMovieReleaseInfo(test.getTmdb(), language, appendToResponse);
+            ResultList<ReleaseInfo> result = instance.getMovieReleaseInfo(test.getTmdb(), language);
             TestSuite.test(result, "Rel Info");
         }
     }
@@ -301,11 +287,10 @@ public class TmdbMoviesTest extends AbstractTests {
         LOG.info("getMovieVideos");
 
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
         boolean found = false;
 
         for (TestID test : FILM_IDS) {
-            ResultList<Video> result = instance.getMovieVideos(test.getTmdb(), language, appendToResponse);
+            ResultList<Video> result = instance.getMovieVideos(test.getTmdb(), language);
             found = found || !result.isEmpty();
         }
         assertTrue("No videos", found);
@@ -320,10 +305,8 @@ public class TmdbMoviesTest extends AbstractTests {
     public void testGetMovieTranslations() throws MovieDbException {
         LOG.info("getMovieTranslations");
 
-        String[] appendToResponse = null;
-
         for (TestID test : FILM_IDS) {
-            ResultList<Translation> result = instance.getMovieTranslations(test.getTmdb(), appendToResponse);
+            ResultList<Translation> result = instance.getMovieTranslations(test.getTmdb());
             TestSuite.test(result, "Translations");
         }
     }
@@ -339,10 +322,9 @@ public class TmdbMoviesTest extends AbstractTests {
 
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            ResultList<MovieInfo> result = instance.getSimilarMovies(test.getTmdb(), page, language, appendToResponse);
+            ResultList<MovieInfo> result = instance.getSimilarMovies(test.getTmdb(), page, language);
             TestSuite.test(result, "Similar");
         }
     }
@@ -358,14 +340,13 @@ public class TmdbMoviesTest extends AbstractTests {
 
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
             if (test.getTmdb() == 76757) {
                 // Has no reviews
                 continue;
             }
-            ResultList<Review> result = instance.getMovieReviews(test.getTmdb(), page, language, appendToResponse);
+            ResultList<Review> result = instance.getMovieReviews(test.getTmdb(), page, language);
             TestSuite.test(result, "Reviews");
         }
     }
@@ -381,10 +362,9 @@ public class TmdbMoviesTest extends AbstractTests {
 
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : FILM_IDS) {
-            ResultList<UserList> result = instance.getMovieLists(test.getTmdb(), page, language, appendToResponse);
+            ResultList<UserList> result = instance.getMovieLists(test.getTmdb(), page, language);
             TestSuite.test(result, "Lists");
         }
     }

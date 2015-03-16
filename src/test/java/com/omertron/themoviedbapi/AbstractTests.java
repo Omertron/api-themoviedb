@@ -19,6 +19,8 @@
  */
 package com.omertron.themoviedbapi;
 
+import com.omertron.themoviedbapi.enumeration.MovieMethod;
+import com.omertron.themoviedbapi.interfaces.AppendToResponseMethod;
 import com.omertron.themoviedbapi.methods.TmdbAccount;
 import com.omertron.themoviedbapi.methods.TmdbAuthentication;
 import com.omertron.themoviedbapi.model.account.Account;
@@ -260,6 +262,29 @@ public class AbstractTests {
      * @return
      */
     protected static String getProperty(String property) {
+        appendToResponseBuilder(MovieMethod.class);
         return props.getProperty(property);
+    }
+
+    /**
+     * Build up a full list of the AppendToResponse methods into a string for
+     * use in the URL
+     *
+     * @param <T>
+     * @param methodClass
+     * @return
+     */
+    protected static <T extends AppendToResponseMethod> String appendToResponseBuilder(Class<T> methodClass) {
+        boolean first = true;
+        StringBuilder atr = new StringBuilder();
+        for (AppendToResponseMethod method : methodClass.getEnumConstants()) {
+            if (first) {
+                first = false;
+            } else {
+                atr.append(",");
+            }
+            atr.append(method.getPropertyString());
+        }
+        return atr.toString();
     }
 }

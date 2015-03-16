@@ -26,15 +26,22 @@ import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
-import com.omertron.themoviedbapi.model.media.AlternativeTitle;
-import com.omertron.themoviedbapi.model.movie.MovieInfo;
-import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
+import com.omertron.themoviedbapi.model.movie.MovieInfo;
+import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.results.WrapperAlternativeTitles;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperImages;
+import com.omertron.themoviedbapi.results.WrapperMovieKeywords;
+import com.omertron.themoviedbapi.results.WrapperReleaseInfo;
+import com.omertron.themoviedbapi.results.WrapperTranslations;
+import com.omertron.themoviedbapi.results.WrapperVideos;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -43,13 +50,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.results.WrapperAlternativeTitles;
-import com.omertron.themoviedbapi.results.WrapperGenericList;
-import com.omertron.themoviedbapi.results.WrapperImages;
-import com.omertron.themoviedbapi.results.WrapperMovieKeywords;
-import com.omertron.themoviedbapi.results.WrapperReleaseInfo;
-import com.omertron.themoviedbapi.results.WrapperTranslations;
-import com.omertron.themoviedbapi.results.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -78,7 +78,8 @@ public class TmdbMovies extends AbstractMethod {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
      * @param movieId
      * @param language
@@ -110,7 +111,8 @@ public class TmdbMovies extends AbstractMethod {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
      * @param imdbId
      * @param language
@@ -139,8 +141,8 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method lets a user get the status of whether or not the movie has been rated or added to their favourite or movie watch
-     * list.
+     * This method lets a user get the status of whether or not the movie has
+     * been rated or added to their favourite or movie watch list.
      *
      * A valid session id is required.
      *
@@ -165,19 +167,18 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for
+     * a particular movie.
      *
      * @param movieId
      * @param country
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country, String... appendToResponse) throws MovieDbException {
+    public ResultList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.COUNTRY, country);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.ALT_TITLES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -195,14 +196,12 @@ public class TmdbMovies extends AbstractMethod {
      * Get the cast and crew information for a specific movie id.
      *
      * @param movieId
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public MediaCreditList getMovieCredits(int movieId, String... appendToResponse) throws MovieDbException {
+    public MediaCreditList getMovieCredits(int movieId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -214,19 +213,18 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the
+     * images for a particular movie.
      *
      * @param movieId
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<Artwork> getMovieImages(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.IMAGES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -242,19 +240,18 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added
+     * to a particular movie.
      *
      * Currently, only English keywords exist.
      *
      * @param movieId
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<Keyword> getMovieKeywords(int movieId, String... appendToResponse) throws MovieDbException {
+    public ResultList<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.KEYWORDS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -270,19 +267,18 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data
+     * we have for a specific movie.
      *
      * @param movieId
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.RELEASES).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -298,21 +294,20 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular movie.
+     * This method is used to retrieve all of the trailers for a particular
+     * movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
      * @param movieId
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<Video> getMovieVideos(int movieId, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<Video> getMovieVideos(int movieId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.VIDEOS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -328,17 +323,16 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
+     * This method is used to retrieve a list of the available translations for
+     * a specific movie.
      *
      * @param movieId
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<Translation> getMovieTranslations(int movieId, String... appendToResponse) throws MovieDbException {
+    public ResultList<Translation> getMovieTranslations(int movieId) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.TRANSLATIONS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -354,25 +348,25 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a particular movie.
+     * The similar movies method will let you retrieve the similar movies for a
+     * particular movie.
      *
-     * This data is created dynamically but with the help of users votes on TMDb.
+     * This data is created dynamically but with the help of users votes on
+     * TMDb.
      *
      * The data is much better with movies that have more keywords
      *
      * @param movieId
      * @param language
      * @param page
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.SIMILAR).buildUrl(parameters);
         WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "similar movies");
@@ -385,16 +379,14 @@ public class TmdbMovies extends AbstractMethod {
      * @param movieId
      * @param page
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<Review> getMovieReviews(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<Review> getMovieReviews(int movieId, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.REVIEWS).buildUrl(parameters);
         WrapperGenericList<Review> wrapper = processWrapper(getTypeReference(Review.class), url, "review");
@@ -407,16 +399,14 @@ public class TmdbMovies extends AbstractMethod {
      * @param movieId
      * @param language
      * @param page
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public ResultList<UserList> getMovieLists(int movieId, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<UserList> getMovieLists(int movieId, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, movieId);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.PAGE, page);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.LISTS).buildUrl(parameters);
         WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "movie lists");
@@ -430,7 +420,8 @@ public class TmdbMovies extends AbstractMethod {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
@@ -522,7 +513,8 @@ public class TmdbMovies extends AbstractMethod {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
      *
      * @param language
      * @param page
@@ -560,7 +552,8 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb.
      *
      * The default response will return 20 movies.
      *

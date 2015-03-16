@@ -25,9 +25,9 @@ import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
-import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ContentRating;
@@ -35,6 +35,10 @@ import com.omertron.themoviedbapi.model.person.ExternalID;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperImages;
+import com.omertron.themoviedbapi.results.WrapperTranslations;
+import com.omertron.themoviedbapi.results.WrapperVideos;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
@@ -43,10 +47,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.PostBody;
 import com.omertron.themoviedbapi.tools.PostTools;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.results.WrapperGenericList;
-import com.omertron.themoviedbapi.results.WrapperImages;
-import com.omertron.themoviedbapi.results.WrapperTranslations;
-import com.omertron.themoviedbapi.results.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
 import org.yamj.api.common.exception.ApiExceptionType;
@@ -96,8 +96,8 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * This method lets users get the status of whether or not the TV show has been rated or added to their favourite or watch
-     * lists.
+     * This method lets users get the status of whether or not the TV show has
+     * been rated or added to their favourite or watch lists.
      *
      * A valid session id is required.
      *
@@ -171,15 +171,13 @@ public class TmdbTV extends AbstractMethod {
      *
      * @param tvID
      * @param language
-     * @param appendToResponse
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public MediaCreditList getTVCredits(int tvID, String language, String... appendToResponse) throws MovieDbException {
+    public MediaCreditList getTVCredits(int tvID, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -245,14 +243,12 @@ public class TmdbTV extends AbstractMethod {
      * Get the plot keywords for a specific TV show id.
      *
      * @param tvID
-     * @param appendToResponse
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<Keyword> getTVKeywords(int tvID, String... appendToResponse) throws MovieDbException {
+    public ResultList<Keyword> getTVKeywords(int tvID) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.KEYWORDS).buildUrl(parameters);
         WrapperGenericList<Keyword> wrapper = processWrapper(getTypeReference(Keyword.class), url, "keywords");
@@ -300,16 +296,14 @@ public class TmdbTV extends AbstractMethod {
      * @param tvID
      * @param page
      * @param language
-     * @param appendToResponse
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVInfo> getTVSimilar(int tvID, Integer page, String language, String... appendToResponse) throws MovieDbException {
+    public ResultList<TVInfo> getTVSimilar(int tvID, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, tvID);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.SIMILAR).buildUrl(parameters);
         WrapperGenericList<TVInfo> wrapper = processWrapper(getTypeReference(TVInfo.class), url, "similar TV shows");
@@ -317,7 +311,8 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * Get the list of translations that exist for a TV series. These translations cascade down to the episode level.
+     * Get the list of translations that exist for a TV series. These
+     * translations cascade down to the episode level.
      *
      * @param tvID
      * @return
@@ -341,7 +336,8 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * Get the videos that have been added to a TV series (trailers, opening credits, etc...)
+     * Get the videos that have been added to a TV series (trailers, opening
+     * credits, etc...)
      *
      * @param tvID
      * @param language
@@ -386,7 +382,8 @@ public class TmdbTV extends AbstractMethod {
     /**
      * Get the list of TV shows that are currently on the air.
      *
-     * This query looks for any TV show that has an episode with an air date in the next 7 days.
+     * This query looks for any TV show that has an episode with an air date in
+     * the next 7 days.
      *
      * @param page
      * @param language
@@ -428,7 +425,8 @@ public class TmdbTV extends AbstractMethod {
     /**
      * Get the list of top rated TV shows.
      *
-     * By default, this list will only include TV shows that have 2 or more votes.
+     * By default, this list will only include TV shows that have 2 or more
+     * votes.
      *
      * This list refreshes every day.
      *

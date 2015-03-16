@@ -30,11 +30,11 @@ import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
-import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
+import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.media.MediaCreditList;
 import com.omertron.themoviedbapi.model.media.MediaState;
-import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ContentRating;
@@ -89,17 +89,7 @@ public class TmdbTVTest extends AbstractTests {
         LOG.info("appendToResponse");
 
         String language = LANGUAGE_DEFAULT;
-
-        boolean first = true;
-        StringBuilder appendToResponse = new StringBuilder();
-        for (TVMethod method : TVMethod.values()) {
-            if (first) {
-                first = false;
-            } else {
-                appendToResponse.append(",");
-            }
-            appendToResponse.append(method.getPropertyString());
-        }
+        String appendToResponse = appendToResponseBuilder(TVMethod.class);
 
         for (TestID test : TV_IDS) {
             // Just test Waling Dead
@@ -107,8 +97,11 @@ public class TmdbTVTest extends AbstractTests {
                 continue;
             }
 
-            TVInfo result = instance.getTVInfo(test.getTmdb(), language, appendToResponse.toString());
+            TVInfo result = instance.getTVInfo(test.getTmdb(), language, appendToResponse);
             TestSuite.test(result);
+            for (TVMethod method : TVMethod.values()) {
+                assertTrue("Does not have " + method.getPropertyString(), result.hasMethod(method));
+            }
             TestSuite.test(result.getAlternativeTitles(), "Alt titles");
             TestSuite.test(result.getContentRatings(), "Content Ratings");
             TestSuite.test(result.getCredits());
@@ -300,10 +293,8 @@ public class TmdbTVTest extends AbstractTests {
     public void testGetTVKeywords() throws MovieDbException {
         LOG.info("getTVKeywords");
 
-        String[] appendToResponse = null;
-
         for (TestID test : TV_IDS) {
-            ResultList<Keyword> result = instance.getTVKeywords(test.getTmdb(), appendToResponse);
+            ResultList<Keyword> result = instance.getTVKeywords(test.getTmdb());
             TestSuite.test(result, "TV Keyword");
         }
     }
@@ -335,10 +326,9 @@ public class TmdbTVTest extends AbstractTests {
 
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : TV_IDS) {
-            ResultList<TVInfo> result = instance.getTVSimilar(test.getTmdb(), page, language, appendToResponse);
+            ResultList<TVInfo> result = instance.getTVSimilar(test.getTmdb(), page, language);
             TestSuite.test(result, "TV Similar");
         }
     }

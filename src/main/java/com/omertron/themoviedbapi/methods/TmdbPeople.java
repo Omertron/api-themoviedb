@@ -31,19 +31,19 @@ import com.omertron.themoviedbapi.model.credits.CreditBasic;
 import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
 import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonCreditsMixIn;
 import com.omertron.themoviedbapi.model.person.PersonFind;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.results.ResultList;
+import com.omertron.themoviedbapi.results.WrapperGenericList;
+import com.omertron.themoviedbapi.results.WrapperImages;
 import com.omertron.themoviedbapi.tools.ApiUrl;
 import com.omertron.themoviedbapi.tools.HttpTools;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import com.omertron.themoviedbapi.tools.MethodSub;
 import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
-import com.omertron.themoviedbapi.results.WrapperGenericList;
-import com.omertron.themoviedbapi.results.WrapperImages;
 import java.io.IOException;
 import java.net.URL;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,7 @@ public class TmdbPeople extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, PersonInfo.class);
         } catch (IOException ex) {
-            LoggerFactory.getLogger("test").info("{}",ex);
+            LoggerFactory.getLogger("test").info("{}", ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person info", url, ex);
         }
     }
@@ -95,15 +95,13 @@ public class TmdbPeople extends AbstractMethod {
      *
      * @param personId
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public PersonCreditList<CreditMovieBasic> getPersonMovieCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList<CreditMovieBasic> getPersonMovieCredits(int personId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.MOVIE_CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -128,15 +126,13 @@ public class TmdbPeople extends AbstractMethod {
      *
      * @param personId
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public PersonCreditList<CreditTVBasic> getPersonTVCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList<CreditTVBasic> getPersonTVCredits(int personId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.TV_CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
@@ -161,15 +157,13 @@ public class TmdbPeople extends AbstractMethod {
      *
      * @param personId
      * @param language
-     * @param appendToResponse
      * @return
      * @throws MovieDbException
      */
-    public PersonCreditList<CreditBasic> getPersonCombinedCredits(int personId, String language, String... appendToResponse) throws MovieDbException {
+    public PersonCreditList<CreditBasic> getPersonCombinedCredits(int personId, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.ID, personId);
         parameters.add(Param.LANGUAGE, language);
-        parameters.add(Param.APPEND, appendToResponse);
 
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).subMethod(MethodSub.COMBINED_CREDITS).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);

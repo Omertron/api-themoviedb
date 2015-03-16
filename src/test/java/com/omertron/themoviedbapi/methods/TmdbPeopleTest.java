@@ -34,9 +34,9 @@ import com.omertron.themoviedbapi.model.credits.CreditBasic;
 import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
 import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.model.person.PersonCreditList;
 import com.omertron.themoviedbapi.model.person.PersonFind;
+import com.omertron.themoviedbapi.model.person.PersonInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
 import java.text.SimpleDateFormat;
@@ -96,20 +96,14 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testAppendToResponse() throws MovieDbException {
         LOG.info("appendToResponse");
 
-        boolean first = true;
-        StringBuilder appendToResponse = new StringBuilder();
-        for (PeopleMethod method : PeopleMethod.values()) {
-            if (first) {
-                first = false;
-            } else {
-                appendToResponse.append(",");
-            }
-            appendToResponse.append(method.getPropertyString());
-        }
+        String appendToResponse = appendToResponseBuilder(PeopleMethod.class);
 
         for (TestID test : TEST_IDS) {
-            PersonInfo result = instance.getPersonInfo(test.getTmdb(), appendToResponse.toString());
+            PersonInfo result = instance.getPersonInfo(test.getTmdb(), appendToResponse);
             TestSuite.test(result);
+            for (PeopleMethod method : PeopleMethod.values()) {
+                assertTrue("Does not have " + method.getPropertyString(), result.hasMethod(method));
+            }
             TestSuite.test(result.getExternalIDs());
             TestSuite.test(result.getImages(), "Images");
             TestSuite.test(result.getMovieCredits(), "Movie Credits");
@@ -146,10 +140,9 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonMovieCredits() throws MovieDbException {
         LOG.info("getPersonMovieCredits");
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : TEST_IDS) {
-            PersonCreditList<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language, appendToResponse);
+            PersonCreditList<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
@@ -170,10 +163,9 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonTVCredits() throws MovieDbException {
         LOG.info("getPersonTVCredits");
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : TEST_IDS) {
-            PersonCreditList<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language, appendToResponse);
+            PersonCreditList<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
@@ -194,10 +186,9 @@ public class TmdbPeopleTest extends AbstractTests {
     public void testGetPersonCombinedCredits() throws MovieDbException {
         LOG.info("getPersonCombinedCredits");
         String language = LANGUAGE_DEFAULT;
-        String[] appendToResponse = null;
 
         for (TestID test : TEST_IDS) {
-            PersonCreditList<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language, appendToResponse);
+            PersonCreditList<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language);
             LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
             assertEquals("Incorrect ID", test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");

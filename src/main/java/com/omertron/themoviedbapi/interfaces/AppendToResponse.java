@@ -23,10 +23,10 @@ package com.omertron.themoviedbapi.interfaces;
  * Interface to indicate that the object has append to response methods
  *
  * @author Stuart
- * @param <AppendToResponseMethod> Method for Append To Response
+ * @param <T> Method for Append To Response
  */
-public interface AppendToResponse<AppendToResponseMethod> {
+public interface AppendToResponse<T extends AppendToResponseMethod> {
 
-    boolean hasMethod(AppendToResponseMethod method);
+    boolean hasMethod(T method);
 
 }
