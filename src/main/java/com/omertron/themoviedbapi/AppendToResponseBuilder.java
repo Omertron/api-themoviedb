@@ -28,7 +28,7 @@ import com.omertron.themoviedbapi.interfaces.AppendToResponseMethod;
  */
 public class AppendToResponseBuilder {
 
-    private StringBuilder response;
+    private final StringBuilder response;
 
     /**
      * Construct the builder with the first method
@@ -36,7 +36,7 @@ public class AppendToResponseBuilder {
      * @param method
      */
     public AppendToResponseBuilder(AppendToResponseMethod method) {
-        response.append(method.getPropertyString());
+        response = new StringBuilder(method.getPropertyString());
     }
 
     /**
