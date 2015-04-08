@@ -1,0 +1,9 @@
++-------------------------------------------------------------------------
+| Project Name  | ${project.name}
++-------------------------------------------------------------------------
+| Version       | ${project.version}
+| Revision SHA  | ${git.commit.id}
+| Revision Date | ${git.commit.time}
+| Build Date    | ${git.build.time}
+| Artifact Name | ${project.artifactId}-${project.version}-${timestamp}-${git.commit.id.abbrev}
+-------------------------------------------------------------------------

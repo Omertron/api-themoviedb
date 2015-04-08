@@ -9,7 +9,7 @@
     <fileSets>
         <!-- add version.txt file -->
         <fileSet>
-            <directory>${project.build.directory}</directory>
+            <directory>${project.build.directory}/classes</directory>
             <outputDirectory></outputDirectory>
             <includes>
                 <include>version.txt</include>
