@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class PersonFind extends PersonBasic implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("adult")
     private Boolean adult;

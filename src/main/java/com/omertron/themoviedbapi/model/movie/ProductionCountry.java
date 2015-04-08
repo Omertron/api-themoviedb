@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @JsonRootName("production_country")
 public class ProductionCountry extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("iso_3166_1")
     private String country;

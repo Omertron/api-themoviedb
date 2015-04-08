@@ -44,7 +44,7 @@ import java.util.Set;
  */
 public class TVEpisodeInfo extends TVEpisodeBasic implements Serializable, AppendToResponse<TVEpisodeMethod> {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("crew")
     private List<MediaCreditCrew> crew;

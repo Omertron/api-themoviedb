@@ -30,7 +30,7 @@ import java.io.Serializable;
  */
 public class MediaCredit extends AbstractJsonMapping implements Serializable, Identification {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("credit_id")
     private String creditId;

@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ChangeKeyItem extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     @JsonProperty("key")
     private String key;
     @JsonProperty("items")

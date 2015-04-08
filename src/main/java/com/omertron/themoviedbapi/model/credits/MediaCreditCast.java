@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 public class MediaCreditCast extends MediaCredit implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("cast_id")
     private int castId = 0;

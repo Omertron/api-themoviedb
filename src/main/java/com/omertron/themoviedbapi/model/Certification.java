@@ -26,7 +26,7 @@ import java.io.Serializable;
 @JsonRootName("certification")
 public class Certification extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     // Properties
     @JsonProperty("certification")
     private String value;

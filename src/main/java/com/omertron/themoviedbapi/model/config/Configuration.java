@@ -34,7 +34,7 @@ import org.yamj.api.common.exception.ApiExceptionType;
  */
 public class Configuration extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("base_url")
     private String baseUrl;

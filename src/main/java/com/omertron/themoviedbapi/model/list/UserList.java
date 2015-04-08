@@ -30,7 +30,7 @@ import java.io.Serializable;
  */
 public class UserList extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("id")
     private String id;

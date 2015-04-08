@@ -29,7 +29,7 @@ import java.io.Serializable;
  */
 public class RatedValue extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("value")
     private float value = -1f;

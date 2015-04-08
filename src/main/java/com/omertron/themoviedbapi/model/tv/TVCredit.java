@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class TVCredit extends AbstractIdName implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("original_name")
     private String originalName;

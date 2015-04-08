@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 public class ChangedItem extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     @JsonProperty("id")
     private String id;
     @JsonProperty("action")

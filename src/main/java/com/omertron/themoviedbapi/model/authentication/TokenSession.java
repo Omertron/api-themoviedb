@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 public class TokenSession extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     @JsonProperty("session_id")
     private String sessionId;
     @JsonProperty("success")

@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     private static final Logger LOG = LoggerFactory.getLogger(AbstractJsonMapping.class);
 
     /**

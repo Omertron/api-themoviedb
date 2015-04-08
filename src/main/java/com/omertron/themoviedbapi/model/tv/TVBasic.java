@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class TVBasic extends MediaBasic implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("name")
     private String name;

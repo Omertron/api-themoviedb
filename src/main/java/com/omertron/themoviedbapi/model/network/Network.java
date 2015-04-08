@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 public class Network extends AbstractIdName implements Serializable, Identification {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     // Nothing to add to base class
 
 }

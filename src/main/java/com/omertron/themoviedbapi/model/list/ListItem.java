@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class ListItem<T> extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("id")
     private String id;

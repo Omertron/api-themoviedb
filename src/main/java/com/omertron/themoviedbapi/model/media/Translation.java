@@ -32,7 +32,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class Translation extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("english_name")
     private String englishName;

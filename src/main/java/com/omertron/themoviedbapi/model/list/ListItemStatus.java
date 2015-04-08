@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 public class ListItemStatus extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("status_code")
     private int statusCode;

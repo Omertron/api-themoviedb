@@ -32,7 +32,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  */
 public class Company extends AbstractJsonMapping implements Serializable, Identification {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     // Properties
     @JsonProperty("id")
     private int id = 0;

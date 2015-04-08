@@ -59,7 +59,7 @@ import java.util.Set;
  */
 public class MovieInfo extends MovieBasic implements Serializable, Identification, AppendToResponse<MovieMethod> {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("belongs_to_collection")
     private Collection belongsToCollection;

@@ -26,7 +26,7 @@ import java.util.List;
 
 public class JobDepartment extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     // Properties
     @JsonProperty("department")
     private String department;

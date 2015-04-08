@@ -31,7 +31,7 @@ import java.io.Serializable;
  */
 public class MovieBasic extends MediaBasic implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("adult")
     private boolean adult;

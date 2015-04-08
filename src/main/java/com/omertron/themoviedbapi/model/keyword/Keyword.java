@@ -29,6 +29,6 @@ import java.io.Serializable;
 @JsonRootName("keyword")
 public class Keyword extends AbstractIdName implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     // Nothing to override from the base class.
 }

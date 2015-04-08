@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public class TVSeasonInfo extends TVSeasonBasic implements Serializable, AppendToResponse<TVSeasonMethod> {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("name")
     private String name;

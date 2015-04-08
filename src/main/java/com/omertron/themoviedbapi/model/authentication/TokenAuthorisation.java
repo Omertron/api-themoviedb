@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 public class TokenAuthorisation extends AbstractJsonMapping implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     @JsonProperty("expires_at")
     private String expires;
     @JsonProperty("request_token")

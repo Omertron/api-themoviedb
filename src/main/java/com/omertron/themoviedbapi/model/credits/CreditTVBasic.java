@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 public class CreditTVBasic extends CreditBasic implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("episode_count")
     private int episodeCount;

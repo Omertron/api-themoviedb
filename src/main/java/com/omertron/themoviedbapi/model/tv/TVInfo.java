@@ -52,7 +52,7 @@ import java.util.Set;
  */
 public class TVInfo extends TVBasic implements Serializable, AppendToResponse<TVMethod> {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("created_by")
     private List<PersonBasic> createdBy;

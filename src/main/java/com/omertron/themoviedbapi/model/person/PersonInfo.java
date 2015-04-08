@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public class PersonInfo extends PersonBasic implements Serializable, AppendToResponse<PeopleMethod> {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("adult")
     private boolean adult;

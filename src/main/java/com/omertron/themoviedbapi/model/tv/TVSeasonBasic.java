@@ -31,7 +31,7 @@ import java.io.Serializable;
  */
 public class TVSeasonBasic extends AbstractJsonMapping implements Serializable, Identification {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("id")
     private int id = -1;

@@ -31,7 +31,7 @@ import java.io.Serializable;
  */
 public class TVEpisodeBasic extends MediaBasic implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("air_date")
     private String airDate;

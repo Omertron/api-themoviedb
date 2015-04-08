@@ -58,8 +58,7 @@ public class TestLogger {
         config.append("sun.net.www.protocol.http.HttpURLConnection.level = OFF").append(CRLF);
         config.append("org.apache.http.level = SEVERE").append(CRLF);
 
-        InputStream ins = new ByteArrayInputStream(config.toString().getBytes());
-        try {
+        try (InputStream ins = new ByteArrayInputStream(config.toString().getBytes())) {
             LogManager.getLogManager().readConfiguration(ins);
         } catch (IOException e) {
             LOG.warn("Failed to configure log manager due to an IO problem", e);

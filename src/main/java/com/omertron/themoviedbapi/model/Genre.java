@@ -28,6 +28,6 @@ import java.io.Serializable;
 @JsonRootName("genre")
 public class Genre extends AbstractIdName implements Serializable {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
     // Nothing to override from the base class.
 }

@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class AbstractIdName extends AbstractJsonMapping implements Serializable, Identification {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 100L;
 
     @JsonProperty("id")
     private int id;
