@@ -33,7 +33,7 @@ public class ArtworkResults {
     private final Map<ArtworkType, Boolean> results;
 
     public ArtworkResults() {
-        results = new EnumMap<ArtworkType, Boolean>(ArtworkType.class);
+        results = new EnumMap<>(ArtworkType.class);
         for (ArtworkType at : ArtworkType.values()) {
             results.put(at, false);
         }
