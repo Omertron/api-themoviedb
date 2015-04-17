@@ -1,6 +1,8 @@
 The Movie DB API
 ================
 
+[![Join the chat at https://gitter.im/Omertron/api-themoviedb](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Omertron/api-themoviedb?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Author: Stuart Boston (Omertron AT Gmail DOT com)
 
 This API uses the [TheMovieDB.org API](http://api.themoviedb.org/)
