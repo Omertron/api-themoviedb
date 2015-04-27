@@ -60,6 +60,9 @@ import com.omertron.themoviedbapi.model.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.config.Configuration;
 import com.omertron.themoviedbapi.model.config.JobDepartment;
+import com.omertron.themoviedbapi.model.credits.CreditBasic;
+import com.omertron.themoviedbapi.model.credits.CreditMovieBasic;
+import com.omertron.themoviedbapi.model.credits.CreditTVBasic;
 import com.omertron.themoviedbapi.model.discover.Discover;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.ListItem;
@@ -1162,7 +1165,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCreditList getPersonMovieCredits(int personId, String language) throws MovieDbException {
+    public PersonCreditList<CreditMovieBasic> getPersonMovieCredits(int personId, String language) throws MovieDbException {
         return tmdbPeople.getPersonMovieCredits(personId, language);
     }
 
@@ -1180,7 +1183,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCreditList getPersonTVCredits(int personId, String language) throws MovieDbException {
+    public PersonCreditList<CreditTVBasic> getPersonTVCredits(int personId, String language) throws MovieDbException {
         return tmdbPeople.getPersonTVCredits(personId, language);
     }
 
@@ -1198,7 +1201,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public PersonCreditList getPersonCombinedCredits(int personId, String language) throws MovieDbException {
+    public PersonCreditList<CreditBasic> getPersonCombinedCredits(int personId, String language) throws MovieDbException {
         return tmdbPeople.getPersonCombinedCredits(personId, language);
     }
 
