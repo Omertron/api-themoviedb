@@ -62,7 +62,7 @@ import org.junit.Test;
 public class TmdbPeopleTest extends AbstractTests {
 
     private static TmdbPeople instance;
-    private static final List<TestID> TEST_IDS = new ArrayList<TestID>();
+    private static final List<TestID> TEST_IDS = new ArrayList<>();
 
     public TmdbPeopleTest() {
     }
@@ -199,13 +199,35 @@ public class TmdbPeopleTest extends AbstractTests {
             for (CreditBasic p : result.getCast()) {
                 if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
                     CreditMovieBasic c = (CreditMovieBasic) p;
+                    assertTrue("No Movie title", StringUtils.isNotBlank(c.getTitle()));
+                    checkedMovie = true;
+                }
+
+                if (!checkedTV && p.getMediaType() == MediaType.TV) {
+                    CreditTVBasic c = (CreditTVBasic) p;
+                    assertTrue("No TV name", StringUtils.isNotBlank(c.getName()));
+                    checkedTV = true;
+                }
+
+                if (checkedMovie && checkedTV) {
+                    break;
+                }
+            }
+
+            checkedMovie = false;
+            checkedTV = false;
+            for (CreditBasic p : result.getCrew()) {
+                if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
+                    CreditMovieBasic c = (CreditMovieBasic) p;
                     assertTrue("No title", StringUtils.isNotBlank(c.getTitle()));
+                    assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
                     checkedMovie = true;
                 }
 
                 if (!checkedTV && p.getMediaType() == MediaType.TV) {
                     CreditTVBasic c = (CreditTVBasic) p;
                     assertTrue("No name", StringUtils.isNotBlank(c.getName()));
+                    assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
                     checkedTV = true;
                 }
 
