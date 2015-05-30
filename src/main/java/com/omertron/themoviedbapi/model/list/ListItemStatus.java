@@ -30,10 +30,20 @@ public class ListItemStatus extends AbstractJsonMapping implements Serializable 
 
     private static final long serialVersionUID = 100L;
 
+    @JsonProperty("id")
+    private String id;
     @JsonProperty("status_code")
     private int statusCode;
     @JsonProperty("item_present")
     private boolean itemPresent;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public int getStatusCode() {
         return statusCode;
