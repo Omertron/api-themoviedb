@@ -20,8 +20,9 @@
 package com.omertron.themoviedbapi.model.account;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
-public class Hash {
+public class Hash extends AbstractJsonMapping {
 
     @JsonProperty("hash")
     private String hash;
