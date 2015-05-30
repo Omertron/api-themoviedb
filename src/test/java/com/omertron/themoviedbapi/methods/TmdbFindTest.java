@@ -42,9 +42,9 @@ import org.junit.Test;
 public class TmdbFindTest extends AbstractTests {
 
     private static TmdbFind instance;
-    private static final List<TestID> PERSON_IDS = new ArrayList<TestID>();
-    private static final List<TestID> FILM_IDS = new ArrayList<TestID>();
-    private static final List<TestID> TV_IDS = new ArrayList<TestID>();
+    private static final List<TestID> PERSON_IDS = new ArrayList<>();
+    private static final List<TestID> FILM_IDS = new ArrayList<>();
+    private static final List<TestID> TV_IDS = new ArrayList<>();
 
     public TmdbFindTest() {
     }

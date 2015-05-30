@@ -63,7 +63,7 @@ import org.junit.Test;
 public class TmdbMoviesTest extends AbstractTests {
 
     private static TmdbMovies instance;
-    private static final List<TestID> FILM_IDS = new ArrayList<TestID>();
+    private static final List<TestID> FILM_IDS = new ArrayList<>();
 
     public TmdbMoviesTest() {
     }

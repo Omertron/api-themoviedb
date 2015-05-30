@@ -54,7 +54,7 @@ import org.junit.Test;
 public class TmdbEpisodesTest extends AbstractTests {
 
     private static TmdbEpisodes instance;
-    private static final List<TestID> TV_IDS = new ArrayList<TestID>();
+    private static final List<TestID> TV_IDS = new ArrayList<>();
 
     public TmdbEpisodesTest() {
     }
