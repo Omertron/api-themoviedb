@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Basic Movie information
@@ -33,6 +34,8 @@ public class MovieBasic extends MediaBasic implements Serializable {
 
     private static final long serialVersionUID = 100L;
 
+    @JsonProperty("_id")
+    private String mediaId;
     @JsonProperty("adult")
     private boolean adult;
     @JsonProperty("original_title")
@@ -45,9 +48,25 @@ public class MovieBasic extends MediaBasic implements Serializable {
     private Boolean video = null;
     @JsonProperty("rating")
     private float userRating = -1f;
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
+    @JsonProperty("original_language")
+    private String originalLanguage;
+    @JsonProperty("overview")
+    private String overview;
+    @JsonProperty("revenue")
+    private long revenue = 0L;
 
     public MovieBasic() {
         super.setMediaType(MediaType.MOVIE);
+    }
+
+    public String getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(String mediaId) {
+        this.mediaId = mediaId;
     }
 
     public boolean isAdult() {
@@ -86,7 +105,7 @@ public class MovieBasic extends MediaBasic implements Serializable {
         return video;
     }
 
-    public void setVideo(boolean video) {
+    public void setVideo(Boolean video) {
         this.video = video;
     }
 
@@ -96,5 +115,37 @@ public class MovieBasic extends MediaBasic implements Serializable {
 
     public void setUserRating(float userRating) {
         this.userRating = userRating;
+    }
+
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public long getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(long revenue) {
+        this.revenue = revenue;
     }
 }

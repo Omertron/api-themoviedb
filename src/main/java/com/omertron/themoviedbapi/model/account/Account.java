@@ -40,6 +40,8 @@ public class Account extends AbstractJsonMapping implements Serializable, Identi
     private String language;
     @JsonProperty("iso_3166_1")
     private String country;
+    @JsonProperty("avatar")
+    private Avatar avatar;
 
     @Override
     public int getId() {
@@ -89,5 +91,13 @@ public class Account extends AbstractJsonMapping implements Serializable, Identi
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
     }
 }
