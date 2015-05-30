@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -28,6 +29,9 @@ public class HttpTools {
     private final HttpClient httpClient;
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final String APPLICATION_JSON = "application/json";
+    private static final int RETRY_DELAY = 1;
+    private static final int RETRY_MAX = 5;
+    private static final int STATUS_TOO_MANY_REQUESTS = 429;
 
     public HttpTools(HttpClient httpClient) {
         this.httpClient = httpClient;
@@ -44,10 +48,24 @@ public class HttpTools {
         try {
             HttpGet httpGet = new HttpGet(url.toURI());
             httpGet.addHeader(HttpHeaders.ACCEPT, APPLICATION_JSON);
-            return validateResponse(DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET), url);
-        } catch (URISyntaxException ex) {
-            throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
-        } catch (IOException ex) {
+            DigestedResponse response = DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET);
+            int retryCount = 0;
+
+            // If we have a 429 response, wait and try again
+            while (response.getStatusCode() == STATUS_TOO_MANY_REQUESTS && retryCount++ <= RETRY_MAX) {
+                try {
+                    // Wait for the timeout to finish
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(RETRY_DELAY * retryCount));
+                } catch (InterruptedException ex) {
+                    // Doesn't matter if we're interrupted
+                }
+
+                // Retry the request
+                response = DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET);
+            }
+
+            return validateResponse(response, url);
+        } catch (URISyntaxException | IOException ex) {
             throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
         } catch (RuntimeException ex) {
             throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, "Service Unavailable", url, ex);
@@ -65,9 +83,7 @@ public class HttpTools {
         try {
             HttpDelete httpDel = new HttpDelete(url.toURI());
             return validateResponse(DigestedResponseReader.deleteContent(httpClient, httpDel, CHARSET), url);
-        } catch (URISyntaxException ex) {
-            throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
-        } catch (IOException ex) {
+        } catch (URISyntaxException | IOException ex) {
             throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
         }
     }
@@ -89,9 +105,7 @@ public class HttpTools {
             httpPost.setEntity(params);
 
             return validateResponse(DigestedResponseReader.postContent(httpClient, httpPost, CHARSET), url);
-        } catch (URISyntaxException ex) {
-            throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
-        } catch (IOException ex) {
+        } catch (URISyntaxException | IOException ex) {
             throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
         }
     }
