@@ -46,7 +46,6 @@ import com.omertron.themoviedbapi.tools.Param;
 import com.omertron.themoviedbapi.tools.TmdbParameters;
 import java.io.IOException;
 import java.net.URL;
-import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -79,13 +78,19 @@ public class TmdbPeople extends AbstractMethod {
         parameters.add(Param.ID, personId);
         parameters.add(Param.APPEND, appendToResponse);
 
+        // Switch combined credits for tv & movie.
+        String atr = (String) parameters.get(Param.APPEND);
+        if (atr.contains("combined_credits")) {
+            atr = atr.replace("combined_credits", "tv_credits,movie_credits");
+            parameters.add(Param.APPEND, atr);
+        }
+
         URL url = new ApiUrl(apiKey, MethodBase.PERSON).buildUrl(parameters);
         String webpage = httpTools.getRequest(url);
 
         try {
             return MAPPER.readValue(webpage, PersonInfo.class);
         } catch (IOException ex) {
-            LoggerFactory.getLogger("test").info("{}", ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get person info", url, ex);
         }
     }
@@ -118,11 +123,9 @@ public class TmdbPeople extends AbstractMethod {
     /**
      * Get the TV credits for a specific person id.
      *
-     * To get the expanded details for each record, call the /credit method with
-     * the provided credit_id.
+     * To get the expanded details for each record, call the /credit method with the provided credit_id.
      *
-     * This will provide details about which episode and/or season the credit is
-     * for.
+     * This will provide details about which episode and/or season the credit is for.
      *
      * @param personId
      * @param language
@@ -149,11 +152,9 @@ public class TmdbPeople extends AbstractMethod {
     /**
      * Get the combined (movie and TV) credits for a specific person id.
      *
-     * To get the expanded details for each TV record, call the /credit method
-     * with the provided credit_id.
+     * To get the expanded details for each TV record, call the /credit method with the provided credit_id.
      *
-     * This will provide details about which episode and/or season the credit is
-     * for.
+     * This will provide details about which episode and/or season the credit is for.
      *
      * @param personId
      * @param language
@@ -216,7 +217,7 @@ public class TmdbPeople extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll(ArtworkType.PROFILE));
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll(ArtworkType.PROFILE));
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -227,8 +228,7 @@ public class TmdbPeople extends AbstractMethod {
     /**
      * Get the images that have been tagged with a specific person id.
      *
-     * We return all of the image results with a media object mapped for each
-     * image.
+     * We return all of the image results with a media object mapped for each image.
      *
      * @param personId
      * @param page
@@ -254,8 +254,7 @@ public class TmdbPeople extends AbstractMethod {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is
-     * 14.
+     * The maximum number of days that can be returned in a single request is 14.
      *
      * The language is present on fields that are translatable.
      *
