@@ -183,6 +183,14 @@ public class TestSuite {
         assertTrue(message + " ID " + id + " not found in list", found);
     }
 
+    /**
+     * Test the AppendToResponse method
+     *
+     * @param <T>
+     * @param test
+     * @param methodClass
+     * @param skip Any methods to skip
+     */
     public static <T extends AppendToResponseMethod> void testATR(AppendToResponse<T> test, Class<T> methodClass, T skip) {
         for (T method : methodClass.getEnumConstants()) {
             if (skip != null && method != skip) {

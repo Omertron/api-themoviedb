@@ -33,7 +33,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class TmdbParameters {
 
-    private final Map<Param, String> parameters = new EnumMap<Param, String>(Param.class);
+    private final Map<Param, String> parameters = new EnumMap<>(Param.class);
 
     /**
      * Construct an empty set of parameters
@@ -51,7 +51,7 @@ public class TmdbParameters {
     }
 
     /**
-     * Add a parameter to the collection
+     * Add an array parameter to the collection
      *
      * @param key Parameter to add
      * @param value The array value to use (will be converted into a comma separated list)
@@ -165,17 +165,16 @@ public class TmdbParameters {
      */
     public String toList(final String[] appendToResponse) {
         StringBuilder sb = new StringBuilder();
-        if (appendToResponse.length > 0) {
-            boolean first = Boolean.TRUE;
-            for (String append : appendToResponse) {
-                if (first) {
-                    first = Boolean.FALSE;
-                } else {
-                    sb.append(",");
-                }
-                sb.append(append);
+        boolean first = Boolean.TRUE;
+        for (String append : appendToResponse) {
+            if (first) {
+                first = Boolean.FALSE;
+            } else {
+                sb.append(",");
             }
+            sb.append(append);
         }
+
         return sb.toString();
     }
 

@@ -67,7 +67,7 @@ public class AbstractMethod {
     protected final HttpTools httpTools;
     // Jackson JSON configuration
     protected static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<Class, TypeReference>();
+    private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<>();
 
     static {
         TYPE_REFS.put(MovieBasic.class, new TypeReference<WrapperGenericList<MovieBasic>>() {
@@ -186,7 +186,7 @@ public class AbstractMethod {
 
         try {
             WrapperChanges wrapper = MAPPER.readValue(webpage, WrapperChanges.class);
-            ResultList<ChangeKeyItem> results = new ResultList<ChangeKeyItem>(wrapper.getChangedItems());
+            ResultList<ChangeKeyItem> results = new ResultList<>(wrapper.getChangedItems());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {

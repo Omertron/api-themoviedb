@@ -24,16 +24,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author stuart.boston
  * @param <T>
  */
-public class PersonCreditList<T extends CreditBasic> extends AbstractJsonMapping implements Serializable, Identification {
+public class PersonCreditList<T extends CreditBasic> extends AbstractJsonMapping implements Identification {
 
-    private static final long serialVersionUID = 100L;
+    private static final long serialVersionUID = 101L;
 
     @JsonProperty("id")
     private int id;

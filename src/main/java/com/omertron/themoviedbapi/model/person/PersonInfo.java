@@ -69,9 +69,9 @@ public class PersonInfo extends PersonBasic implements Serializable, AppendToRes
     // TODO: Add COMBINED_CREDITS
     private ExternalID externalIDs = new ExternalID();
     private List<Artwork> images = Collections.emptyList();
-    private PersonCreditList<CreditMovieBasic> movieCredits = new PersonCreditList<CreditMovieBasic>();
     private List<ArtworkMedia> taggedImages = Collections.emptyList();
-    private PersonCreditList<CreditTVBasic> tvCredits = new PersonCreditList<CreditTVBasic>();
+    private PersonCreditList<CreditMovieBasic> movieCredits = new PersonCreditList<>();
+    private PersonCreditList<CreditTVBasic> tvCredits = new PersonCreditList<>();
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
     public boolean isAdult() {
