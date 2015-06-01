@@ -53,11 +53,9 @@ public class TmdbCollections extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the basic information about a
-     * movie collection.
+     * This method is used to retrieve all of the basic information about a movie collection.
      *
-     * You can get the ID needed for this method by making a getMovieInfo
-     * request for the belongs_to_collection.
+     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
      *
      * @param collectionId
      * @param language
@@ -97,7 +95,7 @@ public class TmdbCollections extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {

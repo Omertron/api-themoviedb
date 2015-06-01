@@ -78,8 +78,7 @@ public class TmdbMovies extends AbstractMethod {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
-     * found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param movieId
      * @param language
@@ -111,8 +110,7 @@ public class TmdbMovies extends AbstractMethod {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
-     * found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
      *
      * @param imdbId
      * @param language
@@ -141,8 +139,8 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method lets a user get the status of whether or not the movie has
-     * been rated or added to their favourite or movie watch list.
+     * This method lets a user get the status of whether or not the movie has been rated or added to their favourite or movie watch
+     * list.
      *
      * A valid session id is required.
      *
@@ -167,8 +165,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for
-     * a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for a particular movie.
      *
      * @param movieId
      * @param country
@@ -184,7 +181,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
-            ResultList<AlternativeTitle> results = new ResultList<AlternativeTitle>(wrapper.getTitles());
+            ResultList<AlternativeTitle> results = new ResultList<>(wrapper.getTitles());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -213,8 +210,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the
-     * images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
      *
      * @param movieId
      * @param language
@@ -231,7 +227,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -240,8 +236,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added
-     * to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added to a particular movie.
      *
      * Currently, only English keywords exist.
      *
@@ -258,7 +253,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperMovieKeywords wrapper = MAPPER.readValue(webpage, WrapperMovieKeywords.class);
-            ResultList<Keyword> results = new ResultList<Keyword>(wrapper.getKeywords());
+            ResultList<Keyword> results = new ResultList<>(wrapper.getKeywords());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -267,8 +262,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data
-     * we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data we have for a specific movie.
      *
      * @param movieId
      * @param language
@@ -285,7 +279,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperReleaseInfo wrapper = MAPPER.readValue(webpage, WrapperReleaseInfo.class);
-            ResultList<ReleaseInfo> results = new ResultList<ReleaseInfo>(wrapper.getCountries());
+            ResultList<ReleaseInfo> results = new ResultList<>(wrapper.getCountries());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -294,8 +288,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular
-     * movie.
+     * This method is used to retrieve all of the trailers for a particular movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
@@ -314,7 +307,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<>(wrapper.getVideos());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -323,8 +316,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for
-     * a specific movie.
+     * This method is used to retrieve a list of the available translations for a specific movie.
      *
      * @param movieId
      * @return
@@ -339,7 +331,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
-            ResultList<Translation> results = new ResultList<Translation>(wrapper.getTranslations());
+            ResultList<Translation> results = new ResultList<>(wrapper.getTranslations());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -348,11 +340,9 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a
-     * particular movie.
+     * The similar movies method will let you retrieve the similar movies for a particular movie.
      *
-     * This data is created dynamically but with the help of users votes on
-     * TMDb.
+     * This data is created dynamically but with the help of users votes on TMDb.
      *
      * The data is much better with movies that have more keywords
      *
@@ -420,8 +410,7 @@ public class TmdbMovies extends AbstractMethod {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is
-     * 14.
+     * The maximum number of days that can be returned in a single request is 14.
      *
      * The language is present on fields that are translatable.
      *
@@ -513,8 +502,7 @@ public class TmdbMovies extends AbstractMethod {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default
-     * response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
      *
      * @param language
      * @param page
@@ -552,8 +540,7 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10
-     * votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
      *
      * The default response will return 20 movies.
      *

@@ -96,8 +96,8 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * This method lets users get the status of whether or not the TV show has
-     * been rated or added to their favourite or watch lists.
+     * This method lets users get the status of whether or not the TV show has been rated or added to their favourite or watch
+     * lists.
      *
      * A valid session id is required.
      *
@@ -231,7 +231,7 @@ public class TmdbTV extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -311,8 +311,7 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * Get the list of translations that exist for a TV series. These
-     * translations cascade down to the episode level.
+     * Get the list of translations that exist for a TV series. These translations cascade down to the episode level.
      *
      * @param tvID
      * @return
@@ -327,7 +326,7 @@ public class TmdbTV extends AbstractMethod {
 
         try {
             WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
-            ResultList<Translation> results = new ResultList<Translation>(wrapper.getTranslations());
+            ResultList<Translation> results = new ResultList<>(wrapper.getTranslations());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -336,8 +335,7 @@ public class TmdbTV extends AbstractMethod {
     }
 
     /**
-     * Get the videos that have been added to a TV series (trailers, opening
-     * credits, etc...)
+     * Get the videos that have been added to a TV series (trailers, opening credits, etc...)
      *
      * @param tvID
      * @param language
@@ -354,7 +352,7 @@ public class TmdbTV extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<>(wrapper.getVideos());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -382,8 +380,7 @@ public class TmdbTV extends AbstractMethod {
     /**
      * Get the list of TV shows that are currently on the air.
      *
-     * This query looks for any TV show that has an episode with an air date in
-     * the next 7 days.
+     * This query looks for any TV show that has an episode with an air date in the next 7 days.
      *
      * @param page
      * @param language
@@ -425,8 +422,7 @@ public class TmdbTV extends AbstractMethod {
     /**
      * Get the list of top rated TV shows.
      *
-     * By default, this list will only include TV shows that have 2 or more
-     * votes.
+     * By default, this list will only include TV shows that have 2 or more votes.
      *
      * This list refreshes every day.
      *

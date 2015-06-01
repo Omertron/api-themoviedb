@@ -157,4 +157,5 @@ public class TmdbAuthentication extends AbstractMethod {
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get Guest Session Token", url, ex);
         }
-    }}
+    }
+}

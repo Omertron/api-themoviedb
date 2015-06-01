@@ -99,8 +99,7 @@ public class TmdbSeasons extends AbstractMethod {
     }
 
     /**
-     * This method lets users get the status of whether or not the TV episodes
-     * of a season have been rated.
+     * This method lets users get the status of whether or not the TV episodes of a season have been rated.
      *
      * A valid session id is required.
      *
@@ -147,8 +146,7 @@ public class TmdbSeasons extends AbstractMethod {
     }
 
     /**
-     * Get the external ids that we have stored for a TV season by season
-     * number.
+     * Get the external ids that we have stored for a TV season by season number.
      *
      * @param tvID
      * @param seasonNumber
@@ -194,7 +192,7 @@ public class TmdbSeasons extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -203,8 +201,7 @@ public class TmdbSeasons extends AbstractMethod {
     }
 
     /**
-     * Get the videos that have been added to a TV season (trailers, teasers,
-     * etc...)
+     * Get the videos that have been added to a TV season (trailers, teasers, etc...)
      *
      * @param tvID
      * @param seasonNumber
@@ -223,7 +220,7 @@ public class TmdbSeasons extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<>(wrapper.getVideos());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
