@@ -91,7 +91,7 @@ public class TmdbGenres extends AbstractMethod {
 
         try {
             WrapperGenres wrapper = MAPPER.readValue(webpage, WrapperGenres.class);
-            ResultList<Genre> results = new ResultList<>(wrapper.getGenres());
+            ResultList<Genre> results = new ResultList<Genre>(wrapper.getGenres());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
