@@ -95,7 +95,7 @@ public class TmdbConfiguration extends AbstractMethod {
 
         try {
             WrapperJobList wrapper = MAPPER.readValue(webpage, WrapperJobList.class);
-            ResultList<JobDepartment> results = new ResultList<JobDepartment>(wrapper.getJobs());
+            ResultList<JobDepartment> results = new ResultList<>(wrapper.getJobs());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -121,7 +121,7 @@ public class TmdbConfiguration extends AbstractMethod {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get timezone list", url, ex);
         }
 
-        ResultsMap<String, List<String>> timezones = new ResultsMap<String, List<String>>();
+        ResultsMap<String, List<String>> timezones = new ResultsMap<>();
 
         for (Map<String, List<String>> tzMap : tzList) {
             for (Map.Entry<String, List<String>> x : tzMap.entrySet()) {

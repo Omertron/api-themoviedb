@@ -203,13 +203,14 @@ public class TmdbSearch extends AbstractMethod {
 
         try {
             WrapperMultiSearch wrapper = MAPPER.readValue(webpage, WrapperMultiSearch.class);
-            ResultList<MediaBasic> results = new ResultList<MediaBasic>();
+            ResultList<MediaBasic> results = new ResultList<>();
             results.getResults().addAll(wrapper.getResults());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get multi search", url, ex);
-        }    }
+        }
+    }
 
     /**
      * This is a good starting point to start finding people on TMDb.

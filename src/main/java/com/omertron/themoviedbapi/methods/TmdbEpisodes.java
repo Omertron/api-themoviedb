@@ -42,7 +42,6 @@ import com.omertron.themoviedbapi.results.WrapperImages;
 import com.omertron.themoviedbapi.results.WrapperVideos;
 import java.io.IOException;
 import java.net.URL;
-import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -89,7 +88,6 @@ public class TmdbEpisodes extends AbstractMethod {
         try {
             return MAPPER.readValue(webpage, TVEpisodeInfo.class);
         } catch (IOException ex) {
-            LoggerFactory.getLogger("test").warn("{}", ex);
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV Episode Info", url, ex);
         }
     }
@@ -207,7 +205,7 @@ public class TmdbEpisodes extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -274,7 +272,7 @@ public class TmdbEpisodes extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<>(wrapper.getVideos());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {

@@ -184,7 +184,7 @@ public class TmdbMovies extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
         try {
             WrapperAlternativeTitles wrapper = MAPPER.readValue(webpage, WrapperAlternativeTitles.class);
-            ResultList<AlternativeTitle> results = new ResultList<AlternativeTitle>(wrapper.getTitles());
+            ResultList<AlternativeTitle> results = new ResultList<>(wrapper.getTitles());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -231,7 +231,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll());
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -258,7 +258,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperMovieKeywords wrapper = MAPPER.readValue(webpage, WrapperMovieKeywords.class);
-            ResultList<Keyword> results = new ResultList<Keyword>(wrapper.getKeywords());
+            ResultList<Keyword> results = new ResultList<>(wrapper.getKeywords());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -285,7 +285,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperReleaseInfo wrapper = MAPPER.readValue(webpage, WrapperReleaseInfo.class);
-            ResultList<ReleaseInfo> results = new ResultList<ReleaseInfo>(wrapper.getCountries());
+            ResultList<ReleaseInfo> results = new ResultList<>(wrapper.getCountries());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -314,7 +314,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperVideos wrapper = MAPPER.readValue(webpage, WrapperVideos.class);
-            ResultList<Video> results = new ResultList<Video>(wrapper.getVideos());
+            ResultList<Video> results = new ResultList<>(wrapper.getVideos());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
@@ -339,7 +339,7 @@ public class TmdbMovies extends AbstractMethod {
 
         try {
             WrapperTranslations wrapper = MAPPER.readValue(webpage, WrapperTranslations.class);
-            ResultList<Translation> results = new ResultList<Translation>(wrapper.getTranslations());
+            ResultList<Translation> results = new ResultList<>(wrapper.getTranslations());
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {

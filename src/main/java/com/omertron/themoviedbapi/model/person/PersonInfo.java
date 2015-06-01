@@ -66,7 +66,6 @@ public class PersonInfo extends PersonBasic implements Serializable, AppendToRes
     private final Set<PeopleMethod> methods = EnumSet.noneOf(PeopleMethod.class);
     // AppendToResponse Properties
     private List<ChangeKeyItem> changes = Collections.emptyList();
-    // TODO: Add COMBINED_CREDITS
     private ExternalID externalIDs = new ExternalID();
     private List<Artwork> images = Collections.emptyList();
     private List<ArtworkMedia> taggedImages = Collections.emptyList();

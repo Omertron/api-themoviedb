@@ -65,7 +65,7 @@ public class TmdbCertifications extends AbstractMethod {
             JsonNode node = MAPPER.readTree(webpage);
             Map<String, List<Certification>> results = MAPPER.readValue(node.elements().next().traverse(), new TypeReference<Map<String, List<Certification>>>() {
             });
-            return new ResultsMap<String, List<Certification>>(results);
+            return new ResultsMap<>(results);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get movie certifications", url, ex);
         }
@@ -85,7 +85,7 @@ public class TmdbCertifications extends AbstractMethod {
             JsonNode node = MAPPER.readTree(webpage);
             Map<String, List<Certification>> results = MAPPER.readValue(node.elements().next().traverse(), new TypeReference<Map<String, List<Certification>>>() {
             });
-            return new ResultsMap<String, List<Certification>>(results);
+            return new ResultsMap<>(results);
         } catch (IOException ex) {
             throw new MovieDbException(ApiExceptionType.MAPPING_FAILED, "Failed to get TV certifications", url, ex);
         }

@@ -97,7 +97,7 @@ public class TmdbCollections extends AbstractMethod {
 
         try {
             WrapperImages wrapper = MAPPER.readValue(webpage, WrapperImages.class);
-            ResultList<Artwork> results = new ResultList<Artwork>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
+            ResultList<Artwork> results = new ResultList<>(wrapper.getAll(ArtworkType.POSTER, ArtworkType.BACKDROP));
             wrapper.setResultProperties(results);
             return results;
         } catch (IOException ex) {
