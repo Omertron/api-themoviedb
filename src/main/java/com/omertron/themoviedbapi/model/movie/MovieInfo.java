@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Movie Bean
+ * Movie Info
  *
  * @author stuart.boston
  */
@@ -71,18 +71,12 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
     private String homepage;
     @JsonProperty("imdb_id")
     private String imdbID;
-    @JsonProperty("overview")
-    private String overview;
     @JsonProperty("production_companies")
     private List<ProductionCompany> productionCompanies = Collections.emptyList();
     @JsonProperty("production_countries")
     private List<ProductionCountry> productionCountries = Collections.emptyList();
-    @JsonProperty("revenue")
-    private long revenue;
     @JsonProperty("runtime")
     private int runtime;
-    @JsonProperty("original_language")
-    private String originalLanguage;
     @JsonProperty("spoken_languages")
     private List<Language> spokenLanguages = Collections.emptyList();
     @JsonProperty("tagline")
@@ -125,20 +119,12 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
         return imdbID;
     }
 
-    public String getOverview() {
-        return overview;
-    }
-
     public List<ProductionCompany> getProductionCompanies() {
         return productionCompanies;
     }
 
     public List<ProductionCountry> getProductionCountries() {
         return productionCountries;
-    }
-
-    public long getRevenue() {
-        return revenue;
     }
 
     public int getRuntime() {
@@ -155,10 +141,6 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
 
     public String getStatus() {
         return status;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
     }
     // </editor-fold>
 
@@ -183,20 +165,12 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
         this.imdbID = imdbID;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public void setProductionCompanies(List<ProductionCompany> productionCompanies) {
         this.productionCompanies = productionCompanies;
     }
 
     public void setProductionCountries(List<ProductionCountry> productionCountries) {
         this.productionCountries = productionCountries;
-    }
-
-    public void setRevenue(long revenue) {
-        this.revenue = revenue;
     }
 
     public void setRuntime(int runtime) {
@@ -213,10 +187,6 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
     }
     // </editor-fold>
 

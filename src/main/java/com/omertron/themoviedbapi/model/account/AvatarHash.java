@@ -22,16 +22,16 @@ package com.omertron.themoviedbapi.model.account;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 
-public class Avatar extends AbstractJsonMapping {
+public class AvatarHash extends AbstractJsonMapping {
 
-    @JsonProperty("gravatar")
-    private AvatarHash hash = null;
+    @JsonProperty("hash")
+    private String hash;
 
     public String getHash() {
-        return hash == null ? "" : hash.getHash();
+        return hash;
     }
 
-    public void setHash(AvatarHash hash) {
+    public void setHash(String hash) {
         this.hash = hash;
     }
 
