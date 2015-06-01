@@ -29,7 +29,7 @@ public class HttpTools {
     private final HttpClient httpClient;
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final String APPLICATION_JSON = "application/json";
-    private static final int RETRY_DELAY = 1;
+    private static final long RETRY_DELAY = 1;
     private static final int RETRY_MAX = 5;
     private static final int STATUS_TOO_MANY_REQUESTS = 429;
 
@@ -49,16 +49,11 @@ public class HttpTools {
             HttpGet httpGet = new HttpGet(url.toURI());
             httpGet.addHeader(HttpHeaders.ACCEPT, APPLICATION_JSON);
             DigestedResponse response = DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET);
-            int retryCount = 0;
+            long retryCount = 0L;
 
             // If we have a 429 response, wait and try again
             while (response.getStatusCode() == STATUS_TOO_MANY_REQUESTS && retryCount++ <= RETRY_MAX) {
-                try {
-                    // Wait for the timeout to finish
-                    Thread.sleep(TimeUnit.SECONDS.toMillis(RETRY_DELAY * retryCount));
-                } catch (InterruptedException ex) {
-                    // Doesn't matter if we're interrupted
-                }
+                delay(retryCount);
 
                 // Retry the request
                 response = DigestedResponseReader.requestContent(httpClient, httpGet, CHARSET);
@@ -69,6 +64,20 @@ public class HttpTools {
             throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, null, url, ex);
         } catch (RuntimeException ex) {
             throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, "Service Unavailable", url, ex);
+        }
+    }
+
+    /**
+     * Sleep for a period of time
+     *
+     * @param multiplier
+     */
+    private void delay(long multiplier) {
+        try {
+            // Wait for the timeout to finish
+            Thread.sleep(TimeUnit.SECONDS.toMillis(RETRY_DELAY * multiplier));
+        } catch (InterruptedException ex) {
+            // Doesn't matter if we're interrupted
         }
     }
 
