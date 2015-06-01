@@ -45,7 +45,7 @@ public class CollectionInfo extends AbstractJsonMapping implements Serializable,
     @JsonProperty("backdrop_path")
     private String backdropPath;
     @JsonProperty("parts")
-    private List<Collection> parts = new ArrayList<Collection>();
+    private List<Collection> parts = new ArrayList<>();
 
     public String getBackdropPath() {
         return backdropPath;

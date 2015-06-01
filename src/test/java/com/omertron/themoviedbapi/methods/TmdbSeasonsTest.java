@@ -52,7 +52,7 @@ import org.junit.Test;
 public class TmdbSeasonsTest extends AbstractTests {
 
     private static TmdbSeasons instance;
-    private static final List<TestID> TV_IDS = new ArrayList<TestID>();
+    private static final List<TestID> TV_IDS = new ArrayList<>();
 
     public TmdbSeasonsTest() {
     }

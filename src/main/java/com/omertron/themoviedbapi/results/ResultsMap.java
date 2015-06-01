@@ -42,9 +42,9 @@ public final class ResultsMap<K, V> extends AbstractWrapperIdPages {
 
     public ResultsMap(Map<K, V> resultsMap) {
         if (resultsMap == null) {
-            results = new HashMap<K, V>();
+            results = new HashMap<>();
         } else {
-            results = new HashMap<K, V>(resultsMap);
+            results = new HashMap<>(resultsMap);
         }
     }
 

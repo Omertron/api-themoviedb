@@ -37,7 +37,7 @@ import org.junit.Test;
 public class TmdbNetworksTest extends AbstractTests {
 
     private static TmdbNetworks instance;
-    private static final List<TestID> testIDs = new ArrayList<TestID>();
+    private static final List<TestID> testIDs = new ArrayList<>();
 
     public TmdbNetworksTest() {
     }

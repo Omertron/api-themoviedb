@@ -79,13 +79,13 @@ public class WrapperImages extends AbstractWrapperAll {
      * @return
      */
     public List<Artwork> getAll(ArtworkType... artworkList) {
-        List<Artwork> artwork = new ArrayList<Artwork>();
+        List<Artwork> artwork = new ArrayList<>();
         List<ArtworkType> types;
 
         if (artworkList.length > 0) {
-            types = new ArrayList<ArtworkType>(Arrays.asList(artworkList));
+            types = new ArrayList<>(Arrays.asList(artworkList));
         } else {
-            types = new ArrayList<ArtworkType>(Arrays.asList(ArtworkType.values()));
+            types = new ArrayList<>(Arrays.asList(ArtworkType.values()));
         }
 
         // Add all the posters to the list

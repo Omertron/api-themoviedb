@@ -41,9 +41,9 @@ public final class ResultList<T> extends AbstractWrapperIdPages {
 
     public ResultList(List<T> resultList) {
         if (resultList == null) {
-            results = new ArrayList<T>();
+            results = new ArrayList<>();
         } else {
-            results = new ArrayList<T>(resultList);
+            results = new ArrayList<>(resultList);
         }
     }
 

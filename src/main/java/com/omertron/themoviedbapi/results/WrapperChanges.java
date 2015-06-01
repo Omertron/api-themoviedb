@@ -27,7 +27,7 @@ import java.util.List;
 public class WrapperChanges extends AbstractWrapperBase {
 
     @JsonProperty("changes")
-    private List<ChangeKeyItem> changedItems = new ArrayList<ChangeKeyItem>();
+    private List<ChangeKeyItem> changedItems = new ArrayList<>();
 
     public List<ChangeKeyItem> getChangedItems() {
         return changedItems;

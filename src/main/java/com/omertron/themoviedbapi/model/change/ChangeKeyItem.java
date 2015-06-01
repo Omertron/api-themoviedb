@@ -31,7 +31,7 @@ public class ChangeKeyItem extends AbstractJsonMapping implements Serializable {
     @JsonProperty("key")
     private String key;
     @JsonProperty("items")
-    private List<ChangedItem> changedItems = new ArrayList<ChangedItem>();
+    private List<ChangedItem> changedItems = new ArrayList<>();
 
     public String getKey() {
         return key;

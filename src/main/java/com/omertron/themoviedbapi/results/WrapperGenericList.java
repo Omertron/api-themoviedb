@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.results;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.omertron.themoviedbapi.results.ResultList;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class WrapperGenericList<T> extends AbstractWrapperAll {
     }
 
     public ResultList<T> getResultsList() {
-        ResultList<T> resultsList = new ResultList<T>(results);
+        ResultList<T> resultsList = new ResultList<>(results);
         setResultProperties(resultsList);
         return resultsList;
     }

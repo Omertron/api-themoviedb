@@ -37,9 +37,9 @@ public abstract class AbstractWrapperBase extends AbstractJsonMapping {
      */
     public <E extends Enum<E>> List<E> getTypeList(Class<E> clz, E[] typeList) {
         if (typeList.length > 0) {
-            return new ArrayList<E>(Arrays.asList(typeList));
+            return new ArrayList<>(Arrays.asList(typeList));
         } else {
-            return new ArrayList<E>(EnumSet.allOf(clz));
+            return new ArrayList<>(EnumSet.allOf(clz));
         }
     }
 

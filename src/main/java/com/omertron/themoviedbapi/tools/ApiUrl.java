@@ -48,7 +48,7 @@ public class ApiUrl {
     private final String apiKey;
     private final MethodBase method;
     private MethodSub submethod = MethodSub.NONE;
-    private static final List<Param> IGNORE_PARAMS = new ArrayList<Param>();
+    private static final List<Param> IGNORE_PARAMS = new ArrayList<>();
 
     static {
         IGNORE_PARAMS.add(Param.ID);

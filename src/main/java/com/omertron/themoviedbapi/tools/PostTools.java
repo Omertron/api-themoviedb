@@ -35,7 +35,7 @@ public class PostTools {
     // Jackson JSON configuration
     protected static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private final Map<String, Object> values = new HashMap<String, Object>();
+    private final Map<String, Object> values = new HashMap<>();
 
     public PostTools() {
     }

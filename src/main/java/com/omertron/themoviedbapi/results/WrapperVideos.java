@@ -45,7 +45,7 @@ public class WrapperVideos extends AbstractWrapperId {
     @JsonSetter("quicktime")
     public void setQuickTime(List<Trailer> trailers) {
         if (this.videos == null) {
-            this.videos = new ArrayList<Video>();
+            this.videos = new ArrayList<>();
         }
 
         for (Trailer t : trailers) {
@@ -56,7 +56,7 @@ public class WrapperVideos extends AbstractWrapperId {
     @JsonSetter("youtube")
     public void setYouTube(List<Trailer> trailers) {
         if (this.videos == null) {
-            this.videos = new ArrayList<Video>();
+            this.videos = new ArrayList<>();
         }
 
         for (Trailer t : trailers) {
