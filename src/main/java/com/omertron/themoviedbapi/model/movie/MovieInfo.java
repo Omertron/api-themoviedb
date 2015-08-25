@@ -31,7 +31,7 @@ import com.omertron.themoviedbapi.model.Genre;
 import com.omertron.themoviedbapi.model.Language;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
-import com.omertron.themoviedbapi.model.collection.Collection;
+import com.omertron.themoviedbapi.model.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.credits.MediaCreditCast;
@@ -62,7 +62,7 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
     private static final long serialVersionUID = 100L;
 
     @JsonProperty("belongs_to_collection")
-    private Collection belongsToCollection;
+    private CollectionInfo belongsToCollection;
     @JsonProperty("budget")
     private long budget;
     @JsonProperty("genres")
@@ -99,7 +99,7 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
     private List<ChangeKeyItem> changes = Collections.emptyList();
 
     // <editor-fold defaultstate="collapsed" desc="Getter methods">
-    public Collection getBelongsToCollection() {
+    public CollectionInfo getBelongsToCollection() {
         return belongsToCollection;
     }
 
@@ -145,7 +145,7 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Setter methods">
-    public void setBelongsToCollection(Collection belongsToCollection) {
+    public void setBelongsToCollection(CollectionInfo belongsToCollection) {
         this.belongsToCollection = belongsToCollection;
     }
 

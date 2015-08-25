@@ -55,7 +55,6 @@ import com.omertron.themoviedbapi.model.authentication.TokenAuthorisation;
 import com.omertron.themoviedbapi.model.authentication.TokenSession;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
-import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.collection.CollectionInfo;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.config.Configuration;
@@ -1327,7 +1326,7 @@ public class TheMovieDbApi {
      * @return
      * @throws MovieDbException
      */
-    public ResultList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
+    public ResultList<MovieBasic> searchCollection(String query, Integer page, String language) throws MovieDbException {
         return tmdbSearch.searchCollection(query, page, language);
     }
 
