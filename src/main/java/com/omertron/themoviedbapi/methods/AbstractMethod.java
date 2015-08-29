@@ -25,7 +25,9 @@ import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.model.artwork.ArtworkMedia;
 import com.omertron.themoviedbapi.model.change.ChangeKeyItem;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
+import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
+import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.AlternativeTitle;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
@@ -75,6 +77,10 @@ public class AbstractMethod {
         TYPE_REFS.put(UserList.class, new TypeReference<WrapperGenericList<UserList>>() {
         });
         TYPE_REFS.put(Company.class, new TypeReference<WrapperGenericList<Company>>() {
+        });
+        TYPE_REFS.put(Collection.class, new TypeReference<WrapperGenericList<Collection>>() {
+        });
+        TYPE_REFS.put(Keyword.class, new TypeReference<WrapperGenericList<Keyword>>() {
         });
         TYPE_REFS.put(MovieInfo.class, new TypeReference<WrapperGenericList<MovieInfo>>() {
         });

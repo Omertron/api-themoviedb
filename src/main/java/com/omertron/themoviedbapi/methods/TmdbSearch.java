@@ -22,11 +22,11 @@ package com.omertron.themoviedbapi.methods;
 import com.omertron.themoviedbapi.MovieDbException;
 import com.omertron.themoviedbapi.enumeration.SearchType;
 import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
+import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
 import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
-import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
@@ -92,14 +92,14 @@ public class TmdbSearch extends AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    public ResultList<MovieBasic> searchCollection(String query, Integer page, String language) throws MovieDbException {
+    public ResultList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.QUERY, query);
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.COLLECTION).buildUrl(parameters);
-        WrapperGenericList<MovieBasic> wrapper = processWrapper(getTypeReference(MovieBasic.class), url, "collection");
+        WrapperGenericList<Collection> wrapper = processWrapper(getTypeReference(Collection.class), url, "collection");
         return wrapper.getResultsList();
     }
 
