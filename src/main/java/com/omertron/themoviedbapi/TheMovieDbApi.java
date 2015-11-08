@@ -1622,7 +1622,7 @@ public class TheMovieDbApi {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVOnTheAir(Integer page, String language) throws MovieDbException {
+    public ResultList<TVInfo> getTVOnTheAir(Integer page, String language) throws MovieDbException {
         return tmdbTv.getTVOnTheAir(page, language);
     }
 
@@ -1637,7 +1637,7 @@ public class TheMovieDbApi {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
+    public ResultList<TVInfo> getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
         return tmdbTv.getTVAiringToday(page, language, timezone);
     }
 
@@ -1654,7 +1654,7 @@ public class TheMovieDbApi {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVTopRated(Integer page, String language) throws MovieDbException {
+    public ResultList<TVInfo> getTVTopRated(Integer page, String language) throws MovieDbException {
         return tmdbTv.getTVTopRated(page, language);
     }
 
@@ -1666,7 +1666,7 @@ public class TheMovieDbApi {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVPopular(Integer page, String language) throws MovieDbException {
+    public ResultList<TVInfo> getTVPopular(Integer page, String language) throws MovieDbException {
         return tmdbTv.getTVPopular(page, language);
     }
     //</editor-fold>
