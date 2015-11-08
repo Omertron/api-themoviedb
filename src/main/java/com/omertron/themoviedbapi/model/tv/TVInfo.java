@@ -41,6 +41,7 @@ import com.omertron.themoviedbapi.results.WrapperGenericList;
 import com.omertron.themoviedbapi.results.WrapperImages;
 import com.omertron.themoviedbapi.results.WrapperTranslations;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -229,6 +230,17 @@ public class TVInfo extends TVBasic implements Serializable, AppendToResponse<TV
         this.type = type;
     }
     //</editor-fold>
+
+    @JsonSetter("genre_ids")
+    public void setGenreIds(List<Integer> ids) {
+        this.genres = new ArrayList<>();
+
+        for (Integer id : ids) {
+            Genre g = new Genre();
+            g.setId(id);
+            genres.add(g);
+        }
+    }
 
     private void addMethod(TVMethod method) {
         methods.add(method);
