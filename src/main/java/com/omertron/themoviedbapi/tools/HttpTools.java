@@ -128,7 +128,9 @@ public class HttpTools {
      * @throws MovieDbException
      */
     private String validateResponse(final DigestedResponse response, final URL url) throws MovieDbException {
-        if (response.getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+        if (response.getStatusCode() == 0) {
+            throw new MovieDbException(ApiExceptionType.CONNECTION_ERROR, response.getContent(), response.getStatusCode(), url, null);
+        } else if (response.getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new MovieDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url, null);
         } else if (response.getStatusCode() >= HttpStatus.SC_MULTIPLE_CHOICES) {
             throw new MovieDbException(ApiExceptionType.HTTP_404_ERROR, response.getContent(), response.getStatusCode(), url, null);
