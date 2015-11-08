@@ -77,6 +77,7 @@ public class TmdbTVTest extends AbstractTests {
         TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
         TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622, "Misha Collins"));
         TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418, "Kaley Cuoco"));
+        TV_IDS.add(new TestID("Breaking Bad", "tt0903747", 1396, "Aaron Paul"));
     }
 
     /**
@@ -233,7 +234,10 @@ public class TmdbTVTest extends AbstractTests {
             }
             assertTrue(test.getOther() + " not found in cast!", found);
 
-            assertFalse(result.getCrew().isEmpty());
+            // Only breaking bad has crew
+            if (test.getTmdb() == 1396) {
+                assertFalse(result.getCrew().isEmpty());
+            }
             break;
         }
     }
@@ -390,7 +394,7 @@ public class TmdbTVTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        ResultList<TVBasic> result = instance.getTVOnTheAir(page, language);
+        ResultList<TVInfo> result = instance.getTVOnTheAir(page, language);
         TestSuite.test(result, "TV OTA");
     }
 
@@ -406,7 +410,7 @@ public class TmdbTVTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
         String timezone = "";
 
-        ResultList<TVBasic> result = instance.getTVAiringToday(page, language, timezone);
+        ResultList<TVInfo> result = instance.getTVAiringToday(page, language, timezone);
         TestSuite.test(result, "TV Airing");
     }
 
@@ -421,7 +425,7 @@ public class TmdbTVTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        ResultList<TVBasic> result = instance.getTVTopRated(page, language);
+        ResultList<TVInfo> result = instance.getTVTopRated(page, language);
         TestSuite.test(result, "TV Top");
     }
 
@@ -436,7 +440,7 @@ public class TmdbTVTest extends AbstractTests {
         Integer page = null;
         String language = LANGUAGE_DEFAULT;
 
-        ResultList<TVBasic> result = instance.getTVPopular(page, language);
+        ResultList<TVInfo> result = instance.getTVPopular(page, language);
         TestSuite.test(result, "tv Popular");
     }
 

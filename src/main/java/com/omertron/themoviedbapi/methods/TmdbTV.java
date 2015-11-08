@@ -390,13 +390,13 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVOnTheAir(Integer page, String language) throws MovieDbException {
+    public ResultList<TVInfo> getTVOnTheAir(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.ON_THE_AIR).buildUrl(parameters);
-        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "on the air");
+        WrapperGenericList<TVInfo> wrapper = processWrapper(getTypeReference(TVInfo.class), url, "on the air");
         return wrapper.getResultsList();
     }
 
@@ -411,14 +411,14 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
+    public ResultList<TVInfo> getTVAiringToday(Integer page, String language, String timezone) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
         parameters.add(Param.TIMEZONE, timezone);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.AIRING_TODAY).buildUrl(parameters);
-        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "airing today");
+        WrapperGenericList<TVInfo> wrapper = processWrapper(getTypeReference(TVInfo.class), url, "airing today");
         return wrapper.getResultsList();
     }
 
@@ -435,13 +435,13 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVTopRated(Integer page, String language) throws MovieDbException {
+    public ResultList<TVInfo> getTVTopRated(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.TOP_RATED).buildUrl(parameters);
-        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "top rated TV shows");
+        WrapperGenericList<TVInfo> wrapper = processWrapper(getTypeReference(TVInfo.class), url, "top rated TV shows");
         return wrapper.getResultsList();
     }
 
@@ -453,13 +453,13 @@ public class TmdbTV extends AbstractMethod {
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
-    public ResultList<TVBasic> getTVPopular(Integer page, String language) throws MovieDbException {
+    public ResultList<TVInfo> getTVPopular(Integer page, String language) throws MovieDbException {
         TmdbParameters parameters = new TmdbParameters();
         parameters.add(Param.PAGE, page);
         parameters.add(Param.LANGUAGE, language);
 
         URL url = new ApiUrl(apiKey, MethodBase.TV).subMethod(MethodSub.POPULAR).buildUrl(parameters);
-        WrapperGenericList<TVBasic> wrapper = processWrapper(getTypeReference(TVBasic.class), url, "popular TV shows");
+        WrapperGenericList<TVInfo> wrapper = processWrapper(getTypeReference(TVInfo.class), url, "popular TV shows");
         return wrapper.getResultsList();
     }
 }
