@@ -32,7 +32,6 @@ import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.person.ContentRating;
 import com.omertron.themoviedbapi.model.person.ExternalID;
-import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.model.tv.TVInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.results.WrapperGenericList;
