@@ -178,49 +178,65 @@ public class TmdbPeopleTest extends AbstractTests {
             TestSuite.test(result.getCast(), "Cast");
             TestSuite.test(result.getCrew(), "Crew");
 
-            boolean checkedMovie = false;
-            boolean checkedTV = false;
+            testCastCredits(result.getCast());
+            testCrewCredits(result.getCrew());
 
-            for (CreditBasic p : result.getCast()) {
-                if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
-                    CreditMovieBasic c = (CreditMovieBasic) p;
-                    assertTrue("No Movie title", StringUtils.isNotBlank(c.getTitle()));
-                    checkedMovie = true;
-                }
+        }
+    }
 
-                if (!checkedTV && p.getMediaType() == MediaType.TV) {
-                    CreditTVBasic c = (CreditTVBasic) p;
-                    assertTrue("No TV name", StringUtils.isNotBlank(c.getName()));
-                    checkedTV = true;
-                }
-
-                if (checkedMovie && checkedTV) {
-                    break;
-                }
+    /**
+     * Run tests on cast
+     *
+     * @param result
+     */
+    private void testCastCredits(List<CreditBasic> result) {
+        boolean checkedMovie = false;
+        boolean checkedTV = false;
+        for (CreditBasic p : result) {
+            if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
+                CreditMovieBasic c = (CreditMovieBasic) p;
+                assertTrue(NO_TITLE, StringUtils.isNotBlank(c.getTitle()));
+                checkedMovie = true;
             }
 
-            checkedMovie = false;
-            checkedTV = false;
-            for (CreditBasic p : result.getCrew()) {
-                if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
-                    CreditMovieBasic c = (CreditMovieBasic) p;
-                    assertTrue(NO_TITLE, StringUtils.isNotBlank(c.getTitle()));
-                    assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
-                    checkedMovie = true;
-                }
-
-                if (!checkedTV && p.getMediaType() == MediaType.TV) {
-                    CreditTVBasic c = (CreditTVBasic) p;
-                    assertTrue("No name", StringUtils.isNotBlank(c.getName()));
-                    assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
-                    checkedTV = true;
-                }
-
-                if (checkedMovie && checkedTV) {
-                    break;
-                }
+            if (!checkedTV && p.getMediaType() == MediaType.TV) {
+                CreditTVBasic c = (CreditTVBasic) p;
+                assertTrue("No TV name", StringUtils.isNotBlank(c.getName()));
+                checkedTV = true;
             }
 
+            if (checkedMovie && checkedTV) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * Run test on crew
+     *
+     * @param result
+     */
+    private void testCrewCredits(List<CreditBasic> result) {
+        boolean checkedMovie = false;
+        boolean checkedTV = false;
+        for (CreditBasic p : result) {
+            if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
+                CreditMovieBasic c = (CreditMovieBasic) p;
+                assertTrue(NO_TITLE, StringUtils.isNotBlank(c.getTitle()));
+                assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
+                checkedMovie = true;
+            }
+
+            if (!checkedTV && p.getMediaType() == MediaType.TV) {
+                CreditTVBasic c = (CreditTVBasic) p;
+                assertTrue("No name", StringUtils.isNotBlank(c.getName()));
+                assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
+                checkedTV = true;
+            }
+
+            if (checkedMovie && checkedTV) {
+                break;
+            }
         }
     }
 
