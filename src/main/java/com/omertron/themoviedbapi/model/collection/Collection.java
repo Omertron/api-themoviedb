@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -48,6 +49,24 @@ public class Collection extends AbstractJsonMapping implements Serializable, Ide
     private String backdropPath;
     @JsonProperty("release_date")
     private String releaseDate;
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
+    @JsonProperty("adult")
+    private boolean adult;
+    @JsonProperty("original_language")
+    private String originalLanguage;
+    @JsonProperty("original_title")
+    private String originalTitle;
+    @JsonProperty("overview")
+    private String overview;
+    @JsonProperty("video")
+    private boolean video;
+    @JsonProperty("popularity")
+    private float popularity;
+    @JsonProperty("vote_average")
+    private float voteAverage;
+    @JsonProperty("vote_count")
+    private int voteCount;
 
     public String getBackdropPath() {
         return backdropPath;
@@ -80,6 +99,18 @@ public class Collection extends AbstractJsonMapping implements Serializable, Ide
         return name;
     }
 
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public boolean isAdult() {
+        return adult;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
@@ -103,6 +134,66 @@ public class Collection extends AbstractJsonMapping implements Serializable, Ide
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public boolean isVideo() {
+        return video;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
+
+    public float getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(float voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 
     @Override
