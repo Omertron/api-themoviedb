@@ -21,16 +21,10 @@ package com.omertron.themoviedbapi.tools;
 
 import com.omertron.themoviedbapi.TestLogger;
 import java.net.URL;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -44,24 +38,9 @@ public class ApiUrlTest {
     private static final String APIKEY = "APIKEY";
     private static final String QUERY = "query";
 
-    public ApiUrlTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() {
         TestLogger.configure();
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
