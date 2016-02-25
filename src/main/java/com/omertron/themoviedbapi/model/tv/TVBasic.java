@@ -44,6 +44,12 @@ public class TVBasic extends MediaBasic implements Serializable {
     private List<String> originCountry;
     @JsonProperty("rating")
     private float rating = -1f;
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
+    @JsonProperty("original_language")
+    private String originalLanguage;
+    @JsonProperty("overview")
+    private String overview;
 
     public TVBasic() {
         super.setMediaType(MediaType.TV);
@@ -87,6 +93,30 @@ public class TVBasic extends MediaBasic implements Serializable {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
 }
