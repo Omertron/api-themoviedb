@@ -25,11 +25,8 @@ import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.results.ResultList;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -49,18 +46,6 @@ public class TmdbCompaniesTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbCompanies(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -85,6 +70,6 @@ public class TmdbCompaniesTest extends AbstractTests {
     public void testGetCompanyMovies() throws MovieDbException {
         LOG.info("getCompanyMovies");
         ResultList<MovieBasic> result = instance.getCompanyMovies(ID_COMPANY, LANGUAGE_DEFAULT, 0);
-        TestSuite.test(result,"Company Movies");
+        TestSuite.test(result, "Company Movies");
     }
 }

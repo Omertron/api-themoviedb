@@ -39,6 +39,7 @@ public class ApiUrlTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApiUrlTest.class);
     private static final String APIKEY = "APIKEY";
+    private static final String QUERY = "query";
 
     public ApiUrlTest() {
     }
@@ -73,7 +74,7 @@ public class ApiUrlTest {
     public void testQuery() {
         LOG.info("Query Test");
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, "query");
+        parameters.add(Param.QUERY, QUERY);
 
         URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).buildUrl(parameters);
         String expResult = "http://api.themoviedb.org/3/movie?api_key=APIKEY&query=query";
@@ -84,7 +85,7 @@ public class ApiUrlTest {
     public void testQuerySub() {
         LOG.info("Query-Sub Test");
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, "query");
+        parameters.add(Param.QUERY, QUERY);
 
         URL result = new ApiUrl(APIKEY, MethodBase.MOVIE).subMethod(MethodSub.LATEST).buildUrl(parameters);
         String expResult = "http://api.themoviedb.org/3/movie/latest?api_key=APIKEY&query=query";
@@ -95,7 +96,7 @@ public class ApiUrlTest {
     public void testQueryExtra() {
         LOG.info("Query Extra Test");
         TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, "query");
+        parameters.add(Param.QUERY, QUERY);
         parameters.add(Param.PAGE, 1);
         parameters.add(Param.LANGUAGE, "lang");
 

@@ -25,7 +25,6 @@ import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
 import com.omertron.themoviedbapi.model.collection.CollectionInfo;
 import com.omertron.themoviedbapi.results.ResultList;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,10 +45,6 @@ public class TmdbCollectionsTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbCollections(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
     }
 
     /**
@@ -74,7 +69,7 @@ public class TmdbCollectionsTest extends AbstractTests {
     public void testGetCollectionImages() throws MovieDbException {
         LOG.info("getCollectionImages");
         ResultList<Artwork> result = instance.getCollectionImages(ID_COLLECTION_STAR_WARS, LANGUAGE_DEFAULT);
-        TestSuite.test(result,"Collection Images");
+        TestSuite.test(result, "Collection Images");
     }
 
 }

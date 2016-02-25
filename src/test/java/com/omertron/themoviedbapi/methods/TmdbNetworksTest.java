@@ -25,7 +25,6 @@ import com.omertron.themoviedbapi.TestID;
 import com.omertron.themoviedbapi.model.network.Network;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,7 +36,7 @@ import org.junit.Test;
 public class TmdbNetworksTest extends AbstractTests {
 
     private static TmdbNetworks instance;
-    private static final List<TestID> testIDs = new ArrayList<>();
+    private static final List<TestID> TEST_IDS = new ArrayList<>();
 
     public TmdbNetworksTest() {
     }
@@ -46,12 +45,8 @@ public class TmdbNetworksTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbNetworks(getApiKey(), getHttpTools());
-        testIDs.add(new TestID("Fuji Television", "", 1));
-        testIDs.add(new TestID("Sonshine Media Network International", "", 200));
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
+        TEST_IDS.add(new TestID("Fuji Television", "", 1));
+        TEST_IDS.add(new TestID("Sonshine Media Network International", "", 200));
     }
 
     /**
@@ -64,7 +59,7 @@ public class TmdbNetworksTest extends AbstractTests {
         LOG.info("getNetworkInfo");
 
         Network result;
-        for (TestID t : testIDs) {
+        for (TestID t : TEST_IDS) {
             result = instance.getNetworkInfo(t.getTmdb());
             assertEquals("Wrong network returned", t.getName(), result.getName());
         }

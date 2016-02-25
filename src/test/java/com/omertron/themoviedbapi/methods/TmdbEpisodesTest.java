@@ -37,13 +37,10 @@ import com.omertron.themoviedbapi.model.tv.TVEpisodeInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -55,6 +52,7 @@ public class TmdbEpisodesTest extends AbstractTests {
 
     private static TmdbEpisodes instance;
     private static final List<TestID> TV_IDS = new ArrayList<>();
+    private static final String TESTING = "Testing: {}";
 
     public TmdbEpisodesTest() {
     }
@@ -67,18 +65,6 @@ public class TmdbEpisodesTest extends AbstractTests {
         TV_IDS.add(new TestID("The Walking Dead", "tt1589921", 1402, "Andrew Lincoln"));
         TV_IDS.add(new TestID("Supernatural", "tt0713618", 1622, "Misha Collins"));
         TV_IDS.add(new TestID("The Big Bang Theory", "tt0775431", 1418, "Kaley Cuoco"));
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -96,7 +82,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         String appendToResponse = appendToResponseBuilder(TVEpisodeMethod.class);
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             TVEpisodeInfo result = instance.getEpisodeInfo(test.getTmdb(), seasonNumber, episodeNumber, language, appendToResponse);
             TestSuite.test(result);
             TestSuite.testATR(result, TVEpisodeMethod.class, null);
@@ -127,7 +113,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         int episodeNumber = 1;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             MediaState result = instance.getEpisodeAccountState(test.getTmdb(), seasonNumber, episodeNumber, getSessionId());
             assertNotNull("Null result", result);
             assertTrue("Invalid rating", result.getRated() > -2f);
@@ -147,7 +133,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         int episodeNumber = 1;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             MediaCreditList result = instance.getEpisodeCredits(test.getTmdb(), seasonNumber, episodeNumber);
             assertNotNull(result);
             assertFalse(result.getCast().isEmpty());
@@ -180,7 +166,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             ExternalID result = instance.getEpisodeExternalID(test.getTmdb(), seasonNumber, episodeNumber, language);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
@@ -199,7 +185,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         int episodeNumber = 1;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             ArtworkResults results = new ArtworkResults();
             ResultList<Artwork> result = instance.getEpisodeImages(test.getTmdb(), seasonNumber, episodeNumber);
             assertFalse("No artwork", result.isEmpty());
@@ -227,7 +213,7 @@ public class TmdbEpisodesTest extends AbstractTests {
         String guestSessionID = null;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             int rating = TestSuite.randomRating();
             StatusCode result = instance.postEpisodeRating(test.getTmdb(), seasonNumber, episodeNumber, rating, getSessionId(), guestSessionID);
             assertEquals("failed to post rating", 12, result.getCode());

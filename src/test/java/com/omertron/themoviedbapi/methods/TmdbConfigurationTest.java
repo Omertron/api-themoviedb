@@ -28,12 +28,9 @@ import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.results.ResultsMap;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -52,18 +49,6 @@ public class TmdbConfigurationTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbConfiguration(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -121,8 +106,8 @@ public class TmdbConfigurationTest extends AbstractTests {
         ResultsMap<String, List<String>> result = instance.getTimezones();
         assertNotNull("Null results", result);
         assertFalse("Empty results", result.isEmpty());
-        assertTrue("No US TZ",result.containsKey("US"));
-        assertTrue("No GB TZ",result.containsKey("GB"));
+        assertTrue("No US TZ", result.containsKey("US"));
+        assertTrue("No GB TZ", result.containsKey("GB"));
     }
 
 }

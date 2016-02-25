@@ -21,10 +21,7 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -59,18 +56,6 @@ public class CompareTest {
         moviedb.setTitle(TITLE_MAIN);
         moviedb.setOriginalTitle(TITLE_OTHER);
         moviedb.setReleaseDate(YEAR_FULL);
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     /**

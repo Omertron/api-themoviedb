@@ -25,7 +25,6 @@ import com.omertron.themoviedbapi.model.Certification;
 import com.omertron.themoviedbapi.results.ResultsMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,10 +45,6 @@ public class TmdbCertificationsTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbCertifications(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
     }
 
     /**

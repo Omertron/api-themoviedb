@@ -45,6 +45,11 @@ import static org.junit.Assert.assertTrue;
 
 public class TestSuite {
 
+    private static final String MISSING_NAME = ": Missing name";
+    private static final String MISSING_POSTER = ": Missing poster";
+    private static final String MISSING_TITLE = ": Missing title";
+    private static final String MISSING_ID = ": Missing ID";
+
     private TestSuite() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -66,16 +71,16 @@ public class TestSuite {
 
     public static void test(MovieBasic test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing title", isNotBlank(test.getTitle()));
-        assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
+        assertTrue(message + MISSING_TITLE, isNotBlank(test.getTitle()));
+        assertTrue(message + MISSING_POSTER, isNotBlank(test.getPosterPath()));
         assertTrue(message + ": Missing release date", isNotBlank(test.getReleaseDate()));
     }
 
     public static void test(MovieInfo test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing title", isNotBlank(test.getTitle()));
+        assertTrue(message + MISSING_TITLE, isNotBlank(test.getTitle()));
         assertTrue(message + ": Missing original title", isNotBlank(test.getOriginalTitle()));
-        assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
+        assertTrue(message + MISSING_POSTER, isNotBlank(test.getPosterPath()));
         assertTrue(message + ": Missing release date", isNotBlank(test.getReleaseDate()));
         assertTrue(message + ": Missing backdrop", isNotBlank(test.getBackdropPath()));
         assertTrue(message + ": Missing poster path", isNotBlank(test.getPosterPath()));
@@ -88,20 +93,20 @@ public class TestSuite {
 
     public static void test(UserList test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing ID", isNotBlank(test.getId()));
+        assertTrue(message + MISSING_ID, isNotBlank(test.getId()));
         assertTrue(message + ": Missing Description", isNotBlank(test.getDescription()));
     }
 
     public static void test(TVBasic test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing name", isNotBlank(test.getName()));
-        assertTrue(message + ": Missing poster", isNotBlank(test.getPosterPath()));
+        assertTrue(message + MISSING_NAME, isNotBlank(test.getName()));
+        assertTrue(message + MISSING_POSTER, isNotBlank(test.getPosterPath()));
         assertTrue(message + ": Missing first air date", isNotBlank(test.getFirstAirDate()));
     }
 
     public static void test(TVInfo test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing ID", test.getId() > 0);
+        assertTrue(message + MISSING_ID, test.getId() > 0);
         assertFalse(message + ": Missing runtime", test.getEpisodeRunTime().isEmpty());
         assertFalse(message + ": Missing genres", test.getGenres().isEmpty());
         assertTrue(message + ": Missing season count", test.getNumberOfSeasons() > 0);
@@ -110,8 +115,8 @@ public class TestSuite {
 
     public static void test(TVEpisodeInfo test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing ID", test.getId() > 0);
-        assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
+        assertTrue(message + MISSING_ID, test.getId() > 0);
+        assertTrue(message + MISSING_NAME, StringUtils.isNotBlank(test.getName()));
         assertFalse(message + ": Missing crew", test.getCrew().isEmpty());
         assertFalse(message + ": Missing guest stars", test.getGuestStars().isEmpty());
     }
@@ -121,7 +126,7 @@ public class TestSuite {
         assertTrue(message + ": Missing bio", StringUtils.isNotBlank(test.getBiography()));
         assertTrue(message + ": Missing birthday", StringUtils.isNotBlank(test.getBirthday()));
         assertTrue(message + ": Missing homepage", StringUtils.isNotBlank(test.getHomepage()));
-        assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
+        assertTrue(message + MISSING_NAME, StringUtils.isNotBlank(test.getName()));
         assertTrue(message + ": Missing birth place", StringUtils.isNotBlank(test.getPlaceOfBirth()));
         assertTrue(message + ": Missing artwork", StringUtils.isNotBlank(test.getProfilePath()));
         assertTrue(message + ": Missing bio", test.getPopularity() > 0F);
@@ -129,8 +134,8 @@ public class TestSuite {
 
     public static void test(TVSeasonInfo test) {
         String message = test.getClass().getSimpleName();
-        assertTrue(message + ": Missing ID", test.getId() > 0);
-        assertTrue(message + ": Missing name", StringUtils.isNotBlank(test.getName()));
+        assertTrue(message + MISSING_ID, test.getId() > 0);
+        assertTrue(message + MISSING_NAME, StringUtils.isNotBlank(test.getName()));
         assertTrue(message + ": Missing overview", StringUtils.isNotBlank(test.getOverview()));
         assertTrue(message + ": Missing episodes", test.getEpisodes().size() > 0);
     }

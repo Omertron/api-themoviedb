@@ -25,7 +25,6 @@ import com.omertron.themoviedbapi.TestSuite;
 import com.omertron.themoviedbapi.model.change.ChangeListItem;
 import com.omertron.themoviedbapi.results.ResultList;
 import com.omertron.themoviedbapi.tools.MethodBase;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -44,10 +43,6 @@ public class TmdbChangesTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbChanges(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
     }
 
     /**

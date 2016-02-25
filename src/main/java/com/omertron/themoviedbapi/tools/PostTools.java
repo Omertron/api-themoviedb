@@ -37,7 +37,11 @@ public class PostTools {
 
     private final Map<String, Object> values = new HashMap<>();
 
+    /**
+     * Construct an empty set of values
+     */
     public PostTools() {
+        // Create an empty set of values
     }
 
     public PostTools add(PostBody key, Object value) {

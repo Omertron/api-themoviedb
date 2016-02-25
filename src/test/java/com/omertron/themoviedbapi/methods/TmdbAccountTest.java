@@ -31,12 +31,9 @@ import com.omertron.themoviedbapi.model.movie.MovieBasic;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
 import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,6 +42,9 @@ import org.junit.Test;
  * @author stuart.boston
  */
 public class TmdbAccountTest extends AbstractTests {
+
+    private static final String RESULT = "Result: {}";
+    private static final String INCORRECT_STATUS_CODE = "Incorrect status code";
 
     private static TmdbAccount instance;
     // Constants
@@ -58,18 +58,6 @@ public class TmdbAccountTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbAccount(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() throws MovieDbException {
-    }
-
-    @After
-    public void tearDown() throws MovieDbException {
     }
 
     /**
@@ -95,7 +83,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetUserLists() throws MovieDbException {
         LOG.info("getUserLists");
         ResultList<UserList> results = instance.getUserLists(getSessionId(), getAccountId());
-        TestSuite.test(results,"UserLists");
+        TestSuite.test(results, "UserLists");
 
         for (UserList result : results.getResults()) {
             TestSuite.test(result);
@@ -111,7 +99,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetFavoriteMovies() throws MovieDbException {
         LOG.info("getFavoriteMovies");
         ResultList<MovieBasic> results = instance.getFavoriteMovies(getSessionId(), getAccountId());
-        TestSuite.test(results,"Fav Movies");
+        TestSuite.test(results, "Fav Movies");
 
         for (MovieBasic result : results.getResults()) {
             TestSuite.test(result);
@@ -127,7 +115,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetFavoriteTv() throws MovieDbException {
         LOG.info("getFavoriteTv");
         ResultList<TVBasic> results = instance.getFavoriteTv(getSessionId(), getAccountId());
-        TestSuite.test(results,"Fav TV");
+        TestSuite.test(results, "Fav TV");
 
         for (TVBasic result : results.getResults()) {
             TestSuite.test(result);
@@ -145,23 +133,23 @@ public class TmdbAccountTest extends AbstractTests {
 
         // Add a movie as a favourite
         StatusCode result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, true);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a movie as a favourite
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, false);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 13);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 13);
 
         // Add a TV Show as a favourite
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, true);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a TV Show as a favourite
         result = instance.modifyFavoriteStatus(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 13);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 13);
     }
 
     /**
@@ -173,7 +161,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetRatedMovies() throws MovieDbException {
         LOG.info("getRatedMovies");
         ResultList<MovieBasic> results = instance.getRatedMovies(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results,"Rated Movies");
+        TestSuite.test(results, "Rated Movies");
     }
 
     /**
@@ -185,7 +173,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetRatedTV() throws MovieDbException {
         LOG.info("getRatedTV");
         ResultList<TVBasic> results = instance.getRatedTV(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results,"Rated TV");
+        TestSuite.test(results, "Rated TV");
         for (TVBasic result : results.getResults()) {
             TestSuite.test(result);
         }
@@ -200,7 +188,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetWatchListMovie() throws MovieDbException {
         LOG.info("getWatchListMovie");
         ResultList<MovieBasic> results = instance.getWatchListMovie(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results,"Watch List Movie");
+        TestSuite.test(results, "Watch List Movie");
         for (MovieBasic result : results.getResults()) {
             TestSuite.test(result);
         }
@@ -215,7 +203,7 @@ public class TmdbAccountTest extends AbstractTests {
     public void testGetWatchListTV() throws MovieDbException {
         LOG.info("getWatchListTV");
         ResultList<TVBasic> results = instance.getWatchListTV(getSessionId(), getAccountId(), null, null, null);
-        TestSuite.test(results,"Watch List TV");
+        TestSuite.test(results, "Watch List TV");
         for (TVBasic result : results.getResults()) {
             TestSuite.test(result);
         }
@@ -232,23 +220,23 @@ public class TmdbAccountTest extends AbstractTests {
 
         // Add a movie to the watch list
         StatusCode result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, true);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a movie from the watch list
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.MOVIE, ID_MOVIE_FIGHT_CLUB, false);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 13);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 13);
 
         // Add a TV Show to the watch list
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, true);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 1 || result.getCode() == 12);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 1 || result.getCode() == 12);
 
         // Remove a TV Show from the watch list
         result = instance.modifyWatchList(getSessionId(), getAccountId(), MediaType.TV, ID_TV_WALKING_DEAD, false);
-        LOG.info("Result: {}", result);
-        assertTrue("Incorrect status code", result.getCode() == 13);
+        LOG.info(RESULT, result);
+        assertTrue(INCORRECT_STATUS_CODE, result.getCode() == 13);
     }
 
     /**
@@ -284,7 +272,7 @@ public class TmdbAccountTest extends AbstractTests {
             result = instance.getGuestRatedMovies(guestSession, language, page, sortBy);
         }
 
-        TestSuite.test(result,"Guest Reated Movies");
+        TestSuite.test(result, "Guest Reated Movies");
     }
 
     private void postGuestRating(String guestSessionId, int movieId) throws MovieDbException {

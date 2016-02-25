@@ -45,13 +45,10 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -63,6 +60,9 @@ public class TmdbPeopleTest extends AbstractTests {
 
     private static TmdbPeople instance;
     private static final List<TestID> TEST_IDS = new ArrayList<>();
+    private static final String NO_TITLE = "No title";
+    private static final String INCORRECT_ID = "Incorrect ID";
+    private static final String ID_CAST_CREW = "ID: {}, # Cast: {}, # Crew: {}";
 
     public TmdbPeopleTest() {
     }
@@ -73,18 +73,6 @@ public class TmdbPeopleTest extends AbstractTests {
         instance = new TmdbPeople(getApiKey(), getHttpTools());
         TEST_IDS.add(new TestID("Bruce Willis", "nm0000246", 62));
         TEST_IDS.add(new TestID("Will Smith", "nm0000226", 2888));
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -142,14 +130,14 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : TEST_IDS) {
             PersonCreditList<CreditMovieBasic> result = instance.getPersonMovieCredits(test.getTmdb(), language);
-            LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
-            assertEquals("Incorrect ID", test.getTmdb(), result.getId());
+            LOG.info(ID_CAST_CREW, result.getId(), result.getCast().size(), result.getCrew().size());
+            assertEquals(INCORRECT_ID, test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
             TestSuite.test(result.getCrew(), "Crew");
 
             // Check that we have the movie specific fields
-            assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getTitle()));
-            assertTrue("No title", StringUtils.isNotBlank(result.getCrew().get(0).getTitle()));
+            assertTrue(NO_TITLE, StringUtils.isNotBlank(result.getCast().get(0).getTitle()));
+            assertTrue(NO_TITLE, StringUtils.isNotBlank(result.getCrew().get(0).getTitle()));
         }
     }
 
@@ -165,14 +153,14 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : TEST_IDS) {
             PersonCreditList<CreditTVBasic> result = instance.getPersonTVCredits(test.getTmdb(), language);
-            LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
-            assertEquals("Incorrect ID", test.getTmdb(), result.getId());
+            LOG.info(ID_CAST_CREW, result.getId(), result.getCast().size(), result.getCrew().size());
+            assertEquals(INCORRECT_ID, test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
             TestSuite.test(result.getCrew(), "Crew");
 
             // Check that we have the TV specific fields
-            assertTrue("No title", StringUtils.isNotBlank(result.getCast().get(0).getName()));
-            assertTrue("No title", StringUtils.isNotBlank(result.getCrew().get(0).getName()));
+            assertTrue(NO_TITLE, StringUtils.isNotBlank(result.getCast().get(0).getName()));
+            assertTrue(NO_TITLE, StringUtils.isNotBlank(result.getCrew().get(0).getName()));
         }
     }
 
@@ -188,8 +176,8 @@ public class TmdbPeopleTest extends AbstractTests {
 
         for (TestID test : TEST_IDS) {
             PersonCreditList<CreditBasic> result = instance.getPersonCombinedCredits(test.getTmdb(), language);
-            LOG.info("ID: {}, # Cast: {}, # Crew: {}", result.getId(), result.getCast().size(), result.getCrew().size());
-            assertEquals("Incorrect ID", test.getTmdb(), result.getId());
+            LOG.info(ID_CAST_CREW, result.getId(), result.getCast().size(), result.getCrew().size());
+            assertEquals(INCORRECT_ID, test.getTmdb(), result.getId());
             TestSuite.test(result.getCast(), "Cast");
             TestSuite.test(result.getCrew(), "Crew");
 
@@ -219,7 +207,7 @@ public class TmdbPeopleTest extends AbstractTests {
             for (CreditBasic p : result.getCrew()) {
                 if (!checkedMovie && p.getMediaType() == MediaType.MOVIE) {
                     CreditMovieBasic c = (CreditMovieBasic) p;
-                    assertTrue("No title", StringUtils.isNotBlank(c.getTitle()));
+                    assertTrue(NO_TITLE, StringUtils.isNotBlank(c.getTitle()));
                     assertTrue("No department", StringUtils.isNotBlank(c.getDepartment()));
                     checkedMovie = true;
                 }

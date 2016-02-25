@@ -28,9 +28,6 @@ import com.omertron.themoviedbapi.model.FindResults;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,6 +42,7 @@ public class TmdbFindTest extends AbstractTests {
     private static final List<TestID> PERSON_IDS = new ArrayList<>();
     private static final List<TestID> FILM_IDS = new ArrayList<>();
     private static final List<TestID> TV_IDS = new ArrayList<>();
+    private static final String TESTING = "Testing {}";
 
     public TmdbFindTest() {
     }
@@ -64,18 +62,6 @@ public class TmdbFindTest extends AbstractTests {
         TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622));
     }
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of Find Movie
      *
@@ -87,7 +73,7 @@ public class TmdbFindTest extends AbstractTests {
         FindResults result;
 
         for (TestID test : FILM_IDS) {
-            LOG.info("Testing {}", test);
+            LOG.info(TESTING, test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
             TestSuite.test(result.getMovieResults(), "Movies IMDB");
             TestSuite.testId(result.getMovieResults(), test.getTmdb(), "Movie");
@@ -106,7 +92,7 @@ public class TmdbFindTest extends AbstractTests {
         FindResults result;
 
         for (TestID test : PERSON_IDS) {
-            LOG.info("Testing {}", test);
+            LOG.info(TESTING, test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
             TestSuite.test(result.getPersonResults(), "Person IMDB");
             TestSuite.testId(result.getPersonResults(), test.getTmdb(), "Person");
@@ -124,7 +110,7 @@ public class TmdbFindTest extends AbstractTests {
         FindResults result;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing {}", test);
+            LOG.info(TESTING, test);
             result = instance.find(test.getImdb(), ExternalSource.IMDB_ID, LANGUAGE_DEFAULT);
             TestSuite.test(result.getTvResults(), "TV IMDB");
             TestSuite.testId(result.getTvResults(), test.getTmdb(), "TV");

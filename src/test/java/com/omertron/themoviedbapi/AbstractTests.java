@@ -44,9 +44,9 @@ import org.yamj.api.common.http.SimpleHttpClientBuilder;
 public class AbstractTests {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
-    private static final String PROP_FIlENAME = "testing.properties";
+    private static final String PROP_FILENAME = "testing.properties";
     private static final String FILENAME_EXT = ".bin";
-    private static final Properties props = new Properties();
+    private static final Properties PROPS = new Properties();
     private static HttpClient httpClient;
     private static HttpTools httpTools;
     // Session informaion
@@ -56,6 +56,10 @@ public class AbstractTests {
     protected static final String LANGUAGE_DEFAULT = "";
     protected static final String LANGUAGE_ENGLISH = "en";
     protected static final String LANGUAGE_RUSSIAN = "ru";
+
+    protected AbstractTests() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     /**
      * Do the initial configuration for the test cases
@@ -67,21 +71,21 @@ public class AbstractTests {
         httpClient = new SimpleHttpClientBuilder().build();
         httpTools = new HttpTools(httpClient);
 
-        if (props.isEmpty()) {
-            File f = new File(PROP_FIlENAME);
+        if (PROPS.isEmpty()) {
+            File f = new File(PROP_FILENAME);
             if (f.exists()) {
-                LOG.info("Loading properties from '{}'", PROP_FIlENAME);
-                TestLogger.loadProperties(props, f);
+                LOG.info("Loading properties from '{}'", PROP_FILENAME);
+                TestLogger.loadProperties(PROPS, f);
             } else {
-                LOG.info("Property file '{}' not found, creating dummy file.", PROP_FIlENAME);
+                LOG.info("Property file '{}' not found, creating dummy file.", PROP_FILENAME);
 
-                props.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
-                props.setProperty("Username", "INSERT_YOUR_USERNAME_HERE");
-                props.setProperty("Password", "INSERT_YOUR_PASSWORD_HERE");
-                props.setProperty("GuestSession", "INSERT_YOUR_GUEST_SESSION_ID_HERE");
+                PROPS.setProperty("API_Key", "INSERT_YOUR_KEY_HERE");
+                PROPS.setProperty("Username", "INSERT_YOUR_USERNAME_HERE");
+                PROPS.setProperty("Password", "INSERT_YOUR_PASSWORD_HERE");
+                PROPS.setProperty("GuestSession", "INSERT_YOUR_GUEST_SESSION_ID_HERE");
 
-                TestLogger.saveProperties(props, f, "Properties file for tests");
-                fail("Failed to get key information from properties file '" + PROP_FIlENAME + "'");
+                TestLogger.saveProperties(PROPS, f, "Properties file for tests");
+                fail("Failed to get key information from properties file '" + PROP_FILENAME + "'");
             }
         }
     }
@@ -225,7 +229,7 @@ public class AbstractTests {
      * @return
      */
     protected static String getApiKey() {
-        return props.getProperty("API_Key");
+        return PROPS.getProperty("API_Key");
     }
 
     /**
@@ -234,7 +238,7 @@ public class AbstractTests {
      * @return
      */
     protected static String getUsername() {
-        return props.getProperty("Username");
+        return PROPS.getProperty("Username");
     }
 
     /**
@@ -243,7 +247,7 @@ public class AbstractTests {
      * @return
      */
     protected static String getPassword() {
-        return props.getProperty("Password");
+        return PROPS.getProperty("Password");
     }
 
     /**
@@ -252,7 +256,7 @@ public class AbstractTests {
      * @return
      */
     protected static String getGuestSession() {
-        return props.getProperty("GuestSession");
+        return PROPS.getProperty("GuestSession");
     }
 
     /**
@@ -263,7 +267,7 @@ public class AbstractTests {
      */
     protected static String getProperty(String property) {
         appendToResponseBuilder(MovieMethod.class);
-        return props.getProperty(property);
+        return PROPS.getProperty(property);
     }
 
     /**

@@ -25,12 +25,9 @@ import com.omertron.themoviedbapi.model.StatusCode;
 import com.omertron.themoviedbapi.model.list.ListItem;
 import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +36,8 @@ import org.junit.rules.ExpectedException;
 public class TmdbListsTest extends AbstractTests {
 
     private static TmdbLists instance;
+    private static final String RESULT = "Result: {}";
+    private static final String INVALID_RESPONSE = "Invalid response: ";
     private static final int ID_JUPITER_ASCENDING = 76757;
     private static final int ID_BIG_HERO_6 = 177572;
     // Status codes
@@ -55,18 +54,6 @@ public class TmdbListsTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbLists(getApiKey(), getHttpTools());
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -144,12 +131,12 @@ public class TmdbListsTest extends AbstractTests {
     private void testDeleteList(String listId) throws MovieDbException {
         LOG.info("deleteList");
         StatusCode result = instance.deleteList(getSessionId(), listId);
-        LOG.info("Result: {}", result);
+        LOG.info(RESULT, result);
 
         // We expect there to be an exception thrown here
         exception.expect(MovieDbException.class);
         ListItem result2 = instance.getList(listId);
-        LOG.info("Result: {}", result2);
+        LOG.info(RESULT, result2);
     }
 
     /**
@@ -160,7 +147,7 @@ public class TmdbListsTest extends AbstractTests {
     private void testAddItem(String listId, int mediaId) throws MovieDbException {
         LOG.info("addItem");
         StatusCode result = instance.addItem(getSessionId(), listId, mediaId);
-        assertEquals("Invalid response: " + result.toString(), SC_SUCCESS_UPD, result.getCode());
+        assertEquals(INVALID_RESPONSE + result.toString(), SC_SUCCESS_UPD, result.getCode());
     }
 
     /**
@@ -171,7 +158,7 @@ public class TmdbListsTest extends AbstractTests {
     private void testRemoveItem(String listId, int mediaId) throws MovieDbException {
         LOG.info("removeItem");
         StatusCode result = instance.removeItem(getSessionId(), listId, mediaId);
-        assertEquals("Invalid response: " + result.toString(), SC_SUCCESS_DEL, result.getCode());
+        assertEquals(INVALID_RESPONSE + result.toString(), SC_SUCCESS_DEL, result.getCode());
     }
 
     /**
@@ -182,7 +169,7 @@ public class TmdbListsTest extends AbstractTests {
     private void testClear(String listId) throws MovieDbException {
         LOG.info("clear");
         StatusCode result = instance.clear(getSessionId(), listId, true);
-        assertEquals("Invalid response: " + result.toString(), SC_SUCCESS_UPD, result.getCode());
+        assertEquals(INVALID_RESPONSE + result.toString(), SC_SUCCESS_UPD, result.getCode());
     }
 
 }

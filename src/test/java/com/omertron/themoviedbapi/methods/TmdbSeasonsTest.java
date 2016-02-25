@@ -36,12 +36,9 @@ import com.omertron.themoviedbapi.model.tv.TVSeasonInfo;
 import com.omertron.themoviedbapi.results.ResultList;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -53,6 +50,7 @@ public class TmdbSeasonsTest extends AbstractTests {
 
     private static TmdbSeasons instance;
     private static final List<TestID> TV_IDS = new ArrayList<>();
+    private static final String TESTING = "Testing: {}";
 
     public TmdbSeasonsTest() {
     }
@@ -65,18 +63,6 @@ public class TmdbSeasonsTest extends AbstractTests {
         TV_IDS.add(new TestID("The Walking Dead", "tt1520211", 1402, "Andrew Lincoln"));
         TV_IDS.add(new TestID("Supernatural", "tt0460681", 1622, "Misha Collins"));
         TV_IDS.add(new TestID("The Big Bang Theory", "tt0898266", 1418, "Kaley Cuoco"));
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -93,7 +79,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         String appendToResponse = appendToResponseBuilder(TVSeasonMethod.class);
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             TVSeasonInfo result = instance.getSeasonInfo(test.getTmdb(), seasonNumber, language, appendToResponse);
             TestSuite.test(result);
             TestSuite.testATR(result, TVSeasonMethod.class, null);
@@ -125,7 +111,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         LOG.info("getSeasonAccountState");
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             MediaState result = instance.getSeasonAccountState(test.getTmdb(), getSessionId());
             TestSuite.test(result);
         }
@@ -143,7 +129,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         int seasonNumber = 0;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             MediaCreditList result = instance.getSeasonCredits(test.getTmdb(), seasonNumber);
 
             assertNotNull(result);
@@ -177,7 +163,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         String language = LANGUAGE_DEFAULT;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             ExternalID result = instance.getSeasonExternalID(test.getTmdb(), seasonNumber, language);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbId());
         }
@@ -199,7 +185,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         ArtworkResults results = new ArtworkResults();
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             ResultList<Artwork> result = instance.getSeasonImages(test.getTmdb(), seasonNumber, language, includeImageLanguage);
             TestSuite.test(result, "Artwork");
             for (Artwork artwork : result.getResults()) {
@@ -225,7 +211,7 @@ public class TmdbSeasonsTest extends AbstractTests {
         boolean found = false;
 
         for (TestID test : TV_IDS) {
-            LOG.info("Testing: {}", test);
+            LOG.info(TESTING, test);
             ResultList<Video> result = instance.getSeasonVideos(test.getTmdb(), seasonNumber, language);
             found = found || !result.isEmpty();
         }

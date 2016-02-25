@@ -39,6 +39,7 @@ public class TmdbParameters {
      * Construct an empty set of parameters
      */
     public TmdbParameters() {
+        // Create an empty set of parameters
     }
 
     /**

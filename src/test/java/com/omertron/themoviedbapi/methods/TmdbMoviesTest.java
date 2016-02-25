@@ -64,6 +64,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
     private static TmdbMovies instance;
     private static final List<TestID> FILM_IDS = new ArrayList<>();
+    private static final String WRONG_TITLE = "Wrong title";
 
     public TmdbMoviesTest() {
     }
@@ -99,7 +100,7 @@ public class TmdbMoviesTest extends AbstractTests {
 
             MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
-            assertEquals("Wrong title", test.getName(), result.getTitle());
+            assertEquals(WRONG_TITLE, test.getName(), result.getTitle());
             TestSuite.test(result);
             TestSuite.testATR(result, MovieMethod.class, MovieMethod.CHANGES);
             TestSuite.test(result.getAlternativeTitles(), "Alt titles");
@@ -132,7 +133,7 @@ public class TmdbMoviesTest extends AbstractTests {
         for (TestID test : FILM_IDS) {
             MovieInfo result = instance.getMovieInfo(test.getTmdb(), language, appendToResponse);
             assertEquals("Wrong IMDB ID", test.getImdb(), result.getImdbID());
-            assertEquals("Wrong title", test.getName(), result.getTitle());
+            assertEquals(WRONG_TITLE, test.getName(), result.getTitle());
             TestSuite.test(result);
         }
     }
@@ -151,7 +152,7 @@ public class TmdbMoviesTest extends AbstractTests {
         for (TestID test : FILM_IDS) {
             MovieInfo result = instance.getMovieInfoImdb(test.getImdb(), language, appendToResponse);
             assertEquals("Wrong TMDB ID", test.getTmdb(), result.getId());
-            assertEquals("Wrong title", test.getName(), result.getTitle());
+            assertEquals(WRONG_TITLE, test.getName(), result.getTitle());
             TestSuite.test(result);
         }
     }
