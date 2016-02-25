@@ -43,12 +43,12 @@ public class TestLogger {
     }
 
     /**
-     * Configure the logger with a simple in-memory file for the required log level
+     * configure the logger with a simple in-memory file for the required log level
      *
      * @param level The logging level required
      * @return True if successful
      */
-    public static boolean Configure(String level) {
+    public static boolean configure(String level) {
         StringBuilder config = new StringBuilder("handlers = java.util.logging.ConsoleHandler\n");
         config.append(".level = ").append(level).append(CRLF);
         config.append("java.util.logging.ConsoleHandler.level = ").append(level).append(CRLF);
@@ -73,8 +73,8 @@ public class TestLogger {
      *
      * @return True if successful
      */
-    public static boolean Configure() {
-        return Configure("ALL");
+    public static boolean configure() {
+        return TestLogger.configure("ALL");
     }
 
     /**

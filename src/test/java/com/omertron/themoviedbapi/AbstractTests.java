@@ -40,6 +40,12 @@ import static org.junit.Assert.fail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class AbstractTests {
 
@@ -67,7 +73,7 @@ public class AbstractTests {
      * @throws MovieDbException
      */
     protected static final void doConfiguration() throws MovieDbException {
-        TestLogger.Configure();
+        TestLogger.configure();
         httpClient = new SimpleHttpClientBuilder().build();
         httpTools = new HttpTools(httpClient);
 

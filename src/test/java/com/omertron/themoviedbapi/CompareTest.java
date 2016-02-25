@@ -26,6 +26,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -49,7 +52,7 @@ public class CompareTest {
 
     @BeforeClass
     public static void setUpClass() {
-        TestLogger.Configure();
+        TestLogger.configure();
 
         // Set the default comparison movie
         moviedb = new MovieInfo();
