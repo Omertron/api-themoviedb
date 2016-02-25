@@ -64,9 +64,6 @@ public class TmdbPeopleTest extends AbstractTests {
     private static final String INCORRECT_ID = "Incorrect ID";
     private static final String ID_CAST_CREW = "ID: {}, # Cast: {}, # Crew: {}";
 
-    public TmdbPeopleTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

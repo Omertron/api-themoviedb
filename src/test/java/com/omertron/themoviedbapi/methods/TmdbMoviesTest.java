@@ -66,9 +66,6 @@ public class TmdbMoviesTest extends AbstractTests {
     private static final List<TestID> FILM_IDS = new ArrayList<>();
     private static final String WRONG_TITLE = "Wrong title";
 
-    public TmdbMoviesTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

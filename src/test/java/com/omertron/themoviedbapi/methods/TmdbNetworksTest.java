@@ -38,9 +38,6 @@ public class TmdbNetworksTest extends AbstractTests {
     private static TmdbNetworks instance;
     private static final List<TestID> TEST_IDS = new ArrayList<>();
 
-    public TmdbNetworksTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

@@ -39,9 +39,6 @@ public class TmdbAuthenticationTest extends AbstractTests {
 
     private static TmdbAuthentication instance;
 
-    public TmdbAuthenticationTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
@@ -64,7 +61,7 @@ public class TmdbAuthenticationTest extends AbstractTests {
     /**
      * Test of getSessionToken method, of class TmdbAuthentication.
      *
-     * TODO: Cannot be tested without a HTTP authorisation: <br/>
+     * Cannot be tested without a HTTP authorisation: <br/>
      * http://help.themoviedb.org/kb/api/user-authentication
      *
      * @throws com.omertron.themoviedbapi.MovieDbException
@@ -98,7 +95,7 @@ public class TmdbAuthenticationTest extends AbstractTests {
      */
     @Test
     public void testGetSessionTokenLogin() throws MovieDbException {
-        System.out.println("getSessionTokenLogin");
+        LOG.info("getSessionTokenLogin");
         TokenAuthorisation token = instance.getAuthorisationToken();
         TokenAuthorisation result = instance.getSessionTokenLogin(token, getUsername(), getPassword());
         assertNotNull("Null token returned", result);

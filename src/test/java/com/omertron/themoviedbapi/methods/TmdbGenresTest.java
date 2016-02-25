@@ -40,9 +40,6 @@ public class TmdbGenresTest extends AbstractTests {
     private static final String LIST_IS_NULL = "List is null";
     private static final int ID_GENRE_ACTION = 28;
 
-    public TmdbGenresTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

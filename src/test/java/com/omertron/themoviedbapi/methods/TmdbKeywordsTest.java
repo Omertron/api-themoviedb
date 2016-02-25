@@ -38,9 +38,6 @@ public class TmdbKeywordsTest extends AbstractTests {
     private static TmdbKeywords tmdb;
     private static final String ID_KEYWORD = "1721";
 
-    public TmdbKeywordsTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

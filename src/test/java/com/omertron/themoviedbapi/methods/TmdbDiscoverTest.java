@@ -37,9 +37,6 @@ public class TmdbDiscoverTest extends AbstractTests {
 
     private static TmdbDiscover instance;
 
-    public TmdbDiscoverTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

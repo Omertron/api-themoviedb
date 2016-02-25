@@ -21,13 +21,10 @@ package com.omertron.themoviedbapi;
 
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import org.apache.commons.lang3.StringUtils;
-import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -46,9 +43,6 @@ public class CompareTest {
 
     private static final boolean CASE_SENSITIVE = true;
     private static final boolean NOT_CASE_SENSITIVE = false;
-
-    public CompareTest() {
-    }
 
     @BeforeClass
     public static void setUpClass() {

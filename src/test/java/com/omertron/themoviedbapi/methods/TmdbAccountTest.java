@@ -51,9 +51,6 @@ public class TmdbAccountTest extends AbstractTests {
     private static final int ID_MOVIE_FIGHT_CLUB = 550;
     private static final int ID_TV_WALKING_DEAD = 1402;
 
-    public TmdbAccountTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

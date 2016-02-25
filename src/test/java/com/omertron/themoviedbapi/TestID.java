@@ -29,7 +29,8 @@ public class TestID {
     private int tmdb;
     private String other;
 
-    public TestID() {
+    private TestID() {
+        throw new UnsupportedOperationException("Must use argument constructors");
     }
 
     public TestID(String name, String imdb, int tmdb) {

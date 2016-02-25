@@ -35,9 +35,6 @@ public class TmdbCreditsTest extends AbstractTests {
 
     private static TmdbCredits instance;
 
-    public TmdbCreditsTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

@@ -54,9 +54,6 @@ public class TmdbEpisodesTest extends AbstractTests {
     private static final List<TestID> TV_IDS = new ArrayList<>();
     private static final String TESTING = "Testing: {}";
 
-    public TmdbEpisodesTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

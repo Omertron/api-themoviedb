@@ -47,9 +47,6 @@ public class TmdbListsTest extends AbstractTests {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    public TmdbListsTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

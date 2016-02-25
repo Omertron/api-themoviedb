@@ -39,9 +39,6 @@ public class TmdbCompaniesTest extends AbstractTests {
     private static TmdbCompanies instance;
     private static final int ID_COMPANY = 2;
 
-    public TmdbCompaniesTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();

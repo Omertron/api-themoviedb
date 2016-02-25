@@ -38,9 +38,6 @@ public class TmdbCollectionsTest extends AbstractTests {
     private static TmdbCollections instance;
     private static final int ID_COLLECTION_STAR_WARS = 10;
 
-    public TmdbCollectionsTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
