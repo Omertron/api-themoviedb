@@ -35,15 +35,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.http.client.HttpClient;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -62,10 +56,6 @@ public class AbstractTests {
     protected static final String LANGUAGE_DEFAULT = "";
     protected static final String LANGUAGE_ENGLISH = "en";
     protected static final String LANGUAGE_RUSSIAN = "ru";
-
-    protected AbstractTests() {
-        throw new UnsupportedOperationException("Utility class");
-    }
 
     /**
      * Do the initial configuration for the test cases
