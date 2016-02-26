@@ -1,5 +1,5 @@
 -classpath
-'/root/release/api-themoviedb/target/checkout/target/classes:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.6.3/jackson-databind-2.6.3.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.6.3/jackson-core-2.6.3.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/org/apache/httpcomponents/httpclient/4.5.1/httpclient-4.5.1.jar:/root/.m2/repository/org/apache/httpcomponents/httpcore/4.4.3/httpcore-4.4.3.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12.jar:/root/.m2/repository/commons-codec/commons-codec/1.9/commons-codec-1.9.jar:/root/.m2/repository/org/yamj/api-common/2.0/api-common-2.0.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.6.3/jackson-annotations-2.6.3.jar'
+'/root/release/api-themoviedb/target/checkout/target/classes:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.7.1/jackson-databind-2.7.1.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.7.1/jackson-core-2.7.1.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/org/apache/httpcomponents/httpclient/4.5.1/httpclient-4.5.1.jar:/root/.m2/repository/org/apache/httpcomponents/httpcore/4.4.3/httpcore-4.4.3.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.16/slf4j-api-1.7.16.jar:/root/.m2/repository/commons-codec/commons-codec/1.9/commons-codec-1.9.jar:/root/.m2/repository/org/yamj/api-common/2.0/api-common-2.0.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.7.1/jackson-annotations-2.7.1.jar'
 -encoding
 'UTF-8'
 -protected
@@ -15,10 +15,10 @@
 -docencoding
 'UTF-8'
 -doctitle
-'API-The MovieDB 4.1 API'
+'API-The MovieDB 4.2 API'
 -link
 'http://java.sun.com/javase/6/docs/api'
 -use
 -version
 -windowtitle
-'API-The MovieDB 4.1 API'
+'API-The MovieDB 4.2 API'
