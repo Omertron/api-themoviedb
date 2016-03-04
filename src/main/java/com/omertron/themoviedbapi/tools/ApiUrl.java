@@ -144,11 +144,9 @@ public class ApiUrl {
         // Append the key information
         urlString.append(DELIMITER_FIRST)
                 .append(Param.API_KEY.getValue())
-                .append(apiKey);
-
-        // Append the search term
-        urlString.append(DELIMITER_SUBSEQUENT);
-        urlString.append(Param.QUERY.getValue());
+                .append(apiKey)
+                .append(DELIMITER_SUBSEQUENT)// Append the search term
+                .append(Param.QUERY.getValue());
 
         String query = (String) params.get(Param.QUERY);
 

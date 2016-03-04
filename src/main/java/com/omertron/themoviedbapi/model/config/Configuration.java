@@ -199,8 +199,7 @@ public class Configuration extends AbstractJsonMapping implements Serializable {
         }
 
         StringBuilder sb = new StringBuilder(getBaseUrl());
-        sb.append(requiredSize);
-        sb.append(imagePath);
+        sb.append(requiredSize).append(imagePath);
 
         try {
             return new URL(sb.toString());
