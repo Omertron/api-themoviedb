@@ -45,8 +45,8 @@ public abstract class AbstractJsonMapping implements Serializable {
     @JsonAnySetter
     protected void handleUnknown(String key, Object value) {
         StringBuilder unknown = new StringBuilder(this.getClass().getSimpleName());
-        unknown.append(": Unknown property='").append(key);
-        unknown.append("' value='").append(value).append("'");
+        unknown.append(": Unknown property='").append(key)
+               .append("' value='").append(value).append("'");
 
         LOG.trace(unknown.toString());
     }
