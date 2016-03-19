@@ -40,6 +40,8 @@ public class Translation extends AbstractJsonMapping implements Serializable {
     private String isoCode;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("iso_3166_1")
+    private String language;
 
     public String getEnglishName() {
         return englishName;
@@ -53,6 +55,10 @@ public class Translation extends AbstractJsonMapping implements Serializable {
         return name;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
     public void setEnglishName(String englishName) {
         this.englishName = englishName;
     }
@@ -63,6 +69,10 @@ public class Translation extends AbstractJsonMapping implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override
