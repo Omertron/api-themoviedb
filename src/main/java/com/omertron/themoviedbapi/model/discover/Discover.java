@@ -25,7 +25,7 @@ import com.omertron.themoviedbapi.tools.TmdbParameters;
 
 /**
  * Generate a discover object for use in the MovieDbApi
- * <p/>
+ * <p>
  * This allows you to just add the search components you are concerned with
  *
  * @author stuart.boston
@@ -39,7 +39,7 @@ public class Discover {
 
     /**
      * Get the parameters
-     * <p/>
+     * <p>
      * This will be used to construct the URL in the API
      *
      * @return
@@ -183,7 +183,7 @@ public class Discover {
 
     /**
      * The minimum release to include.
-     * <p/>
+     * <p>
      * Expected format is YYYY-MM-DD.
      *
      * @param releaseDateGte
@@ -196,7 +196,7 @@ public class Discover {
 
     /**
      * The maximum release to include.
-     * <p/>
+     * <p>
      * Expected format is YYYY-MM-DD.
      *
      * @param releaseDateLte
@@ -209,9 +209,9 @@ public class Discover {
 
     /**
      * Only include movies with certifications for a specific country.
-     * <p/>
+     * <p>
      * When this value is specified, 'certificationLte' is required.
-     * <p/>
+     * <p>
      * A ISO 3166-1 is expected
      *
      * @param certificationCountry
@@ -224,7 +224,7 @@ public class Discover {
 
     /**
      * Only include movies with this certification and lower.
-     * <p/>
+     * <p>
      * Expected value is a valid certification for the specified 'certificationCountry'.
      *
      * @param certificationLte
@@ -337,11 +337,11 @@ public class Discover {
 
     /**
      * Only include movies with the specified genres.
-     * <p/>
+     * <p>
      * Expected value is an integer (the id of a genre).
-     * <p/>
+     * <p>
      * Multiple values can be specified.
-     * <p/>
+     * <p>
      * Comma separated indicates an 'AND' query, while a pipe (|) separated value indicates an 'OR'
      *
      * @param withGenres
