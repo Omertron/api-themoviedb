@@ -36,8 +36,6 @@ public class Video extends AbstractJsonMapping implements Serializable {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("iso_639_1")
-    private String language;
     @JsonProperty("key")
     private String key;
     @JsonProperty("name")
@@ -48,6 +46,10 @@ public class Video extends AbstractJsonMapping implements Serializable {
     private int size;
     @JsonProperty("type")
     private String type;
+    @JsonProperty("iso_639_1")
+    private String language;
+    @JsonProperty("iso_3166_1")
+    private String country;
 
     public String getId() {
         return id;
@@ -75,6 +77,10 @@ public class Video extends AbstractJsonMapping implements Serializable {
 
     public String getLanguage() {
         return language;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public void setId(String id) {
@@ -105,6 +111,10 @@ public class Video extends AbstractJsonMapping implements Serializable {
         this.language = language;
     }
 
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Video) {
@@ -115,6 +125,7 @@ public class Video extends AbstractJsonMapping implements Serializable {
                     .append(size, other.size)
                     .append(key, other.key)
                     .append(language, other.language)
+                    .append(country, other.country)
                     .isEquals();
         } else {
             return false;
@@ -130,6 +141,7 @@ public class Video extends AbstractJsonMapping implements Serializable {
                 .append(key)
                 .append(site)
                 .append(language)
+                .append(country)
                 .toHashCode();
     }
 }
