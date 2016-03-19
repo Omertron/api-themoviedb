@@ -37,42 +37,42 @@ public class Translation extends AbstractJsonMapping implements Serializable {
     @JsonProperty("english_name")
     private String englishName;
     @JsonProperty("iso_639_1")
-    private String isoCode;
+    private String language;
     @JsonProperty("name")
     private String name;
     @JsonProperty("iso_3166_1")
-    private String language;
+    private String country;
 
     public String getEnglishName() {
         return englishName;
-    }
-
-    public String getIsoCode() {
-        return isoCode;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getLanguage() {
         return language;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
     public void setEnglishName(String englishName) {
         this.englishName = englishName;
     }
 
-    public void setIsoCode(String isoCode) {
-        this.isoCode = isoCode;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Translation extends AbstractJsonMapping implements Serializable {
             return new EqualsBuilder()
                     .append(name, other.name)
                     .append(englishName, other.englishName)
-                    .append(isoCode, other.isoCode)
+                    .append(language, other.language)
                     .isEquals();
         } else {
             return false;
@@ -93,7 +93,7 @@ public class Translation extends AbstractJsonMapping implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(englishName)
-                .append(isoCode)
+                .append(language)
                 .append(name)
                 .toHashCode();
     }

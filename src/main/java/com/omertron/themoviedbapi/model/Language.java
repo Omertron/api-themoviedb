@@ -34,20 +34,20 @@ public class Language extends AbstractJsonMapping implements Serializable {
     private static final long serialVersionUID = 100L;
 
     @JsonProperty("iso_639_1")
-    private String isoCode;
+    private String language;
     @JsonProperty("name")
     private String name;
 
-    public String getIsoCode() {
-        return isoCode;
+    public String getLanguage() {
+        return language;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setIsoCode(String isoCode) {
-        this.isoCode = isoCode;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public void setName(String name) {
@@ -59,7 +59,7 @@ public class Language extends AbstractJsonMapping implements Serializable {
         if (obj instanceof Language) {
             final Language other = (Language) obj;
             return new EqualsBuilder()
-                    .append(isoCode, other.isoCode)
+                    .append(language, other.language)
                     .append(name, other.name)
                     .isEquals();
         } else {
@@ -70,7 +70,7 @@ public class Language extends AbstractJsonMapping implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(isoCode)
+                .append(language)
                 .append(name)
                 .toHashCode();
     }
