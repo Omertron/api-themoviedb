@@ -33,18 +33,16 @@ public enum Gender {
     /**
      * Get the gender from an integer type
      *
-     * @param iType
+     * @param type
      * @return
      */
-    public static Gender fromInteger(int iType) {
-        switch (iType) {
-            case 1:
-                return MALE;
-            case 2:
-                return FEMALE;
-            default:
-                return UNKNOWN;
+    public static Gender fromInteger(int type) {
+        for (Gender gender : Gender.values()) {
+            if (gender.type == type) {
+                return gender;
+            }
         }
+        return UNKNOWN;
     }
 
 }
