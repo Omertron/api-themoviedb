@@ -44,6 +44,10 @@ public class ExternalID extends AbstractJsonMapping implements Serializable, Ide
     private String tvdbId;
     @JsonProperty("tvrage_id")
     private String tvrageId;
+    @JsonProperty("facebook_id")
+    private String facebookId;
+    @JsonProperty("twitter_id")
+    private String twitterId;
 
     @Override
     public int getId() {
@@ -93,6 +97,22 @@ public class ExternalID extends AbstractJsonMapping implements Serializable, Ide
 
     public void setTvdbId(String tvdbId) {
         this.tvdbId = tvdbId;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+    }
+
+    public String getTwitterId() {
+        return twitterId;
+    }
+
+    public void setTwitterId(String twitterId) {
+        this.twitterId = twitterId;
     }
 
 }
