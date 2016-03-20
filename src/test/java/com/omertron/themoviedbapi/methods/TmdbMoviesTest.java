@@ -39,6 +39,7 @@ import com.omertron.themoviedbapi.model.media.MediaState;
 import com.omertron.themoviedbapi.model.media.Translation;
 import com.omertron.themoviedbapi.model.media.Video;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
+import com.omertron.themoviedbapi.model.movie.ReleaseDates;
 import com.omertron.themoviedbapi.model.movie.ReleaseInfo;
 import com.omertron.themoviedbapi.model.review.Review;
 import com.omertron.themoviedbapi.results.ResultList;
@@ -485,6 +486,35 @@ public class TmdbMoviesTest extends AbstractTests {
 
         ResultList<MovieInfo> result = instance.getTopRatedMovies(page, language);
         TestSuite.test(result, "Top Rated");
+    }
+
+    /**
+     * Test of getReleaseDates method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetReleaseDates() throws MovieDbException {
+        LOG.info("getReleaseDates");
+
+        for (TestID test : FILM_IDS) {
+            ResultList<ReleaseDates> result = instance.getReleaseDates(test.getTmdb());
+            LOG.info("ID: {}, Page {} of {}, {} results", result.getId(), result.getPage(), result.getTotalPages(), result.getTotalResults());
+
+            TestSuite.test(result, "release dates");
+
+            // There should always be a US release
+            boolean found = false;
+            for (ReleaseDates check : result.getResults()) {
+                if ("US".equals(check.getCountry())) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue("No US release found", found);
+
+        }
+
     }
 
 }
