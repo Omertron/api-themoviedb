@@ -12,3 +12,4 @@ testing.properties
 .classpath
 .project
 .DS_Store
+/nbproject/

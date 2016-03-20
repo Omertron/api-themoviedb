@@ -54,7 +54,7 @@ public enum MethodSub {
     MOVIE_CREDITS("movie_credits"),
     MOVIE_LIST("movie/list"),
     MULTI("multi"),
-    NOW_PLAYING("now-playing"),
+    NOW_PLAYING("now_playing"),
     ON_THE_AIR("on_the_air"),
     PERSON("person"),
     POPULAR("popular"),
@@ -79,7 +79,8 @@ public enum MethodSub {
     VIDEOS("videos"),
     WATCHLIST("watchlist"),
     WATCHLIST_MOVIES("watchlist/movies"),
-    WATCHLIST_TV("watchlist/tv");
+    WATCHLIST_TV("watchlist/tv"),
+    RELEASE_DATES("release_dates");
 
     private final String value;
 
