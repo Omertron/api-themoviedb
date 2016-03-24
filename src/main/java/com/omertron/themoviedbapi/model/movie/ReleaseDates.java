@@ -9,7 +9,7 @@ public class ReleaseDates extends AbstractJsonMapping {
     @JsonProperty("iso_3166_1")
     private String country;
     @JsonProperty("release_dates")
-    private List<ReleaseDate> releaseDates;
+    private List<ReleaseDate> releaseDate;
 
     public String getCountry() {
         return country;
@@ -19,12 +19,12 @@ public class ReleaseDates extends AbstractJsonMapping {
         this.country = country;
     }
 
-    public List<ReleaseDate> getReleaseDates() {
-        return releaseDates;
+    public List<ReleaseDate> getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseDates(List<ReleaseDate> releaseDates) {
-        this.releaseDates = releaseDates;
+    public void setReleaseDate(List<ReleaseDate> releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
 }
