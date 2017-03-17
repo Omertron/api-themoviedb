@@ -26,6 +26,8 @@ public class ListStatusCode extends StatusCode {
 
     @JsonProperty("list_id")
     private String listId;
+    @JsonProperty("success")
+    private boolean success;
 
     public String getListId() {
         return listId;
@@ -34,4 +36,13 @@ public class ListStatusCode extends StatusCode {
     public void setListId(String listId) {
         this.listId = listId;
     }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
 }

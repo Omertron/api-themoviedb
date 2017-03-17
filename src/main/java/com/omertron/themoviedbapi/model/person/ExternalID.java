@@ -48,6 +48,8 @@ public class ExternalID extends AbstractJsonMapping implements Serializable, Ide
     private String facebookId;
     @JsonProperty("twitter_id")
     private String twitterId;
+    @JsonProperty("instagram_id")
+    private String instagramId;
 
     @Override
     public int getId() {
@@ -113,6 +115,14 @@ public class ExternalID extends AbstractJsonMapping implements Serializable, Ide
 
     public void setTwitterId(String twitterId) {
         this.twitterId = twitterId;
+    }
+
+    public String getInstagramId() {
+        return instagramId;
+    }
+
+    public void setInstagramId(String instagramId) {
+        this.instagramId = instagramId;
     }
 
 }
