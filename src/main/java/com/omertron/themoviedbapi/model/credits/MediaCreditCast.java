@@ -36,6 +36,8 @@ public class MediaCreditCast extends MediaCredit implements Serializable {
     private String character;
     @JsonProperty("order")
     private int order;
+    @JsonProperty("gender")
+    private int gender;
 
     public int getCastId() {
         return castId;
@@ -59,6 +61,14 @@ public class MediaCreditCast extends MediaCredit implements Serializable {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
 }
