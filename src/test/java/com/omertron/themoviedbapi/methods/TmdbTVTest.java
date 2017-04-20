@@ -154,6 +154,11 @@ public class TmdbTVTest extends AbstractTests {
         LOG.info("getTVAlternativeTitles");
 
         for (TestID test : TV_IDS) {
+            // Skip supernatural (no alternative titles)
+            if (test.getTmdb() == 1622) {
+                continue;
+            }
+
             ResultList<AlternativeTitle> result = instance.getTVAlternativeTitles(test.getTmdb());
             TestSuite.test(result, "TV Alt Titles");
         }
