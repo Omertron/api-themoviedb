@@ -27,7 +27,6 @@ import com.omertron.themoviedbapi.enumeration.SearchType;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
-import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
@@ -91,21 +90,7 @@ public class TmdbSearchTest extends AbstractTests {
         int page = 0;
         ResultList<Keyword> result = instance.searchKeyword(query, page);
         TestSuite.test(result, "Keyword");
-        TestSuite.testId(result, 207600, "Keyword");
-    }
-
-    /**
-     * Test of searchList method, of class TheMovieDbApi.
-     *
-     * @throws MovieDbException
-     */
-    @Test
-    public void testSearchList() throws MovieDbException {
-        LOG.info("searchList");
-        String query = "watch";
-        int page = 0;
-        ResultList<UserList> result = instance.searchList(query, page, null);
-        TestSuite.test(result, "List");
+        TestSuite.testId(result, 210313, "Keyword");
     }
 
     /**

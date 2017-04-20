@@ -25,7 +25,6 @@ import static com.omertron.themoviedbapi.methods.AbstractMethod.MAPPER;
 import com.omertron.themoviedbapi.model.collection.Collection;
 import com.omertron.themoviedbapi.model.company.Company;
 import com.omertron.themoviedbapi.model.keyword.Keyword;
-import com.omertron.themoviedbapi.model.list.UserList;
 import com.omertron.themoviedbapi.model.media.MediaBasic;
 import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
@@ -118,26 +117,6 @@ public class TmdbSearch extends AbstractMethod {
 
         URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.KEYWORD).buildUrl(parameters);
         WrapperGenericList<Keyword> wrapper = processWrapper(getTypeReference(Keyword.class), url, "keyword");
-        return wrapper.getResultsList();
-    }
-
-    /**
-     * Search for lists by name and description.
-     *
-     * @param query
-     * @param includeAdult
-     * @param page
-     * @return
-     * @throws MovieDbException
-     */
-    public ResultList<UserList> searchList(String query, Integer page, Boolean includeAdult) throws MovieDbException {
-        TmdbParameters parameters = new TmdbParameters();
-        parameters.add(Param.QUERY, query);
-        parameters.add(Param.PAGE, page);
-        parameters.add(Param.INCLUDE_ADULT, includeAdult);
-
-        URL url = new ApiUrl(apiKey, MethodBase.SEARCH).subMethod(MethodSub.LIST).buildUrl(parameters);
-        WrapperGenericList<UserList> wrapper = processWrapper(getTypeReference(UserList.class), url, "list");
         return wrapper.getResultsList();
     }
 
