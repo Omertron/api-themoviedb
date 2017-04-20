@@ -75,7 +75,8 @@ public class TmdbListsTest extends AbstractTests {
         testClear(listId);
 
         // Delete the list
-        testDeleteList(listId);
+        // API v4 ONLY
+//        testDeleteList(listId);
 
     }
 
@@ -85,7 +86,7 @@ public class TmdbListsTest extends AbstractTests {
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     private void testGetList(String listId) throws MovieDbException {
-        LOG.info("getList");
+        LOG.info("getList - List: {}", listId);
 
         ListItem result = instance.getList(listId);
         LOG.info("Found {} movies on list", result.getItems().size());
@@ -105,6 +106,8 @@ public class TmdbListsTest extends AbstractTests {
         String description = "This is random list number " + r + " used for testing purposes";
         String result = instance.createList(getSessionId(), name, description);
         assertTrue("No list ID returned", StringUtils.isNotBlank(result));
+
+        LOG.info("List created: {}", result);
         return result;
     }
 
@@ -114,7 +117,7 @@ public class TmdbListsTest extends AbstractTests {
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     private void testCheckItemStatus(String listId, int mediaId) throws MovieDbException {
-        LOG.info("checkItemStatus");
+        LOG.info("checkItemStatus - List: {}, Media: {}", listId, mediaId);
         boolean expResult = true;
         boolean result = instance.checkItemStatus(listId, mediaId);
         assertEquals("Item is not on list!", expResult, result);
@@ -126,7 +129,7 @@ public class TmdbListsTest extends AbstractTests {
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     private void testDeleteList(String listId) throws MovieDbException {
-        LOG.info("deleteList");
+        LOG.info("deleteList - List: {}", listId);
         StatusCode result = instance.deleteList(getSessionId(), listId);
         LOG.info(RESULT, result);
 
@@ -142,7 +145,7 @@ public class TmdbListsTest extends AbstractTests {
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     private void testAddItem(String listId, int mediaId) throws MovieDbException {
-        LOG.info("addItem");
+        LOG.info("addItem - List: {}, Media: {}", listId, mediaId);
         StatusCode result = instance.addItem(getSessionId(), listId, mediaId);
         assertEquals(INVALID_RESPONSE + result.toString(), SC_SUCCESS_UPD, result.getCode());
     }
@@ -153,7 +156,7 @@ public class TmdbListsTest extends AbstractTests {
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     private void testRemoveItem(String listId, int mediaId) throws MovieDbException {
-        LOG.info("removeItem");
+        LOG.info("removeItem - List: {}, Media: {}", listId, mediaId);
         StatusCode result = instance.removeItem(getSessionId(), listId, mediaId);
         assertEquals(INVALID_RESPONSE + result.toString(), SC_SUCCESS_DEL, result.getCode());
     }
@@ -164,7 +167,7 @@ public class TmdbListsTest extends AbstractTests {
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
     private void testClear(String listId) throws MovieDbException {
-        LOG.info("clear");
+        LOG.info("clear - List: {}", listId);
         StatusCode result = instance.clear(getSessionId(), listId, true);
         assertEquals(INVALID_RESPONSE + result.toString(), SC_SUCCESS_UPD, result.getCode());
     }
