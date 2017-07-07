@@ -37,6 +37,10 @@ public enum MediaType {
      */
     TV,
     /**
+     * TV Season media type
+     */
+    SEASON,
+    /**
      * TV Episode media type
      */
     EPISODE;
