@@ -20,8 +20,8 @@
 package com.omertron.themoviedbapi.enumeration;
 
 public enum Gender {
-    MALE(1),
-    FEMALE(2),
+    MALE(2),
+    FEMALE(1),
     UNKNOWN(0);
 
     private final int type;
