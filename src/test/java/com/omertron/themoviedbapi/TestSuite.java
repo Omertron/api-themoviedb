@@ -137,7 +137,7 @@ public class TestSuite {
         assertTrue(message + MISSING_ID, test.getId() > 0);
         assertTrue(message + MISSING_NAME, StringUtils.isNotBlank(test.getName()));
         assertTrue(message + ": Missing overview", StringUtils.isNotBlank(test.getOverview()));
-        assertTrue(message + ": Missing episodes", test.getEpisodes().size() > 0);
+        assertFalse(message + ": Missing episodes", test.getEpisodes().isEmpty());
     }
 
     public static void test(ExternalID test) {

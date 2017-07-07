@@ -32,6 +32,7 @@ import com.omertron.themoviedbapi.model.movie.MovieInfo;
 import com.omertron.themoviedbapi.model.person.PersonFind;
 import com.omertron.themoviedbapi.model.tv.TVBasic;
 import com.omertron.themoviedbapi.results.ResultList;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -105,12 +106,12 @@ public class TmdbSearchTest extends AbstractTests {
         // Try a movie with less than 1 page of results
         ResultList<MovieInfo> movieList = instance.searchMovie("Blade Runner", 0, "", null, 0, 0, SearchType.PHRASE);
         TestSuite.test(movieList, "Movie 1");
-        assertTrue("No movies found, should be at least 1", movieList.getResults().size() > 0);
+        assertFalse("No movies found, should be at least 1", movieList.getResults().isEmpty());
 
         // Try a russian langugage movie
         movieList = instance.searchMovie("О чём говорят мужчины", 0, LANGUAGE_RUSSIAN, null, 0, 0, SearchType.PHRASE);
         TestSuite.test(movieList, "Movie 2");
-        assertTrue("No 'RU' movies found, should be at least 1", movieList.getResults().size() > 0);
+        assertFalse("No 'RU' movies found, should be at least 1", movieList.getResults().isEmpty());
 
         // Try a movie with more than 20 results
         movieList = instance.searchMovie("Star Wars", 0, LANGUAGE_ENGLISH, null, 0, 0, SearchType.PHRASE);
