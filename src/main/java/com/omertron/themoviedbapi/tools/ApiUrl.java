@@ -60,8 +60,8 @@ public class ApiUrl {
     /**
      * Constructor for the simple API URL method without a sub-method
      *
-     * @param apiKey
-     * @param method
+     * @param apiKey API Key
+     * @param method Base method to create URL for
      */
     public ApiUrl(String apiKey, MethodBase method) {
         this.apiKey = apiKey;
@@ -71,8 +71,8 @@ public class ApiUrl {
     /**
      * Add a sub-methods
      *
-     * @param submethod
-     * @return
+     * @param submethod Sub-method of base method
+     * @return Builder object
      */
     public ApiUrl subMethod(MethodSub submethod) {
         if (submethod != MethodSub.NONE) {
@@ -84,7 +84,7 @@ public class ApiUrl {
     /**
      * Build the URL with the default parameters
      *
-     * @return
+     * @return Builder object
      */
     public URL buildUrl() {
         return buildUrl(new TmdbParameters());
@@ -93,8 +93,8 @@ public class ApiUrl {
     /**
      * Build the URL from the pre-created parameters.
      *
-     * @param params
-     * @return
+     * @param params The parameters for the method
+     * @return Builder object
      */
     public URL buildUrl(final TmdbParameters params) {
         StringBuilder urlString = new StringBuilder(TMDB_API_BASE);
@@ -130,8 +130,8 @@ public class ApiUrl {
     /**
      * Create the query based URL portion
      *
-     * @param params
-     * @return
+     * @param params The parameters for the method
+     * @return Builder object
      */
     private StringBuilder queryProcessing(TmdbParameters params) {
         StringBuilder urlString = new StringBuilder();
@@ -164,8 +164,8 @@ public class ApiUrl {
     /**
      * Create the ID based URL portion
      *
-     * @param params
-     * @return
+     * @param params The parameters for the method
+     * @return Builder object
      */
     private StringBuilder idProcessing(final TmdbParameters params) {
         StringBuilder urlString = new StringBuilder();
@@ -198,8 +198,8 @@ public class ApiUrl {
     /**
      * Create a string of the remaining parameters
      *
-     * @param params
-     * @return
+     * @param params The parameters for the method
+     * @return Builder object
      */
     private StringBuilder otherProcessing(final TmdbParameters params) {
         StringBuilder urlString = new StringBuilder();
