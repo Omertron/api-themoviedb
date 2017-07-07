@@ -77,6 +77,8 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd-HHmm</maven.build.timestamp.format>
+        <!--Turn off javadoc errors-->
+        <additionalparam>-Xdoclint:none</additionalparam>
     </properties>
 
     <dependencies>

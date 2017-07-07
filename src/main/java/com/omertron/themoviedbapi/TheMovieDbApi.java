@@ -100,7 +100,8 @@ import org.yamj.api.common.http.SimpleHttpClientBuilder;
 /**
  * The MovieInfo API
  * <p>
- * This is for version 3 of the API as specified here: http://help.themoviedb.org/kb/api/about-3
+ * This is for version 3 of the API as specified here:
+ * http://help.themoviedb.org/kb/api/about-3
  *
  * @author stuart.boston
  */
@@ -133,8 +134,8 @@ public class TheMovieDbApi {
     /**
      * API for The Movie Db.
      *
-     * @param apiKey
-     * @throws MovieDbException
+     * @param apiKey apiKey
+     * @throws MovieDbException exception
      */
     public TheMovieDbApi(String apiKey) throws MovieDbException {
         this(apiKey, new SimpleHttpClientBuilder().build());
@@ -143,9 +144,9 @@ public class TheMovieDbApi {
     /**
      * API for The Movie Db.
      *
-     * @param apiKey
+     * @param apiKey apiKey
      * @param httpClient The httpClient to use for web requests.
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public TheMovieDbApi(String apiKey, HttpClient httpClient) throws MovieDbException {
         this.httpTools = new HttpTools(httpClient);
@@ -155,8 +156,8 @@ public class TheMovieDbApi {
     /**
      * Initialise the sub-classes once the API key and http client are known
      *
-     * @param apiKey
-     * @param httpTools
+     * @param apiKey apiKey
+     * @param httpTools httpTools
      */
     private void initialise(String apiKey, HttpTools httpTools) {
         tmdbAccount = new TmdbAccount(apiKey, httpTools);
@@ -184,11 +185,12 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Account">
     /**
-     * Get the basic information for an account. You will need to have a valid session id.
+     * Get the basic information for an account. You will need to have a valid
+     * session id.
      *
-     * @param sessionId
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @return Account
+     * @throws MovieDbException exception
      */
     public Account getAccount(String sessionId) throws MovieDbException {
         return tmdbAccount.getAccount(sessionId);
@@ -197,10 +199,10 @@ public class TheMovieDbApi {
     /**
      * Get all lists of a given user
      *
-     * @param sessionId
-     * @param accountId
+     * @param sessionId sessionId
+     * @param accountId accountId
      * @return The lists
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<UserList> getUserLists(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getUserLists(sessionId, accountId);
@@ -209,10 +211,10 @@ public class TheMovieDbApi {
     /**
      * Get the account favourite movies
      *
-     * @param sessionId
-     * @param accountId
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @return ResultList
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getFavoriteMovies(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteMovies(sessionId, accountId);
@@ -221,13 +223,13 @@ public class TheMovieDbApi {
     /**
      * Add or remove a movie to an accounts favourite list.
      *
-     * @param sessionId
-     * @param accountId
-     * @param mediaId
-     * @param mediaType
-     * @param isFavorite
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param mediaId mediaId
+     * @param mediaType mediaType
+     * @param isFavorite isFavorite
+     * @return StatusCode
+     * @throws MovieDbException exception
      */
     public StatusCode modifyFavoriteStatus(String sessionId, int accountId, Integer mediaId, MediaType mediaType, boolean isFavorite) throws MovieDbException {
         return tmdbAccount.modifyFavoriteStatus(sessionId, accountId, mediaType, mediaId, isFavorite);
@@ -236,13 +238,13 @@ public class TheMovieDbApi {
     /**
      * Get the list of rated movies (and associated rating) for an account.
      *
-     * @param sessionId
-     * @param accountId
-     * @param page
-     * @param sortBy
-     * @param language
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param page page
+     * @param sortBy sortBy
+     * @param language language
+     * @return ResultList
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getRatedMovies(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getRatedMovies(sessionId, accountId, page, sortBy, language);
@@ -251,13 +253,13 @@ public class TheMovieDbApi {
     /**
      * Get the list of rated TV shows (and associated rating) for an account.
      *
-     * @param sessionId
-     * @param accountId
-     * @param page
-     * @param sortBy
-     * @param language
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param page page
+     * @param sortBy sortBy
+     * @param language language
+     * @return ResultList
+     * @throws MovieDbException exception
      */
     public ResultList<TVBasic> getRatedTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getRatedTV(sessionId, accountId, page, sortBy, language);
@@ -266,13 +268,13 @@ public class TheMovieDbApi {
     /**
      * Get the list of movies on an accounts watchlist.
      *
-     * @param sessionId
-     * @param accountId
-     * @param page
-     * @param sortBy
-     * @param language
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param page page
+     * @param sortBy sortBy
+     * @param language language
      * @return The watchlist of the user
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getWatchListMovie(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getWatchListMovie(sessionId, accountId, page, sortBy, language);
@@ -281,13 +283,13 @@ public class TheMovieDbApi {
     /**
      * Get the list of movies on an accounts watchlist.
      *
-     * @param sessionId
-     * @param accountId
-     * @param page
-     * @param sortBy
-     * @param language
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param page page
+     * @param sortBy sortBy
+     * @param language language
      * @return The watchlist of the user
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<TVBasic> getWatchListTV(String sessionId, int accountId, Integer page, String sortBy, String language) throws MovieDbException {
         return tmdbAccount.getWatchListTV(sessionId, accountId, page, sortBy, language);
@@ -296,12 +298,12 @@ public class TheMovieDbApi {
     /**
      * Add a movie to an accounts watch list.
      *
-     * @param sessionId
-     * @param accountId
-     * @param mediaId
-     * @param mediaType
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param mediaId mediaId
+     * @param mediaType mediaType
+     * @return StatusCode
+     * @throws MovieDbException exception
      */
     public StatusCode addToWatchList(String sessionId, int accountId, MediaType mediaType, Integer mediaId) throws MovieDbException {
         return tmdbAccount.modifyWatchList(sessionId, accountId, mediaType, mediaId, true);
@@ -310,12 +312,12 @@ public class TheMovieDbApi {
     /**
      * Remove a movie from an accounts watch list.
      *
-     * @param sessionId
-     * @param accountId
-     * @param mediaId
-     * @param mediaType
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @param mediaId mediaId
+     * @param mediaType mediaType
+     * @return StatusCode
+     * @throws MovieDbException exception
      */
     public StatusCode removeFromWatchList(String sessionId, int accountId, MediaType mediaType, Integer mediaId) throws MovieDbException {
         return tmdbAccount.modifyWatchList(sessionId, accountId, mediaType, mediaId, false);
@@ -324,10 +326,10 @@ public class TheMovieDbApi {
     /**
      * Get the list of favorite TV series for an account.
      *
-     * @param sessionId
-     * @param accountId
-     * @return
-     * @throws MovieDbException
+     * @param sessionId sessionId
+     * @param accountId accountId
+     * @return ResultList
+     * @throws MovieDbException exception
      */
     public ResultList<TVBasic> getFavoriteTv(String sessionId, int accountId) throws MovieDbException {
         return tmdbAccount.getFavoriteTv(sessionId, accountId);
@@ -336,12 +338,12 @@ public class TheMovieDbApi {
     /**
      * Get a list of rated movies for a specific guest session id.
      *
-     * @param guestSessionId
-     * @param language
-     * @param page
+     * @param guestSessionId guestSessionId
+     * @param language language
+     * @param page page
      * @param sortBy only CREATED_AT_ASC or CREATED_AT_DESC is supported
-     * @return
-     * @throws MovieDbException
+     * @return ResultList
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getGuestRatedMovies(String guestSessionId, String language, Integer page, SortBy sortBy) throws MovieDbException {
         return tmdbAccount.getGuestRatedMovies(guestSessionId, language, page, sortBy);
@@ -350,44 +352,49 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Authentication">
     /**
-     * This method is used to generate a valid request token for user based authentication.
+     * This method is used to generate a valid request token for user based
+     * authentication.
      *
      * A request token is required in order to request a session id.
      *
-     * You can generate any number of request tokens but they will expire after 60 minutes.
+     * You can generate any number of request tokens but they will expire after
+     * 60 minutes.
      *
-     * As soon as a valid session id has been created the token will be destroyed.
+     * As soon as a valid session id has been created the token will be
+     * destroyed.
      *
-     * @return
-     * @throws MovieDbException
+     * @return TokenAuthorisation
+     * @throws MovieDbException exception
      */
     public TokenAuthorisation getAuthorisationToken() throws MovieDbException {
         return tmdbAuth.getAuthorisationToken();
     }
 
     /**
-     * This method is used to generate a session id for user based authentication.
+     * This method is used to generate a session id for user based
+     * authentication.
      *
      * A session id is required in order to use any of the write methods.
      *
-     * @param token
-     * @return
-     * @throws MovieDbException
+     * @param token token
+     * @return TokenSession
+     * @throws MovieDbException exception
      */
     public TokenSession getSessionToken(TokenAuthorisation token) throws MovieDbException {
         return tmdbAuth.getSessionToken(token);
     }
 
     /**
-     * This method is used to generate a session id for user based authentication. User must provide their username and password
+     * This method is used to generate a session id for user based
+     * authentication. User must provide their username and password
      *
      * A session id is required in order to use any of the write methods.
      *
      * @param token Session token
      * @param username User's username
      * @param password User's password
-     * @return
-     * @throws MovieDbException
+     * @return TokenAuthorisation
+     * @throws MovieDbException exception
      */
     public TokenAuthorisation getSessionTokenLogin(TokenAuthorisation token, String username, String password) throws MovieDbException {
         return tmdbAuth.getSessionTokenLogin(token, username, password);
@@ -396,17 +403,21 @@ public class TheMovieDbApi {
     /**
      * This method is used to generate a guest session id.
      *
-     * A guest session can be used to rate movies without having a registered TMDb user account.
+     * A guest session can be used to rate movies without having a registered
+     * TMDb user account.
      *
-     * You should only generate a single guest session per user (or device) as you will be able to attach the ratings to a TMDb user
-     * account in the future.
+     * You should only generate a single guest session per user (or device) as
+     * you will be able to attach the ratings to a TMDb user account in the
+     * future.
      *
-     * There are also IP limits in place so you should always make sure it's the end user doing the guest session actions.
+     * There are also IP limits in place so you should always make sure it's the
+     * end user doing the guest session actions.
      *
-     * If a guest session is not used for the first time within 24 hours, it will be automatically discarded.
-     *
-     * @return
-     * @throws MovieDbException
+     * If a guest session is not used for the first time within 24 hours, it
+     * will be automatically discarded.
+     * 
+     * @return TokenSession
+     * @throws MovieDbException exception
      */
     public TokenSession getGuestSessionToken() throws MovieDbException {
         return tmdbAuth.getGuestSessionToken();
@@ -417,8 +428,8 @@ public class TheMovieDbApi {
     /**
      * Get a list of movies certification.
      *
-     * @return
-     * @throws MovieDbException
+     * @return ResultsMap
+     * @throws MovieDbException exception
      */
     public ResultsMap<String, List<Certification>> getMoviesCertification() throws MovieDbException {
         return tmdbCertifications.getMoviesCertification();
@@ -427,8 +438,8 @@ public class TheMovieDbApi {
     /**
      * Get a list of tv certification.
      *
-     * @return
-     * @throws MovieDbException
+     * @return ResultsMap
+     * @throws MovieDbException exception
      */
     public ResultsMap<String, List<Certification>> getTvCertification() throws MovieDbException {
         return tmdbCertifications.getTvCertification();
@@ -439,13 +450,14 @@ public class TheMovieDbApi {
     /**
      * Get a list of Movie IDs that have been edited.
      *
-     * You can then use the movie changes API to get the actual data that has been changed.
+     * You can then use the movie changes API to get the actual data that has
+     * been changed.
      *
-     * @param page
+     * @param page page
      * @param startDate the start date of the changes, optional
      * @param endDate the end date of the changes, optional
      * @return List of changed movie
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ChangeListItem> getMovieChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.MOVIE, page, startDate, endDate);
@@ -454,13 +466,14 @@ public class TheMovieDbApi {
     /**
      * Get a list of TV IDs that have been edited.
      *
-     * You can then use the TV changes API to get the actual data that has been changed.
+     * You can then use the TV changes API to get the actual data that has been
+     * changed.
      *
-     * @param page
+     * @param page page
      * @param startDate the start date of the changes, optional
      * @param endDate the end date of the changes, optional
      * @return List of changed movie
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ChangeListItem> getTvChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.TV, page, startDate, endDate);
@@ -469,13 +482,14 @@ public class TheMovieDbApi {
     /**
      * Get a list of PersonInfo IDs that have been edited.
      *
-     * You can then use the person changes API to get the actual data that has been changed.
+     * You can then use the person changes API to get the actual data that has
+     * been changed.
      *
-     * @param page
+     * @param page page
      * @param startDate the start date of the changes, optional
      * @param endDate the end date of the changes, optional
      * @return List of changed movie
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ChangeListItem> getPersonChangeList(Integer page, String startDate, String endDate) throws MovieDbException {
         return tmdbChanges.getChangeList(MethodBase.PERSON, page, startDate, endDate);
@@ -484,14 +498,16 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Collections">
     /**
-     * This method is used to retrieve all of the basic information about a movie collection.
+     * This method is used to retrieve all of the basic information about a
+     * movie collection.
      *
-     * You can get the ID needed for this method by making a getMovieInfo request for the belongs_to_collection.
+     * You can get the ID needed for this method by making a getMovieInfo
+     * request for the belongs_to_collection.
      *
-     * @param collectionId
-     * @param language
-     * @return
-     * @throws MovieDbException
+     * @param collectionId collectionId
+     * @param language language
+     * @return CollectionInfo
+     * @throws MovieDbException exception
      */
     public CollectionInfo getCollectionInfo(int collectionId, String language) throws MovieDbException {
         return tmdbCollections.getCollectionInfo(collectionId, language);
@@ -500,10 +516,10 @@ public class TheMovieDbApi {
     /**
      * Get all of the images for a particular collection by collection id.
      *
-     * @param collectionId
-     * @param language
-     * @return
-     * @throws MovieDbException
+     * @param collectionId collectionId
+     * @param language language
+     * @return ResultList
+     * @throws MovieDbException exception
      */
     public ResultList<Artwork> getCollectionImages(int collectionId, String language) throws MovieDbException {
         return tmdbCollections.getCollectionImages(collectionId, language);
@@ -512,11 +528,12 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Companies">
     /**
-     * This method is used to retrieve the basic information about a production company on TMDb.
+     * This method is used to retrieve the basic information about a production
+     * company on TMDb.
      *
-     * @param companyId
-     * @return
-     * @throws MovieDbException
+     * @param companyId companyId
+     * @return Company
+     * @throws MovieDbException exception
      */
     public Company getCompanyInfo(int companyId) throws MovieDbException {
         return tmdbCompany.getCompanyInfo(companyId);
@@ -525,13 +542,14 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies associated with a company.
      *
-     * These movies are returned in order of most recently released to oldest. The default response will return 20 movies per page.
+     * These movies are returned in order of most recently released to oldest.
+     * The default response will return 20 movies per page.
      *
-     * @param companyId
-     * @param language
-     * @param page
+     * @param companyId companyId
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getCompanyMovies(int companyId, String language, Integer page) throws MovieDbException {
         return tmdbCompany.getCompanyMovies(companyId, language, page);
@@ -552,10 +570,10 @@ public class TheMovieDbApi {
     /**
      * Generate the full image URL from the size and image path
      *
-     * @param imagePath
-     * @param requiredSize
+     * @param imagePath imagePath
+     * @param requiredSize requiredSize
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public URL createImageUrl(String imagePath, String requiredSize) throws MovieDbException {
         return tmdbConfiguration.getConfig().createImageUrl(imagePath, requiredSize);
@@ -565,14 +583,15 @@ public class TheMovieDbApi {
      * Get a list of valid jobs
      *
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<JobDepartment> getJobs() throws MovieDbException {
         return tmdbConfiguration.getJobs();
     }
 
     /**
-     * Get the list of supported timezones for the API methods that support them.
+     * Get the list of supported timezones for the API methods that support
+     * them.
      *
      * @return @throws MovieDbException
      */
@@ -587,16 +606,19 @@ public class TheMovieDbApi {
      * <p>
      * This is currently only supported with the new credit model found in TV.
      *
-     * These IDs can be found from any TV credit response as well as the TV_credits and combined_credits methods for people.<br>
-     * The episodes object returns a list of episodes and are generally going to be guest stars. <br>
+     * These IDs can be found from any TV credit response as well as the
+     * TV_credits and combined_credits methods for people.<br>
+     * The episodes object returns a list of episodes and are generally going to
+     * be guest stars. <br>
      * The season array will return a list of season numbers. <br>
-     * Season credits are credits that were marked with the "add to every season" option in the editing interface and are assumed to
-     * be "season regulars".
+     * Season credits are credits that were marked with the "add to every
+     * season" option in the editing interface and are assumed to be "season
+     * regulars".
      *
-     * @param creditId
-     * @param language
+     * @param creditId creditId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public CreditInfo getCreditInfo(String creditId, String language) throws MovieDbException {
         return tmdbCredits.getCreditInfo(creditId, language);
@@ -605,22 +627,24 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Discover">
     /**
-     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of
+     * votes, genres and certifications.
      *
      * @param discover A discover object containing the search criteria required
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getDiscoverMovies(Discover discover) throws MovieDbException {
         return tmdbDiscover.getDiscoverMovies(discover);
     }
 
     /**
-     * Discover movies by different types of data like average rating, number of votes, genres and certifications.
+     * Discover movies by different types of data like average rating, number of
+     * votes, genres and certifications.
      *
      * @param discover A discover object containing the search criteria required
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<TVBasic> getDiscoverTV(Discover discover) throws MovieDbException {
         return tmdbDiscover.getDiscoverTV(discover);
@@ -629,16 +653,18 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="Find">
     /**
-     * You con use this method to find movies, tv series or persons using external ids.
+     * You con use this method to find movies, tv series or persons using
+     * external ids.
      *
      * Supported query ids are
      * <ul>
      * <li>Movies: imdb_id</li>
      * <li>People: imdb_id, freebase_mid, freebase_id, tvrage_id</li>
-     * <li>TV Series: imdb_id, freebase_mid, freebase_id, tvdb_id, tvrage_id</li>
+     * <li>TV Series: imdb_id, freebase_mid, freebase_id, tvdb_id,
+     * tvrage_id</li>
      * <li>TV Seasons: freebase_mid, freebase_id, tvdb_id, tvrage_id</li>
-     * <li>TV Episodes: imdb_id, freebase_mid, freebase_id, tvdb_id, tvrage_idimdb_id, freebase_mid, freebase_id, tvrage_id,
-     * tvdb_id.
+     * <li>TV Episodes: imdb_id, freebase_mid, freebase_id, tvdb_id,
+     * tvrage_idimdb_id, freebase_mid, freebase_id, tvrage_id, tvdb_id.
      * </ul>
      *
      * For details see http://docs.themoviedb.apiary.io/#find
@@ -647,7 +673,7 @@ public class TheMovieDbApi {
      * @param externalSource one of {@link ExternalSource}.
      * @param language the language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public FindResults find(String id, ExternalSource externalSource, String language) throws MovieDbException {
         return tmdbFind.find(id, externalSource, language);
@@ -658,9 +684,9 @@ public class TheMovieDbApi {
     /**
      * Get the list of Movie genres.
      *
-     * @param language
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Genre> getGenreMovieList(String language) throws MovieDbException {
         return tmdbGenre.getGenreMovieList(language);
@@ -669,9 +695,9 @@ public class TheMovieDbApi {
     /**
      * Get the list of TV genres..
      *
-     * @param language
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Genre> getGenreTVList(String language) throws MovieDbException {
         return tmdbGenre.getGenreTVList(language);
@@ -680,17 +706,19 @@ public class TheMovieDbApi {
     /**
      * Get a list of movies per genre.
      *
-     * It is important to understand that only movies with more than 10 votes get listed.
+     * It is important to understand that only movies with more than 10 votes
+     * get listed.
      *
-     * This prevents movies from 1 10/10 rating from being listed first and for the first 5 pages.
+     * This prevents movies from 1 10/10 rating from being listed first and for
+     * the first 5 pages.
      *
-     * @param genreId
-     * @param language
-     * @param page
-     * @param includeAllMovies
-     * @param includeAdult
+     * @param genreId genreId
+     * @param language language
+     * @param page page
+     * @param includeAllMovies includeAllMovies
+     * @param includeAdult includeAdult
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getGenreMovies(int genreId, String language, Integer page, Boolean includeAllMovies, Boolean includeAdult) throws MovieDbException {
         return tmdbGenre.getGenreMovies(genreId, language, page, includeAllMovies, includeAdult);
@@ -701,9 +729,9 @@ public class TheMovieDbApi {
     /**
      * Get the basic information for a specific keyword id.
      *
-     * @param keywordId
+     * @param keywordId keywordId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public Keyword getKeyword(String keywordId) throws MovieDbException {
         return tmdbKeywords.getKeyword(keywordId);
@@ -712,11 +740,11 @@ public class TheMovieDbApi {
     /**
      * Get the list of movies for a particular keyword by id.
      *
-     * @param keywordId
-     * @param language
-     * @param page
+     * @param keywordId keywordId
+     * @param language language
+     * @param page page
      * @return List of movies with the keyword
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieBasic> getKeywordMovies(String keywordId, String language, Integer page) throws MovieDbException {
         return tmdbKeywords.getKeywordMovies(keywordId, language, page);
@@ -727,9 +755,9 @@ public class TheMovieDbApi {
     /**
      * Get a list by its ID
      *
-     * @param listId
+     * @param listId listId
      * @return The list and its items
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ListItem<MovieInfo> getList(String listId) throws MovieDbException {
         return tmdbList.getList(listId);
@@ -738,23 +766,24 @@ public class TheMovieDbApi {
     /**
      * This method lets users create a new list. A valid session id is required.
      *
-     * @param sessionId
-     * @param name
-     * @param description
+     * @param sessionId sessionId
+     * @param name name
+     * @param description description
      * @return The list id
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public String createList(String sessionId, String name, String description) throws MovieDbException {
         return tmdbList.createList(sessionId, name, description);
     }
 
     /**
-     * This method lets users delete a list that they created. A valid session id is required.
+     * This method lets users delete a list that they created. A valid session
+     * id is required.
      *
-     * @param sessionId
-     * @param listId
+     * @param sessionId sessionId
+     * @param listId listId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public StatusCode deleteList(String sessionId, String listId) throws MovieDbException {
         return tmdbList.deleteList(sessionId, listId);
@@ -763,10 +792,10 @@ public class TheMovieDbApi {
     /**
      * Check to see if an item is already on a list.
      *
-     * @param listId
-     * @param mediaId
+     * @param listId listId
+     * @param mediaId mediaId
      * @return true if the item is on the list
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public boolean checkItemStatus(String listId, Integer mediaId) throws MovieDbException {
         return tmdbList.checkItemStatus(listId, mediaId);
@@ -777,11 +806,11 @@ public class TheMovieDbApi {
      *
      * A valid session id is required.
      *
-     * @param sessionId
-     * @param listId
-     * @param mediaId
+     * @param sessionId sessionId
+     * @param listId listId
+     * @param mediaId mediaId
      * @return true if the movie is on the list
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public StatusCode addItemToList(String sessionId, String listId, Integer mediaId) throws MovieDbException {
         return tmdbList.addItem(sessionId, listId, mediaId);
@@ -792,11 +821,11 @@ public class TheMovieDbApi {
      *
      * A valid session id is required.
      *
-     * @param sessionId
-     * @param listId
-     * @param mediaId
+     * @param sessionId sessionId
+     * @param listId listId
+     * @param mediaId mediaId
      * @return true if the movie is on the list
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public StatusCode removeItemFromList(String sessionId, String listId, Integer mediaId) throws MovieDbException {
         return tmdbList.removeItem(sessionId, listId, mediaId);
@@ -809,13 +838,14 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
-     * @param movieId
-     * @param language
-     * @param appendToResponse
+     * @param movieId movieId
+     * @param language language
+     * @param appendToResponse appendToResponse
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MovieInfo getMovieInfo(int movieId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getMovieInfo(movieId, language, appendToResponse);
@@ -826,40 +856,42 @@ public class TheMovieDbApi {
      *
      * It will return the single highest rated poster and backdrop.
      *
-     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies found.
+     * ApiExceptionType.MOVIE_ID_NOT_FOUND will be thrown if there are no movies
+     * found.
      *
-     * @param imdbId
-     * @param language
-     * @param appendToResponse
+     * @param imdbId imdbId
+     * @param language language
+     * @param appendToResponse appendToResponse
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MovieInfo getMovieInfoImdb(String imdbId, String language, String... appendToResponse) throws MovieDbException {
         return tmdbMovies.getMovieInfoImdb(imdbId, language, appendToResponse);
     }
 
     /**
-     * This method lets a user get the status of whether or not the movie has been rated or added to their favourite or movie watch
-     * list.
+     * This method lets a user get the status of whether or not the movie has
+     * been rated or added to their favourite or movie watch list.
      *
      * A valid session id is required.
      *
-     * @param movieId
-     * @param sessionId
+     * @param movieId movieId
+     * @param sessionId sessionId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MediaState getMovieAccountState(int movieId, String sessionId) throws MovieDbException {
         return tmdbMovies.getMovieAccountState(movieId, sessionId);
     }
 
     /**
-     * This method is used to retrieve all of the alternative titles we have for a particular movie.
+     * This method is used to retrieve all of the alternative titles we have for
+     * a particular movie.
      *
-     * @param movieId
-     * @param country
+     * @param movieId movieId
+     * @param country country
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<AlternativeTitle> getMovieAlternativeTitles(int movieId, String country) throws MovieDbException {
         return tmdbMovies.getMovieAlternativeTitles(movieId, country);
@@ -868,88 +900,95 @@ public class TheMovieDbApi {
     /**
      * Get the cast and crew information for a specific movie id.
      *
-     * @param movieId
+     * @param movieId movieId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MediaCreditList getMovieCredits(int movieId) throws MovieDbException {
         return tmdbMovies.getMovieCredits(movieId);
     }
 
     /**
-     * This method should be used when you’re wanting to retrieve all of the images for a particular movie.
+     * This method should be used when you’re wanting to retrieve all of the
+     * images for a particular movie.
      *
-     * @param movieId
-     * @param language
+     * @param movieId movieId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Artwork> getMovieImages(int movieId, String language) throws MovieDbException {
         return tmdbMovies.getMovieImages(movieId, language);
     }
 
     /**
-     * This method is used to retrieve all of the keywords that have been added to a particular movie.
+     * This method is used to retrieve all of the keywords that have been added
+     * to a particular movie.
      *
      * Currently, only English keywords exist.
      *
-     * @param movieId
+     * @param movieId movieId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Keyword> getMovieKeywords(int movieId) throws MovieDbException {
         return tmdbMovies.getMovieKeywords(movieId);
     }
 
     /**
-     * This method is used to retrieve all of the release and certification data we have for a specific movie.
+     * This method is used to retrieve all of the release and certification data
+     * we have for a specific movie.
      *
-     * @param movieId
-     * @param language
+     * @param movieId movieId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ReleaseInfo> getMovieReleaseInfo(int movieId, String language) throws MovieDbException {
         return tmdbMovies.getMovieReleaseInfo(movieId, language);
     }
 
     /**
-     * This method is used to retrieve all of the trailers for a particular movie.
+     * This method is used to retrieve all of the trailers for a particular
+     * movie.
      *
      * Supported sites are YouTube and QuickTime.
      *
-     * @param movieId
-     * @param language
+     * @param movieId movieId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Video> getMovieVideos(int movieId, String language) throws MovieDbException {
         return tmdbMovies.getMovieVideos(movieId, language);
     }
 
     /**
-     * This method is used to retrieve a list of the available translations for a specific movie.
+     * This method is used to retrieve a list of the available translations for
+     * a specific movie.
      *
-     * @param movieId
+     * @param movieId movieId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Translation> getMovieTranslations(int movieId) throws MovieDbException {
         return tmdbMovies.getMovieTranslations(movieId);
     }
 
     /**
-     * The similar movies method will let you retrieve the similar movies for a particular movie.
+     * The similar movies method will let you retrieve the similar movies for a
+     * particular movie.
      *
-     * This data is created dynamically but with the help of users votes on TMDb.
+     * This data is created dynamically but with the help of users votes on
+     * TMDb.
      *
      * The data is much better with movies that have more keywords
      *
-     * @param movieId
-     * @param language
-     * @param page
+     * @param movieId movieId
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieInfo> getSimilarMovies(int movieId, Integer page, String language) throws MovieDbException {
         return tmdbMovies.getSimilarMovies(movieId, page, language);
@@ -958,11 +997,11 @@ public class TheMovieDbApi {
     /**
      * Get the reviews for a particular movie id.
      *
-     * @param movieId
-     * @param page
-     * @param language
+     * @param movieId movieId
+     * @param page page
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Review> getMovieReviews(int movieId, Integer page, String language) throws MovieDbException {
         return tmdbMovies.getMovieReviews(movieId, page, language);
@@ -971,11 +1010,11 @@ public class TheMovieDbApi {
     /**
      * Get the lists that the movie belongs to
      *
-     * @param movieId
-     * @param language
-     * @param page
+     * @param movieId movieId
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<UserList> getMovieLists(int movieId, Integer page, String language) throws MovieDbException {
         return tmdbMovies.getMovieLists(movieId, page, language);
@@ -988,15 +1027,16 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
-     * @param movieId
-     * @param startDate
-     * @param endDate
+     * @param movieId movieId
+     * @param startDate startDate
+     * @param endDate endDate
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ChangeKeyItem> getMovieChanges(int movieId, String startDate, String endDate) throws MovieDbException {
         return tmdbMovies.getMovieChanges(movieId, startDate, endDate);
@@ -1007,12 +1047,12 @@ public class TheMovieDbApi {
      *
      * A valid session id or guest session id is required.
      *
-     * @param sessionId
-     * @param movieId
-     * @param rating
-     * @param guestSessionId
+     * @param sessionId sessionId
+     * @param movieId movieId
+     * @param rating rating
+     * @param guestSessionId guestSessionId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public StatusCode postMovieRating(int movieId, int rating, String sessionId, String guestSessionId) throws MovieDbException {
         return tmdbMovies.postMovieRating(movieId, rating, sessionId, guestSessionId);
@@ -1022,7 +1062,7 @@ public class TheMovieDbApi {
      * This method is used to retrieve the newest movie that was added to TMDb.
      *
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MovieInfo getLatestMovie() throws MovieDbException {
         return tmdbMovies.getLatestMovie();
@@ -1035,10 +1075,10 @@ public class TheMovieDbApi {
      *
      * The maximum number of items this list will include is 100.
      *
-     * @param language
-     * @param page
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieInfo> getUpcoming(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getUpcoming(page, language);
@@ -1047,12 +1087,13 @@ public class TheMovieDbApi {
     /**
      * This method is used to retrieve the movies currently in theatres.
      *
-     * This is a curated list that will normally contain 100 movies. The default response will return 20 movies.
+     * This is a curated list that will normally contain 100 movies. The default
+     * response will return 20 movies.
      *
-     * @param language
-     * @param page
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieInfo> getNowPlayingMovies(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getNowPlayingMovies(page, language);
@@ -1063,24 +1104,25 @@ public class TheMovieDbApi {
      *
      * This list is updated daily. The default response will return 20 movies.
      *
-     * @param language
-     * @param page
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieInfo> getPopularMovieList(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getPopularMovieList(page, language);
     }
 
     /**
-     * This method is used to retrieve the top rated movies that have over 10 votes on TMDb.
+     * This method is used to retrieve the top rated movies that have over 10
+     * votes on TMDb.
      *
      * The default response will return 20 movies.
      *
-     * @param language
-     * @param page
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieInfo> getTopRatedMovies(Integer page, String language) throws MovieDbException {
         return tmdbMovies.getTopRatedMovies(page, language);
@@ -1093,9 +1135,9 @@ public class TheMovieDbApi {
      * <p>
      * You can use this ID to search for TV shows with the discover method.
      *
-     * @param networkId
+     * @param networkId networkId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public Network getNetworkInfo(int networkId) throws MovieDbException {
         return tmdbNetworks.getNetworkInfo(networkId);
@@ -1106,10 +1148,10 @@ public class TheMovieDbApi {
     /**
      * Get the general person information for a specific id.
      *
-     * @param personId
-     * @param appendToResponse
+     * @param personId personId
+     * @param appendToResponse appendToResponse
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public PersonInfo getPersonInfo(int personId, String... appendToResponse) throws MovieDbException {
         return tmdbPeople.getPersonInfo(personId, appendToResponse);
@@ -1118,10 +1160,10 @@ public class TheMovieDbApi {
     /**
      * Get the movie credits for a specific person id.
      *
-     * @param personId
-     * @param language
+     * @param personId personId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public PersonCreditList<CreditMovieBasic> getPersonMovieCredits(int personId, String language) throws MovieDbException {
         return tmdbPeople.getPersonMovieCredits(personId, language);
@@ -1130,14 +1172,16 @@ public class TheMovieDbApi {
     /**
      * Get the TV credits for a specific person id.
      *
-     * To get the expanded details for each record, call the /credit method with the provided credit_id.
+     * To get the expanded details for each record, call the /credit method with
+     * the provided credit_id.
      *
-     * This will provide details about which episode and/or season the credit is for.
+     * This will provide details about which episode and/or season the credit is
+     * for.
      *
-     * @param personId
-     * @param language
+     * @param personId personId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public PersonCreditList<CreditTVBasic> getPersonTVCredits(int personId, String language) throws MovieDbException {
         return tmdbPeople.getPersonTVCredits(personId, language);
@@ -1146,14 +1190,16 @@ public class TheMovieDbApi {
     /**
      * Get the combined (movie and TV) credits for a specific person id.
      *
-     * To get the expanded details for each TV record, call the /credit method with the provided credit_id.
+     * To get the expanded details for each TV record, call the /credit method
+     * with the provided credit_id.
      *
-     * This will provide details about which episode and/or season the credit is for.
+     * This will provide details about which episode and/or season the credit is
+     * for.
      *
-     * @param personId
-     * @param language
+     * @param personId personId
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public PersonCreditList<CreditBasic> getPersonCombinedCredits(int personId, String language) throws MovieDbException {
         return tmdbPeople.getPersonCombinedCredits(personId, language);
@@ -1162,9 +1208,9 @@ public class TheMovieDbApi {
     /**
      * Get the external ids for a specific person id.
      *
-     * @param personId
+     * @param personId personId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ExternalID getPersonExternalIds(int personId) throws MovieDbException {
         return tmdbPeople.getPersonExternalIds(personId);
@@ -1173,9 +1219,9 @@ public class TheMovieDbApi {
     /**
      * Get the images for a specific person id.
      *
-     * @param personId
+     * @param personId personId
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Artwork> getPersonImages(int personId) throws MovieDbException {
         return tmdbPeople.getPersonImages(personId);
@@ -1184,11 +1230,12 @@ public class TheMovieDbApi {
     /**
      * Get the images that have been tagged with a specific person id.
      *
-     * We return all of the image results with a media object mapped for each image.
+     * We return all of the image results with a media object mapped for each
+     * image.
      *
-     * @param personId
-     * @param page
-     * @param language
+     * @param personId personId
+     * @param page page
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1203,13 +1250,14 @@ public class TheMovieDbApi {
      *
      * By default, only the last 24 hours of changes are returned.
      *
-     * The maximum number of days that can be returned in a single request is 14.
+     * The maximum number of days that can be returned in a single request is
+     * 14.
      *
      * The language is present on fields that are translatable.
      *
-     * @param personId
-     * @param startDate
-     * @param endDate
+     * @param personId personId
+     * @param startDate startDate
+     * @param endDate endDate
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1222,9 +1270,9 @@ public class TheMovieDbApi {
      *
      * This list refreshes every day.
      *
-     * @param page
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<PersonFind> getPersonPopular(Integer page) throws MovieDbException {
         return tmdbPeople.getPersonPopular(page);
@@ -1234,7 +1282,7 @@ public class TheMovieDbApi {
      * Get the latest person id.
      *
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public PersonInfo getPersonLatest() throws MovieDbException {
         return tmdbPeople.getPersonLatest();
@@ -1244,7 +1292,7 @@ public class TheMovieDbApi {
     //<editor-fold defaultstate="collapsed" desc="Review">
     /**
      *
-     * @param reviewId
+     * @param reviewId reviewId
      * @return @throws MovieDbException
      */
     public Review getReviews(String reviewId) throws MovieDbException {
@@ -1256,15 +1304,15 @@ public class TheMovieDbApi {
     /**
      * Search Companies.
      *
-     * You can use this method to search for production companies that are part of TMDb. The company IDs will map to those returned
-     * on movie calls.
+     * You can use this method to search for production companies that are part
+     * of TMDb. The company IDs will map to those returned on movie calls.
      *
      * http://help.themoviedb.org/kb/api/search-companies
      *
-     * @param query
-     * @param page
+     * @param query query
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Company> searchCompanies(String query, Integer page) throws MovieDbException {
         return tmdbSearch.searchCompanies(query, page);
@@ -1273,11 +1321,11 @@ public class TheMovieDbApi {
     /**
      * Search for collections by name.
      *
-     * @param query
-     * @param language
-     * @param page
+     * @param query query
+     * @param language language
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Collection> searchCollection(String query, Integer page, String language) throws MovieDbException {
         return tmdbSearch.searchCollection(query, page, language);
@@ -1286,27 +1334,30 @@ public class TheMovieDbApi {
     /**
      * Search for keywords by name
      *
-     * @param query
-     * @param page
+     * @param query query
+     * @param page page
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Keyword> searchKeyword(String query, Integer page) throws MovieDbException {
         return tmdbSearch.searchKeyword(query, page);
     }
 
     /**
-     * Search Movies This is a good starting point to start finding movies on TMDb.
+     * Search Movies This is a good starting point to start finding movies on
+     * TMDb.
      *
-     * @param query
-     * @param searchYear Limit the search to the provided year. Zero (0) will get all years
+     * @param query query
+     * @param searchYear Limit the search to the provided year. Zero (0) will
+     * get all years
      * @param language The language to include. Can be blank/null.
      * @param includeAdult true or false to include adult titles in the search
-     * @param page The page of results to return. 0 to get the default (first page)
-     * @param primaryReleaseYear
-     * @param searchType
+     * @param page The page of results to return. 0 to get the default (first
+     * page)
+     * @param primaryReleaseYear primaryReleaseYear
+     * @param searchType searchType
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MovieInfo> searchMovie(String query,
             Integer page,
@@ -1321,16 +1372,18 @@ public class TheMovieDbApi {
     /**
      * Search the movie, tv show and person collections with a single query.
      *
-     * Each item returned in the result array has a media_type field that maps to either movie, tv or person.
+     * Each item returned in the result array has a media_type field that maps
+     * to either movie, tv or person.
      *
-     * Each mapped result is the same response you would get from each independent search
+     * Each mapped result is the same response you would get from each
+     * independent search
      *
-     * @param query
-     * @param page
-     * @param language
-     * @param includeAdult
+     * @param query query
+     * @param page page
+     * @param language language
+     * @param includeAdult includeAdult
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<MediaBasic> searchMulti(String query, Integer page, String language, Boolean includeAdult) throws MovieDbException {
         return tmdbSearch.searchMulti(query, page, language, includeAdult);
@@ -1339,14 +1392,15 @@ public class TheMovieDbApi {
     /**
      * This is a good starting point to start finding people on TMDb.
      *
-     * The idea is to be a quick and light method so you can iterate through people quickly.
+     * The idea is to be a quick and light method so you can iterate through
+     * people quickly.
      *
-     * @param query
-     * @param includeAdult
-     * @param page
-     * @param searchType
+     * @param query query
+     * @param includeAdult includeAdult
+     * @param page page
+     * @param searchType searchType
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<PersonFind> searchPeople(String query, Integer page, Boolean includeAdult, SearchType searchType) throws MovieDbException {
         return tmdbSearch.searchPeople(query, page, includeAdult, searchType);
@@ -1355,11 +1409,11 @@ public class TheMovieDbApi {
     /**
      * Search for TV shows by title.
      *
-     * @param query
-     * @param page
-     * @param language
-     * @param firstAirDateYear
-     * @param searchType
+     * @param query query
+     * @param page page
+     * @param language language
+     * @param firstAirDateYear firstAirDateYear
+     * @param searchType searchType
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1372,9 +1426,9 @@ public class TheMovieDbApi {
     /**
      * Get the primary information about a TV series by id.
      *
-     * @param tvID
-     * @param language
-     * @param appendToResponse
+     * @param tvID tvID
+     * @param language language
+     * @param appendToResponse appendToResponse
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1383,13 +1437,13 @@ public class TheMovieDbApi {
     }
 
     /**
-     * This method lets users get the status of whether or not the TV show has been rated or added to their favourite or watch
-     * lists.
+     * This method lets users get the status of whether or not the TV show has
+     * been rated or added to their favourite or watch lists.
      *
      * A valid session id is required.
      *
-     * @param tvID
-     * @param sessionID
+     * @param tvID tvID
+     * @param sessionID sessionID
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1400,7 +1454,7 @@ public class TheMovieDbApi {
     /**
      * Get the alternative titles for a specific show ID.
      *
-     * @param tvID
+     * @param tvID tvID
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1411,9 +1465,9 @@ public class TheMovieDbApi {
     /**
      * Get the changes for a specific TV show id.
      *
-     * @param tvID
-     * @param startDate
-     * @param endDate
+     * @param tvID tvID
+     * @param startDate startDate
+     * @param endDate endDate
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1424,7 +1478,7 @@ public class TheMovieDbApi {
     /**
      * Get the content ratings for a specific TV show id.
      *
-     * @param tvID
+     * @param tvID tvID
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1435,8 +1489,8 @@ public class TheMovieDbApi {
     /**
      * Get the cast & crew information about a TV series.
      *
-     * @param tvID
-     * @param language
+     * @param tvID tvID
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1447,8 +1501,8 @@ public class TheMovieDbApi {
     /**
      * Get the external ids that we have stored for a TV series.
      *
-     * @param tvID
-     * @param language
+     * @param tvID tvID
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1459,9 +1513,9 @@ public class TheMovieDbApi {
     /**
      * Get the images (posters and backdrops) for a TV series.
      *
-     * @param tvID
-     * @param language
-     * @param includeImageLanguage
+     * @param tvID tvID
+     * @param language language
+     * @param includeImageLanguage includeImageLanguage
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1472,7 +1526,7 @@ public class TheMovieDbApi {
     /**
      * Get the plot keywords for a specific TV show id.
      *
-     * @param tvID
+     * @param tvID tvID
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1485,10 +1539,10 @@ public class TheMovieDbApi {
      *
      * A valid session id or guest session id is required.
      *
-     * @param tvID
-     * @param rating
-     * @param sessionID
-     * @param guestSessionID
+     * @param tvID tvID
+     * @param rating rating
+     * @param sessionID sessionID
+     * @param guestSessionID guestSessionID
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1499,9 +1553,9 @@ public class TheMovieDbApi {
     /**
      * Get the similar TV shows for a specific tv id.
      *
-     * @param tvID
-     * @param page
-     * @param language
+     * @param tvID tvID
+     * @param page page
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1510,9 +1564,10 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get the list of translations that exist for a TV series. These translations cascade down to the episode level.
+     * Get the list of translations that exist for a TV series. These
+     * translations cascade down to the episode level.
      *
-     * @param tvID
+     * @param tvID tvID
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1521,10 +1576,11 @@ public class TheMovieDbApi {
     }
 
     /**
-     * Get the videos that have been added to a TV series (trailers, opening credits, etc...)
+     * Get the videos that have been added to a TV series (trailers, opening
+     * credits, etc...)
      *
-     * @param tvID
-     * @param language
+     * @param tvID tvID
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1545,10 +1601,11 @@ public class TheMovieDbApi {
     /**
      * Get the list of TV shows that are currently on the air.
      *
-     * This query looks for any TV show that has an episode with an air date in the next 7 days.
+     * This query looks for any TV show that has an episode with an air date in
+     * the next 7 days.
      *
-     * @param page
-     * @param language
+     * @param page page
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1561,9 +1618,9 @@ public class TheMovieDbApi {
      *
      * Without a specified timezone, this query defaults to EST
      *
-     * @param page
-     * @param language
-     * @param timezone
+     * @param page page
+     * @param language language
+     * @param timezone timezone
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1574,12 +1631,13 @@ public class TheMovieDbApi {
     /**
      * Get the list of top rated TV shows.
      *
-     * By default, this list will only include TV shows that have 2 or more votes.
+     * By default, this list will only include TV shows that have 2 or more
+     * votes.
      *
      * This list refreshes every day.
      *
-     * @param page
-     * @param language
+     * @param page page
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1590,8 +1648,8 @@ public class TheMovieDbApi {
     /**
      * Get the list of popular TV shows. This list refreshes every day.
      *
-     * @param page
-     * @param language
+     * @param page page
+     * @param language language
      * @return
      * @throws com.omertron.themoviedbapi.MovieDbException
      */
@@ -1604,12 +1662,12 @@ public class TheMovieDbApi {
     /**
      * Get the primary information about a TV season by its season number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param language
-     * @param appendToResponse
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param language language
+     * @param appendToResponse appendToResponse
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public TVSeasonInfo getSeasonInfo(int tvID, int seasonNumber, String language, String... appendToResponse) throws MovieDbException {
         return tmdbSeasons.getSeasonInfo(tvID, seasonNumber, language, appendToResponse);
@@ -1618,25 +1676,26 @@ public class TheMovieDbApi {
     /**
      * Look up a TV season's changes by season ID.
      *
-     * @param tvID
-     * @param startDate
-     * @param endDate
+     * @param tvID tvID
+     * @param startDate startDate
+     * @param endDate endDate
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ChangeKeyItem> getSeasonChanges(int tvID, String startDate, String endDate) throws MovieDbException {
         return tmdbSeasons.getSeasonChanges(tvID, startDate, endDate);
     }
 
     /**
-     * This method lets users get the status of whether or not the TV episodes of a season have been rated.
+     * This method lets users get the status of whether or not the TV episodes
+     * of a season have been rated.
      *
      * A valid session id is required.
      *
-     * @param tvID
-     * @param sessionID
+     * @param tvID tvID
+     * @param sessionID sessionID
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MediaState getSeasonAccountState(int tvID, String sessionID) throws MovieDbException {
         return tmdbSeasons.getSeasonAccountState(tvID, sessionID);
@@ -1645,23 +1704,24 @@ public class TheMovieDbApi {
     /**
      * Get the cast & crew credits for a TV season by season number.
      *
-     * @param tvID
-     * @param seasonNumber
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MediaCreditList getSeasonCredits(int tvID, int seasonNumber) throws MovieDbException {
         return tmdbSeasons.getSeasonCredits(tvID, seasonNumber);
     }
 
     /**
-     * Get the external ids that we have stored for a TV season by season number.
+     * Get the external ids that we have stored for a TV season by season
+     * number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param language
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ExternalID getSeasonExternalID(int tvID, int seasonNumber, String language) throws MovieDbException {
         return tmdbSeasons.getSeasonExternalID(tvID, seasonNumber, language);
@@ -1670,25 +1730,26 @@ public class TheMovieDbApi {
     /**
      * Get the images that we have stored for a TV season by season number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param language
-     * @param includeImageLanguage
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param language language
+     * @param includeImageLanguage includeImageLanguage
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Artwork> getSeasonImages(int tvID, int seasonNumber, String language, String... includeImageLanguage) throws MovieDbException {
         return tmdbSeasons.getSeasonImages(tvID, seasonNumber, language, includeImageLanguage);
     }
 
     /**
-     * Get the videos that have been added to a TV season (trailers, teasers, etc...)
+     * Get the videos that have been added to a TV season (trailers, teasers,
+     * etc...)
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param language
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Video> getSeasonVideos(int tvID, int seasonNumber, String language) throws MovieDbException {
         return tmdbSeasons.getSeasonVideos(tvID, seasonNumber, language);
@@ -1697,15 +1758,16 @@ public class TheMovieDbApi {
 
     //<editor-fold defaultstate="collapsed" desc="TV Episodes">
     /**
-     * Get the primary information about a TV episode by combination of a season and episode number.
+     * Get the primary information about a TV episode by combination of a season
+     * and episode number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
-     * @param language
-     * @param appendToResponse
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
+     * @param language language
+     * @param appendToResponse appendToResponse
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public TVEpisodeInfo getEpisodeInfo(int tvID, int seasonNumber, int episodeNumber, String language, String... appendToResponse) throws MovieDbException {
         return tmdbEpisodes.getEpisodeInfo(tvID, seasonNumber, episodeNumber, language, appendToResponse);
@@ -1714,27 +1776,28 @@ public class TheMovieDbApi {
     /**
      * Look up a TV episode's changes by episode ID
      *
-     * @param episodeID
-     * @param startDate
-     * @param endDate
+     * @param episodeID episodeID
+     * @param startDate startDate
+     * @param endDate endDate
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<ChangeKeyItem> getEpisodeChanges(int episodeID, String startDate, String endDate) throws MovieDbException {
         return tmdbEpisodes.getEpisodeChanges(episodeID, startDate, endDate);
     }
 
     /**
-     * This method lets users get the status of whether or not the TV episode has been rated.
+     * This method lets users get the status of whether or not the TV episode
+     * has been rated.
      *
      * A valid session id is required.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
-     * @param sessionID
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
+     * @param sessionID sessionID
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MediaState getEpisodeAccountState(int tvID, int seasonNumber, int episodeNumber, String sessionID) throws MovieDbException {
         return tmdbEpisodes.getEpisodeAccountState(tvID, seasonNumber, episodeNumber, sessionID);
@@ -1743,68 +1806,72 @@ public class TheMovieDbApi {
     /**
      * Get the TV episode credits by combination of season and episode number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public MediaCreditList getEpisodeCredits(int tvID, int seasonNumber, int episodeNumber) throws MovieDbException {
         return tmdbEpisodes.getEpisodeCredits(tvID, seasonNumber, episodeNumber);
     }
 
     /**
-     * Get the external ids for a TV episode by comabination of a season and episode number.
+     * Get the external ids for a TV episode by comabination of a season and
+     * episode number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
-     * @param language
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ExternalID getEpisodeExternalID(int tvID, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return tmdbEpisodes.getEpisodeExternalID(tvID, seasonNumber, episodeNumber, language);
     }
 
     /**
-     * Get the images (episode stills) for a TV episode by combination of a season and episode number.
+     * Get the images (episode stills) for a TV episode by combination of a
+     * season and episode number.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Artwork> getEpisodeImages(int tvID, int seasonNumber, int episodeNumber) throws MovieDbException {
         return tmdbEpisodes.getEpisodeImages(tvID, seasonNumber, episodeNumber);
     }
 
     /**
-     * This method lets users rate a TV episode. A valid session id or guest session id is required.
+     * This method lets users rate a TV episode. A valid session id or guest
+     * session id is required.
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
-     * @param rating
-     * @param sessionID
-     * @param guestSessionID
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
+     * @param rating rating
+     * @param sessionID sessionID
+     * @param guestSessionID guestSessionID
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public StatusCode postEpisodeRating(int tvID, int seasonNumber, int episodeNumber, int rating, String sessionID, String guestSessionID) throws MovieDbException {
         return tmdbEpisodes.postEpisodeRating(tvID, seasonNumber, episodeNumber, rating, sessionID, guestSessionID);
     }
 
     /**
-     * Get the videos that have been added to a TV episode (teasers, clips, etc...)
+     * Get the videos that have been added to a TV episode (teasers, clips,
+     * etc...)
      *
-     * @param tvID
-     * @param seasonNumber
-     * @param episodeNumber
-     * @param language
+     * @param tvID tvID
+     * @param seasonNumber seasonNumber
+     * @param episodeNumber episodeNumber
+     * @param language language
      * @return
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public ResultList<Video> getEpisodeVideos(int tvID, int seasonNumber, int episodeNumber, String language) throws MovieDbException {
         return tmdbEpisodes.getEpisodeVideos(tvID, seasonNumber, episodeNumber, language);
