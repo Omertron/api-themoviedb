@@ -61,7 +61,7 @@ public class HttpTools {
      *
      * @param url URL to use in the request
      * @return String content
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public String getRequest(final URL url) throws MovieDbException {
         try {
@@ -89,7 +89,7 @@ public class HttpTools {
     /**
      * Sleep for a period of time
      *
-     * @param multiplier
+     * @param multiplier number of seconds to use for delay
      */
     private void delay(long multiplier) {
         try {
@@ -105,7 +105,7 @@ public class HttpTools {
      *
      * @param url URL to use in the request
      * @return String content
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public String deleteRequest(final URL url) throws MovieDbException {
         try {
@@ -122,7 +122,7 @@ public class HttpTools {
      * @param url URL to use in the request
      * @param jsonBody Body to use in the request
      * @return String content
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     public String postRequest(final URL url, final String jsonBody) throws MovieDbException {
         try {
@@ -144,7 +144,7 @@ public class HttpTools {
      * @param response DigestedResponse to process
      * @param url URL for notification purposes
      * @return String content
-     * @throws MovieDbException
+     * @throws MovieDbException exception
      */
     private String validateResponse(final DigestedResponse response, final URL url) throws MovieDbException {
         if (response.getStatusCode() == 0) {

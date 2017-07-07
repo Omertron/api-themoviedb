@@ -57,7 +57,7 @@ public enum MethodBase {
     /**
      * Get the URL parameter to use
      *
-     * @return
+     * @return value
      */
     public String getValue() {
         return this.value;
@@ -66,8 +66,8 @@ public enum MethodBase {
     /**
      * Convert a string into an Enum type
      *
-     * @param value
-     * @return
+     * @param value the string representation of the enum
+     * @return matching enum
      */
     public static MethodBase fromString(String value) {
         if (StringUtils.isNotBlank(value)) {

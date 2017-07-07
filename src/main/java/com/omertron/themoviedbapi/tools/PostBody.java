@@ -43,7 +43,7 @@ public enum PostBody {
     /**
      * Get the URL parameter to use
      *
-     * @return
+     * @return value
      */
     public String getValue() {
         return this.value;

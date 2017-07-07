@@ -45,7 +45,7 @@ public class TmdbParameters {
     /**
      * Get the entry set of the parameters
      *
-     * @return
+     * @return map of parameters
      */
     public Set<Map.Entry<Param, String>> getEntries() {
         return parameters.entrySet();
@@ -115,7 +115,7 @@ public class TmdbParameters {
      * Check to see if the collection has a certain parameter
      *
      * @param key The Parameter to check
-     * @return
+     * @return true if parameter exists
      */
     public boolean has(final Param key) {
         return parameters.containsKey(key);
@@ -125,7 +125,7 @@ public class TmdbParameters {
      * Get a parameter from the collection
      *
      * @param key The parameter to get
-     * @return
+     * @return the parameter
      */
     public Object get(final Param key) {
         return parameters.get(key);
@@ -134,7 +134,7 @@ public class TmdbParameters {
     /**
      * Remove a parameter from the collection
      *
-     * @param key
+     * @param key parameter to remove
      */
     public void remove(final Param key) {
         parameters.remove(key);
@@ -143,7 +143,7 @@ public class TmdbParameters {
     /**
      * Check to see if the collection has no items
      *
-     * @return
+     * @return true if the parameters are empty
      */
     public boolean isEmpty() {
         return parameters.isEmpty();
@@ -152,7 +152,7 @@ public class TmdbParameters {
     /**
      * Check to see if the collection has items
      *
-     * @return
+     * @return true if there are parameters
      */
     public boolean isNotEmpty() {
         return !isEmpty();
@@ -161,8 +161,8 @@ public class TmdbParameters {
     /**
      * Append any optional parameters to the URL
      *
-     * @param appendToResponse
-     * @return
+     * @param appendToResponse String array to convert to a comma list
+     * @return comma separated list
      */
     public String toList(final String[] appendToResponse) {
         StringBuilder sb = new StringBuilder();

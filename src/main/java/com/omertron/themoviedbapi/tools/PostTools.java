@@ -61,9 +61,9 @@ public class PostTools {
     /**
      * Use Jackson to convert Map to JSON string.
      *
-     * @param map
-     * @return
-     * @throws MovieDbException
+     * @param map Map to convert to json
+     * @return json string
+     * @throws MovieDbException exception
      */
     private String convertToJson(Map<String, ?> map) throws MovieDbException {
         try {
