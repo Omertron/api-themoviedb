@@ -40,6 +40,8 @@ public class MediaCredit extends AbstractJsonMapping implements Serializable, Id
     private String artworkPath;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("gender")
+    private int gender;
 
     public String getCreditId() {
         return creditId;
@@ -73,6 +75,14 @@ public class MediaCredit extends AbstractJsonMapping implements Serializable, Id
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
 }
