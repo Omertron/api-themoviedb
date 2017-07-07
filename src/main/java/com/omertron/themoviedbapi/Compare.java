@@ -39,7 +39,7 @@ public class Compare {
     }
 
     /**
-     * Compare the MovieDB object with a title & year
+     * Compare the MovieDB object with a title and year
      *
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
@@ -51,7 +51,7 @@ public class Compare {
     }
 
     /**
-     * Compare the MovieDB object with a title & year
+     * Compare the MovieDB object with a title and year
      *
      * @param moviedb The moviedb object to compare too
      * @param title The title of the movie to compare
@@ -107,13 +107,13 @@ public class Compare {
     }
 
     /**
-     * Compare the MovieDB object with a title & year, case sensitive
+     * Compare the MovieDB object with a title and year, case sensitive
      *
-     * @param moviedb
-     * @param title
-     * @param year
-     * @param maxDistance
-     * @return
+     * @param moviedb movieinfo
+     * @param title title
+     * @param year year
+     * @param maxDistance maximum distance
+     * @return true if matched
      */
     public static boolean movies(final MovieInfo moviedb, final String title, final String year, int maxDistance) {
         return Compare.movies(moviedb, title, year, maxDistance, true);
@@ -122,9 +122,9 @@ public class Compare {
     /**
      * Compare the Levenshtein Distance between the two strings
      *
-     * @param title1
-     * @param title2
-     * @param distance
+     * @param title1 title
+     * @param title2 title
+     * @param distance max distance
      */
     private static boolean compareDistance(final String title1, final String title2, int distance) {
         return StringUtils.getLevenshteinDistance(title1, title2) <= distance;
@@ -133,7 +133,7 @@ public class Compare {
     /**
      * Check the year is not blank or UNKNOWN
      *
-     * @param year
+     * @param year year
      */
     private static boolean isValidYear(final String year) {
         return StringUtils.isNotBlank(year) && !"UNKNOWN".equals(year);

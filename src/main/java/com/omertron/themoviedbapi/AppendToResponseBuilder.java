@@ -33,7 +33,7 @@ public class AppendToResponseBuilder {
     /**
      * Construct the builder with the first method
      *
-     * @param method
+     * @param method method
      */
     public AppendToResponseBuilder(AppendToResponseMethod method) {
         response = new StringBuilder(method.getPropertyString());
@@ -42,7 +42,7 @@ public class AppendToResponseBuilder {
     /**
      * Generate the string
      *
-     * @return
+     * @return ATR string
      */
     public String build() {
         return response.toString();
@@ -51,8 +51,8 @@ public class AppendToResponseBuilder {
     /**
      * Add a method to the list
      *
-     * @param method
-     * @return
+     * @param method method
+     * @return builder
      */
     public AppendToResponseBuilder add(AppendToResponseMethod method) {
         response.append(",").append(method.getPropertyString());

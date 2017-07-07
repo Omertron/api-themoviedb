@@ -79,7 +79,7 @@ public class TmdbParameters {
      * Add an integer parameter to the collection
      *
      * @param key Parameter to add
-     * @param value The value to add (will be checked to ensure >0)
+     * @param value The value to add (will be checked to ensure greater than zero)
      */
     public void add(final Param key, final Integer value) {
         if (value != null && value > 0) {
@@ -91,7 +91,7 @@ public class TmdbParameters {
      * Add a float parameter to the collection
      *
      * @param key Parameter to add
-     * @param value The value to add (will be checked to ensure >0)
+     * @param value The value to add (will be checked to ensure greater than zero)
      */
     public void add(final Param key, final Float value) {
         if (value != null && value > 0f) {
@@ -103,7 +103,7 @@ public class TmdbParameters {
      * Add a boolean parameter to the collection
      *
      * @param key Parameter to add
-     * @param value The value to add (will be checked to ensure >0)
+     * @param value The value to add (will be checked to ensure greater than zero)
      */
     public void add(final Param key, final Boolean value) {
         if (value != null) {
