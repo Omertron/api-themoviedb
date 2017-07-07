@@ -75,10 +75,6 @@ public class TVInfo extends TVBasic implements Serializable, AppendToResponse<TV
     private int numberOfEpisodes;
     @JsonProperty("number_of_seasons")
     private int numberOfSeasons;
-    @JsonProperty("original_language")
-    private String originalLanguage;
-    @JsonProperty("overview")
-    private String overview;
     @JsonProperty("production_companies")
     private List<ProductionCompany> productionCompanies;
     @JsonProperty("seasons")
@@ -182,22 +178,6 @@ public class TVInfo extends TVBasic implements Serializable, AppendToResponse<TV
         this.numberOfSeasons = numberOfSeasons;
     }
 
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public List<ProductionCompany> getProductionCompanies() {
         return productionCompanies;
     }
@@ -232,6 +212,7 @@ public class TVInfo extends TVBasic implements Serializable, AppendToResponse<TV
     //</editor-fold>
 
     @JsonSetter("genre_ids")
+    @Override
     public void setGenreIds(List<Integer> ids) {
         this.genres = new ArrayList<>();
 
