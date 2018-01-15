@@ -263,6 +263,24 @@ public class TmdbMovies extends AbstractMethod {
     }
 
     /**
+     * The recommendations method will let you retrieve the movie recommendations for a particular movie.
+     *
+     * @param movieId
+     * @param language
+     * @return
+     * @throws MovieDbException
+     */
+    public ResultList<MovieInfo> getRecommendations(int movieId, String language) throws MovieDbException {
+        TmdbParameters parameters = new TmdbParameters();
+        parameters.add(Param.ID, movieId);
+        parameters.add(Param.LANGUAGE, language);
+
+        URL url = new ApiUrl(apiKey, MethodBase.MOVIE).subMethod(MethodSub.RECOMMENDATIONS).buildUrl(parameters);
+        WrapperGenericList<MovieInfo> wrapper = processWrapper(getTypeReference(MovieInfo.class), url, "recommendations");
+        return wrapper.getResultsList();
+    }
+
+    /**
      * This method is used to retrieve all of the release and certification data we have for a specific movie.
      *
      * @param movieId

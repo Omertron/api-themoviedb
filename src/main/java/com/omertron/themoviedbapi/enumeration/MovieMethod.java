@@ -35,6 +35,7 @@ public enum MovieMethod implements AppendToResponseMethod {
     IMAGES,
     KEYWORDS,
     LISTS,
+    RECOMMENDATIONS,
     RELEASES,
     REVIEWS,
     SIMILAR,
