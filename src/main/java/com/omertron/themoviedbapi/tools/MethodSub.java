@@ -62,6 +62,7 @@ public enum MethodSub {
     RATED_MOVIES_GUEST("rated_movies"),
     RATED_TV("rated/tv"),
     RATING("rating"),
+    RECOMMENDATIONS("recommendations"),
     RELEASES("releases"),
     REMOVE_ITEM("remove_item"),
     REVIEWS("reviews"),

@@ -327,6 +327,24 @@ public class TmdbMoviesTest extends AbstractTests {
     }
 
     /**
+     * Test of getRecommendations method, of class TmdbMovies.
+     *
+     * @throws com.omertron.themoviedbapi.MovieDbException
+     */
+    @Test
+    public void testGetRecommendations() throws MovieDbException {
+        LOG.info("getRecommendations");
+
+        String language = LANGUAGE_DEFAULT;
+
+        for (TestID test : FILM_IDS) {
+            ResultList<MovieInfo> result = instance.getRecommendations(test.getTmdb(), language);
+            TestSuite.test(result, "Recommendations");
+        }
+    }
+
+
+    /**
      * Test of getMovieReviews method, of class TmdbMovies.
      *
      * @throws com.omertron.themoviedbapi.MovieDbException

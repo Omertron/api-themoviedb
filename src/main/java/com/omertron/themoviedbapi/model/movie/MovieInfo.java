@@ -94,6 +94,7 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
     private List<Video> videos = Collections.emptyList();
     private List<Translation> translations = Collections.emptyList();
     private List<MovieInfo> similarMovies = Collections.emptyList();
+    private List<MovieInfo> recommendations = Collections.emptyList();
     private List<Review> reviews = Collections.emptyList();
     private List<UserList> lists = Collections.emptyList();
     private List<ChangeKeyItem> changes = Collections.emptyList();
@@ -293,6 +294,12 @@ public class MovieInfo extends MovieBasic implements Serializable, Identificatio
     public void setLists(WrapperGenericList<UserList> lists) {
         this.lists = lists.getResults();
         addMethod(MovieMethod.LISTS);
+    }
+
+    @JsonSetter("recommendations")
+    public void seRecommendations(WrapperGenericList<MovieInfo> recommendations) {
+        this.recommendations = recommendations.getResults();
+        addMethod(MovieMethod.RECOMMENDATIONS);
     }
 
     @JsonSetter("reviews")
