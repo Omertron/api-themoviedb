@@ -13,3 +13,5 @@ testing.properties
 .project
 .DS_Store
 /nbproject/
+.idea
+*.iml
