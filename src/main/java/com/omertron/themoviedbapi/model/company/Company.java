@@ -48,6 +48,8 @@ public class Company extends AbstractJsonMapping implements Serializable, Identi
     private String logoPath = EMPTY;
     @JsonProperty("parent_company")
     private Company parentCompany = null;
+    @JsonProperty("origin_country")
+    private String originCountry;
 
     @Override
     public int getId() {
@@ -114,4 +116,13 @@ public class Company extends AbstractJsonMapping implements Serializable, Identi
         parent.setLogoPath(logoPath);
         this.parentCompany = parent;
     }
+
+    public String getOriginCountry() {
+        return originCountry;
+    }
+
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
+    }
+    
 }

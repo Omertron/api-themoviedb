@@ -55,7 +55,9 @@ public class TmdbCompaniesTest extends AbstractTests {
         LOG.info("getCompanyInfo");
         Company company = instance.getCompanyInfo(ID_COMPANY);
         assertTrue("No company information found", company.getId() > 0);
-        assertNotNull("No parent company found", company.getParentCompany());
+        assertNotNull("No homepage founnd", company.getHomepage());
+        assertNotNull("No logo found", company.getLogoPath());
+        assertNotNull("No origin country", company.getOriginCountry());
     }
 
     /**
