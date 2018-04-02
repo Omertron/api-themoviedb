@@ -19,6 +19,7 @@
  */
 package com.omertron.themoviedbapi.model.movie;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.omertron.themoviedbapi.model.AbstractIdName;
 import java.io.Serializable;
@@ -30,5 +31,25 @@ import java.io.Serializable;
 public class ProductionCompany extends AbstractIdName implements Serializable {
 
     private static final long serialVersionUID = 100L;
-    // Nothing to override from the base class.
+    @JsonProperty("logo_path")
+    private String logoPath;
+    @JsonProperty("origin_country")
+    private String originCountry;
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
+    }
+
+    public String getOriginCountry() {
+        return originCountry;
+    }
+
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
+    }
+
 }

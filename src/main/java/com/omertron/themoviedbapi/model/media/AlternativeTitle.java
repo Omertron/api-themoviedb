@@ -35,6 +35,8 @@ public class AlternativeTitle implements Serializable {
     private String country;
     @JsonProperty("title")
     private String title;
+    @JsonProperty("type")
+    private String type;
 
     public String getCountry() {
         return country;
@@ -52,6 +54,14 @@ public class AlternativeTitle implements Serializable {
         this.title = title;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof AlternativeTitle) {
@@ -59,6 +69,7 @@ public class AlternativeTitle implements Serializable {
             return new EqualsBuilder()
                     .append(country, other.country)
                     .append(title, other.title)
+                    .append(type, other.type)
                     .isEquals();
         } else {
             return false;
@@ -70,6 +81,7 @@ public class AlternativeTitle implements Serializable {
         return new HashCodeBuilder()
                 .append(country)
                 .append(title)
+                .append(type)
                 .toHashCode();
     }
 }

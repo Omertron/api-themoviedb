@@ -343,7 +343,6 @@ public class TmdbMoviesTest extends AbstractTests {
         }
     }
 
-
     /**
      * Test of getMovieReviews method, of class TmdbMovies.
      *
