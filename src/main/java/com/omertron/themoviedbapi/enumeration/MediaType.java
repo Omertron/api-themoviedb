@@ -48,8 +48,8 @@ public enum MediaType {
     /**
      * Convert a string into an Enum type
      *
-     * @param mediaType
-     * @return
+     * @param mediaType String to convert to enum
+     * @return enum version of param
      * @throws IllegalArgumentException If type is not recognised
      *
      */

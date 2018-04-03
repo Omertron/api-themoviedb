@@ -46,8 +46,8 @@ public enum ArtworkType {
     /**
      * Convert a string into an Enum type
      *
-     * @param artworkType
-     * @return
+     * @param artworkType String to convert to enum
+     * @return enum version of param
      * @throws IllegalArgumentException If type is not recognised
      *
      */

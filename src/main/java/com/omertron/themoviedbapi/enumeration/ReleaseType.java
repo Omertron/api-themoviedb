@@ -42,8 +42,8 @@ public enum ReleaseType {
     /**
      * Get the Release Type from an integer type
      *
-     * @param type
-     * @return
+     * @param type Integer to convert to enum
+     * @return enum version of param
      */
     public static ReleaseType fromInteger(int type) {
         for (ReleaseType rt : ReleaseType.values()) {

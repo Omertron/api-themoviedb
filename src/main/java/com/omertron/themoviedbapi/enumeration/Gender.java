@@ -33,8 +33,8 @@ public enum Gender {
     /**
      * Get the gender from an integer type
      *
-     * @param type
-     * @return
+     * @param type Integer to convert to enum
+     * @return enum version of param
      */
     public static Gender fromInteger(int type) {
         for (Gender gender : Gender.values()) {

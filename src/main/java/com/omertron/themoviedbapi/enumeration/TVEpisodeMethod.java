@@ -37,7 +37,7 @@ public enum TVEpisodeMethod implements AppendToResponseMethod {
     /**
      * Get the string to use in the URL
      *
-     * @return
+     * @return the string representation of the enum
      */
     @Override
     public String getPropertyString() {
@@ -47,8 +47,8 @@ public enum TVEpisodeMethod implements AppendToResponseMethod {
     /**
      * Convert a string into an Enum type
      *
-     * @param method
-     * @return
+     * @param method String to convert to enum
+     * @return enum version of param
      * @throws IllegalArgumentException If type is not recognised
      *
      */
