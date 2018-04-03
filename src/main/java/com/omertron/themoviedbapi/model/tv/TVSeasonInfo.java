@@ -44,10 +44,6 @@ public class TVSeasonInfo extends TVSeasonBasic implements Serializable, AppendT
 
     private static final long serialVersionUID = 100L;
 
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("overview")
-    private String overview;
     @JsonProperty("episodes")
     private List<TVEpisodeInfo> episodes;
     // AppendToResponse
@@ -59,22 +55,6 @@ public class TVSeasonInfo extends TVSeasonBasic implements Serializable, AppendT
     private List<Video> videos = Collections.emptyList();
 
     //<editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public List<TVEpisodeInfo> getEpisodes() {
         return episodes;
     }

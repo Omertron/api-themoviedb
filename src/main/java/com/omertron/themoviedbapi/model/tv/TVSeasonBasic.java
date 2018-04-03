@@ -35,6 +35,8 @@ public class TVSeasonBasic extends AbstractJsonMapping implements Serializable, 
 
     @JsonProperty("id")
     private int id = -1;
+    @JsonProperty("name")
+    private String name;
     @JsonProperty("air_date")
     private String airDate;
     @JsonProperty("poster_path")
@@ -43,6 +45,8 @@ public class TVSeasonBasic extends AbstractJsonMapping implements Serializable, 
     private int seasonNumber;
     @JsonProperty("episode_count")
     private int episodeCount = -1;
+    @JsonProperty("overview")
+    private String overview;
 
     @Override
     public int getId() {
@@ -84,6 +88,22 @@ public class TVSeasonBasic extends AbstractJsonMapping implements Serializable, 
 
     public void setEpisodeCount(int episodeCount) {
         this.episodeCount = episodeCount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
 }
