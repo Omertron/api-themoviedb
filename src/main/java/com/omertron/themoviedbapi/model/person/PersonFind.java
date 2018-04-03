@@ -42,6 +42,8 @@ public class PersonFind extends PersonBasic implements Serializable {
     @JsonProperty("popularity")
     private Float popularity;
     private List<? extends MediaBasic> knownFor;
+    @JsonProperty("known_for_department")
+    private String knownForDepartment;
 
     public Boolean getAdult() {
         return adult;
@@ -70,13 +72,23 @@ public class PersonFind extends PersonBasic implements Serializable {
             defaultImpl = MediaBasic.class
     )
     @JsonSubTypes({
-        @JsonSubTypes.Type(value = MovieBasic.class, name = "movie"),
-        @JsonSubTypes.Type(value = TVBasic.class, name = "tv"),
+        @JsonSubTypes.Type(value = MovieBasic.class, name = "movie")
+        ,
+        @JsonSubTypes.Type(value = TVBasic.class, name = "tv")
+        ,
         @JsonSubTypes.Type(value = TVEpisodeBasic.class, name = "episode")
     })
     @JsonSetter("known_for")
     public void setKnownFor(List<? extends MediaBasic> knownFor) {
         this.knownFor = knownFor;
+    }
+
+    public String getKnownForDepartment() {
+        return knownForDepartment;
+    }
+
+    public void setKnownForDepartment(String knownForDepartment) {
+        this.knownForDepartment = knownForDepartment;
     }
 
 }
