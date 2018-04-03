@@ -30,7 +30,7 @@ public class JobDepartment extends AbstractJsonMapping implements Serializable {
     // Properties
     @JsonProperty("department")
     private String department;
-    @JsonProperty("job_list")
+    @JsonProperty("jobs")
     private List<String> jobs;
 
     public String getDepartment() {
