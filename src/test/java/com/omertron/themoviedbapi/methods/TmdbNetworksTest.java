@@ -42,7 +42,7 @@ public class TmdbNetworksTest extends AbstractTests {
     public static void setUpClass() throws MovieDbException {
         doConfiguration();
         instance = new TmdbNetworks(getApiKey(), getHttpTools());
-        TEST_IDS.add(new TestID("Fuji Television", "", 1));
+        TEST_IDS.add(new TestID("Fuji TV", "", 1));
         TEST_IDS.add(new TestID("Sonshine Media Network International", "", 200));
     }
 
