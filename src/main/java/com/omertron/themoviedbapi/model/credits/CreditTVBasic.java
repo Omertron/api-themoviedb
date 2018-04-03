@@ -38,6 +38,8 @@ public class CreditTVBasic extends CreditBasic implements Serializable {
     private String name;
     @JsonProperty("original_name")
     private String originalName;
+    @JsonProperty("origin_country")
+    private String originCountry;
 
     public CreditTVBasic() {
         setMediaType(MediaType.TV);
@@ -73,6 +75,14 @@ public class CreditTVBasic extends CreditBasic implements Serializable {
 
     public void setOriginalName(String originalName) {
         this.originalName = originalName;
+    }
+
+    public String getOriginCountry() {
+        return originCountry;
+    }
+
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
     }
 
 }

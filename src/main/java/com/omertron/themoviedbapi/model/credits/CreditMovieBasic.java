@@ -38,6 +38,8 @@ public class CreditMovieBasic extends CreditBasic implements Serializable {
     private String releaseDate;
     @JsonProperty("title")
     private String title;
+    @JsonProperty("video")
+    private boolean video;
 
     public CreditMovieBasic() {
         setMediaType(MediaType.MOVIE);
@@ -73,6 +75,14 @@ public class CreditMovieBasic extends CreditBasic implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isVideo() {
+        return video;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
     }
 
 }

@@ -27,6 +27,7 @@ import com.omertron.themoviedbapi.enumeration.MediaType;
 import com.omertron.themoviedbapi.interfaces.Identification;
 import com.omertron.themoviedbapi.model.AbstractJsonMapping;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author stuart.boston
@@ -44,6 +45,20 @@ public class CreditBasic extends AbstractJsonMapping implements Serializable, Id
     private int id;
     @JsonProperty("poster_path")
     private String artworkPath;
+    @JsonProperty("backdrop_path")
+    private String backdropPath;
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
+    @JsonProperty("original_language")
+    private String originalLanguage;
+    @JsonProperty("overview")
+    private String overview;
+    @JsonProperty("popularity")
+    private float popularity;
+    @JsonProperty("vote_average")
+    private float voteAverage;
+    @JsonProperty("vote_count")
+    private int voteCount;
 
     //cast
     @JsonProperty("character")
@@ -71,7 +86,7 @@ public class CreditBasic extends AbstractJsonMapping implements Serializable, Id
         this.mediaType = MediaType.fromString(mediaType);
     }
 
-    public void setMediaType(MediaType mediaType) {
+    public final void setMediaType(MediaType mediaType) {
         this.mediaType = mediaType;
     }
 
@@ -126,6 +141,62 @@ public class CreditBasic extends AbstractJsonMapping implements Serializable, Id
     public void setJob(String job) {
         this.job = job;
         setCreditType(CreditType.CREW);
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public float getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(float popularity) {
+        this.popularity = popularity;
+    }
+
+    public float getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(float voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public int getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 
 }
