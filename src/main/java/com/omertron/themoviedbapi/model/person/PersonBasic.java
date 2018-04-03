@@ -20,6 +20,8 @@
 package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.omertron.themoviedbapi.enumeration.Gender;
 import com.omertron.themoviedbapi.model.AbstractIdName;
 import java.io.Serializable;
 
@@ -32,6 +34,8 @@ public class PersonBasic extends AbstractIdName implements Serializable {
 
     @JsonProperty("profile_path")
     private String profilePath;
+    @JsonProperty("gender")
+    private Gender gender;
 
     public String getProfilePath() {
         return profilePath;
@@ -40,4 +44,18 @@ public class PersonBasic extends AbstractIdName implements Serializable {
     public void setProfilePath(String profilePath) {
         this.profilePath = profilePath;
     }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    @JsonSetter("gender")
+    public void setGender(int gender) {
+        this.gender = Gender.fromInteger(gender);
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
 }

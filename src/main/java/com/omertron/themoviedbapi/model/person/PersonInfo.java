@@ -21,7 +21,6 @@ package com.omertron.themoviedbapi.model.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.omertron.themoviedbapi.enumeration.Gender;
 import com.omertron.themoviedbapi.enumeration.PeopleMethod;
 import com.omertron.themoviedbapi.interfaces.AppendToResponse;
 import com.omertron.themoviedbapi.model.artwork.Artwork;
@@ -63,7 +62,6 @@ public class PersonInfo extends PersonBasic implements Serializable, AppendToRes
     private String placeOfBirth;
     @JsonProperty("popularity")
     private float popularity;
-    private Gender gender;
     // AppendToResponse
     private final Set<PeopleMethod> methods = EnumSet.noneOf(PeopleMethod.class);
     // AppendToResponse Properties
@@ -150,15 +148,6 @@ public class PersonInfo extends PersonBasic implements Serializable, AppendToRes
 
     private void addMethod(PeopleMethod method) {
         methods.add(method);
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    @JsonSetter("gender")
-    public void setGender(int gender) {
-        this.gender = Gender.fromInteger(gender);
     }
 
     @Override
