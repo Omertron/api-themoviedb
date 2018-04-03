@@ -37,6 +37,8 @@ public class Network extends AbstractIdName implements Serializable, Identificat
     private String homepage;
     @JsonProperty("origin_country")
     private String originCountry;
+    @JsonProperty("logo_path")
+    private String logoPath;
 
     public String getHeadquarters() {
         return headquarters;
@@ -60,6 +62,14 @@ public class Network extends AbstractIdName implements Serializable, Identificat
 
     public void setOriginCountry(String originCountry) {
         this.originCountry = originCountry;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 
 }
