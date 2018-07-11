@@ -138,6 +138,33 @@ public class Discover {
     }
 
     /**
+     * The primary minimum release to include.
+     * <p>
+     * Expected format is YYYY-MM-DD.
+     *
+     * @param primaryReleaseDateGte
+     * @return
+     */
+    public Discover primaryReleaseDateGte(String primaryReleaseDateGte) {
+        params.add(Param.PRIMARY_RELEASE_DATE_GTE, primaryReleaseDateGte);
+        return this;
+    }
+
+    /**
+     * The primary maximum release to include.
+     * <p>
+     * Expected format is YYYY-MM-DD.
+     *
+     * @param primaryReleaseDateLte
+     * @return
+     */
+    public Discover primaryReleaseDateLte(String primaryReleaseDateLte) {
+        params.add(Param.PRIMARY_RELEASE_DATE_LTE, primaryReleaseDateLte);
+        return this;
+    }
+
+
+    /**
      * Only include movies that are equal to, or have a vote count higher than this value
      *
      * @param voteCountGte

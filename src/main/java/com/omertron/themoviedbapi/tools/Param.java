@@ -56,6 +56,8 @@ public enum Param {
     PAGE("page="),
     PASSWORD("password="),
     PRIMARY_RELEASE_YEAR("primary_release_year="),
+    PRIMARY_RELEASE_DATE_GTE("primary_release_date.gte="),
+    PRIMARY_RELEASE_DATE_LTE("primary_release_date.lte="),
     QUERY("query="),
     RELEASE_DATE_GTE("release_date.gte="),
     RELEASE_DATE_LTE("release_date.lte="),
