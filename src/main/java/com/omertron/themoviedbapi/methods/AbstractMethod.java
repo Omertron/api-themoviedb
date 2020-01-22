@@ -49,6 +49,7 @@ import com.omertron.themoviedbapi.tools.TmdbParameters;
 import com.omertron.themoviedbapi.results.WrapperChanges;
 import com.omertron.themoviedbapi.results.WrapperGenericList;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class AbstractMethod {
     protected final HttpTools httpTools;
     // Jackson JSON configuration
     protected static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<>();
+    private static final Map<Class<? extends Serializable>, TypeReference<? extends WrapperGenericList<? extends Serializable>>> TYPE_REFS = new HashMap<>();
 
     static {
         TYPE_REFS.put(MovieBasic.class, new TypeReference<WrapperGenericList<MovieBasic>>() {
@@ -124,9 +125,9 @@ public class AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    protected static TypeReference getTypeReference(Class aClass) throws MovieDbException {
+    protected static <T> TypeReference<? extends WrapperGenericList<T>> getTypeReference(Class<T> aClass) throws MovieDbException {
         if (TYPE_REFS.containsKey(aClass)) {
-            return TYPE_REFS.get(aClass);
+            return (TypeReference<? extends WrapperGenericList<T>>) TYPE_REFS.get(aClass);
         } else {
             throw new MovieDbException(ApiExceptionType.UNKNOWN_CAUSE, "Class type reference for '" + aClass.getSimpleName() + "' not found!");
         }
@@ -142,7 +143,7 @@ public class AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    protected <T> List<T> processWrapperList(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
+    protected <T> List<T> processWrapperList(TypeReference<? extends WrapperGenericList<T>> typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
         WrapperGenericList<T> val = processWrapper(typeRef, url, errorMessageSuffix);
         return val.getResults();
     }
@@ -157,7 +158,7 @@ public class AbstractMethod {
      * @return
      * @throws MovieDbException
      */
-    protected <T> WrapperGenericList<T> processWrapper(TypeReference typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
+    protected <T> WrapperGenericList<T> processWrapper(TypeReference<? extends WrapperGenericList<T>> typeRef, URL url, String errorMessageSuffix) throws MovieDbException {
         String webpage = httpTools.getRequest(url);
         try {
             // Due to type erasure, this doesn't work
