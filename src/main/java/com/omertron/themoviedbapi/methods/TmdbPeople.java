@@ -113,7 +113,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            TypeReference tr = new TypeReference<PersonCreditList<CreditMovieBasic>>() {
+            TypeReference<PersonCreditList<CreditMovieBasic>> tr = new TypeReference<PersonCreditList<CreditMovieBasic>>() {
             };
             return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
@@ -144,7 +144,7 @@ public class TmdbPeople extends AbstractMethod {
         String webpage = httpTools.getRequest(url);
 
         try {
-            TypeReference tr = new TypeReference<PersonCreditList<CreditTVBasic>>() {
+            TypeReference<PersonCreditList<CreditTVBasic>> tr = new TypeReference<PersonCreditList<CreditTVBasic>>() {
             };
             return MAPPER.readValue(webpage, tr);
         } catch (IOException ex) {
@@ -177,7 +177,7 @@ public class TmdbPeople extends AbstractMethod {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.addMixIn(PersonCreditList.class, PersonCreditsMixIn.class);
-            TypeReference tr = new TypeReference<PersonCreditList<CreditBasic>>() {
+            TypeReference<PersonCreditList<CreditBasic>> tr = new TypeReference<PersonCreditList<CreditBasic>>() {
             };
             return mapper.readValue(webpage, tr);
         } catch (IOException ex) {
